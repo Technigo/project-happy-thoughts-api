@@ -22,6 +22,20 @@ router.post('/', async (req, res) => {
   res.json(thought);
 });
 
-router.post('/:thoughId/like', (req, res) => {});
+router.post('/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params;
+  const thought = await Thought.findById(thoughtId);
+
+  if (thought) {
+    thought.hearts += 1;
+    thought.save();
+    res.json(thought);
+  } else {
+    res.status(404).json({
+      statusCode: 404,
+      error: `No happy thought find with ${thoughtId}`
+    });
+  }
+});
 
 module.exports = router;
