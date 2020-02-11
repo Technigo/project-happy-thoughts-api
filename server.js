@@ -31,8 +31,14 @@ app.use(cors())
 app.use(bodyParser.json())
 
 app.get('/', async (req, res) => {
-  const thoughts = await Thought.find().sort({ 'createdAt': 'desc' }).limit(20).exec()
-  res.json(thoughts)
+  const dateSorting = req.query.date ? req.query.date : 'desc'
+
+  try {
+    const thoughts = await Thought.find().sort({ 'createdAt': dateSorting }).limit(20).exec()
+    res.json(thoughts)
+  } catch (err) {
+    res.status(400).json({ message: 'Could not find thoughts', error: err.errors })
+  }
 })
 
 app.post('/', async (req, res) => {
