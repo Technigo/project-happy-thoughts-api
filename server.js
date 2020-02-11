@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 import compression from 'compression';
 import logger from 'morgan';
 import { errors } from 'celebrate';
+import Routes from './routes/index';
+import Thought from './models/thought';
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
