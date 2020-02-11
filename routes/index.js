@@ -7,8 +7,8 @@ router.get('/', async (req, res) => {
   const thoughts = await Thought.find();
 
   if (thoughts.length > 0) {
-    res.json(thoughts.reverse().slice(0, 20));
-    // res.json(thoughts);
+    // res.json(thoughts.reverse().slice(0, 20));
+    res.json(thoughts);
   } else {
     res.status(404).json({
       statusCode: 404,
