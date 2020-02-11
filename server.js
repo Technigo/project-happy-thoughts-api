@@ -30,8 +30,9 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-app.get('/', (req, res) => {
-  res.send('Hello world')
+app.get('/', async (req, res) => {
+  const thoughts = await Thought.find().sort({ 'createdAt': 'desc' }).limit(20).exec()
+  res.json(thoughts)
 })
 
 app.listen(port, () => {
