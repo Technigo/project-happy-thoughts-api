@@ -4,7 +4,7 @@ import Thought from '../models/thought';
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc' });
+  const thoughts = await Thought.find();
 
   if (thoughts.length > 0) {
     res.json(thoughts);
