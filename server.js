@@ -43,11 +43,22 @@ if (process.env.RESET_DB === 'true') {
 const port = process.env.PORT || 8080;
 const app = express();
 
-// Middlewares
+// Middleware
 app.use(compression());
 app.use(logger('dev'));
 app.use(cors());
 app.use(bodyParser.json());
+
+// Middleware to check if API service is available
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next();
+  } else {
+    res.status(503).json({
+      error: 'Service unavailable'
+    });
+  }
+});
 
 // Load API routes
 app.use('/api', Routes);
