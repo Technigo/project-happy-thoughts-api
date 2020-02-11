@@ -1,6 +1,10 @@
 import mongoose, { mongo } from 'mongoose';
 
 const thoughtSchema = new mongoose.Schema({
+  thoughtId: {
+    type: Number,
+    default: 1
+  },
   message: {
     type: String,
     min: 5,
