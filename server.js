@@ -54,6 +54,9 @@ app.get('/', (req, res) => {
   res.send('Hello world');
 });
 
+// Catch errors thrown by Celebrate
+app.use(errors());
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
