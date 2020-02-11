@@ -12,7 +12,7 @@ const Thought = mongoose.model('Thought', {
     type: String,
     required: true,
     minlength: 5,
-    maxlentgh: 140
+    maxlength: 140
   },
   hearts: {
     type: Number,
@@ -33,6 +33,18 @@ app.use(bodyParser.json())
 app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({ 'createdAt': 'desc' }).limit(20).exec()
   res.json(thoughts)
+})
+
+app.post('/', async (req, res) => {
+  const { message } = req.body
+  const newThought = new Thought({ message })
+
+  try {
+    await newThought.save()
+    res.status(201).json(newThought)
+  } catch (err) {
+    res.status(400).json({ message: "Could not save thought", error: err.errors })
+  }
 })
 
 app.listen(port, () => {
