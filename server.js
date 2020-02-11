@@ -9,6 +9,18 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
+// if (process.env.RESET_DB) {
+//   const seedDatabase = async () => {
+//     await Thought.deleteMany({});
+
+//     db.myCollection.happyThoughts.thoughts.forEach(thought => {
+//       new Thought(thought).save();
+//     });
+//   };
+
+//   seedDatabase();
+// }
+
 // Defines the port the app will run on. Defaults to 8080, but can be
 // overridden when starting the server. For example:
 //
@@ -23,13 +35,43 @@ app.use(bodyParser.json());
 // new Thought({ message: "He" }).save();
 
 // Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello");
+app.get("/", async (req, res) => {
+  Thought.find((err, thoughts) => {
+    if (err) {
+      console.log(err);
+      res.status(400).json({ error: "Not found" });
+    } else {
+      res.json(thoughts);
+    }
+  })
+    .sort({ createdAt: -1 })
+    .limit(20);
 });
 
-app.post("/thoughts", async (req, res) => {
-  const thought = await new Thought(req.body).save();
-  res.json(thought);
+app.post("/", async (req, res) => {
+  try {
+    const thought = new Thought({ message: req.body.message });
+    await thought.save();
+    res.json(thought);
+  } catch (err) {
+    res
+      .status(400)
+      .json({ errors: err.errors, message: "Cannot add new thought" });
+  }
+});
+
+app.post("/:thoughtId/like", async (req, res) => {
+  const thoughtId = req.params.thoughtId;
+  const like = await Thought.findOne({ _id: thoughtId });
+  // const heart = new Thought({ heart: req.body.heart + 1 });
+
+  console.log(thoughtId);
+
+  if (like) {
+    res.json(like);
+  } else {
+    res.status(404).json({ error: "No thought - so no like" });
+  }
 });
 
 // Start the server
