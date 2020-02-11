@@ -16,7 +16,11 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', (req, res) => {});
+router.post('/', async (req, res) => {
+  const thought = new Thought({ message: req.body.message });
+  await thought.save();
+  res.json(thought);
+});
 
 router.post('/:thoughId/like', (req, res) => {});
 
