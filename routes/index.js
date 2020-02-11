@@ -7,3 +7,5 @@ router.get('/', (req, res) => {});
 router.post('/', (req, res) => {});
 
 router.post('/:thoughId/like', (req, res) => {});
+
+module.exports = router;
