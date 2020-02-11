@@ -25,6 +25,14 @@ try {
 
 mongoose.Promise = Promise;
 
+if (process.env.RESET_DB === 'true') {
+  const resetDatabase = async () => {
+    await Thought.deleteMany();
+  };
+  resetDatabase();
+  console.log('Database cleared!');
+}
+
 const port = process.env.PORT || 8080;
 const app = express();
 
