@@ -31,7 +31,7 @@ if (process.env.RESET_DB === 'true') {
 
     for (let i = 0; i < 40; i++) {
       const newThought = new Thought({
-        message: `Message #${i + 1}`
+        message: `Happy thought #${i + 1}`
       });
       newThought.save();
     }
