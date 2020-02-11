@@ -9,6 +9,8 @@ import { errors } from 'celebrate';
 import Routes from './routes/index';
 import Thought from './models/thought';
 
+dotenv.config();
+
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
