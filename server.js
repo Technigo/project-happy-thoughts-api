@@ -68,8 +68,25 @@ app.post('/thoughts', async (req, res) => {
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
   } catch (err) {
-    res.status(400).json({ message: 'Could not save thought to the Database', error: err.errors })
+    res.status(400).json({ message: 'Could not save your thought to the Database', error: err.errors })
+  }
+})
 
+
+app.post('/thoughtId/:id', async (req, res) => {
+  //so this endpoint should update the heart Number
+
+  try {
+    //Success
+    const like = await Thought.findOneAndUpdate(
+      { "_id": req.params.id },
+      { $inc: { "heart": 1 } },
+      { returnNewDocument: true }
+
+    )
+    res.status(201).json(like)
+  } catch {
+    res.status(400).json({ message: 'Could not save your like to the Database' })
   }
 
 })
