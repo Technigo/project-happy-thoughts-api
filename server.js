@@ -57,6 +57,19 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+  const thoughtLiked = await Thought.findById(thoughtId);
+
+  if (thoughtLiked) {
+    thoughtLiked.heart += 1;
+    thoughtLiked.save();
+    res.json(thoughtLiked);
+  } else {
+    res.status(404).json({ message: "Could not find happy thought", error: err.errors });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
