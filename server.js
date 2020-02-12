@@ -30,6 +30,12 @@ const Thought = mongoose.model("Thought", {
     type: Number,
     default: 0
   },
+  name: {
+    type: String,
+    default: "anonymous",
+    minlength: 2,
+    maxlength: 50
+  },
   createdAt: {
     type: Date,
     default: Date.now
@@ -43,6 +49,37 @@ app.get("/", async (req, res) => {
     res.json(thoughts)
   } else {
     res.status(404).json({ message: "No happy thoughts" })
+  }
+})
+
+app.post("/", async (req, res) => {
+  //Get info sent by client to our API endpoint
+  const { message, name } = req.body
+  //Use our mongoose model to create a new database entry
+  const thought = new Thought({ message, name })
+  try {
+    //Sucess case
+    const savedThought = await thought.save()
+    res.status(201).json(savedThought)
+  }
+  catch (err) {
+    res.status(400).json({ message: "Couldn't save thought", error: err.errors })
+  }
+})
+
+app.post("/:thoughtID/like", async (req, res) => {
+  //Find specific thought
+  const thoughtID = req.params.thoughtID
+  const thought = await Thought.findById(thoughtID)
+
+  if (thought) {
+    //Sucess case
+    thought.hearts += 1
+    thought.save()
+    res.status(201).json(thought)
+  }
+  else {
+    res.status(404).json({ message: `No thought with id: ${thoughtID} `, error: err.errors })
   }
 })
 
