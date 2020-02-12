@@ -1,16 +1,16 @@
 import express from 'express';
 import Thought from '../models/thought';
 import { celebrate, Segments, Joi } from 'celebrate';
-import { requireJsonContent } from '../middleware/index';
 Joi.objectId = require('joi-objectid')(Joi);
 
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
-  const thoughts = await Thought.find();
+  const thoughts = await Thought.find()
+    .sort({ createdAt: 'desc' })
+    .limit(20);
 
   if (thoughts.length > 0) {
-    // res.json(thoughts.reverse().slice(0, 20));
     res.json(thoughts);
   } else {
     res.status(404).json({
