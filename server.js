@@ -47,7 +47,7 @@ const app = express();
 app.use(compression());
 app.use(logger('dev'));
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ type: 'application/json' }));
 
 // Middleware to check if API service is available
 app.use((req, res, next) => {
@@ -60,21 +60,21 @@ app.use((req, res, next) => {
   }
 });
 
-// Validate all incoming request headers for the user-agent JSON header
-// If missing or not the correct format, respond with an error
-// app.use(
-//   celebrate({
-//     headers: Joi.object({
-//       'content-type': Joi.string().valid('application/json;')
-//     }).unknown()
-//   })
-// );
-
 // Load API routes
 app.use('/api', Routes);
 
 // Catch errors thrown by Celebrate
 app.use(errors());
+
+app.use((err, req, res, next) => {
+  res.status(err.statusCode).json({
+    statusCode: err.statusCode,
+    error: 'Bad Request',
+    request: {
+      body: err.body
+    }
+  });
+});
 
 // Start the server
 app.listen(port, () => {

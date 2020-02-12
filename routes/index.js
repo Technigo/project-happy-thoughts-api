@@ -39,7 +39,6 @@ router.post(
       .options({ abortEarly: false })
   }),
   async (req, res) => {
-    console.log(req.headers);
     const thought = new Thought({ message: req.body.message });
     await thought.save();
     res.json(thought);
