@@ -49,18 +49,13 @@ if (process.env.RESET_DB) {
 }
 
 
-// Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world')
-})
-
 //Creating one GET-endpoint
-app.get('/thoughts', async (req, res) => {
+app.get('/', async (req, res) => {
   const thought = await Thought.find().sort({ createdAt: 'desc', heart: +1 }).limit(20).exec();
   res.json(thought)
 })
 
-app.post('/thoughts', async (req,res) => {
+app.post('/', async (req,res) => {
 const { message } = req.body;
 
 const thought = new Thought ({ message });
@@ -69,9 +64,21 @@ try {
   const savedThought = await thought.save()
   res.status(201).json(savedThought);
 } catch (err) {
-  res.status(400).json({ message: 'Could not save Thought to database', error: err.errors });
+  res.status(400).json({ message: 'Could not save thought to database', error: err.errors });
 }
 });
+
+app.post('/:thoughtId/like', async (req,res) => {
+  const thoughtId = req.params.thoughtId 
+
+  try {
+    const likedThought = await Thought.findByIdAndUpdate(thoughtId, { $inc: {'heart': 1} }, {new: true})
+    res.status(201).json(likedThought)
+  } catch (err) {
+    res.status(400).json({message: 'Could not like thought', error: err.errors });
+  }
+}) 
+
 
 
 // Start the server
