@@ -9,39 +9,15 @@ mongoose.Promise = Promise
 
 
 const Thought = mongoose.model('Thought', {
-  text: String,
-  createdAt: {
-    type: Date,
-    default: () => new Date()
-  }
-})
-const Person = mongoose.model('Person', {
-  name: {
+  message: {
     type: String,
     required: true,
-    minlength: 2,
-    maxlength: 500
+    minlength: 5,
+    maxlength: 140
   },
-  height: {
+  hearts: {
     type: Number,
-    required: true,
-    min: 5
-  },
-  birthdate: {
-    type: Date,
-    default: Date.now
-  }
-})
-
-const Task = mongoose.model('Task', {
-  text: {
-    type: String,
-    required: true,
-    minlength: 5
-  },
-  complete: {
-    type: Boolean,
-    default: false
+    default: 0
   },
   createdAt: {
     type: Date,
@@ -49,9 +25,18 @@ const Task = mongoose.model('Task', {
   }
 })
 
+// SEEDING FOR ADDING NEW DATA
+if (process.env.RESET_DB) {
+  console.log('Resetting database')
+  const seedDatabase = async () => {
+    await Thought.deleteMany({})
 
-// new Person({ name: "linda", height: 150 }).save()
-
+    // thought.forEach(() => {
+    //   new Thought().save()
+    // })
+  }
+  seedDatabase()
+}
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
@@ -60,66 +45,56 @@ const Task = mongoose.model('Task', {
 const port = process.env.PORT || 8080
 const app = express()
 
-// Add middlewares to enable cors and json body parsing
+// MIDDLEWARES
 app.use(cors())
 app.use(bodyParser.json())
-
-
-// Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('HAPPY THOUGHTS')
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: 'Service unavailabale' })
+  }
 })
 
-app.post('/thoughts', async (req, res) => {
-  const thought = new Thought({ text: req.body.text })
-  await thought.save()
-  res.json(thought)
-})
 
-app.post('/people', async (req, res) => {
-  //Promises
-  new Person(req.body).save()
-    .then((person) => {
-      res.status(200).json(person)
-    })
-    .catch((err) => {
-      res.status(400).json({ message: 'Could not save person', error: err.errors })
-    })
-
-  //Try catch form
-  // try {
-  //   //Success
-  //   const person = await new Person(req.body).save()
-  //   res.status(200).json(person)
-  // } catch (err) {
-  //   //Bad request
-  //   res.status(400).json({ message: 'Could not save person', error: err.errors })
-  // }
-})
-
-//GET A LIST OF THE TASK IN THE DATABASE_ desc = descending order
-app.get('/tasks', async (req, res) => {
-  const tasks = await Task.find().sort({ createdAt: 'desc' }).limit(20).exec()
-  res.json(tasks)
+//GET A LIST OF THE THOUGHTS IN THE DATABASE. desc = descending order
+app.get('/', async (req, res) => {
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+  res.json(thoughts)
 })
 
 //POST/SEND INFORMATION IN A REQUEST
-app.post('/tasks', async (req, res) => {
+app.post('/', async (req, res) => {
   //Retrieve the information sent by the client to our API endpoint
-  const { text, complete } = req.body
+  const { message, heart } = req.body
 
   //use our mongoose model to create the database entry
-  const task = new Task({ text, complete })
+  const thought = new Thought({ message, heart })
   try {
     //Success
-    const savedTask = await task.save()
-    res.status(201).json(savedTask)
-    console.log(savedTask)
+    const savedThought = await thought.save()
+    res.status(201).json(savedThought)
+    console.log(savedThought)
   } catch (err) {
     //Bad request
-    res.status(400).json({ message: 'Could not save task to the database', error: err.errors })
+    res.status(400).json({ message: 'Could not save thought to the database', error: err.errors })
   }
 })
+
+app.post('/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
+  const thought = await Thought.findById(thoughtId)
+  try {
+    //Sucess
+    thought.hearts += 1
+    const likedThought = thought.save()
+    res.status(201).json(likedThought)
+  } catch (err) {
+    // Failed
+    res.status(404).json({ message: 'Could not find thought', error: err.errors })
+  }
+})
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
