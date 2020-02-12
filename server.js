@@ -54,6 +54,7 @@ app.get('/', async (req, res) => {
   }
 })
 
+// POST A THOUGHT
 app.post('/', async (req, res) => {
   const { message } = req.body
   const thought = new Thought({ message })
@@ -67,19 +68,20 @@ app.post('/', async (req, res) => {
   }
 })
 
+// LIKE A THOUGHT
 app.post('/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
   try {
     // Sucess to updatde the specific thought with increament hearts by 1
-    const like = await Thought.findOneAndUpdate({ '_id': thoughtId }, { '$inc': { 'hearts': 1 } }, { useFindAndModify: false })
-    res.status(201).json(like)
+    await Thought.updateOne({ '_id': thoughtId }, { '$inc': { 'hearts': 1 } })
+    res.status(201).json()
   } catch (err) {
     // Failed
     res.status(404).json({ message: `Could not like the thought with id ${thoughtId} `, error: err.errors })
   }
 })
 
-// Start the server
+// START THE SERVER
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
 })
