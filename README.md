@@ -1,13 +1,26 @@
-# Project Happy Thoughts API
+# Message API with Express and MongoDB
 
-Replace this readme with your own information about your project.
+### Summary
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+A custom message API created with Express, MongoDB and Mongoose to provide short Twitter like messages from users.
 
-## The problem
+### Implementation details
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+The following endpoints have been implemented in Express:
 
-## View it live
+- Get all messages (GET "/")
+- Post a new message (POST "/" with body: { "message": "text" })
+- Like a message (POST "/:messageId/like")
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+### Technologies used
+
+- JavaScript ES6+
+- Node.js
+- [Express](https://expressjs.com/)
+- [MongoDB](https://www.mongodb.com/)
+- [Joi](https://github.com/hapijs/joi)
+- [Celebrate](https://github.com/arb/celebrate)
+
+### Where can you see it in action?
+
+URL to custom message API: https://express-happy-thoughts-api.herokuapp.com/api
