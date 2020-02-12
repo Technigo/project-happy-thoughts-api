@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import compression from 'compression';
 import logger from 'morgan';
-import { errors } from 'celebrate';
+import { errors, celebrate, Joi, Segments } from 'celebrate';
 import Routes from './routes/index';
 import Thought from './models/thought';
 
@@ -59,6 +59,18 @@ app.use((req, res, next) => {
     });
   }
 });
+
+// Validate all incoming request headers for the user-agent JSON header
+// If missing or not the correct format, respond with an error
+// app.use(
+//   celebrate({
+//     [Segments.HEADERS]: Joi.object({
+//       'Content-Type': Joi.any()
+//         .valid('application/json')
+//         .required()
+//     }).unknown()
+//   })
+// );
 
 // Load API routes
 app.use('/api', Routes);
