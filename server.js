@@ -71,11 +71,11 @@ app.post('/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
   try {
     // Sucess to updatde the specific thought with increament hearts by 1
-    const like = await Thought.findOneAndUpdate({ '_id': thoughtId }, { '$inc': { 'hearts': 1 } })
+    const like = await Thought.findOneAndUpdate({ '_id': thoughtId }, { '$inc': { 'hearts': 1 } }, { useFindAndModify: false })
     res.status(201).json(like)
   } catch (err) {
     // Failed
-    res.status(404).json({ message: 'Could not like the thought', error: err.errors })
+    res.status(404).json({ message: `Could not like the thought with id ${thoughtId} `, error: err.errors })
   }
 })
 
