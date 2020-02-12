@@ -37,17 +37,18 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-// Start defining your routes here
-// app.get('/', (req, res) => {
-//   res.send('Hello world')
-// })
-
 
 app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
   res.json(thoughts)
 })
 
+app.post('/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
+  console.log(thoughtId)
+  await Thought.updateOne({ '_id': thoughtId }, { '$inc': { 'hearts': 1 } })
+  res.status(201)
+})
 
 app.post('/', async (req, res) => {
   try {
@@ -57,15 +58,6 @@ app.post('/', async (req, res) => {
     res.status(400).json({ message: 'Could not save thought', errors: err.error })
   }
 })
-
-
-// app.post('/:thoughtId/like', async (req, res) => {
-//   try {
-//     const heartLikes = await thoughts.findByIdAndUpdate({ hearts + 1})
-
-//   }
-// })
-
 
 
 // Start the server
