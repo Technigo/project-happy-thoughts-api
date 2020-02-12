@@ -8,18 +8,19 @@ A custom message API created with Express, MongoDB and Mongoose to provide short
 
 The following endpoints have been implemented in Express:
 
-- Get all messages (GET "/")
+- Get all messages (GET **"/"**)
 - Post a new message (POST "/" with body: `{ "message": "text" }`)
 - Like a message (POST "/:messageId/like")
 
 ### Technologies used
 
 - JavaScript ES6+
-- Node.js
-- [Express](https://expressjs.com/)
-- [MongoDB](https://www.mongodb.com/)
-- [Joi](https://github.com/hapijs/joi)
-- [Celebrate](https://github.com/arb/celebrate)
+- Node JS
+- [Express](https://expressjs.com/) - A minimal and flexible Node JS web application framework
+- [MongoDB](https://www.mongodb.com/) - A general purpose, document-based, distributed database
+- [Mongoose](https://mongoosejs.com/) - MongoDB object modeling for Node JS
+- [Joi](https://github.com/hapijs/joi) - A powerful schema description language and data validator
+- [Celebrate](https://github.com/arb/celebrate) - A Joi validation middleware for Express JS
 
 ### Where can you see it in action?
 
