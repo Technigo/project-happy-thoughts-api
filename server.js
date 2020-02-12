@@ -69,12 +69,10 @@ app.post('/', async (req, res) => {
 
 app.post('/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
-  const thought = await Thought.findById(thoughtId)
   try {
-    //Sucess
-    thought.hearts += 1
-    const likedThought = thought.save()
-    res.status(201).json(likedThought)
+    //Sucess to updatde the specific thought with increament hearst by 1
+    await Thought.updateOne({ '_id': thoughtId }, { '$inc': { 'hearts': 1 } })
+    res.status(201)
   } catch (err) {
     // Failed
     res.status(404).json({ message: 'Could not find thought', error: err.errors })
