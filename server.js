@@ -59,13 +59,12 @@ app.post("/thoughts", async (req, res) => {
 
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
-  const thoughtLiked = await Thought.findById(thoughtId);
-
-  if (thoughtLiked) {
+  try {
+    const thoughtLiked = await Thought.findById(thoughtId);
     thoughtLiked.heart += 1;
     thoughtLiked.save();
     res.json(thoughtLiked);
-  } else {
+  } catch (err) {
     res.status(404).json({ message: "Could not find happy thought", error: err.errors });
   }
 });
