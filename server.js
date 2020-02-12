@@ -73,8 +73,8 @@ app.post('/:thoughtId/like', async (req, res) => {
   try {
     //Sucess
     thought.hearts += 1
-    const savedThought = await thought.save()
-    res.status(201).json(savedThought)
+    const likedThought = thought.save()
+    res.status(201).json(likedThought)
   } catch (err) {
     // Failed
     res.status(404).json({ message: 'Could not find thought', error: err.errors })
