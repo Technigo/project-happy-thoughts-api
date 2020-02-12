@@ -64,10 +64,8 @@ app.use((req, res, next) => {
 // If missing or not the correct format, respond with an error
 // app.use(
 //   celebrate({
-//     [Segments.HEADERS]: Joi.object({
-//       'Content-Type': Joi.any()
-//         .valid('application/json')
-//         .required()
+//     headers: Joi.object({
+//       'content-type': Joi.string().valid('application/json;')
 //     }).unknown()
 //   })
 // );

@@ -1,6 +1,7 @@
 import express from 'express';
 import Thought from '../models/thought';
 import { celebrate, Segments, Joi } from 'celebrate';
+import { requireJsonContent } from '../middleware/index';
 Joi.objectId = require('joi-objectid')(Joi);
 
 const router = express.Router();
@@ -22,6 +23,11 @@ router.get('/', async (req, res, next) => {
 router.post(
   '/',
   celebrate({
+    [Segments.HEADERS]: Joi.object({
+      'content-type': Joi.string()
+        .required()
+        .valid('application/json')
+    }).unknown(),
     [Segments.BODY]: Joi.object()
       .keys({
         message: Joi.string()
@@ -33,6 +39,7 @@ router.post(
       .options({ abortEarly: false })
   }),
   async (req, res) => {
+    console.log(req.headers);
     const thought = new Thought({ message: req.body.message });
     await thought.save();
     res.json(thought);
@@ -48,7 +55,7 @@ router.post(
       })
       .options({ abortEarly: false })
   }),
-  async (req, res, next) => {
+  async (req, res) => {
     const thought = await Thought.findById(req.params.thoughtId);
 
     if (thought) {
