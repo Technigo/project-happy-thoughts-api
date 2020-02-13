@@ -67,14 +67,16 @@ app.post('/:thoughtId/like', async (req, res) => {
   console.log(`POST /${thoughtId}/like`);
 
   try{
-    await Thought.updateOne({_id : thoughtId}, {$inc:{'hearts' :1}})
-    res.status(201).json();
+    await Thought.findOneAndUpdate({_id : thoughtId}, {$inc:{'hearts' :1}})
+    res.status(201).json(like);
    
   }catch(err){
     console.log(err)
     res.status(400).json({message: 'could not save like to Database due to thought not found', error:err.errors});
   }
 })
+
+
 
 // Start the server
 app.listen(port, () => {
