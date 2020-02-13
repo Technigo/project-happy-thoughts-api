@@ -1,4 +1,4 @@
-# Message API with Express and MongoDB
+# API with Express and MongoDB
 
 ### Summary
 
