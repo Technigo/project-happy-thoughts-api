@@ -8,14 +8,13 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
 const Thought = mongoose.model('Thought', {
-  // text: {
   message: {
     type: String,
     required: true,
     minlength: 5,
     maxlength: 140
   },
-  // like: {
+
   hearts: {
     type: Number,
     default: 0
@@ -71,7 +70,7 @@ app.post('/:thoughtId/like', async (req, res) => {
     const like = await Thought.findOneAndUpdate(
       { "_id": req.params.thoughtId }, //filter
       { $inc: { "hearts": 1 } },//update
-      // { returnNewDocument: true } //doesn't update/work 
+      { returnNewDocument: true } //doesn't update/work 
     )
     res.status(201).json(like)
   } catch (err) {
