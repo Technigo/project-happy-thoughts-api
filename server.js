@@ -49,9 +49,11 @@ app.get('/', (req, res) => {
 })
 
 app.post('/thoughts', async (req, res) => {
-  const thought = new Thought(req.body);
-  const savedThought = await thought.save();
-  res.json(savedThought);
+  const thought = await new Thought(req.body).save();
+
+  // const thought = new Thought(req.body);
+  // const savedThought = await thought.save();
+  res.json(thought);
 });
 
 
