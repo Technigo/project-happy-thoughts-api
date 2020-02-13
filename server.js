@@ -48,8 +48,7 @@ app.get('/thoughts', async (req, res) => {
 });
 
 app.post('/thoughts', async (req, res) => {
-  const { message, heart } = req.body;
-  const thought = new Thought({ message, heart });
+  const thought = new Thought({ message: req.body.message });
 
   try {
     const savedThought = await thought.save();
