@@ -49,9 +49,9 @@ app.get('/', async (req, res) => {
 
 app.post('/', async (req, res) => {
   //Retrieve the information sent by the client to our API endpoint
-  const { text, like } = req.body.message
+  const { message, hearts } = req.body.message
   // Use our mongoose model to create the database entry
-  const thought = new Thought({ text, like })
+  const thought = new Thought({ message, hearts })
   try {
     // Success
     const savedThought = await thought.save()
