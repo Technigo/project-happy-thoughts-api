@@ -12,6 +12,10 @@ The following endpoints have been implemented in Express:
 - Post a new message - **POST /api** with request body: `{ "message": "text" }`
 - Like a message - **POST /api/:messageId/like**
 
+Mongoose is an Object Data Modeling (ODM) library for MongoDB and Node JS. It this project Mongoose manages relationships between data, provides schema validation, and is used to translate between objects in code and the representation of those objects in MongoDB.
+
+To combat invalid data in incoming API requests I decided to use Joi, a powerful schema description language and data validator for JavaScript. Together with the Express middleware library Celebrate, which is a wrapper for the Joi library, I can intercept and validate incoming requests before they even reach the route handler. That reduces unneccesary logic and makes the code cleaner in the route handlers.
+
 ### Technologies used
 
 - JavaScript ES6+
