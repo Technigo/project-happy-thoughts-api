@@ -62,7 +62,8 @@ app.post('/:id/like', async (req, res) => {
   try {
     const thoughtLiked = await Thought.updateOne(
       { _id: req.params.id },
-      { $inc: { heart: 1 } }
+      { $inc: { heart: 1 } },
+      { returnNewDocument: true }
     );
     res.status(201).json(thoughtLiked);
   } catch (err) {
