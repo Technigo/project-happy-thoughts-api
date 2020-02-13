@@ -63,11 +63,18 @@ try {
 
 });
 
-app.post('/thoughts/:_id/hearts', async (req, res) => {
-  const {_id} = req.params.id;
-  console.log(`POST /thoughts/${_id}/hearts`);
-  await Thought.updateOne({'id': id}, {'$inc' : {'hearts': 1}});
-  res.status(201);
+app.post('/:thoughtId/like', async (req, res) => {
+  try{
+    const like = await Thought.findOneAndUpdate(
+      { "_id": req.params.thoughtId },
+      { $inc: {"hearts": 1} }
+    )
+    console.log("Likes success")
+    res.status(201).json(like)
+  }catch (err) {
+    res.status(400).json({message: 'Could not save like', error: err.errors})
+    console.logg("In Error Likes")
+  }
 })
 
 // Start the server
