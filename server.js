@@ -14,6 +14,33 @@ mongoose.Promise = Promise
 const port = process.env.PORT || 8080
 const app = express()
 
+const Thought = mongoose.model('Thought', {
+
+  message: {
+    type: String,
+    required: true,
+    minlength: 2,
+    maxlength: 140
+  },
+  hearts: {
+    type: Number
+  },
+  createdAt: {}
+
+})
+
+// if (process.env.RESET_DB) {
+//   const seedDatabase = async () => {
+//     await Thought.deleteMany({})
+
+//     .forEach((thoughtRecord) => {
+//       new Thought(thoughtRecord).save()
+//     })
+//   }
+
+//   seedDatabase()
+// }
+
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(bodyParser.json())
