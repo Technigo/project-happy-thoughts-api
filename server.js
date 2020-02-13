@@ -48,8 +48,14 @@ app.get('/', (req, res) => {
   // const thoughts = res.
 })
 
-app.post('/thoughts', async (req, res) => {
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec();
+  //Klar: return ax 20 thoughts
+  //Klar: array.sort(desc createdAt)
+  res.json(thoughts);
+})
 
+app.post('/thoughts', async (req, res) => {
   //try catch-form
   try {
     //success
@@ -63,8 +69,15 @@ app.post('/thoughts', async (req, res) => {
 
   // const thought = new Thought(req.body);
   // const savedThought = await thought.save();
-
 });
+
+app.post('/:thoughtId/like', async (req, res) => {
+  const id = req.params._id
+  console.log(id)
+  const filterId = json.filter((item => item._id === +id))
+  res.json(filterId)
+  // const id = awa
+})
 
 
 
