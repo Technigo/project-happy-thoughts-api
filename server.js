@@ -68,7 +68,7 @@ app.post('/:thoughtId/like', async (req, res) => {
 
   try{
     await Thought.updateOne({_id : thoughtId}, {$inc:{'hearts' :1}})
-    res.status(201).json();
+    res.status(201).send()//.json();
    
   }catch(err){
     console.log(err)
