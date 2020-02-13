@@ -49,11 +49,20 @@ app.get('/', (req, res) => {
 })
 
 app.post('/thoughts', async (req, res) => {
-  const thought = await new Thought(req.body).save();
+
+  //try catch-form
+  try {
+    //success
+    const thought = await new Thought(req.body).save();
+    res.status(200).json(thought);
+  } catch (err) {
+    //Bad request
+    res.status(400).json({ message: 'Could not post thought', errors: err.errors })
+  }
 
   // const thought = new Thought(req.body);
   // const savedThought = await thought.save();
-  res.json(thought);
+
 });
 
 
