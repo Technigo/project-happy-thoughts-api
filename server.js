@@ -57,10 +57,12 @@ app.post('/:thoughtId/like', async (req, res) => {
   const thoughtId = req.params.thoughtId
 
   try {
-    const likedThought = await Thought.findOneAndUpdate({ '_id': thoughtId }, { $inc: { 'hearts': 1 } }, { new: true })
+    const likedThought = await Thought.findByIdAndUpdate(thoughtId, { $inc: { 'hearts': 1 } }, { new: true })
     res.status(201).json(likedThought)
   } catch (err) {
-    res.status(400).json({ message: "Could not like thought" })
+    if (err.kind === "ObjectId") {
+      res.status(400).json({ message: "Could not like thought", error: "There is no Thought with that id." })
+    }
   }
 })
 
