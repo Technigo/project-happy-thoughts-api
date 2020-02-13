@@ -42,12 +42,12 @@ app.use(bodyParser.json())
 //   res.send('Hello world hej hej')
 // })
 
-app.get('/thoughts', async (req, res) => {
+app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(140).exec()
   res.json(thoughts)
 })
 
-app.post('/thoughts', async (req, res) => {
+app.post('/', async (req, res) => {
   //Retrieve the information sent by the client to our API endpoint
   const { text, like } = req.body.message
   // Use our mongoose model to create the database entry
@@ -62,12 +62,12 @@ app.post('/thoughts', async (req, res) => {
 })
 
 // The endpoint updates the number of like
-app.post('/:id/like', async (req, res) => {
+app.post('/:thoughtId/like', async (req, res) => {
 
   try {
     const like = await Thought.findOneAndUpdate(
-      { "_id": req.params.id }, //filter
-      { $inc: { "heart": 1 } },//update
+      { "_id": req.params.thoughtId }, //filter
+      { $inc: { "hearts": 1 } },//update
       { returnNewDocument: true } //doesn't update/work 
     )
     res.status(201).json(like)
