@@ -8,13 +8,15 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
 const Thought = mongoose.model('Thought', {
-  text: {
+  // text: {
+  message: {
     type: String,
     required: true,
     minlength: 5,
     maxlength: 140
   },
-  like: {
+  // like: {
+  hearts: {
     type: Number,
     default: false
   },
