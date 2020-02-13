@@ -36,18 +36,15 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world');
-});
 
-app.get('/thoughts', async (req, res) => {
+app.get('/', async (req, res) => {
   const thoughts = await Thought.find()
     .sort({ createdAt: 'desc' })
     .limit(20);
   res.json(thoughts);
 });
 
-app.post('/thoughts', async (req, res) => {
+app.post('/', async (req, res) => {
   const thought = new Thought({ message: req.body.message });
 
   try {
@@ -61,12 +58,10 @@ app.post('/thoughts', async (req, res) => {
   }
 });
 
-app.post('/thoughts/:thoughtId/like', async (req, res) => {
-  const { thoughtId } = req.params;
-
+app.post('/:id/like', async (req, res) => {
   try {
     const thoughtLiked = await Thought.updateOne(
-      { _id: thoughtId },
+      { _id: req.params.id },
       { $inc: { heart: 1 } }
     );
     res.status(201).json(thoughtLiked);
