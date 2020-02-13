@@ -61,13 +61,13 @@ app.post('/', async (req, res) => {
   }
 })
 
- // The endpoint updates the number of like
-app.post('/:id/like', async (req, res) => {
+ // The endpoint updates the number of likePOST /:thoughtId/like
+app.post('/:thoughtId/like', async (req, res) => {
   
   try {
     const like = await Thought.findOneAndUpdate(
       { "_id": req.params.id }, //filter
-      { $inc: { "heart": 1 } },//update
+      { $inc: { "hearts": 1 } },//update
       { returnNewDocument: true } //doesn't update/work 
     )
     res.status(201).json(like)
