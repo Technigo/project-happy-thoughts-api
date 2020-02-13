@@ -18,13 +18,13 @@ const Thought = mongoose.model('Thought', {
     type: Number,
     default: 0
     // Måste vara default 0 annars följer den inte med om jag itne sj skriver t.ex. heart: 1
-    // Should not be assignable when creating a new thought. For example, if I send a POST request to / to create a new thought with this JSON body; { "message": "Hello", "hearts": 9000 }, then the hearts property should be ignored, and the object we store in mongo should have 0 hearts.
+    // Klart: Should not be assignable when creating a new thought
   },
   createdAt: {
     type: Date,
     default: Date.now()
     // default: () => new Date
-    // Should not be assignable when creating a new thought.
+    //Klart: Should not be assignable when creating a new thought.
   }
 });
 
@@ -53,7 +53,8 @@ app.post('/thoughts', async (req, res) => {
   //try catch-form
   try {
     //success
-    const thought = await new Thought(req.body).save();
+    const { message } = req.body
+    const thought = await new Thought({ message }).save();
     res.status(200).json(thought);
   } catch (err) {
     //Bad request
