@@ -14,7 +14,7 @@ const Thought = mongoose.model('Thought', {
     minlength:5,
     maxlength:140
   },
-  heart: {
+  hearts: {
     type:Number,
     default:0
   },
@@ -64,7 +64,7 @@ app.post('/:thoughtId/like', async (req, res) => {
   try{ 
     const like = await Thought.findOneAndUpdate(
       { "_id": req.params.thoughtId },
-      { $inc: {"heart": 1} }
+      { $inc: {"hearts": 1} }
     )
     console.log("Likes success")
     res.status(201).json(like)
