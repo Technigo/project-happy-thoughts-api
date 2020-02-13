@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
+//mongodb+srv://annaholly:WAfV2IEidqVDmDR5@cluster0-trdcw.mongodb.net/happyThoughts?retryWrites=true&w=majority
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -14,7 +15,7 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 140
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -47,10 +48,10 @@ app.get('/', async (req, res) => {
 
 app.post('/', async (req, res) => {
   //get the info send by user to our API endpoint
-  const {message, heart} = req.body;
+  const {message, hearts} = req.body;
 
   //use our mongoose model to create database entry
-  const thought = new Thought({message, heart});
+  const thought = new Thought({message, hearts});
 
   try{
     const savedThought = await thought.save();
@@ -66,7 +67,7 @@ app.post('/:thoughtId/like', async (req, res) => {
   console.log(`POST /${thoughtId}/like`);
 
   try{
-    await Thought.updateOne({_id : thoughtId}, {'$inc': {'heart' :1}})
+    await Thought.updateOne({_id : thoughtId}, {$inc:{'hearts' :1}})
     res.status(201).json();
    
   }catch(err){
