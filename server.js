@@ -18,6 +18,31 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
+// Mongoose model
+
+const Thought = mongoose.model("Thought", {
+  message: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 140
+  },
+  hearts: {
+    type: Number,
+    default: 0
+  },
+  name: {
+    type: String,
+    default: "anonymous",
+    minlength: 2,
+    maxlength: 50
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+})
+
 // Start defining your routes here
 app.get('/', (req, res) => {
   res.send('Hello world')
