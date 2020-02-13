@@ -9,7 +9,7 @@ A custom message API created with Express, MongoDB and Mongoose to provide short
 The following endpoints have been implemented in Express:
 
 - Get all messages - **GET api/**
-- Post a new message - **POST api/** with body: `{ "message": "text" }`
+- Post a new message - **POST api/** with request body: `{ "message": "text" }`
 - Like a message - **POST api/:messageId/like**
 
 ### Technologies used
