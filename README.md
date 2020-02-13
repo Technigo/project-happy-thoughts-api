@@ -2,7 +2,7 @@
 
 ### Summary
 
-A custom message API created with Express, MongoDB and Mongoose to provide short Twitter like messages from users.
+A custom Message API created with Express, MongoDB and Mongoose to provide short Twitter like messages from users.
 
 ### Implementation details
 
@@ -24,5 +24,5 @@ The following endpoints have been implemented in Express:
 
 ### Where can you see it in action?
 
-- URL to custom message API: https://express-happy-thoughts-api.herokuapp.com/api
+- URL to custom Message API: https://express-happy-thoughts-api.herokuapp.com/api
 - URL to Message site using the API: https://goofy-shannon-552309.netlify.com/
