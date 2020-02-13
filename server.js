@@ -14,15 +14,16 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 140
   },
+
   hearts: {
     type: Number,
     default: 0
-    ///Should not be assignable when creating a new thought
   },
+
   createdAt: {
     type: Date,
     default: Date.now
-    //Should not be assignable when creating a new thought
+
   },
 })
 
@@ -44,15 +45,18 @@ app.get('/', async (req, res) => {
 })
 
 app.post('/:thoughtId/like', async (req, res) => {
-  const { thoughtId } = req.params
-  console.log(thoughtId)
-  await Thought.updateOne({ '_id': thoughtId }, { '$inc': { 'hearts': 1 } })
-  res.status(201)
+  try {
+    const { thoughtId } = req.params
+    await Thought.updateOne({ '_id': thoughtId }, { '$inc': { 'hearts': 1 } })
+    res.status(201).json({ message: `Thought Id nr: ${thoughtId} got one heart update` })
+  } catch (err) {
+    res.status(400).json({ message: 'Could not find thought', errors: err.error })
+  }
 })
 
 app.post('/', async (req, res) => {
   try {
-    const thought = await new Thought(req.body).save()
+    const thought = await new Thought({ message: req.body.message }).save()
     res.status(201).json(thought)
   } catch (err) {
     res.status(400).json({ message: 'Could not save thought', errors: err.error })
