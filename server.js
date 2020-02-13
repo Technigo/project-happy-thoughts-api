@@ -14,8 +14,8 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 140
   },
-  complete: {
-    type: Boolean,
+  like: {
+    type: Number,
     default: false
   },
   createdAt: {
@@ -47,10 +47,10 @@ app.get('/thoughts', async (req, res) => {
 
 app.post('/thoughts', async (req, res) => {
   //Retrieve the information sent by the client to our API endpoint
-  const {text, complete} = req.body
+  const {text} = req.body
 
   // Use our mongoose model to create the database entry
-  const thought = new Thought({text, complete})
+  const thought = new Thought({text})
 
   try {
     // Success
@@ -61,17 +61,20 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-app.post('/:thoughtId/like', async (req, res) => {
-  //Update the heart Number
-  // const heart = req.params.id
-  // const like = heart.find(createdAt).count(heart + 1)
-  const like = await like.find(req.params.id).count({ type: Number }, function (err, count) {
-    if (err)
-      console.log('hearts', count);
-  });
-  like.save()
-  res.json(like)
-  //add a error message if id is not found.
+ // The endpoint updates the number of like
+app.post('/:id/like', async (req, res) => {
+  
+  try {
+    const like = await Thought.findOneAndUpdate(
+      { "_id": req.params.id }, //filter
+      { $inc: { "heart": 1 } },//update
+      { returnNewDocument: true } //doesn't update/work 
+    )
+    res.status(201).json(like)
+  } catch (err) {
+    console.log(err)
+    res.status(400).json({ message: 'Ups, I could not save your like', error: err })
+  }
 })
 
 // Start the server
