@@ -47,9 +47,9 @@ app.get('/thoughts', async (req, res) => {
 
 app.post('/thoughts', async (req, res) => {
   //Retrive the information sent by the client to our API endpoint
-  const {message, hearts} = req.body;
+  const {message} = req.body;
   //Use our mongoose model to create the database entry
-  const thought = new Thought({message, hearts});
+  const thought = new Thought({message});
 
 
 try {
@@ -62,6 +62,13 @@ try {
 }
 
 });
+
+app.post('/thoughts/:_id/hearts', async (req, res) => {
+  const {_id} = req.params.id;
+  console.log(`POST /thoughts/${_id}/hearts`);
+  await Thought.updateOne({'id': id}, {'$inc' : {'hearts': 1}});
+  res.status(201);
+})
 
 // Start the server
 app.listen(port, () => {
