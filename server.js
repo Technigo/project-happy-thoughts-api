@@ -66,7 +66,7 @@ app.post('/:thoughtId/like', async (req, res) => {
   
   try {
     const like = await Thought.findOneAndUpdate(
-      { "_id": req.params.id }, //filter
+      { "_id": req.params.thoughtId }, //filter
       { $inc: { "hearts": 1 } },//update
       { returnNewDocument: true } //doesn't update/work 
     )
