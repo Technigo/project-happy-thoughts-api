@@ -13,4 +13,5 @@ If I had more time I would've added some filtering and sorting options to the ge
 ## View it live
 
 Here's the API: https://happy-thoughts-matilda.herokuapp.com/
+
 Frontend: https://matilda-arvidsson-project-happy-thoughts.netlify.com/
