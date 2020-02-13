@@ -1,13 +1,16 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+I built an API to an earlier frontend-project: https://matilda-arvidsson-project-happy-thoughts.netlify.com/
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+In this API I used MongoDB and Mongoose to make a model. The model contains of message, hearts, name (optional) and timestamp.
+
+The API then have three routes, one get (for fetching all happy thoughts), and two post (one for posting a happy thought, and one for liking a happy thought).
+
+If I had more time I would've added some filtering and sorting options to the get-endpoint. Now I just chose to sort by newest first.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Here's the API: https://happy-thoughts-matilda.herokuapp.com/
+Frontend: https://matilda-arvidsson-project-happy-thoughts.netlify.com/
