@@ -16,16 +16,12 @@ const Thought = mongoose.model('Thought', {
   },
   heart: {
     type: Number,
-    default: 0,
+    default: 0
   },
   createdAt: {
     type: Date,
     default: Date.now
   }
-  // thoughtId: {
-  //   type: String,
-  //   unique: true
-  // }
 })
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
@@ -53,16 +49,18 @@ app.post('/thoughts', async (req, res) => {
   const thought = new Thought({ message })
 
   try {
+    // Success case
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
+    // Error case
   } catch (err) {
-    res.status(400).json({ text: 'Could not send Happy Thought, please try again', error: err.errors })
+    res.status(400).json({ message: 'Could not send Happy Thought, please try again', error: err.errors })
   }
 })
 
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
-  const { thoughtId } = req.params
-  await Thought.updateOne({ 'thoughtId': thoughtId }, { '$inc': { 'heart': 1 } })
+  const { _id } = req.params
+  await Thought.updateOne({ '_id': thoughtId }, { '$inc': { 'heart': 1 } })
   res.status(201).json()
 })
 
