@@ -6,7 +6,7 @@ import mongoose from 'mongoose'
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
-d
+
 const Thought = mongoose.model('Thought', {
   text: {
     type: String,
@@ -14,8 +14,8 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 140
   },
-  complete: {
-    type: Boolean,
+  like: {
+    type: Number,
     default: false
   },
   createdAt: {
@@ -30,29 +30,25 @@ const Thought = mongoose.model('Thought', {
 //   PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
-
 // Add middlewares to enable cors and json body parsing
+
 app.use(cors())
 app.use(bodyParser.json())
-
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Hello world hej hej')
 })
 
-app.get('thoughs'), async (req, res) => {
-  const thoughts = await Though.find().sort({
-    createdAt:
-
-      'desc'
-  }).limit(140).exec()
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(140).exec()
   res.json(thoughts)
 })
+
 app.post('/thoughts', async (req, res) => {
   //Retrieve the information sent by the client to our API endpoint
-  const { text, complete } = req.body
+  const { text, like } = req.body.message
   // Use our mongoose model to create the database entry
-  const thought = new Thought({ text, complete })
+  const thought = new Thought({ text, like })
   try {
     // Success
     const savedThought = await thought.save()
@@ -61,17 +57,21 @@ app.post('/thoughts', async (req, res) => {
     res.status(400).json({ message: 'Could not save message to the Database', error: err.errors })
   }
 })
-app.post('/:thoughtId/like', async (req, res) => {
-  //Update the heart Number
-  // const heart = req.params.id
-  // const like = heart.find(createdAt).count(heart + 1)
-  const like = await like.find(req.params.id).count({ type: Number }, function (err, count) {
-    if (err)
-      console.log('hearts', count);
-  });
-  like.save()
-  res.json(like)
-  //add a error message if id is not found.
+
+// The endpoint updates the number of like
+app.post('/:id/like', async (req, res) => {
+
+  try {
+    const like = await Thought.findOneAndUpdate(
+      { "_id": req.params.id }, //filter
+      { $inc: { "heart": 1 } },//update
+      { returnNewDocument: true } //doesn't update/work 
+    )
+    res.status(201).json(like)
+  } catch (err) {
+    console.log(err)
+    res.status(400).json({ message: 'Ups, I could not save your like', error: err })
+  }
 })
 
 // Start the server
