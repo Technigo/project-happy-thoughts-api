@@ -3,9 +3,9 @@ Happt Thoughts API - use the same paths and params as Technigo's.
 
 Main endpoint is https://happy-thoughts-api-vd.herokuapp.com/
 
-GET / : Returns array of maximum 20 thoughts, in descending order
-POST / : Post a thought. Body must contain a message between 5-140 characters
-POST /:id/like : Adds a like to a post - id in ObjectID format
+- GET / : Returns array of maximum 20 thoughts, in descending order
+- POST / : Post a thought. Body must contain a message between 5-140 characters
+- POST /:id/like : Adds a like to a post - id in ObjectID format
 
 Front-end app is redirected to this API instead of Technigo's:
 
