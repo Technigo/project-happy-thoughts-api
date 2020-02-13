@@ -36,17 +36,17 @@ app.use(cors())
 app.use(bodyParser.json())
 
 // Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Happy Thoughts')
-})
+// app.get('/', (req, res) => {
+//   res.send('Happy Thoughts')
+// })
 
-app.get('/thoughts', async (req, res) => {
+app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
   console.log("Thoughts array")
   res.json(thoughts)
 })
 
-app.post('/', async (req, res) => {
+app.post('/thoughts', async (req, res) => {
   const {message} = req.body
   const thought = new Thought({message})
  
