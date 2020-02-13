@@ -24,7 +24,6 @@ const Thought = mongoose.model('Thought', {
   }
 })
 
-
 // Defines the port the app will run on
 const port = process.env.PORT || 8082
 const app = express()
@@ -34,20 +33,26 @@ app.use(cors())
 app.use(bodyParser.json())
 
 // Start defining the routes
-app.get('/', (req, res) => {
-  res.send('Happy Thoughts API')
-})
+app.get('/', async (req, res) => {
+  const {sort} = req.query
 
-app.get('/thoughts/', async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
+  const sortData = (sort) => {
+    if (sort === 'dates') {
+      return {createdAt:'asc'}
+    } else if (sort === 'hearts') {
+      return {hearts:'desc'}
+    } else {
+      return {createdAt: 'desc'}
+    }
+  }
+
+  let thoughts = await Thought.find().sort(sortData(sort)).limit(20).exec()
   res.json(thoughts)
 })
 
-app.post('/thoughts/', async (req, res) => {
-  // Retrieve the information sent by the client to our API endpoint
+// Retrieve the information sent by the client to our API endpoint
+app.post('/', async (req, res) => {
   const {message} = req.body
-
-  // Use the mongoose model to create the database entry
   const thought = new Thought({message})
 
   try {
@@ -58,19 +63,15 @@ app.post('/thoughts/', async (req, res) => {
   }
 })
 
-app.post('/thoughts/:thoughtId/like', async (req, res) => {
+app.post('/:thoughtId/like', async (req, res) => {
   const {thoughtId} = req.params
-  const thoughtLiked = await Thought.findById(thoughtId)
-
-  if(thoughtLiked) {
-    thoughtLiked.hearts += 1
-    thoughtLiked.save()
-    res.json(thoughtLiked)
-  } else {
-    res.status(404).json({message: 'Could not find happy thought :(', error: err.errors})
-  }
+  try {
+    await Thought.updateOne({'_id': thoughtId}, {'$inc': {'hearts': 1}})
+    res.status(201).json()
+  } catch (err) {
+    res.status(400).json({message: 'Could not find the happy thought', error: err.errors})
+}
 })
-
 
 // Start the server
 app.listen(port, () => {
