@@ -40,12 +40,12 @@ app.use(bodyParser.json())
 //   res.send('Hello world hej hej')
 // })
 
-app.get('/', async (req, res) => {
+app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(140).exec()
   res.json(thoughts)
 })
 
-app.post('/', async (req, res) => {
+app.post('/thoughts', async (req, res) => {
   //Retrieve the information sent by the client to our API endpoint
   const { text, like } = req.body.message
   // Use our mongoose model to create the database entry
