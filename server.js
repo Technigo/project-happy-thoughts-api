@@ -18,7 +18,7 @@ const Thought = mongoose.model('Thought', {
   // like: {
   hearts: {
     type: Number,
-    default: false
+    default: 0
   },
   createdAt: {
     type: Date,
@@ -47,11 +47,14 @@ app.get('/', async (req, res) => {
   res.json(thoughts)
 })
 
-app.post('/', async (req, res) => {
+app.post('/thoughts', async (req, res) => {
   //Retrieve the information sent by the client to our API endpoint
-  const { message, hearts } = req.body.message
+  // const { message, hearts } = req.body.message
+  const { message } = req.body
   // Use our mongoose model to create the database entry
-  const thought = new Thought({ message, hearts })
+  // const thought = new Thought({ message, hearts })
+  const thought = new Thought({ message })
+
   try {
     // Success
     const savedThought = await thought.save()
@@ -68,7 +71,7 @@ app.post('/:thoughtId/like', async (req, res) => {
     const like = await Thought.findOneAndUpdate(
       { "_id": req.params.thoughtId }, //filter
       { $inc: { "hearts": 1 } },//update
-      { returnNewDocument: true } //doesn't update/work 
+      // { returnNewDocument: true } //doesn't update/work 
     )
     res.status(201).json(like)
   } catch (err) {
