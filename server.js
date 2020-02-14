@@ -42,14 +42,16 @@ app.use(bodyParser.json())
 // })
 
 app.get('/', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+  const thoughts = await Thought.find()
+    .sort({ createdAt: 'desc' })
+    .limit(20).exec()
   res.json(thoughts)
 })
 
 app.post('/', async (req, res) => {
   //Retrieve the information sent by the client to our API endpoint
   // const { message, hearts } = req.body.message
-  const { message, hearts } = req.body
+  const { message, hearts } = req.body.message
   // Use our mongoose model to create the database entry
   // const thought = new Thought({ message, hearts })
   const thought = new Thought({ message, hearts })
