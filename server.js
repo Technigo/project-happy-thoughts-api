@@ -42,24 +42,24 @@ app.use(bodyParser.json())
 // })
 
 app.get('/', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(140).exec()
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
   res.json(thoughts)
 })
 
 app.post('/', async (req, res) => {
   //Retrieve the information sent by the client to our API endpoint
   // const { message, hearts } = req.body.message
-  const { message } = req.body
+  const { message, hearts } = req.body
   // Use our mongoose model to create the database entry
   // const thought = new Thought({ message, hearts })
-  const thought = new Thought({ message })
+  const thought = new Thought({ message, hearts })
 
   try {
     // Success
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
   } catch (err) {
-    res.status(400).json({ message: 'Could not save message to the Database', error: err.errors })
+    res.status(400).json({ message: 'Could not save your heart message', error: err.errors })
   }
 })
 
