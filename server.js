@@ -46,7 +46,7 @@ app.get('/', async (req, res) => {
   res.json(thoughts)
 })
 
-app.post('/thoughts', async (req, res) => {
+app.post('/', async (req, res) => {
   //Retrieve the information sent by the client to our API endpoint
   // const { message, hearts } = req.body.message
   const { message } = req.body
@@ -75,7 +75,7 @@ app.post('/:thoughtId/like', async (req, res) => {
     res.status(201).json(like)
   } catch (err) {
     console.log(err)
-    res.status(400).json({ message: 'Ups, I could not save your like', error: err })
+    res.status(400).json({ message: 'Oops, I could not save your like', error: err })
   }
 })
 
