@@ -22,18 +22,24 @@ const Thought = mongoose.model('Thought', {
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  name: {
+    type: String,
+    required: false,
+    default: "anonymous",
+    maxlength: 50
   }
 })
 
-// SEEDING FOR ADDING NEW DATA
+//SEEDING FOR ADDING NEW DATA
 if (process.env.RESET_DB) {
   console.log('Resetting database')
   const seedDatabase = async () => {
     await Thought.deleteMany({})
 
-    // thought.forEach(() => {
-    //   new Thought().save()
-    // })
+    thought.forEach(() => {
+      new Thought().save()
+    })
   }
   seedDatabase()
 }
@@ -66,10 +72,9 @@ app.get('/', async (req, res) => {
 //POST/SEND INFORMATION IN A REQUEST
 app.post('/', async (req, res) => {
   //Retrieve the information sent by the client to our API endpoint
-  const { message, heart } = req.body
-
+  const { message, name } = req.body
   //use our mongoose model to create the database entry
-  const thought = new Thought({ message, heart })
+  const thought = new Thought({ message, name })
   try {
     //Success
     const savedThought = await thought.save()
@@ -81,17 +86,19 @@ app.post('/', async (req, res) => {
   }
 })
 
-app.post('/:thoughtId/like', async (req, res) => {
-  const { thoughtId } = req.params
-  const thought = await Thought.findById(thoughtId)
-  try {
-    //Sucess
+app.post("/:thoughtID/like", async (req, res) => {
+  //Find specific thought
+  const thoughtID = req.params.thoughtID
+  const thought = await Thought.findById(thoughtID)
+
+  if (thought) {
+    //Success case
     thought.hearts += 1
-    const likedThought = thought.save()
-    res.status(201).json(likedThought)
-  } catch (err) {
-    // Failed
-    res.status(404).json({ message: 'Could not find thought', error: err.errors })
+    thought.save()
+    res.status(201).json(thought)
+  }
+  else {
+    res.status(404).json({ message: `No thought with id: ${thoughtID} `, error: err.errors })
   }
 })
 
