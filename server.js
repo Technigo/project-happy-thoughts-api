@@ -58,7 +58,7 @@ app.post('/:thoughtId/like', async (req, res) => {
   try {
     const { thoughtId } = req.params
     console.log(`POST /${thoughtId}/like`)
-    await Thought.updateOne({ '_id': thoughtId }, { $inc: { 'heart': 1 } })
+    await Thought.updateOne({ '_id': thoughtId }, { $inc: { 'heart': 1 } }, { new: true })
     res.status(201).json({})
   } catch (err) {
     res.status(400).json({ message: 'Could not add like', errors: err.errors })
