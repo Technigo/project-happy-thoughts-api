@@ -16,7 +16,7 @@ const Thought = mongoose.model('Thought', {
   },
   hearts: {
     type: Number,
-    default: false
+    default: 0
   },
   createdAt: {
     type: Date,
@@ -37,27 +37,27 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 // app.get('/', (req, res) => {
-//   res.send('Hello world')
+//   res.send('Happy Thoughts')
 // })
 
 app.get('/', async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(140).exec()
+  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
   res.json(thoughts)
 })
 
-app.post('/', async (req, res) => {
+app.post('/thoughts', async (req, res) => {
   //Retrieve the information sent by the client to our API endpoint
-  const {message, hearts} = req.body
+  const {message} = req.body
 
   // Use our mongoose model to create the database entry
-  const thought = new Thought({message, hearts})
+  const thought = new Thought({message})
 
   try {
     // Success
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
   }catch (err) {
-    res.status(400).json({message: 'Could not save message to the Database', error: err.errors}) 
+    res.status(400).json({message: 'Could not save your sweet thought', error: err.errors}) 
   }
 })
 
@@ -72,8 +72,8 @@ app.post('/:thoughtId/like', async (req, res) => {
     )
     res.status(201).json(like)
   } catch (err) {
-    console.log(err)
-    res.status(400).json({ message: 'Ups, I could not save your like', error: err })
+      console.log(err)
+      res.status(400).json({ message: 'Ups, I could not save your sweet like', error: err })
   }
 })
 
