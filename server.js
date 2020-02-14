@@ -58,11 +58,11 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-app.post('/thoughts/:thoughtId/like', async (req, res) => {
-  const { _id } = req.params
-  await Thought.updateOne({ '_id': thoughtId }, { '$inc': { 'heart': 1 } })
-  res.status(201).json()
-})
+// app.post('/thoughts/:thoughtId/like', async (req, res) => {
+//   const { _id } = req.params
+//   await Thought.updateOne({ '_id': thoughtId }, { '$inc': { 'heart': 1 } })
+//   res.status(201).json()
+// })
 
 // Start defining your routes here
 app.get('/', (req, res) => {
