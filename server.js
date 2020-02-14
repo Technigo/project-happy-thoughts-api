@@ -57,7 +57,7 @@ app.post('/', async (req, res) => {
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
   }catch (err) {
-    res.status(400).json({message: 'Could not save message to the Database', error: err.errors}) 
+    res.status(400).json({message: 'Could not save your sweet message', error: err.errors}) 
   }
 })
 
@@ -73,7 +73,7 @@ app.post('/:thoughtId/like', async (req, res) => {
     res.status(201).json(like)
   } catch (err) {
     console.log(err)
-    res.status(400).json({ message: 'Ups, I could not save your like', error: err })
+    res.status(400).json({ message: 'Ups, I could not save your sweet like', error: err })
   }
 })
 
