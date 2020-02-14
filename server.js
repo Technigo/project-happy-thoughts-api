@@ -17,19 +17,12 @@ const Thought = mongoose.model('Thought', {
   heart: {
     type: Number,
     default: 0
-    // Måste vara default 0 annars följer den inte med om jag itne sj skriver t.ex. heart: 1
-    // Klart: Should not be assignable when creating a new thought
   },
   createdAt: {
     type: Date,
     default: Date.now()
-    // default: () => new Date
-    //Klart: Should not be assignable when creating a new thought.
   }
 });
-
-// Testing validation:
-// new Thought({ message: 'hej hej ' }).save()
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
@@ -42,20 +35,24 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-// Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello hello')
-  // const thoughts = res.
-})
 
-app.get('/thoughts', async (req, res) => {
+// GET
+app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec();
-  //Klar: return ax 20 thoughts
-  //Klar: array.sort(desc createdAt)
   res.json(thoughts);
 })
 
-app.post('/thoughts', async (req, res) => {
+app.get('/:thoughtId', async (req, res) => {
+  const thoughtId = req.params.thoughtId
+  Thought.findOne({ '_id': thoughtId })
+    .then((results) => {
+      res.json(results)
+    })
+})
+
+
+// POST
+app.post('/', async (req, res) => {
   //try catch-form
   try {
     //success
@@ -66,20 +63,19 @@ app.post('/thoughts', async (req, res) => {
     //Bad request
     res.status(400).json({ message: 'Could not post thought', errors: err.errors })
   }
-
-  // const thought = new Thought(req.body);
-  // const savedThought = await thought.save();
 });
 
+
 app.post('/:thoughtId/like', async (req, res) => {
-  const id = req.params._id
-  console.log(id)
-  const filterId = json.filter((item => item._id === +id))
-  res.json(filterId)
-  // const id = awa
+  try {
+    const { thoughtId } = req.params
+    console.log(`POST /${thoughtId}/like`)
+    await Thought.updateOne({ '_id': thoughtId }, { $inc: { 'heart': 1 } })
+    res.status(201)
+  } catch (err) {
+    res.status(400).json({ message: 'Could not add like', errors: err.errors })
+  }
 })
-
-
 
 // Start the server
 app.listen(port, () => {
