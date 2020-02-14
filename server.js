@@ -14,7 +14,7 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 140,
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -37,7 +37,7 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Hello happy thoughts')
 })
 
 app.get('/thoughts', async (req, res) => {
@@ -58,6 +58,18 @@ app.post('/thoughts', async (req, res) => {
     res.status(400).json({message: 'Could not post your thought', error:err})
   }
 })
+
+app.post('/thoughts/:_id/like', async(req, res) => {
+  const {_id} = req.params;
+  try {
+    await Thought.updateOne({'_id': _id}, {'$inc': {'heart': 1}});
+    // If not json is in the response, you have to invoke a send function
+    res.status(201).send();
+  } catch (err) {
+    res.status(401).json({message: 'Like not sent', error:err})
+  }
+})
+
 
 // Start the server
 app.listen(port, () => {
