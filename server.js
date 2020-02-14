@@ -17,6 +17,7 @@ const Thought = mongoose.model('Thought', {
   hearts: {
     type: Number,
     default: 0
+    // require: true
   },
   createdAt: {
     type: Date,
@@ -36,10 +37,6 @@ app.use(cors())
 app.use(bodyParser.json())
 
 // Start defining your routes here
-// app.get('/', (req, res) => {
-//   res.send('Happy')
-// })
-
 app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
   res.json(thoughts)
