@@ -7,6 +7,9 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
+// https://project-happy-thoughts.herokuapp.com/thoughts/${id}
+// https://technigo-thoughts.herokuapp.com/${id}/like
+
 const Thought = mongoose.model('Thought', {
   message: {
     type: String,
@@ -58,11 +61,11 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-// app.post('/thoughts/:thoughtId/like', async (req, res) => {
-//   const { _id } = req.params
-//   await Thought.updateOne({ '_id': thoughtId }, { '$inc': { 'heart': 1 } })
-//   res.status(201).json()
-// })
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { _id } = req.params
+  await Thought.updateOne({ '_id': thoughtId }, { '$inc': { 'heart': 1 } })
+  res.status(201).json()
+})
 
 // Start defining your routes here
 app.get('/', (req, res) => {
