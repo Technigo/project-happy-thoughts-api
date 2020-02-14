@@ -37,7 +37,7 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 // app.get('/', (req, res) => {
-//   res.send('Happy Thoughts')
+//   res.send('Happy')
 // })
 
 app.get('/', async (req, res) => {
@@ -45,19 +45,19 @@ app.get('/', async (req, res) => {
   res.json(thoughts)
 })
 
-app.post('/thoughts', async (req, res) => {
+app.post('/', async (req, res) => {
   //Retrieve the information sent by the client to our API endpoint
-  const {message} = req.body
+  const {message, hearts} = req.body
 
   // Use our mongoose model to create the database entry
-  const thought = new Thought({message})
+  const thought = new Thought({message, hearts})
 
   try {
     // Success
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
   }catch (err) {
-    res.status(400).json({message: 'Could not save your sweet thought', error: err.errors}) 
+    res.status(400).json({message: 'Could not save message to the Database', error: err.errors}) 
   }
 })
 
@@ -72,8 +72,8 @@ app.post('/:thoughtId/like', async (req, res) => {
     )
     res.status(201).json(like)
   } catch (err) {
-      console.log(err)
-      res.status(400).json({ message: 'Ups, I could not save your sweet like', error: err })
+    console.log(err)
+    res.status(400).json({ message: 'Ups, I could not save your like', error: err })
   }
 })
 
