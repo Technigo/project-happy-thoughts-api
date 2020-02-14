@@ -37,7 +37,7 @@ app.get('/', async (req, res) => {
     const thoughts = await Thought.find().sort({ 'createdAt': dateSorting }).limit(20).exec()
     res.json(thoughts)
   } catch (err) {
-    res.status(400).json({ message: 'Could not find thoughts', error: err.errors })
+    res.status(400).json({ message: 'Could not find thoughts', error: err.message })
   }
 })
 
@@ -62,6 +62,8 @@ app.post('/:thoughtId/like', async (req, res) => {
   } catch (err) {
     if (err.kind === "ObjectId") {
       res.status(400).json({ message: "Could not like thought", error: "There is no Thought with that id." })
+    } else {
+      res.status(400).json({ error: err.errors })
     }
   }
 })
