@@ -18,7 +18,9 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Start defining your routes here
-app.get("/", async (req, res) => {
+app.get("/:page", async (req, res) => {
+  const resPerPage = 20; // results per page
+  const { page } = req.params || 1; // Page
   Thought.find((err, thoughts) => {
     if (err) {
       console.log(err);
@@ -27,8 +29,9 @@ app.get("/", async (req, res) => {
       res.json(thoughts);
     }
   })
+    .skip(resPerPage * page - resPerPage)
     .sort({ createdAt: "desc" })
-    .limit(20);
+    .limit(resPerPage);
 });
 
 app.post("/", async (req, res) => {
@@ -52,7 +55,10 @@ app.post("/:thoughtId/like", async (req, res) => {
     like.save();
     res.status(201).json(like);
   } catch (err) {
-    res.status(400).json({ message: "Cannot add like", errors: err.errors });
+    res.status(400).json({
+      message: "Cannot add like, no thought available",
+      errors: err.errors
+    });
   }
 });
 
