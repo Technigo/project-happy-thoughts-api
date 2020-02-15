@@ -49,6 +49,7 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/", async (req, res) => {
+  //Error handling with try/catch (can be also promises)
   try {
     const thought = new Thought({ message: req.body.message });
     await thought.save();
@@ -61,16 +62,17 @@ app.post("/", async (req, res) => {
 });
 
 app.post("/:thoughtId/like", async (req, res) => {
-  const thoughtId = req.params.thoughtId;
-  const like = await Thought.findOne({ _id: thoughtId });
-  // const heart = new Thought({ heart: req.body.heart + 1 });
+  const { thoughtId } = req.params;
 
-  console.log(thoughtId);
-
-  if (like) {
-    res.json(like);
-  } else {
-    res.status(404).json({ error: "No thought - so no like" });
+  try {
+    const like = await Thought.findById(thoughtId);
+    like.hearts += 1;
+    like.save();
+    res.status(201).json(like);
+  } catch (err) {
+    res
+      .status(404)
+      .json({ message: "No thought - so no like", errors: err.errors });
   }
 });
 
