@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happy-thoughts';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
+mongoose.set('useFindAndModify', false);
 
 const Thought = mongoose.model('Thought', {
   message: {
@@ -60,10 +61,9 @@ app.post('/', async (req, res) => {
 
 app.post('/:id/like', async (req, res) => {
   try {
-    const thoughtLiked = await Thought.updateOne(
+    const thoughtLiked = await Thought.findOneAndUpdate(
       { _id: req.params.id },
-      { $inc: { heart: 1 } },
-      { returnNewDocument: true }
+      { $inc: { heart: 1 } }
     );
     res.status(201).json(thoughtLiked);
   } catch (err) {
