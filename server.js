@@ -12,14 +12,11 @@ const Thought = mongoose.model('Thought', {
     type: String,
     required: true,
     minlength: 5,
-    maxlenght: 150
+    maxlenght: 140
   },
   hearts: {
-    type: Boolean,
-    default: false
-  },
-  likes: {
     type: Number,
+    required: true
   },
   createdAt: {
     type: Date,
@@ -39,11 +36,11 @@ app.use(cors())
 app.use(bodyParser.json())
 
 // Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world')
-})
+// app.get('/', (req, res) => {
+//   res.send('Hello world')
+// })
 
-app.get('/thoughts', async (req, res) => {
+app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
   if (thoughts.length > 0) {
     res.json(thoughts)
@@ -52,34 +49,35 @@ app.get('/thoughts', async (req, res) => {
   }
 })
 
-app.post('/thoughts', async (req, res) => {
-  //retrieve the information sent by the client to our API endpoint
-  const { message, hearts } = req.body
-  //use our mongoose model to create the database entry
-  const thought = new Thought({ message, hearts })
-
+app.post('/', async (req, res) => {
+  const thought = new Thought({
+    message: req.body.message,
+    hearts: 0
+  })
   try {
-    //success
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
   } catch (err) {
-    res.status(400).json({ message: "Sorry, could not save Happy Thought", error: err.errors })
+    res.status(400).json({ message: "Sorry, could not save Happy Thought", errors: err.errors })
   }
 })
 
-app.put('/thoughts/:createdAt/hearts', async (req, res) => {
-  const { createdAt } = req.params
-  console.log(`PUT /thoughts/${createdAt}/hearts`)
-  await Thought.updateOne({ 'createdAt': createdAt }, { 'hearts': true })
-  res.status(201)
-})
 
-app.post('/thoughts/:createdAt/likes', async (req, res) => {
-  const { createdAt } = req.params
-  console.log(`POST /thoughts/${createdAt}/likes`)
-  await Thought.updateOne({ 'createdAt': createdAt }, { '$inc': { 'likes': 1 } })
-  res.status(201)
-})
+
+app.post('/:id/like',
+  async (req, res) => {
+    try {
+      const thought = await Thought.findOneAndUpdate(
+        { _id: req.params.id },
+        { $inc: { hearts: 1 } },
+        { new: true }
+      )
+      res.json(thought)
+    } catch (err) {
+      res.status(400).json({ message: "Sorry, could not add heart to Happy Thought", error: err.errors })
+    }
+  })
+
 
 // Start the server
 app.listen(port, () => {
