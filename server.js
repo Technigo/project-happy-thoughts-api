@@ -84,11 +84,6 @@ const Thought = mongoose.model('Thought', {
   createdAt: {
     type: Date,
     default: () => new Date
-  },
-
-  like: {
-    type: Boolean,
-    //default: false
   }
 })
 
@@ -113,7 +108,13 @@ app.get('/intro', (req, res) => {
 //GET and POST the Happy Thoughts 
 app.get('/', async (req, res) => {
   const thought = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
-  res.json(thought);
+  try {
+    // Success 
+    res.status(200).json(thought);
+    //No luck
+  } catch (err) {
+    res.status(400).json({ thought: 'Could not find any Thoughts in the Database', error: err.errors })
+  }
 })
 
 app.post('/', async (req, res) => {
@@ -136,11 +137,15 @@ app.post('/', async (req, res) => {
 app.post('/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params;
   //console.log(`POST /${_id}/like`)
-  await Thought.updateOne({ '_id': thoughtId }, { '$inc': { 'hearts': 1 } }),
-    await Thought.updateOne({ '_id': thoughtId }, { 'like': true })
-  // Success 
-  res.status(201).json()
 
+  try {
+    await Thought.updateOne({ '_id': thoughtId }, { '$inc': { 'hearts': 1 } })
+    // Success 
+    res.status(201).json()
+    // Failure to count
+  } catch (err) {
+    res.status(400).json({ thought: 'We could not count the Happy Thought', error: err.errors })
+  }
 })
 
 // Start the server
