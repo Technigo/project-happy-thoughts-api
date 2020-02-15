@@ -18,9 +18,9 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Start defining your routes here
-app.get("/:page", async (req, res) => {
+app.get("/", async (req, res) => {
   const resPerPage = 20; // results per page
-  const { page } = req.params || 1; // Page
+  const { page } = req.query || 1; // Page
   Thought.find((err, thoughts) => {
     if (err) {
       console.log(err);
