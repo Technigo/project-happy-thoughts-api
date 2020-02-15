@@ -13,9 +13,9 @@ Project brief: https://www.notion.so/Project-Happy-Thoughts-API-3dc1710667304987
 I worked with a Mongo-database. The database was set up as a node express server with mongoose in VS COde. I tested the endpoints in Postman and checked items in Mongo Compass.
 
 ### Endpoints at https://happy-thoughts-ninamansster.herokuapp.com/
-GET /
-POST /
-POST /:thoughtId/like
+#### GET /
+#### POST /
+#### POST /:thoughtId/like
 
 ### Further steps
 I would add a name-field and validation of that.
