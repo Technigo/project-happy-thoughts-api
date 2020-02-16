@@ -1,13 +1,25 @@
 # Project Happy Thoughts API
+Building the backend for a prevoius frontend project the Happy version of twitter; Happy thoughts. Where clienst can post theire thoughts and like all posted thoughts.
 
-Replace this readme with your own information about your project.
+So this project where about building a backend RESTful API with positbilities to POST messages and update messages with likes/hearts
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## Learning objectives
+To build a restful API with GET and POST
+How to use POST requests to send data to your API
+How to store data in your database from POST requests
+How to validate data and ensure your database only contains 'good' data
+Connect previous Frontend project with backend API
 
-## The problem
+## Technologies
+Node.js
+MongoDB, Compass and Atlas
+Mongoose
+Postman
+Heruko
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
 
-## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+## View it live:
+https://happy-thought-api.herokuapp.com/
+
+
