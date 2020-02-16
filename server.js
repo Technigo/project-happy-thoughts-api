@@ -100,7 +100,7 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-// Routes
+// ROUTES
 app.get('/intro', (req, res) => {
   res.send('Hello lovely world  - we are ready to handle happy thoughts')
 })
@@ -134,6 +134,8 @@ app.post('/', async (req, res) => {
   }
 })
 
+//POST likes of the Happy Thoughts 
+
 app.post('/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params;
   //console.log(`POST /${_id}/like`)
@@ -153,44 +155,7 @@ app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
 })
 
-//Code-along VAN notes
 
-// app.get('/tasks', async (req, res) => {
-//   const tasks = await Task.find().sort({ createdAt: 'desc' }).limit(20).exec()
-//   res.json(tasks);
-// })
-
-// app.post('/tasks', async (req, res) => {
-//   // Retrieve the information sent by the client to our API endpoint
-//   const { text, complete } = req.body
-
-//   // Use our mongoose model to create the database entry
-//   const task = new Task({ text, complete })
-
-//   try {
-//     // Success 
-//     const savedTask = await task.save()
-//     res.status(201).json(savedTask)
-//   } catch (err) {
-//     res.status(400).json({ message: 'Could not save task to the Database', error: err.errors })
-//   }
-// })
-
-//Damian Notes
-
-// app.post('/notes', async (req, res) => {
-//   const { text } = req.body
-//   const note = new Note({ text })
-//   await note.save()
-//   res.json(note)
-// })
-
-//VAN People
-// app.post('/people', async (req, res) => {
-//   const person = new Person(req.body)
-//   const savedPerson = await person.save()
-//   res.join(savedPerson)
-// })
 
 
 
