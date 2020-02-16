@@ -15,7 +15,7 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 140
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -73,13 +73,13 @@ app.post('/thoughts', async (req, res) => {
 })
 
 
-app.post('/thoughtId/:id', async (req, res) => {
+app.post('/:thoughtId/like', async (req, res) => {
   //so this endpoint should update the heart Number
 
   try {
     //Success
     const like = await Thought.findOneAndUpdate(
-      { "_id": req.params.id },
+      { "_id": req.params.thoughtId },
       { $inc: { "heart": 1 } },
       { returnNewDocument: true }
 
