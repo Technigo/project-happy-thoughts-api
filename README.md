@@ -1,13 +1,18 @@
-# Project Happy Thoughts API
+# Project Happy Thoughts API ❤️ ❤️ ❤️
 
-Replace this readme with your own information about your project.
+In this project I used Express and Mongodb to build an API which includes both GET request endpoints to return data and POST endpoints to create data.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## In this project, you will find:
 
-## The problem
+Usage of POST requests to send data to API
+Storing data in database from POST requests
+Validation of data and ensuring database contains only 'good' data
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+## Tools/ techniques, approach and planning 🔨
 
-## View it live
+Tools I used in this project include: MongoDb, Mongoose library, JavaScript ES6, Express and Postman for testing.
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+## Deployed version 🚀
+
+https://happy-thoughts-of-aleksandra.herokuapp.com/
+https://happy-thoughts-of-aleksandra.netlify.com/
