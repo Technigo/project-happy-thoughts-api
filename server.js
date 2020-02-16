@@ -11,7 +11,7 @@ mongoose.Promise = Promise
 // overridden when starting the server. For example:
 //
 //   PORT=9000 npm start
-const port = process.env.PORT || 8081
+const port = process.env.PORT || 1000
 const app = express()
 
 // Add middlewares to enable cors and json body parsing
@@ -64,18 +64,19 @@ app.post('/', async (req, res) => {
   }
 });
 
-app.post('/:id/like'),
+app.post('/:id/like',
   async (req, res) => {
     try {
       const thought = await Thought.findOneAndUpdate(
         { _id: req.params.id },
-        { $inc: { hearts: 1 } }
+        { $inc: { hearts: 1 } },
+        { new: true }
       )
       res.json(thought)
     } catch (err) {
       res.json({ message: 'could not update heart' })
     }
-  }
+  })
 
 
 // Start the server
