@@ -35,6 +35,7 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
+// SEEDING FOR ADDING NEW DATA
 if (process.env.RESET_DB) {
   const seedDatabase = async () => {
     await Thought.deleteMany({})
@@ -52,11 +53,13 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
+// THOUGHTS
 app.get('/thoughts', async (req, res) => {
   const thought = await Thought.find().sort({ createdAt: 'desc', heart: +1 }).limit(20).exec()
   res.json(thought)
 })
 
+// POST A THOUGHT
 app.post('/thoughts', async (req, res) => {
   //Retrieve the information sent by the client to our API endpoint
   const { message } = req.body
@@ -72,7 +75,7 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-
+// LIKE A THOUGHT
 app.post('/:thoughtId/like', async (req, res) => {
   //so this endpoint should update the heart Number
 
