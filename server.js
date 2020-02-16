@@ -44,6 +44,19 @@ app.get('/thoughts', async (req, res) => {
   res.json(thoughts)
 })
 
+app.post('/thoughts', async (req, res) => {
+  const { message, heart } = req.body
+  const thought = new Thought({ message, heart })
+  try {
+    const savedThought = await thought.save()
+    res.status(201).json(savedThought)
+  } catch (err) {
+    res
+      .status(400)
+      .json({ message: 'Could not post message', error: err.errors })
+  }
+})
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
