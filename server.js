@@ -79,14 +79,15 @@ app.post('/:thoughtId/like', async (req, res) => {
   try {
     //Success
     const like = await Thought.findOneAndUpdate(
-      { "_id": req.params.thoughtId },
-      { $inc: { "heart": 1 } },
-      { returnNewDocument: true }
+      { "_id": req.params.thoughtId },//filter
+      { $inc: { "heart": 1 } },//update
+      { returnNewDocument: true }//doesn't update/work
 
     )
     res.status(201).json(like)
-  } catch {
-    res.status(400).json({ message: 'Could not save your like to the Database' })
+  } catch (err) {
+    console.log(err)
+    res.status(400).json({ message: 'Could not save your like to the Database', error: err })
   }
 
 })
