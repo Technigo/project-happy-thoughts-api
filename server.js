@@ -20,7 +20,7 @@ const Thought = mongoose.model('Thought', {
   },
   createdAt: {
     type: Date,
-    default: Date.npw
+    default: Date.now
   }
 })
 
@@ -34,6 +34,14 @@ app.use(bodyParser.json())
 // Start defining your routes here
 app.get('/', (req, res) => {
   res.send('Hello world')
+})
+
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await Thought.find()
+    .sort({ createdAt: 'desc' })
+    .limit(20)
+    .exec()
+  res.json(thoughts)
 })
 
 // Start the server
