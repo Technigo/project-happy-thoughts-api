@@ -8,14 +8,15 @@ const router = express.Router();
 router.get('/', async (req, res, next) => {
   const thoughts = await Thought.find()
     .sort({ createdAt: 'desc' })
-    .limit(20);
+    .limit(20)
+    .exec();
 
-  if (thoughts.length > 0) {
+  if (thoughts) {
     res.json(thoughts);
   } else {
     res.status(404).json({
-      statusCode: 404,
-      error: `No happy thoughts found.`
+      message: `No thoughts found`,
+      error: err.errors
     });
   }
 });
@@ -39,9 +40,18 @@ router.post(
       .options({ abortEarly: false })
   }),
   async (req, res) => {
-    const thought = new Thought({ message: req.body.message });
-    await thought.save();
-    res.json(thought);
+    const { message } = req.body;
+    const newThought = new Thought({ message });
+
+    try {
+      const savedThought = await newThought.save();
+      res.status(201).json(savedThought);
+    } catch (err) {
+      res.status(500).json({
+        message: 'Could not create thought due to an unexpected error',
+        error: err.errors
+      });
+    }
   }
 );
 
@@ -55,16 +65,22 @@ router.post(
       .options({ abortEarly: false })
   }),
   async (req, res) => {
-    const thought = await Thought.findById(req.params.thoughtId);
+    const { thoughtId } = req.params;
 
-    if (thought) {
-      thought.hearts += 1;
-      thought.save();
-      res.json(thought);
+    const updatedThought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      {
+        $inc: { hearts: 1 }
+      },
+      { new: true }
+    ).exec();
+
+    if (updatedThought) {
+      res.status(200).json(updatedThought);
     } else {
       res.status(404).json({
         statusCode: 404,
-        error: `No happy thought found with ${thoughtId}`
+        error: `Could not find thoughtId ${thoughtId}`
       });
     }
   }
