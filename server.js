@@ -94,11 +94,14 @@ app.get('/', async (req, res) => {
     .skip(skipResults(page))
     .exec()
   const { tag, name } = req.query
+  const tagRegex = new RegExp(tag, "i")
+  const nameRegex = new RegExp(name, "i")
+
   if (tag) {
-    const filteredThoughts = await Thought.find({ tag })
+    const filteredThoughts = await Thought.find({ 'tag': tagRegex })
     res.json(filteredThoughts)
   } else if (name) {
-    const filteredThoughts = await Thought.find({ name })
+    const filteredThoughts = await Thought.find({ 'name': nameRegex })
     res.json(filteredThoughts)
   } else {
     res.json(thoughts)
