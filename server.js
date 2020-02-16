@@ -66,7 +66,9 @@ app.use((req, res, next) => {
 })
 
 app.get('/', async (req, res) => {
-  const { sort, page } = req.query
+  const { sort, page, tag, name } = req.query
+  const tagRegex = new RegExp(tag, "i")
+  const nameRegex = new RegExp(name, "i")
 
   //Checks the sortquery, and sorts according to increasing date or decreasing likes
   const buildSortQuery = (sort) => {
@@ -93,14 +95,10 @@ app.get('/', async (req, res) => {
     .limit(20)
     .skip(skipResults(page))
     .exec()
-  const { tag, name } = req.query
-  const tagRegex = new RegExp(tag, "i")
-  const nameRegex = new RegExp(name, "i")
-
   if (tag) {
     const filteredThoughts = await Thought.find({ 'tag': tagRegex })
     res.json(filteredThoughts)
-  } else if (name) {
+  } if (name) {
     const filteredThoughts = await Thought.find({ 'name': nameRegex })
     res.json(filteredThoughts)
   } else {
