@@ -59,23 +59,14 @@ app.post('/', async(req, res) => {
 
 
 app.post('/:id/like', async(req, res) => {
-    try {
-      const thought = await Thought.updateOne({ _id: req.params.id }, { $inc: { hearts: 1 } }, { new: true })
-      res.status(200).json(thought)
-    } catch (err) {
-      res.status(400).json({ message: 'Could not add heart', errors: err.errors })
-    }
-  })
-  /* app.post('/:thoughtId/like', async(req, res) => {
-    try {
-      const { thoughtId } = req.params
-      console.log(`POST /${thoughtId}/like`)
-      await Thought.updateOne({ '_id': thoughtId }, { $inc: { 'heart': 1 } }, { new: true })
-      res.json(201).json({})
-    } catch (err) {
-      res.json(400).json({ message: 'Could not add like', errors: err.errors })
-    }
-  }) */
+  try {
+    const thought = await Thought.updateOne({ _id: req.params.id }, { $inc: { hearts: 1 } }, { new: true })
+    res.status(200).json(thought)
+  } catch (err) {
+    res.status(400).json({ message: 'Could not add heart', errors: err.errors })
+  }
+})
+
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
