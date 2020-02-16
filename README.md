@@ -1,13 +1,18 @@
 # Project Happy Thoughts API
 
 This project is to use my new skills with Express and Mongodb to build an API which includes both GET request endpoints to return data and POST endpoints to create data.
-I already have created the frontend part of this project, repo here => https://github.com/Nasimmhn/project-happy-thoughts. After my RESTFUL api was deployed on Heroku, then I just fetched it into my Happy-Thought project.
- 
+I have previously created the frontend part in this repo => https://github.com/Nasimmhn/project-happy-thoughts.
+So after this RESTful API was deployed on Heroku I used it the previous fronend project.
+
+## Endpoints
+- https://happy-thoughts-api-by-nasim.herokuapp.com/thoughts (GET/POST)
+- https://happy-thoughts-api-by-nasim.herokuapp.com/:thoughtId/like (POST)
+
 ## Learning objectives 🧠
 
-* How to build a full API which includes handling of user input
-* How to include error handling to return good validation errors
-* How to build an API which works well with an existing frontend
+* To build an API which includes handling of user input (POST).
+* To include error handling and return reasonable validation errors.
+* To build an API which works well with an existing frontend.
 
 ## Technologies used 💻
 * Express
@@ -17,5 +22,5 @@ I already have created the frontend part of this project, repo here => https://g
 
 ## View it live 🎯
 
-* Backend: https://happy-thoughts-api-by-nasim.herokuapp.com/
+* API base URL: https://happy-thoughts-api-by-nasim.herokuapp.com
 * Frontend: https://happy-thoughts-by-nasim.netlify.com/
