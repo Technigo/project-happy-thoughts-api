@@ -1,13 +1,13 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+Using Express and Mongodb to build an API which includes both GET request endpoints to return data and POST endpoints to create data. And connecting it with a frontend site.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## The problem with making the endpoint work
 
-## The problem
-
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Connecting backend with frontend was tricky but with thorough runthrough of the endpoints it finally worked
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://project-happy-thoughts-api.herokuapp.com/
+
+https://mrsucodesproject11thehappythoughts.netlify.com/
