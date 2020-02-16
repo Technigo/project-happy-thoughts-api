@@ -17,5 +17,5 @@ I already have created the frontend part of this project, repo here => https://g
 
 ## View it live 🎯
 
-Backend: https://happy-thoughts-api-by-nasim.herokuapp.com/
-Frontend: https://happy-thoughts-by-nasim.netlify.com/
+* Backend: https://happy-thoughts-api-by-nasim.herokuapp.com/
+* Frontend: https://happy-thoughts-by-nasim.netlify.com/
