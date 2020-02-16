@@ -41,7 +41,6 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
   res.json(thoughts)
 })
@@ -62,14 +61,13 @@ app.post('/thoughts', async (req, res) => {
 app.post('/thoughts/:_id/like', async(req, res) => {
   const {_id} = req.params;
   try {
-    await Thought.updateOne({'_id': _id}, {'$inc': {'heart': 1}});
+    const thought = await Thought.findOneAndUpdate({'_id': _id}, {'$inc': {'heart': 1}});
     // If not json is in the response, you have to invoke a send function
-    res.status(201).send();
+    res.json(thought).status(201);
   } catch (err) {
     res.status(401).json({message: 'Like not sent', error:err})
   }
 })
-
 
 // Start the server
 app.listen(port, () => {
