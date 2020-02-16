@@ -45,33 +45,38 @@ app.get('/:thoughtId', async(req, res) => {
 })
 
 app.post('/', async(req, res) => {
+  const thought = new Thought({
+    message: req.body.message,
+    hearts: 0
+  })
   try {
-    const { message } = req.body
-    const thought = await new Thought({ message }).save()
-    res.status(200).json(thought);
-    console.log({ message })
+    const saved = await thought.save()
+    res.status(201).json(saved)
   } catch (err) {
-    res.status(400).json({ message: 'Could not post your thought' })
+    res.status(400).json({ message: 'Could not save thought', errors: err.errors })
   }
 });
 
-app.post('/:thoughtId/like', async(req, res) => {
-  try {
-    const { thoughtId } = req.params
-    console.log(`POST /${thoughtId}/like`)
-    await Thought.updateOne({ '_id': thoughtId }, { $inc: { 'heart': 1 } }, { new: true })
-    res.json(201).json({})
-  } catch (err) {
-    res.json(400).json({ message: 'Could not add like', errors: err.errors })
-  }
-})
 
-// Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world')
-})
+app.post('/:id/like', async(req, res) => {
+    try {
+      const thought = await Thought.updateOne({ _id: req.params.id }, { $inc: { hearts: 1 } }, { new: true })
+      res.status(200).json(thought)
+    } catch (err) {
+      res.status(400).json({ message: 'Could not add heart', errors: err.errors })
+    }
+  })
+  /* app.post('/:thoughtId/like', async(req, res) => {
+    try {
+      const { thoughtId } = req.params
+      console.log(`POST /${thoughtId}/like`)
+      await Thought.updateOne({ '_id': thoughtId }, { $inc: { 'heart': 1 } }, { new: true })
+      res.json(201).json({})
+    } catch (err) {
+      res.json(400).json({ message: 'Could not add like', errors: err.errors })
+    }
+  }) */
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
 })
