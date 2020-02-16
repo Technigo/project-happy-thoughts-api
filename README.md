@@ -18,9 +18,9 @@ Some things I probably want to add later is: pagination and categories.
 
 ## View it live
 
-[Happy thoughts](https://happy-thoughts-emmie.herokuapp.com/)
+[Happy Thoughts](https://happy-thoughts-emmie.netlify.com/)
 
-[Happy Thoughts API]()
+[Happy Thoughts API](https://happy-thoughts-emmie.herokuapp.com/)
 ### See 20 posted thoughts
 `GET: https://happy-thoughts-emmie.herokuapp.com/`
 
