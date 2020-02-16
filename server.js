@@ -66,43 +66,49 @@ app.use((req, res, next) => {
 })
 
 app.get('/', async (req, res) => {
-  const { sort } = req.query
-  const sortData = (sort) => {
-    if (sort === 'dates') {
+  const { sort, page } = req.query
+
+  //Checks the sortquery, and sorts according to increasing date or decreasing likes
+  const buildSortQuery = (sort) => {
+    if (sort === "oldest") {
       return { createdAt: 'asc' }
-    } else if (sort === 'hearts') {
+    } else if (sort === "hearts") {
       return { hearts: 'desc' }
     } else {
       return { createdAt: 'desc' }
     }
   }
-  let thoughts = await Thought.find().sort(sortData(sort)).limit(20).exec()
-  res.json(thoughts)
+
+  //Checks how many results should be skipped
+  //e.g. if page = 1 it should skip none, if page it 2 it should skip 20
+  //because the limit it set to 20
+  const skipResults = (page) => {
+    return ((page - 1) * 20)
+  }
+
+  //Find thoughts based on name and tag, sort on date/likes,
+  //limit to 20 results per page, skip so that every page shows accurate results
+  let thoughts = await Thought.find()
+    .sort(buildSortQuery(sort))
+    .limit(20)
+    .skip(skipResults(page))
+    .exec()
+  const { tag, name } = req.query
+  if (tag) {
+    const filteredThoughts = await Thought.find({ tag })
+    res.json(filteredThoughts)
+  } else if (name) {
+    const filteredThoughts = await Thought.find({ name })
+    res.json(filteredThoughts)
+  } else {
+    res.json(thoughts)
+  }
 })
 
-
-//GET A LIST OF THE THOUGHTS IN THE DATABASE. desc = descending order
-app.get('/', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
-  const { tag } = req.query
-  if (tag) {
-    const filteredThoughts = await Thought.find({ tag: tag })
-    res.json(filteredThoughts)
-  }
+app.get('/all', async (req, res) => {
+  let thoughts = await Thought.find()
+    .sort({ createdAt: 'desc' })
   res.json(thoughts)
-
-  // const { sort } = req.query
-  // const sortData = (sort) => {
-  //   if (sort === 'dates') {
-  //     return { createdAt: 'asc' }
-  //   } else if (sort === 'hearts') {
-  //     return { hearts: 'desc' }
-  //   } else {
-  //     return { createdAt: 'desc' }
-  //   }
-  // }
-  // let thoughts = await Thought.find().sort(sortData(sort)).limit(20).exec()
-  // res.json(thoughts)
 })
 
 //POST/SEND INFORMATION IN A REQUEST
@@ -122,23 +128,7 @@ app.post('/', async (req, res) => {
   }
 })
 
-// app.post("/:thoughtID/like", async (req, res) => {
-//   //Find specific thought
-//   const thoughtID = req.params.thoughtID
-//   const thought = await Thought.findById(thoughtID)
-
-//   if (thought) {
-//     //Success case
-//     thought.hearts += 1
-//     thought.save()
-//     res.status(201).json(thought)
-//   }
-//   else {
-//     res.status(404).json({ message: `No thought with id: ${thoughtID} `, error: err.errors })
-//   }
-// })
-
-//Jennies way of finding thougtId for likes
+//Finding single thougtId for likes/hearts
 app.post("/:id/like", async (req, res) => {
   try {
     const thought = await Thought.findOneAndUpdate(
