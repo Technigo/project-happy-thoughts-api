@@ -1,13 +1,15 @@
-# Project Happy Thoughts API
+# Project 19 Build a Happy Thoughts API during Technigo Bootcamp spring 2020
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+During this project I build my own API using both get and post method to post and retreive happy thoughts and to connect that with my frontend happy thoughts project. 
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+First of all I started by building the mongo model, to decide what properties that was neccesarry in my API and what validations I needed. such as min and max lenght of the text-message, what kind of type and i it was default. After that I created the different endpoints and methods so that I would be able to send data and store data in my API, and for this I used GET and POST method. In the POST endpoint, I also made a success and error handler. In case that the user posted good data, it would be stored in the database, and if it did not meet the requirements of the validation, it will show an error message. 
+
+And finally I connected my API to the previous project that I made using technigos API, and now I have a happy thoughts app with my own database stored in heruko. 
+
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+See my deployed site in Netlify:
+https://myhappythoughts.netlify.com/
