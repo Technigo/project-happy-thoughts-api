@@ -4,9 +4,9 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
-mongoose.Promise = Promise
 
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+ 
 
 const Thought = mongoose.model('Thought', {
   message: {
@@ -35,19 +35,6 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-// SEEDING FOR ADDING NEW DATA
-if (process.env.RESET_DB) {
-  const seedDatabase = async () => {
-    await Thought.deleteMany({})
-
-    data.forEach((thought) => {
-      new Thought(thought).save()
-    })
-  }
-
-  seedDatabase()
-}
-
 // Start defining your routes here
 app.get('/', (req, res) => {
   res.send('Hello world')
@@ -55,8 +42,14 @@ app.get('/', (req, res) => {
 
 // THOUGHTS
 app.get('/thoughts', async (req, res) => {
-  const thought = await Thought.find().sort({ createdAt: 'desc', heart: +1 }).limit(20).exec()
-  res.json(thought)
+
+  try {
+    //Success
+    const thoughts = await Thought.find().sort({ createdAt: 'desc', heart: +1 }).limit(20).exec()
+    res.status(200).json(thoughts)
+  } catch (err) {
+    res.status(400).json({ message: 'Could not get thoughts', error: err.errors })
+  }
 })
 
 // POST A THOUGHT
