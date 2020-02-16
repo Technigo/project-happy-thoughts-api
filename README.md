@@ -1,13 +1,21 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+This project is to use my new skills with Express and Mongodb to build an API which includes both GET request endpoints to return data and POST endpoints to create data.
+I already have created the frontend part of this project, repo here => https://github.com/Nasimmhn/project-happy-thoughts. After my RESTFUL api was deployed on Heroku, then I just fetched it into my Happy-Thought project.
+ 
+## Learning objectives 🧠
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+* How to build a full API which includes handling of user input
+* How to include error handling to return good validation errors
+* How to build an API which works well with an existing frontend
 
-## The problem
+## Technologies used 💻
+* Express
+* MongoDB
+* Mongoose
+* Node.js
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+## View it live 🎯
 
-## View it live
-
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Backend: https://happy-thoughts-api-by-nasim.herokuapp.com/
+Frontend: https://happy-thoughts-by-nasim.netlify.com/
