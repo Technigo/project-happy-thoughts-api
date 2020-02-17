@@ -66,7 +66,7 @@ app.post('/:thoughtId/like', async (req, res) => {
 
 app.post('/', async (req, res) => {
   try {
-    const { message, name } = req.body
+    const { name, message } = req.body
     const thought = await new Thought({ message, name }).save()
     res.status(201).json(thought)
   } catch (err) {
