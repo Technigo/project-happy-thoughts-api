@@ -14,7 +14,6 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 140
   },
-
   hearts: {
     type: Number,
     default: 0
@@ -42,7 +41,8 @@ app.use(bodyParser.json())
 // })
 
 app.get('/', async (req, res) => {
-  const thoughts = await Thought.find()
+  const thoughts = await Thought
+    .find()
     .sort({ createdAt: 'desc' })
     .limit(20).exec()
   res.json(thoughts)
@@ -66,7 +66,7 @@ app.post('/', async (req, res) => {
 })
 
 // The endpoint updates the number of like
-app.post('/:thoughtId/like', async (req, res) => {
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
 
   try {
     const like = await Thought.findOneAndUpdate(
