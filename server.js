@@ -45,8 +45,8 @@ app.get('/thoughts', async (req, res) => {
 })
 
 app.post('/thoughts', async (req, res) => {
-  const { message, heart } = req.body
-  const thought = new Thought({ message, heart })
+  const { message } = req.body
+  const thought = new Thought({ message })
   try {
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
