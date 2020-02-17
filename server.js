@@ -57,14 +57,11 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-app.post('/thoughts/:id/like', async (req, res) => {
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
   try {
-    const like = await Thought.updateOne(
-      { _id: req.params.id },
-      { $inc: { heart: 1 } },
-      { new: true }
-    )
-    res.status(201).json(like)
+    await Thought.updateOne({ _id: thoughtId }, { $inc: { heart: 1 } })
+    res.status(201).json()
   } catch (err) {
     res.status(404).json({ message: 'Could not save', error: err.errors })
   }
