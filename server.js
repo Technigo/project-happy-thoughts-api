@@ -36,13 +36,13 @@ app.get('/', async (req, res) => {
   res.json(thoughts);
 })
 
-// app.get('/:thoughtId', async (req, res) => {
-//   const thoughtId = req.params.thoughtId
-//   Thought.findOne({ '_id': thoughtId })
-//     .then((results) => {
-//       res.json(results)
-//     })
-// })
+app.get('/:thoughtId', async (req, res) => {
+  const thoughtId = req.params.thoughtId
+  Thought.findOne({ '_id': thoughtId })
+    .then((results) => {
+      res.json(results)
+    })
+})
 
 app.post('/', async (req, res) => {
   try {
