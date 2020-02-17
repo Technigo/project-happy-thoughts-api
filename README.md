@@ -15,4 +15,4 @@ when the thought was added. I created three endpoints: 1) GET / to return the
 for finding a thought and updating its hearts property to add one heart.
 
 Deployed project: <br>Backend-part: https://michel-happy-thoughts.herokuapp.com/ </br>
-<br>Frontend-part: https://michel-happy-thoughts.netlify.com/ </br>
+Frontend-part: https://michel-happy-thoughts.netlify.com/ 
