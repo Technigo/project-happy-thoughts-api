@@ -1,13 +1,8 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+frontend: https://happy-twitterish.netlify.com/
+backend: https://happy-twitterish-api.herokuapp.com/thoughts
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Building my own API to the Happy Thought Project I built last year.
 
-## The problem
-
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
-
-## View it live
-
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Experimenting with backend, trying to get a hang of MongoDB, Mongoose, Postman, Mongo DB Compass and Heroku. Still trying to figure out how to use all the tools to be more efficient.
