@@ -1,13 +1,18 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+This week's project at the Technigo boot camp was to continue practicing MongoDB and 
+Express to build an API which includes both GET request endpoints and POST endpoints.
+Another part of the project was to fetch data from this API in a previous frontend
+project, 'Happy Thoughts'.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Tech:
+<br>MongoDB, Express</br>
 
-## The problem
+I created a 'Thought' mongoose model which has properties for the message string, 
+a heart property for tracking the number of likes and a createdAt property to store
+when the thought was added. I created three endpoints: 1) GET / to return the
+20 most recent thoughts, 2) POST / for saving new thoughts, and 3) POST /:thoughtId/like
+for finding a thought and updating its hearts property to add one heart.
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
-
-## View it live
-
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Deployed project: <br>Backend-part: https://michel-happy-thoughts.herokuapp.com/ </br>
+<br>Frontend-part: https://michel-happy-thoughts.netlify.com/ </br>
