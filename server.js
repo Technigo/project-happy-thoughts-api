@@ -21,7 +21,7 @@ const Thought = mongoose.model('Thought', {
   createdAt: {
     type:Date,
     default: Date.now
-  }
+  },
 })
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
@@ -65,6 +65,7 @@ app.post('/:thoughtId/like', async (req, res) => {
     const like = await Thought.findOneAndUpdate(
       { "_id": req.params.thoughtId },
       { $inc: {"hearts": 1} }
+      //Lägg in new: true
     )
     console.log("Likes success")
     res.status(201).json(like)
