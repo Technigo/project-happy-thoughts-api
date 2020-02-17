@@ -9,6 +9,7 @@ Link to the frontend: https://happythought-agnes.netlify.com/
 
 - Build an API which allows the handling of user inputs
 - Creating an API for an existing frontend project
+- Error handling 
 
 ## Technologies used:
 
