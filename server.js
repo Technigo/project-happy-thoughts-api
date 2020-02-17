@@ -23,6 +23,9 @@ const Thought = mongoose.model('Thought', {
     type: Date,
     default: Date.now
   },
+  tag: {
+    type: String
+  }
 })
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
@@ -48,7 +51,7 @@ app.get('/', async (req, res) => {
 
 app.post('/', async (req, res) => {
   //get the info send by user to our API endpoint
-  const {message, hearts} = req.body;
+  const {message} = req.body.message;
 
   //use our mongoose model to create database entry
   const thought = new Thought({message, hearts});
