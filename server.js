@@ -14,7 +14,7 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 140
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -60,7 +60,7 @@ app.post('/thoughts', async (req, res) => {
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
   try {
-    await Thought.updateOne({ _id: thoughtId }, { $inc: { heart: 1 } })
+    await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
     res.status(201).json()
   } catch (err) {
     res.status(404).json({ message: 'Could not save', error: err.errors })
