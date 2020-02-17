@@ -57,17 +57,16 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-app.post('/thoughts/:thoughtId/like', async (req, res) => {
-  const { thoughtId } = req.params
+app.post('/thoughts/:id/like', async (req, res) => {
   try {
-    const thoughtLiked = await Thought.findById(thoughtId)
-    thoughtLiked.heart += 1
-    thoughtLiked.save()
-    res.json(thoughtLiked)
-  } catch {
-    res
-      .status(404)
-      .json({ message: 'Could not find happy thought', error: err.errors })
+    const like = await Thought.updateOne(
+      { _id: req.params.id },
+      { $inc: { heart: 1 } },
+      { new: true }
+    )
+    res.status(201).json(like)
+  } catch (err) {
+    res.status(404).json({ message: 'Could not save', error: err.errors })
   }
 })
 
