@@ -10,23 +10,23 @@ mongoose.Promise = Promise
 
 // MODEL FOR THOUGHT
 const Thought = mongoose.model('Thought', {
-  message: { type: String, requierd: true, minlength: 5, maxlength: 140 },
+  message: { type: String, required: true, minlength: 5, maxlength: 140 },
   hearts: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now }
 })
 
 // SEEDING FOR ADDING NEW DATA
-if (process.env.RESET_DB) {
-  console.log('Resetting database')
-  const seedDatabase = async () => {
-    await Thought.deleteMany({})
+// if (process.env.RESET_DB) {
+//   console.log('Resetting database')
+//   const seedDatabase = async () => {
+//     await Thought.deleteMany({})
 
-    // thought.forEach(() => {
-    //   new Thought().save()
-    // })
-  }
-  seedDatabase()
-}
+//     // thought.forEach(() => {
+//     //   new Thought().save()
+//     // })
+//   }
+//   seedDatabase()
+// }
 
 // PORT & APP SETUP
 const port = process.env.PORT || 8080
