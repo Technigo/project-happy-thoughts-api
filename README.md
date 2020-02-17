@@ -1,13 +1,18 @@
-# Project Happy Thoughts API
+# Project 19 - Happy Thoughts API @ Technigo Bootcamp 2019-2020
 
-Replace this readme with your own information about your project.
+The 19th project of the Technigo bootcamp was to expose endpoints thes users and allow them to POST data to the API and then use that data to save new objects in our Mongo database. This is the backend for a frontend project we created earlier in the bootcamp.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Link to the backend: https://happy-thoughts-api-agnes.herokuapp.com/
+Link to the frontend: https://happythought-agnes.netlify.com/
 
-## The problem
+## The requirements for the project:
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+- Build an API which allows the handling of user inputs
+- Creating an API for an existing frontend project
 
-## View it live
+## Technologies used:
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+- MongoDB
+- Mongoose
+- Express
+- JavaScript ES6
