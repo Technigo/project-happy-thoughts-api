@@ -51,7 +51,7 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
   //Retrieve the information sent by the client to our API endpoint
   // const { message, hearts } = req.body.message
-  const { message, hearts } = req.body.message
+  const { message, hearts } = req.body
   // Use our mongoose model to create the database entry
   // const thought = new Thought({ message, hearts })
   const thought = new Thought({ message, hearts })
@@ -66,7 +66,7 @@ app.post('/', async (req, res) => {
 })
 
 // The endpoint updates the number of like
-app.post('/thoughts/:thoughtId/like', async (req, res) => {
+app.post('/:thoughtId/like', async (req, res) => {
 
   try {
     const like = await Thought.findOneAndUpdate(
