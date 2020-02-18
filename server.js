@@ -3,11 +3,29 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
+const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts'
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-// Defines the port the app will run on. Defaults to 8080, but can be 
+const Person = mongoose.model('Person', {
+  name: {
+    type: String,
+    required: true,
+    minlength: 2,
+    maxlenght: 500
+  },
+  height: {
+    type: Number,
+    required: true,
+    min: 5
+  },
+  birthdate: {
+    type: Date,
+    default: Date.now()
+  }
+})
+
+// Defines the port the app will run on. Defaults to 8080, but can be
 // overridden when starting the server. For example:
 //
 //   PORT=9000 npm start
@@ -21,6 +39,15 @@ app.use(bodyParser.json())
 // Start defining your routes here
 app.get('/', (req, res) => {
   res.send('Hello world')
+})
+
+app.post('/people', async (req, res) => {
+  try {
+    const person = await new Person(req.body).save()
+    res.status(200).json(person)
+  } catch (err) {
+    res.status(400).json({ message: 'couldnt save person', errors: err.errors })
+  }
 })
 
 // Start the server
