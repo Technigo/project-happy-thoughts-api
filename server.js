@@ -51,10 +51,10 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
   //Retrieve the information sent by the client to our API endpoint
   // const { message, hearts } = req.body.message
-  const { message, hearts } = req.body.message
+  const { message } = req.body
   // Use our mongoose model to create the database entry
   // const thought = new Thought({ message, hearts })
-  const thought = new Thought({ message, hearts })
+  const thought = new Thought({ message })
 
   try {
     // Success
