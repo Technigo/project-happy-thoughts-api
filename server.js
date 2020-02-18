@@ -2,24 +2,28 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
+// import Person from './PersonModel'
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts'
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-const Person = mongoose.model('Person', {
-  name: {
+const Task = mongoose.model('Task', {
+  text: {
     type: String,
     required: true,
-    minlength: 2,
+    minlength: 5,
     maxlenght: 500
   },
-  height: {
+  id: {
     type: Number,
-    required: true,
-    min: 5
+    required: true
   },
-  birthdate: {
+  complete: {
+    type: Boolean,
+    default: false
+  },
+  createdAt: {
     type: Date,
     default: Date.now()
   }
@@ -41,13 +45,46 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
-app.post('/people', async (req, res) => {
+// find all tasks
+app.get('/tasks', async (req, res) => {
+  const tasks = await Task.find()
+    .sort({ createdAt: 'desc' })
+    .limit(20)
+    .exec()
+  res.json(tasks)
+})
+
+// find not completet
+app.get('/tasks/notcomplete', async (req, res) => {
+  console.log('Get /taks/notcomplete')
+
+  const notComplete = await Task.find({ complete: false })
+    .sort({ createdAt: 'desc' })
+    .limit(20)
+    .exec()
+  res.json(notComplete)
+})
+
+//post task
+app.post('/tasks', async (req, res) => {
+  const { text, id, complete } = req.body
+  const task = new Task({ text, id, complete })
+
   try {
-    const person = await new Person(req.body).save()
-    res.status(200).json(person)
+    const savedTask = await task.save()
+    res.status(200).json(savedTask)
   } catch (err) {
-    res.status(400).json({ message: 'couldnt save person', errors: err.errors })
+    res
+      .status(400)
+      .json({ message: 'could not save tasks to database', errors: err.errors })
   }
+})
+
+//update task complete
+app.post('/tasks/:id/complete', async (req, res) => {
+  const { id } = req.params
+  console.log(`POST /task/${id}/complete`)
+  await Task.updateOne({ id: id }, { complete: true })
 })
 
 // Start the server
