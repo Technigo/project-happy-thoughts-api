@@ -19,10 +19,42 @@ app.use(bodyParser.json())
 // My routes
 app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
-  res.json('thoughts')
+  res.json(thoughts)
+})
+
+app.get('/:thoughtId', async (req, res) => {
+  const thoughtId = req.params.thoughtId
+  Thought.findOne({ '_id': thoughtId })
+    .then((results) => {
+      res.json(results)
+    })
+})
+
+// POST thoughts to page
+app.post('/', async (req, res) => {
+  try {
+    const { message } = req.body
+    const thought = await new Thought({ message }).save()
+    res.status(200).json(thought)
+  } catch (err) {
+    res.status(400).json({ message: 'Bad request, could not post thought', error: err.error })
+  }
+})
+
+// POST likes to page
+app.post('/:thoughtId/like', async (req, res) => {
+  try {
+    const { thoughtId } = req.params
+    console.log(`POST /${thoughtId}/like`)
+    await Thought.updateOne({'_id': thoughtId }, {$inc: {'like': 1}}, { new: true})
+    res.status(201).json({})
+  } catch (err) {
+    res.status(400).json({ message: 'Bad request, could not add like'})
+  }
 })
 
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
+  console.log('Hello world!')
 })
