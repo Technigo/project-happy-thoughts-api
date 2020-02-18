@@ -7,66 +7,6 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-// const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/people"
-// mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
-// mongoose.Promise = Promise
-
-// const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/notes"
-// mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
-// mongoose.Promise = Promise
-
-// const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/post-codealong"
-// mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
-// mongoose.Promise = Promise
-
-// //Create Note model with Damian
-// const Note = mongoose.model('Note', {
-//   text: String,
-//   createdAt: {
-//     type: Date,
-//     default: () => new Date()
-//   }
-// })
-
-//Create a model for mongo database as of VAN
-// const Person = mongoose.model('Person', {
-//   name: {
-//     type: String,
-//     required: true,
-//     minlength: 2,
-//     minheight: 500
-//   },
-//   height: {
-//     type: Number,
-//     required: true,
-//     min: 5
-//   },
-//   birthdate: {
-//     type: Date,
-//     default: Date.now
-//   }
-// })
-
-// new Person({ name: "Nina", height: 150 }).save()
-
-
-//Code-along with Task by VAN 
-// const Task = mongoose.model('Task', {
-//   text: {
-//     type: String,
-//     required: true,
-//     minlength: 5
-//   },
-//   complete: {
-//     type: Boolean,
-//     default: false
-//   },
-//   createdAt: {
-//     type: Date,
-//     default: Date.now
-//   }
-// });
-
 // Message for Happy Thought, validation of 5-140 characters, hearts and created date.
 const Thought = mongoose.model('Thought', {
   message: {
@@ -86,7 +26,6 @@ const Thought = mongoose.model('Thought', {
     default: () => new Date
   }
 })
-
 
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
