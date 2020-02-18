@@ -12,9 +12,9 @@ const Thought = mongoose.model("Thought", {
     type: String,
     required: true,
     minlength: 5,
-    maxlenght: 140
+    maxlength: 140
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -47,8 +47,8 @@ app.get("/thoughts", async (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
-  const { message, heart } = req.body;
-  const thought = new Thought({ message, heart });
+  const { message } = req.body;
+  const thought = new Thought({ message });
   try {
     const savedThought = await thought.save();
     res.status(201).json(savedThought);
@@ -61,7 +61,7 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
   try {
     const thoughtLiked = await Thought.findById(thoughtId);
-    thoughtLiked.heart += 1;
+    thoughtLiked.hearts += 1;
     thoughtLiked.save();
     res.json(thoughtLiked);
   } catch (err) {
