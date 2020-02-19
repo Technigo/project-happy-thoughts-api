@@ -8,20 +8,16 @@ const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts'
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-const Task = mongoose.model('Task', {
-  text: {
+const Thought = mongoose.model('Thought', {
+  message: {
     type: String,
     required: true,
-    minlength: 5,
+    minlength: 3,
     maxlenght: 500
   },
-  id: {
+  hearts: {
     type: Number,
-    required: true
-  },
-  complete: {
-    type: Boolean,
-    default: false
+    default: 0
   },
   createdAt: {
     type: Date,
@@ -41,50 +37,45 @@ app.use(cors())
 app.use(bodyParser.json())
 
 // Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world')
-})
+// app.get('/', (req, res) => {
+//   res.send('Hello world')
+// })
 
 // find all tasks
-app.get('/tasks', async (req, res) => {
-  const tasks = await Task.find()
+app.get('/', async (req, res) => {
+  const thought = await Thought.find()
     .sort({ createdAt: 'desc' })
     .limit(20)
     .exec()
-  res.json(tasks)
+  res.json(thought)
 })
 
-// find not completet
-app.get('/tasks/notcomplete', async (req, res) => {
-  console.log('Get /taks/notcomplete')
-
-  const notComplete = await Task.find({ complete: false })
-    .sort({ createdAt: 'desc' })
-    .limit(20)
-    .exec()
-  res.json(notComplete)
-})
-
-//post task
-app.post('/tasks', async (req, res) => {
-  const { text, id, complete } = req.body
-  const task = new Task({ text, id, complete })
+//post thought
+app.post('/', async (req, res) => {
+  const { message } = req.body
+  const thought = new Thought({ message })
 
   try {
-    const savedTask = await task.save()
-    res.status(200).json(savedTask)
+    const savedThought = await thought.save()
+    res.status(200).json(savedThought)
   } catch (err) {
     res
       .status(400)
-      .json({ message: 'could not save tasks to database', errors: err.errors })
+      .json({ message: 'could not save thought', errors: err.errors })
   }
 })
 
-//update task complete
-app.post('/tasks/:id/complete', async (req, res) => {
-  const { id } = req.params
-  console.log(`POST /task/${id}/complete`)
-  await Task.updateOne({ id: id }, { complete: true })
+//like thought
+app.post('/:id/like', async (req, res) => {
+  try {
+    const thought = await Thought.findOneAndUpdate(
+      { _id: req.params.id },
+      { $inc: { hearts: 1 } }
+    )
+    res.status(200).json(thought)
+  } catch (err) {
+    res.status(400).json({ message: 'could not save like', errors: err.errors })
+  }
 })
 
 // Start the server
