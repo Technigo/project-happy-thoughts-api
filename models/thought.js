@@ -4,7 +4,7 @@ export const Thought = mongoose.model('Thought', {
   message: {
     type: String,
     required: true,
-    minlength: 2,
+    minlength: 5,
     maxlength: 140
   },
   likes: {

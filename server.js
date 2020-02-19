@@ -19,15 +19,11 @@ app.use(bodyParser.json())
 // My routes
 app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
-  res.json(thoughts)
-})
-
-app.get('/:thoughtId', async (req, res) => {
-  const thoughtId = req.params.thoughtId
-  Thought.findOne({ '_id': thoughtId })
-    .then((results) => {
-      res.json(results)
-    })
+  if (thoughts) {
+    res.status(200).json(thoughts)
+  } else {
+    res.status(400).json({ message: 'Could not find thoughts', error: err.errors })
+  }
 })
 
 // POST thoughts to page
@@ -45,8 +41,6 @@ app.post('/', async (req, res) => {
 // POST likes to page
 app.post('/:thoughtId/likes', async (req, res) => {
   const { thoughtId } = req.params
-  console.log(thoughtId)
-
   try {
     await Thought.updateOne({'_id': thoughtId }, {$inc: {'likes': 1}}, { new: true})
     res.status(201).json({})
