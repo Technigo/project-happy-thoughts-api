@@ -42,10 +42,10 @@ app.post('/', async (req, res) => {
 })
 
 // POST likes to page
-app.post('/:thoughtId/like', async (req, res) => {
+app.post('/:thoughtId/likes', async (req, res) => {
   try {
     const { thoughtId } = req.params
-    await Thought.updateOne({'_id': thoughtId }, {$inc: {'like': +1}}, { new: true})
+    await Thought.updateOne({'_id': thoughtId }, {$inc: {'likes': +1}}, { new: true})
     res.status(201).json({})
   } catch (err) {
     res.status(400).json({ message: 'Bad request, could not add like'})
