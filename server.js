@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 
 import { Thought } from './models/thought'
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughtsAPI"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
@@ -45,7 +45,6 @@ app.post('/', async (req, res) => {
 app.post('/:thoughtId/like', async (req, res) => {
   try {
     const { thoughtId } = req.params
-    console.log(`POST /${thoughtId}/like`)
     await Thought.updateOne({'_id': thoughtId }, {$inc: {'like': 1}}, { new: true})
     res.status(201).json({})
   } catch (err) {
@@ -56,5 +55,4 @@ app.post('/:thoughtId/like', async (req, res) => {
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
-  console.log('Hello world!')
 })
