@@ -29,12 +29,11 @@ app.get('/', async (req, res) => {
 // POST thoughts to page
 app.post('/', async (req, res) => {
     const { message } = req.body
-
     try {
     const thought = await new Thought({ message }).save()
     res.status(200).json(thought)
   } catch (err) {
-    res.status(400).json({ message: 'Bad request, could not post thought', error: err.error })
+    res.status(400).json({ message: 'Could not post thought', error: err.error })
   }
 })
 
@@ -45,7 +44,7 @@ app.post('/:thoughtId/likes', async (req, res) => {
     await Thought.updateOne({'_id': thoughtId }, {$inc: {'likes': 1}}, { new: true})
     res.status(201).json({})
   } catch (err) {
-    res.status(400).json({ message: 'Bad request, could not add like'})
+    res.status(400).json({ message: 'Could not add like'})
   }
 })
 
