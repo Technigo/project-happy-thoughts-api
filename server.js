@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 
 import { Thought } from './models/thought'
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughtsAPI"
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughtsMONGOAPI"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
