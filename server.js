@@ -2,7 +2,6 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
-// import Person from './PersonModel'
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts'
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -12,8 +11,8 @@ const Thought = mongoose.model('Thought', {
   message: {
     type: String,
     required: true,
-    minlength: 3,
-    maxlenght: 500
+    minlength: 6,
+    maxlength: 500
   },
   hearts: {
     type: Number,
@@ -21,7 +20,7 @@ const Thought = mongoose.model('Thought', {
   },
   createdAt: {
     type: Date,
-    default: Date.now()
+    default: Date.now
   }
 })
 
@@ -36,17 +35,11 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-// Start defining your routes here
-// app.get('/', (req, res) => {
-//   res.send('Hello world')
-// })
-
-// find all tasks
+// find all thoughts
 app.get('/', async (req, res) => {
   const thought = await Thought.find()
     .sort({ createdAt: 'desc' })
     .limit(20)
-    .exec()
   res.json(thought)
 })
 
