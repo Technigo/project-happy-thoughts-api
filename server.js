@@ -32,8 +32,9 @@ app.get('/:thoughtId', async (req, res) => {
 
 // POST thoughts to page
 app.post('/', async (req, res) => {
-  try {
     const { message } = req.body
+
+    try {
     const thought = await new Thought({ message }).save()
     res.status(200).json(thought)
   } catch (err) {
@@ -43,9 +44,11 @@ app.post('/', async (req, res) => {
 
 // POST likes to page
 app.post('/:thoughtId/likes', async (req, res) => {
+  const { thoughtId } = req.params
+  console.log(thoughtId)
+
   try {
-    const { thoughtId } = req.params
-    await Thought.updateOne({'_id': thoughtId }, {$inc: {'likes': 1}}, { new: true}.save())
+    await Thought.updateOne({'_id': thoughtId }, {$inc: {'likes': 1}}, { new: true})
     res.status(201).json({})
   } catch (err) {
     res.status(400).json({ message: 'Bad request, could not add like'})
