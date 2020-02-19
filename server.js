@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 
 import { Thought } from './models/thought'
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughtsAPI"
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughtsMONGOAPI"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
@@ -19,36 +19,32 @@ app.use(bodyParser.json())
 // My routes
 app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
-  res.json(thoughts)
-})
-
-app.get('/:thoughtId', async (req, res) => {
-  const thoughtId = req.params.thoughtId
-  Thought.findOne({ '_id': thoughtId })
-    .then((results) => {
-      res.json(results)
-    })
+  if (thoughts) {
+    res.status(200).json(thoughts)
+  } else {
+    res.status(400).json({ message: 'Could not find thoughts', error: err.errors })
+  }
 })
 
 // POST thoughts to page
 app.post('/', async (req, res) => {
-  try {
     const { message } = req.body
+    try {
     const thought = await new Thought({ message }).save()
     res.status(200).json(thought)
   } catch (err) {
-    res.status(400).json({ message: 'Bad request, could not post thought', error: err.error })
+    res.status(400).json({ message: 'Could not post thought', error: err.error })
   }
 })
 
 // POST likes to page
 app.post('/:thoughtId/likes', async (req, res) => {
+  const { thoughtId } = req.params
   try {
-    const { thoughtId } = req.params
     await Thought.updateOne({'_id': thoughtId }, {$inc: {'likes': 1}}, { new: true})
     res.status(201).json({})
   } catch (err) {
-    res.status(400).json({ message: 'Bad request, could not add like'})
+    res.status(400).json({ message: 'Could not add like'})
   }
 })
 
