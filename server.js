@@ -6,7 +6,7 @@ import mongoose from 'mongoose'
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
- 
+
 
 const Thought = mongoose.model('Thought', {
   message: {
@@ -34,18 +34,25 @@ const app = express()
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(bodyParser.json())
+//error handling when the database is down or out of reach
+app.use((res, req, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: 'Service unavailable' })
+  }
+})
 
-// Start defining your routes here
+
 app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
-// THOUGHTS
+//Path param route, with endpoint /thoughts. using get method
 app.get('/thoughts', async (req, res) => {
-
   try {
     //Success
-    const thoughts = await Thought.find().sort({ createdAt: 'desc', heart: +1 }).limit(20).exec()
+    const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
     res.status(200).json(thoughts)
   } catch (err) {
     res.status(400).json({ message: 'Could not get thoughts', error: err.errors })
@@ -70,19 +77,18 @@ app.post('/thoughts', async (req, res) => {
 
 // LIKE A THOUGHT
 app.post('/:thoughtId/like', async (req, res) => {
-  //so this endpoint should update the heart Number
+  // This endpoint should update the heart Number
 
   try {
     //Success
     const like = await Thought.findOneAndUpdate(
-      { "_id": req.params.thoughtId },//filter
-      { $inc: { "heart": 1 } },//update
-      { returnNewDocument: true }//doesn't update/work
-
+      { "_id": req.params.thoughtId },
+      { $inc: { "hearts": 1 } },
+      { returnNewDocument: true } // returns the new updated thought
     )
     res.status(201).json(like)
   } catch (err) {
-    console.log(err)
+    console.error(err)
     res.status(400).json({ message: 'Could not save your like to the Database', error: err })
   }
 
