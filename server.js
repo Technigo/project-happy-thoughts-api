@@ -30,6 +30,14 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: 'Server unavailable' })
+  }
+})
+
 app.get('/', async (req, res) => {
   const sortQuery = req.query.sort
 
