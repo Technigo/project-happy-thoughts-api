@@ -35,6 +35,12 @@ const Thought = mongoose.model('Thought', {
 const port = process.env.PORT || 8080
 const app = express()
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(bodyParser.json())
@@ -58,7 +64,6 @@ app.post('/', async (req, res) => {
 
   try{
     const savedThought = await thought.save();
-    res.header("Access-Control-Allow-Origin", "*");
     res.status(201).json(savedThought);
   }catch(err){
     console.log(err)
