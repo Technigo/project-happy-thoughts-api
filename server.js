@@ -39,6 +39,16 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
+//Service unavailable
+
+app.use((req, res, next) => {
+  if (mongoose.connection.readystate === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: 'service unavailable' })
+  }
+})
+
 // ROUTES
 app.get('/intro', (req, res) => {
   res.send('Hello lovely world  - we are ready to handle happy thoughts')
