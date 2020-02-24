@@ -58,7 +58,7 @@ app.post('/', async (req, res) => {
 
   try{
     const savedThought = await thought.save();
-    //res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", "*");
     res.status(201).json(savedThought);
   }catch(err){
     console.log(err)
