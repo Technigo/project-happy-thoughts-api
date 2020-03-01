@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import { restart } from 'nodemon'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -43,14 +44,28 @@ app.use(cors())
 app.use(bodyParser.json())
 
 // Start defining your routes here
-app.get('/', (req, res) => {
-    res.send('Hello world')
-})
-
-app.get('/thoughts', async(reg, res) => {
-    const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+app.get('/', async(req, res) => {
+    const thoughts = await Thought.find().limit(20).sort({ createdAt: 'desc' })
     res.json(thoughts)
 })
+
+app.post('/', async(req, res) => {
+    const thought = new Thought({
+        message: req.body.message,
+        hearts: 0
+    })
+    try {
+        const saved = await thought.save()
+        res.status(201).json(saved)
+    } catch (err) {
+        res.status(400).json({ message: 'could not save thought', errors: err.errors })
+    }
+})
+
+// app.get('/thoughts', async(reg, res) => {
+//     const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+//     res.json(thoughts)
+// })
 
 // Start the server
 app.listen(port, () => {
