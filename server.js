@@ -14,8 +14,8 @@ const Thought = mongoose.model('Thought', {
     message: {
         type: String,
         required: true,
-        minLenght: 5,
-        maxLenght: 140
+        minlenght: 5,
+        maxlenght: 140
     },
     hearts: {
         type: Number,
@@ -62,10 +62,17 @@ app.post('/', async(req, res) => {
     }
 })
 
-// app.get('/thoughts', async(reg, res) => {
-//     const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
-//     res.json(thoughts)
-// })
+app.post('/:id/like', async(req, res) => {
+    try {
+        const thought = await Thought.findOneAndUpdate({ _id: req.params.id }, { $inc: { hearts: 1 } })
+        res.status(200).json(thought)
+    } catch (err) {
+        res.status(400).json({ message: 'could not update heart' })
+
+    }
+})
+
+
 
 // Start the server
 app.listen(port, () => {
