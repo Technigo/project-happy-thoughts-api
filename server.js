@@ -7,7 +7,8 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-const Thoughts = mongoose.model('Task', {
+// Setup model
+const Thought = mongoose.model('Thought', {
 
     message: {
         type: String,
@@ -16,11 +17,16 @@ const Thoughts = mongoose.model('Task', {
         maxLenght: 140
     },
     hearts: {
-        default: 0,
+        type: Number,
+        required: true,
+        default: 0
     },
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    tag: {
+        type: String
     }
 
 })
@@ -42,8 +48,8 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async(reg, res) => {
-    const thoughts = await Task.find().sort({ createdAt: 'desc' }).limit(20).exec()
-    res.json(tasks)
+    const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+    res.json(thoughts)
 })
 
 // Start the server
