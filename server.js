@@ -26,10 +26,17 @@ app.get('/', async (req, res) => {
   }
 })
 
+app.get('/:thougthId', async (req, res) => {
+  const thoughtId = req.params.thoughtId
+  Thought.findOne({ '_id': thoughtId })
+  .then ((results) => {
+    res.json(results)
+  })
+})
 // POST thoughts to page
 app.post('/', async (req, res) => {
-    const { message } = req.body
     try {
+    const { message } = req.body
     const thought = await new Thought({ message }).save()
     res.status(200).json(thought)
   } catch (err) {
