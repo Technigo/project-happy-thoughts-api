@@ -1,13 +1,11 @@
-# Project Happy Thoughts API
+Project about implementing a previous frontend project with backend. It is kind of a twitter-like guestbook that you can post your happy thought to and also like previous posts. 
+Built in React, HTML and StyledComponents to fetch and post Happy Thoughts to an API. 
 
-Replace this readme with your own information about your project.
+Backend 
+https://happy-charlotte.herokuapp.com/
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Frontend, live project 
+https://festive-newton-f74c67.netlify.com/
 
-## The problem
-
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
-
-## View it live
-
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Frontend repo on Github 
+https://github.com/HannaCharlotteHolm/project-happy-thoughts
