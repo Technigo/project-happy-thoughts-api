@@ -50,6 +50,7 @@ app.use(bodyParser.json())
   //res.send('Hello world API')
 //})
 
+
 app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
   res.json(thoughts);
@@ -57,10 +58,10 @@ app.get('/', async (req, res) => {
 
 app.post('/', async (req, res) => {
   //get the info send by user to our API endpoint
-  const {message} = req.body.message;
+  const {message} = req.body;
 
   //use our mongoose model to create database entry
-  const thought = new Thought({message, hearts});
+  const thought = new Thought({message});
 
   try{
     const savedThought = await thought.save();
