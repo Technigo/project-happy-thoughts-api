@@ -57,7 +57,6 @@ app.post('/', async (req, res) => {
 app.post('/:thoughtId/like', async (req, res) => {
   try {
     const { thoughtId } = req.params
-    console.log(`POST /${thoughtId}/like`)
     await Thought.updateOne({ '_id': thoughtId }, { $inc: { 'heart': 1 } }, { new: true })
     res.status(201).json({})
   } catch (err) {
@@ -68,5 +67,4 @@ app.post('/:thoughtId/like', async (req, res) => {
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
-  console.log('tjabbaa')
 })
