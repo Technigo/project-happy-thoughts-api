@@ -27,7 +27,7 @@ const Thought = mongoose.model('Thought', {
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
 //
-//   PORT=9000 npm start
+//  PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
 // Add middlewares to enable cors and json body parsing
@@ -35,10 +35,6 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 // Start defining your routes here
-
-// app.get('/', (req, res) => {
-//   res.send('Hello world hej hej')
-// })
 
 app.get('/', async (req, res) => {
   const thoughts = await Thought
@@ -49,15 +45,10 @@ app.get('/', async (req, res) => {
 })
 
 app.post('/', async (req, res) => {
-  //Retrieve the information sent by the client to our API endpoint
-  // const { message, hearts } = req.body.message
   const { message } = req.body
-  // Use our mongoose model to create the database entry
-  // const thought = new Thought({ message, hearts })
   const thought = new Thought({ message })
 
   try {
-    // Success
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
   } catch (err) {
@@ -65,7 +56,6 @@ app.post('/', async (req, res) => {
   }
 })
 
-// The endpoint updates the number of like
 app.post('/:thoughtId/like', async (req, res) => {
 
   try {
