@@ -2,18 +2,25 @@ import express from 'express'
 const router = express.Router()
 import auth from '../util/auth'
 
-import controllers from '../controllers/messages'
+import {
+  getMessages,
+  createMessage,
+  getMessage,
+  updateMessage,
+  deleteMessage,
+  like
+} from '../controllers/messages'
 
 router.route('/')
-  .get(auth, controllers.getMessages)
-  .post(auth, controllers.createMessage)
+  .get(auth, getMessages)
+  .post(auth, createMessage)
 
 router.route('/:id')
-  .get(auth, controllers.getMessage)
-  .put(auth, controllers.updateMessage)
-  .delete(auth, controllers.deleteMessage)
+  .get(auth, getMessage)
+  .put(auth, updateMessage)
+  .delete(auth, deleteMessage)
 
 router.route('/:id/like')
-  .post(auth, controllers.like)
+  .post(auth, like)
 
 export default router

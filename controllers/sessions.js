@@ -1,7 +1,7 @@
 import db from '../models'
 import bcrypt from 'bcrypt-nodejs'
 
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
   try {
     const { email, password } = req.body
     const user = await db.User.findOne({ email })

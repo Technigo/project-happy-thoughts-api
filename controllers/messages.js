@@ -1,6 +1,6 @@
 import db from '../models'
 
-exports.getMessages = async (req, res) => {
+export const getMessages = async (req, res) => {
   const messages = await db.Message.find().sort({ createdAt: -1 }).limit(20).exec()
   if (messages.length > 0) {
     res.json(messages)
@@ -9,7 +9,7 @@ exports.getMessages = async (req, res) => {
   }
 }
 
-exports.createMessage = async (req, res) => {
+export const createMessage = async (req, res) => {
   const { message } = req.body
   const user = await db.User.findOne({
     accessToken: req.header('Authorization')
@@ -24,7 +24,7 @@ exports.createMessage = async (req, res) => {
   }
 }
 
-exports.getMessage = async (req, res) => {
+export const getMessage = async (req, res) => {
   const id = req.params.id
   const message = await db.Message.findById(id)
   if (message) {
@@ -34,7 +34,7 @@ exports.getMessage = async (req, res) => {
   }
 }
 
-exports.updateMessage = async (req, res) => {
+export const updateMessage = async (req, res) => {
   const id = req.params.id
   const newMessage = req.body.message
   const message = await db.Message.findById(id)
@@ -47,7 +47,7 @@ exports.updateMessage = async (req, res) => {
   }
 }
 
-exports.deleteMessage = async (req, res) => {
+export const deleteMessage = async (req, res) => {
   try {
     await db.Message.findOneAndDelete({ _id: req.params.id })
     res.status(202).json({ message: "deleted" })
@@ -58,7 +58,7 @@ exports.deleteMessage = async (req, res) => {
   }
 }
 
-exports.like = async (req, res) => {
+export const like = async (req, res) => {
   const message = await db.Message.findById(req.params.id)
 
   if (message) {

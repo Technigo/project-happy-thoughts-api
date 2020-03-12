@@ -2,15 +2,19 @@ import express from 'express'
 const router = express.Router()
 import auth from '../util/auth'
 
-import controllers from '../controllers/users'
+import {
+  createUser,
+  showMessages,
+  getUser
+} from '../controllers/users'
 
 router.route('/')
-  .post(controllers.createUser)
+  .post(createUser)
 
 router.route('/messages')
-  .get(auth, controllers.showMessages)
+  .get(auth, showMessages)
 
 router.route('/:id')
-  .get(auth, controllers.getUser)
+  .get(auth, getUser)
 
 export default router

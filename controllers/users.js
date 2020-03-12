@@ -1,7 +1,7 @@
 import db from '../models'
 import bcrypt from 'bcrypt-nodejs'
 
-exports.createUser = async (req, res) => {
+export const createUser = async (req, res) => {
   try {
     const { name, email, password } = req.body
     const user = new db.User({ name, email, password: bcrypt.hashSync(password) })
@@ -12,12 +12,12 @@ exports.createUser = async (req, res) => {
   }
 }
 
-exports.getUser = async (req, res) => {
+export const getUser = async (req, res) => {
   const user = await db.User.findById(req.params.id)
   res.json({ secret: `Welcome to the Jungle!! ${user.name}` })
 }
 
-exports.showMessages = async (req, res) => {
+export const showMessages = async (req, res) => {
   const user = await db.User.findOne({
     accessToken: req.header('Authorization')
   })
