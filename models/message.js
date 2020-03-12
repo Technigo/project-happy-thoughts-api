@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const postSchema = new mongoose.Schema(
+const messageSchema = new mongoose.Schema(
   {
     message: {
       type: String,
@@ -8,15 +8,13 @@ const postSchema = new mongoose.Schema(
       minlength: 5,
       maxlength: 140
     },
-    hearts: {
+    likes: {
       type: Number,
       default: 0
     },
-    name: {
-      type: String,
-      default: "anonymous",
-      minlength: 2,
-      maxlength: 50
+    postedBy: {
+      type: mongoose.Schema.Types.ObjectId, ref: 'User',
+      required: true
     },
     createdAt: {
       type: Date,
@@ -25,6 +23,6 @@ const postSchema = new mongoose.Schema(
   }
 )
 
-const Post = mongoose.model('Post', postSchema)
+const Message = mongoose.model('Message', messageSchema)
 
-module.exports = Post
+module.exports = Message

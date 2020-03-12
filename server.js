@@ -1,7 +1,10 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
-import postsRoutes from './routes/posts'
+
+import usersRoutes from './routes/users'
+import sessionsRoutes from './routes/sessions'
+import messagesRoutes from './routes/messages'
 
 const port = process.env.PORT || 8080
 const app = express()
@@ -10,8 +13,10 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-// Start defining your routes here
-app.use('/', postsRoutes)
+// Routes
+app.use('/users', usersRoutes)
+app.use('/sessions', sessionsRoutes)
+app.use('/messages', messagesRoutes)
 
 // Start the server
 app.listen(port, () => {

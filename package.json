@@ -1,19 +1,23 @@
 {
-  "name": "express-api-starter",
+  "name": "message-system-api",
   "version": "1.0.0",
-  "description": "Starter project to get up and running with express quickly",
+  "description": "interview assignment from Ted & Gustaf",
+  "main": "server.js",
   "scripts": {
     "start": "babel-node server.js",
     "dev": "nodemon server.js --exec babel-node"
   },
-  "author": "",
+  "author": "Charlotte Holm",
   "license": "ISC",
   "dependencies": {
     "@babel/core": "^7.8.3",
     "@babel/node": "^7.8.3",
     "@babel/preset-env": "^7.8.3",
+    "bcrypt": "^3.0.8",
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mongoose": "^5.8.10",

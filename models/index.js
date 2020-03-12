@@ -3,8 +3,9 @@ import mongoose from 'mongoose'
 
 dotenv.config()
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/authAPI"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-module.exports.Post = require('./post')
+module.exports.User = require('./user')
+module.exports.Message = require('./message')
