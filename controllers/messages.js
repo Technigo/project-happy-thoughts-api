@@ -1,7 +1,7 @@
 import db from '../models'
 
 export const getMessages = async (req, res) => {
-  const messages = await db.Message.find().sort({ createdAt: -1 }).limit(20).exec()
+  const messages = await db.Message.find().populate('postedBy', 'name').sort({ createdAt: -1 }).limit(20).exec()
   if (messages.length > 0) {
     res.json(messages)
   } else {
@@ -26,7 +26,7 @@ export const createMessage = async (req, res) => {
 
 export const getMessage = async (req, res) => {
   const id = req.params.id
-  const message = await db.Message.findById(id)
+  const message = await db.Message.findById(id).populate('postedBy').exec()
   if (message) {
     res.json(message)
   } else {

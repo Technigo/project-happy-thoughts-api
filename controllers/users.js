@@ -21,8 +21,7 @@ export const showMessages = async (req, res) => {
   const user = await db.User.findOne({
     accessToken: req.header('Authorization')
   })
-  const messages = await db.Message.find({ postedBy: user._id })
-  // .sort({ createdAt: -1 }).exec()
+  const messages = await db.Message.find({ postedBy: user._id }).sort({ createdAt: -1 }).exec()
   if (messages.length > 0) {
     res.json(messages)
   } else {
