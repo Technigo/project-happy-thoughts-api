@@ -1,6 +1,6 @@
 # Project Happy Thoughts API
 
-the objective was to use React to build a  RESTful api to post and get Twitter-like comments  You are also able to "like" a post.
+the objective was  to build a RESTful api to post and get Twitter-like comments, You are also able to "like" a post. 
 
 link to backend: https://github.com/swolfson1/project-happy-thoughts-api
 
