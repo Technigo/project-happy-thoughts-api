@@ -1,11 +1,22 @@
 # Project Happy Thoughts API
 
-An RESTful API which includes both GET and POST request endpoints to return data. 
+the objective was to use React to build a  RESTful api to post and get Twitter-like comments  You are also able to "like" a post.
 
-## The problem
+link to backend: https://github.com/swolfson1/project-happy-thoughts-api
 
+## Learning objectives
+* How to use APIs in React, firing requests within useEffect
+* Learn more about working with useState
+* How to put the result of API responses into React state to show in the page
+* What it's like to work with an API which you both send and receive data from
+* Implement a given design
+## technology implemented
+* Express
+* MongoDB
+* Mongoose
+* Node.js
 
-
-## View it live
-
-https://swolfson-happy.herokuapp.com/
+##
+ deployed frontend site:https://swolfson-happy-thought.netlify.com
+ 
+ deployed backend site: https://swolfson-happy.herokuapp.com/
