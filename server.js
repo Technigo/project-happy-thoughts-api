@@ -6,6 +6,7 @@ import mongoose from 'mongoose'
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
+//to be able to use findOneAnd Update this needs to be false
 mongoose.set('useFindAndModify', false);
 
 const Thought = mongoose.model('Thought', {
@@ -26,25 +27,6 @@ const Thought = mongoose.model('Thought', {
 })
 
 
-// if (process.env.RESET_DATABASE) {
-//   console.log('Resetting the database')
-
-//   const seedDatabase = async () => {
-//     //   await Thought.deleteMany({})
-
-
-//     //   Thought.forEach((data) => {
-//     //     new Tought(data).save()
-
-//     //   })
-//   }
-//   seedDatabase()
-// }
-
-// Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
 
@@ -52,10 +34,6 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-// Start defining your routes here
-// app.get('/', (req, res) => {
-//   res.send('Hello world')
-// })
 
 app.get('/', async (req, res) => {
   const thought = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
@@ -70,20 +48,19 @@ app.post('/', async (req, res) => {
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
   } catch (err) {
-    res.status(400).json({ message: 'Could not save to the Database', error: err.errors })
+    res.status(400).json({ message: 'Could not save your thought', error: err.errors })
   }
 })
 
+// ****this endpoint updates the number of hearts/likes 
 app.post('/:id/like', async (req, res) => {
-  // this endpoint should update the heart Number
   try {
     const like = await Thought.findOneAndUpdate(
-      { "_id": req.params.id }, //filter
-      { $inc: { "heart": 1 } },//update
+      { "_id": req.params.id }, //filters & is required
+      { $inc: { "heart": 1 } }, //updates & is required
       { new: true } //updates the number of hearts in POST
     )
     res.status(201).json(like)
-
   } catch (err) {
     res.status(400).json({ message: 'Could not save your like', error: err.errors })
   }
