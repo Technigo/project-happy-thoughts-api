@@ -34,12 +34,13 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-
+//This endpoint will show all the posted thoughts
 app.get('/', async (req, res) => {
   const thought = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
   res.json(thought)
 })
 
+//Thoughts will be added/posted to this endpoint
 app.post('/', async (req, res) => {
   const { message } = req.body
   const thought = new Thought({ message })
@@ -52,7 +53,7 @@ app.post('/', async (req, res) => {
   }
 })
 
-// ****this endpoint updates the number of hearts/likes 
+//This endpoint updates the number of hearts/likes 
 app.post('/:id/like', async (req, res) => {
   try {
     const like = await Thought.findOneAndUpdate(
