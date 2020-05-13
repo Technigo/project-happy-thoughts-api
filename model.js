@@ -3,7 +3,8 @@ import mongoose from 'mongoose'
 export const Thought = mongoose.model('Thought', {
   message: {
     type: String,
-    minlength: 5
+    minlength: 5,
+    required: true
   },
   createdAt: {
     type: Date,
