@@ -20,7 +20,7 @@ const Thought = mongoose.model("Thought", {
   },
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: () => new Date(),
   },
 });
 
@@ -50,7 +50,7 @@ app.get("/thoughts", async (req, res) => {
 
 app.post("/thoughts", async (req, res) => {
   const { message, hearts } = req.body;
-  const thought = new Thought({ message, hearts });
+  const thought = new Thought({ message: message, hearts: hearts });
 
   try {
     const savedThought = await thought.save();
