@@ -34,15 +34,23 @@ app.post('/thoughts', async (req, res)=>{
   const thought = new Thought({message})
   try {
     const savedThought = await thought.save()
-    res.status(200).json(savedThought)
+    res.status(201).json(savedThought)
   }
   catch(err){
-    res.status(400).json({message:"could not save thought", error: err})
+    res.status(400).json({message:"could not save thought", error: err.errors})
   }
-  
-
 })
-
+app.post('/thoughts/:thoughtId/like', async(req, res)=>{
+  const {thoughtId} = req.params
+  Thought.findByIdAndUpdate(thoughtId, {$inc:{hearts: 1}},{new:true},(doc, err)=>{
+    if(doc){
+      res.json(doc)
+    }
+    else {
+      res.status(400).json({message:"could not like this post", error: err})
+    }
+  }) 
+})
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
