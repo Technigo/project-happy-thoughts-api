@@ -62,6 +62,21 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
+app.post("/:thoughtID/like", async (req, res) => {
+  const { thoughtID } = req.params;
+  const thought = await Thought.findById(thoughtID);
+
+  if (thought) {
+    thought.hearts++;
+    thought.save();
+    res.status(201).json(thought);
+  } else {
+    res.status(400).json({
+      message: `Could not find thought with ID: ${thoughtID}`,
+    });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
