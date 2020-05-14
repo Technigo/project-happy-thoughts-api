@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find()
+  const thoughts = await Thought.find().limit(20)
   res.json(thoughts)
 })
 
