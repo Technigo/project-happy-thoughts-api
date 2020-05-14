@@ -43,6 +43,9 @@ app.get("/", (req, res) => {
 app.get("/thoughts", async (req, res) => {
   const { page } = req.query;
 
+  const totalThoughts = await Thought.find();
+  const pages = Math.ceil(totalThoughts.length / 20);
+
   const pageNbr = +page || 1;
   const perPage = 20;
   const skip = perPage * (pageNbr - 1);
@@ -52,7 +55,7 @@ app.get("/thoughts", async (req, res) => {
     .limit(perPage)
     .skip(skip)
     .exec();
-  res.json(thoughts);
+  res.json([{ pages: pages }, thoughts]);
 });
 
 app.post("/thoughts", async (req, res) => {
