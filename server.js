@@ -41,9 +41,16 @@ app.get("/", (req, res) => {
 });
 
 app.get("/thoughts", async (req, res) => {
+  const { page } = req.query;
+
+  const pageNbr = +page || 1;
+  const perPage = 20;
+  const skip = perPage * (pageNbr - 1);
+
   const thoughts = await Thought.find()
     .sort({ createdAt: -1 })
-    .limit(20)
+    .limit(perPage)
+    .skip(skip)
     .exec();
   res.json(thoughts);
 });
