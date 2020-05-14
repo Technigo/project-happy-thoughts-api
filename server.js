@@ -20,7 +20,7 @@ const Thought = mongoose.model('Thought', {
   },
   createdAt: {
     type: Date,
-    default: () => Date.now()
+    default: Date.now
   },
   name: {
     type: String,
@@ -39,13 +39,13 @@ app.use(cors())
 app.use(bodyParser.json())
 
 // if database not connected
-// app.use((req, res, next) => {
-//   if (mongoose.connection.readyState === 1) {
-//     next()
-//   } else {
-//     res.status(503).json({ error: 'service unavailable' })
-//   }
-// })
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: 'service unavailable' })
+  }
+})
 
 // ROUTES
 app.get('/', async (req, res) => {
@@ -57,15 +57,15 @@ app.get('/thoughts', async (req, res) => {
   res.json(thoughts)
 })
 
+// POST 
 app.post('/thoughts', async (req, res) => {
   // Retrieve the information sent by the client to our API endpoint
-  const { message, heart } = req.body
-
+  const { message, name } = req.body
   // Use our mongoose model to create the database entry
-  const thought = new Thought({ message, heart })
+  const thought = new Thought({ message, name })
 
   try {
-    //successful
+    //success
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
   } catch (err) {
