@@ -1,13 +1,29 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+### Building the backend to a project earlier during the course.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## Learning objectives
 
-## The problem
+- Install and setup of an Express server.
+- Create routes.
+- Create mongoose models.
+- Deploy Node projects.
+- Pagination.
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+## Tech
 
-## View it live
+- Heruko
+- Express
+- Mongo DB
+- Mongoose
+- Postman
+- Javascript
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+### View it live:
+
+https://perssons-happy-thoughts.herokuapp.com/
+
+## Frontend
+
+https://perssons-happy-thoughts.netlify.app/
+https://github.com/Cilpersson/project-happy-thoughts
