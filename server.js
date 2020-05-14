@@ -11,7 +11,7 @@ mongoose.Promise = Promise
 const Thought = mongoose.model('Thought', {
   message: {
     type: String,
-    required: True,
+    required: true,
     minLenght: 5,
     maxLenght: 140,
   },
@@ -21,7 +21,7 @@ const Thought = mongoose.model('Thought', {
   },
   createdAt: {
     type: Date,
-    default: () => new Date()
+    default: () => new Date(),
   }
 })
 
@@ -43,11 +43,33 @@ app.get('/', (req, res) => {
 
 
 //Get the 20 latest thoughts route
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec();
+  res.json(thoughts)
+})
 
 // Post new message 
+app.post('/thoughts', async (req, res) => {
+  const { message } = req.body
+  const thought = new Thought({ message })
+  try {
+    const savedThought = await thought.save();
+    res.status(201).json(savedThought);
+  } catch (err) {
+    res.status(400).json({ message: 'Sorry, could not post this', error: err })
+  }
+})
 
-// Post likes/hearts to a specific message
-
+// Post hearts to a specific message
+app.post('/:thougthId/like', async (req, res) => {
+  const { thoughtId } = req.params;
+  try {
+    const thought = await Thought.findOneAndUpdate({ '_id': thoughtId }, { '$inc': { 'hearts': 1 } });
+    res.json(thought).status(201);
+  } catch (err) {
+    res.status(401).json({ message: 'Heart not added to post', error: err })
+  }
+})
 
 // Start the server
 app.listen(port, () => {
