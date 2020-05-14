@@ -26,9 +26,14 @@ app.get('/', (req, res) => {
 
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body
-  const thought = new Thought({ message })
-  await thought.save()
-  res.json(thought)
+
+  try {
+    const thought = await new Thought({ message }).save()
+    res.status(201).json(thought)
+  } catch (err) {
+    res.status(400).json({ message: 'Could not save thought', errors: err.errors })
+  }
+
 })
 
 // Start the server
