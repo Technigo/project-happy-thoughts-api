@@ -39,9 +39,11 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+const listEndpoints = require("express-list-endpoints");
+
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello world");
+  res.send(listEndpoints(app));
 });
 
 app.get("/thoughts", async (req, res) => {
