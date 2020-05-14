@@ -44,7 +44,9 @@ app.get('/thoughts', async (req, res) => {
     .skip(skip)
     .limit(perPage)
 
-  if (page > pages) {
+  if (numThoughts === 0) {
+    res.status(200).json({ message: 'There are no happy thoughts yet' })
+  } else if (page > pages) {
     res.status(404).json({ message: `There is no page ${page}` })
   } else {
     res.json({
