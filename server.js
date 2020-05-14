@@ -36,6 +36,8 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
+const listEndpoints = require('express-list-endpoints')
+
 // Start defining your routes here
 app.get('/', (req, res) => {
   res.send('Hello world')
@@ -64,7 +66,7 @@ app.post('/thoughts', async (req, res) => {
 app.post('/:thougthId/like', async (req, res) => {
   const { thoughtId } = req.params;
   try {
-    const thought = await Thought.findOneAndUpdate({ '_id': thoughtId }, { '$inc': { 'hearts': 1 } });
+    const thought = await Thought.findOneAndUpdate({ '_id': thoughtId }, { $inc: { 'hearts': 1 } });
     res.json(thought).status(201);
   } catch (err) {
     res.status(401).json({ message: 'Heart not added to post', error: err })
