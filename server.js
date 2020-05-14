@@ -55,7 +55,7 @@ app.get("/thoughts", async (req, res) => {
     .limit(perPage)
     .skip(skip)
     .exec();
-  res.json([pages, thoughts]);
+  res.json({ pages: pages, thoughts: thoughts });
 });
 
 app.post("/thoughts", async (req, res) => {
