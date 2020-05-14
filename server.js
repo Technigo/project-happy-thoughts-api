@@ -49,7 +49,7 @@ const Thought = mongoose.model('Thought', {
 app.get('/', async (req, res) => {
   const PAGE_SIZE = 20;
   const page = req.query.page || 1
-  const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(PAGE_SIZE)
+  const thoughts = await Thought.find().sort({ createdAt: 1 }).limit(PAGE_SIZE)
   res.json(thoughts)
 })
 
@@ -62,7 +62,7 @@ app.post('/', async (req, res) => {
       message: req.body.message,
       postedBy: req.body.user || 'Anonymous'
     }).save()
-    const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(PAGE_SIZE)
+    const thoughts = await Thought.find().sort({ createdAt: 1 }).limit(PAGE_SIZE)
     res.status(200).json(thoughts)
   } catch (err) {
     res.status(400).json({
