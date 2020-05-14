@@ -52,7 +52,7 @@ app.get('/thoughts', async (req, res) => {
     res.json({
       total_pages: pages,
       page: page,
-      thoughts: thoughts
+      thoughts
     })
   }
 })
