@@ -24,6 +24,11 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await Thought.find()
+  res.json(thoughts)
+})
+
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body
 
