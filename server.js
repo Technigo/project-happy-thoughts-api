@@ -24,8 +24,11 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
+// Endpoint returning 20 thoughts
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().limit(20)
+  const thoughts = await Thought.find()
+    .sort({ createdAt: -1 })
+    .limit(20)
   res.json(thoughts)
 })
 
