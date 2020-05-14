@@ -5,7 +5,10 @@ import mongoose from 'mongoose'
 import Thought from './models/thought'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoUrl, {
+  useNewUrlParser: true, useUnifiedTopology: true,
+  useFindAndModify: false
+})
 mongoose.Promise = Promise
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
@@ -32,6 +35,7 @@ app.get('/thoughts', async (req, res) => {
   res.json(thoughts)
 })
 
+// Endpoint expecting a JSON body with the thought message
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body
 
@@ -42,6 +46,19 @@ app.post('/thoughts', async (req, res) => {
     res.status(400).json({ message: 'Could not save thought', errors: err.errors })
   }
 
+})
+
+// Endpoint taking in _id as params, updating hearts property to add one heart
+app.post('/thoughts/:_id/like', async (req, res) => {
+  const { _id } = req.params
+
+  const thoughtLiked = await Thought.findOneAndUpdate(
+    { _id },
+    { $inc: { hearts: 1 } },
+    { new: true }
+  )
+
+  res.json(thoughtLiked)
 })
 
 // Start the server
