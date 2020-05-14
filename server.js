@@ -15,7 +15,7 @@ const Thought = mongoose.model('Thought', {
     minLenght: 5,
     maxLenght: 140,
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -35,6 +35,10 @@ const app = express()
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(bodyParser.json())
+
+// Make Mongoose use `findOneAndUpdate()`. Note that this option is `true`
+// by default, you need to set it to false.
+mongoose.set('useFindAndModify', false);
 
 const listEndpoints = require('express-list-endpoints')
 
