@@ -29,10 +29,30 @@ app.get('/', (req, res) => {
 
 // Endpoint returning 20 thoughts
 app.get('/thoughts', async (req, res) => {
+  const { page } = req.query
+  const pageNo = +page || 1
+  const perPage = 20
+  // skip: E.g. page 3: 10 * (3-1) = 20, sends 20 as parameter to .skip()
+  // skips index 0-19 so that page 3 starts with the book that has index 20
+  const skip = perPage * (pageNo - 1)
+  const allThoughts = await Thought.find()
+  const numThoughts = allThoughts.length
+  const pages = Math.ceil(numThoughts / perPage)
+
   const thoughts = await Thought.find()
     .sort({ createdAt: -1 })
-    .limit(20)
-  res.json(thoughts)
+    .skip(skip)
+    .limit(perPage)
+
+  if (page > pages) {
+    res.status(404).json({ message: `There is no page ${page}` })
+  } else {
+    res.json({
+      total_pages: pages,
+      page: page,
+      thoughts: thoughts
+    })
+  }
 })
 
 // Endpoint expecting a JSON body with the thought message
@@ -41,6 +61,7 @@ app.post('/thoughts', async (req, res) => {
 
   try {
     const thought = await new Thought({ message }).save()
+
     res.status(201).json(thought)
   } catch (err) {
     res.status(400).json({
@@ -61,6 +82,7 @@ app.post('/thoughts/:id/like', async (req, res) => {
       { $inc: { hearts: 1 } },
       { new: true }
     )
+
     res.status(201).json(thoughtLiked)
   } catch (err) {
     res.status(400).json({
