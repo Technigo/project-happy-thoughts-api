@@ -24,6 +24,13 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
+app.post('/thoughts', async (req, res) => {
+  const { message } = req.body
+  const thought = new Thought({ message })
+  await thought.save()
+  res.json(thought)
+})
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
