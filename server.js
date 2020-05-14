@@ -43,22 +43,32 @@ app.post('/thoughts', async (req, res) => {
     const thought = await new Thought({ message }).save()
     res.status(201).json(thought)
   } catch (err) {
-    res.status(400).json({ message: 'Could not save thought', errors: err.errors })
+    res.status(400).json({
+      message: 'Could not save thought',
+      errors: err.errors
+    })
   }
 
 })
 
 // Endpoint taking in _id as params, updating hearts property to add one heart
-app.post('/thoughts/:_id/like', async (req, res) => {
-  const { _id } = req.params
+app.post('/thoughts/:id/like', async (req, res) => {
+  const { id } = req.params
 
-  const thoughtLiked = await Thought.findOneAndUpdate(
-    { _id },
-    { $inc: { hearts: 1 } },
-    { new: true }
-  )
+  try {
+    const thoughtLiked = await Thought.findOneAndUpdate(
+      { _id: id },
+      { $inc: { hearts: 1 } },
+      { new: true }
+    )
+    res.status(201).json(thoughtLiked)
+  } catch (err) {
+    res.status(400).json({
+      message: `No thought with id ${id}`,
+      errors: err.errors
+    })
+  }
 
-  res.json(thoughtLiked)
 })
 
 // Start the server
