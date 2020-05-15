@@ -16,6 +16,11 @@ const ThoughtSchema = new Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  createdBy: {
+    type: String,
+    maxlength: 15,
+    default: 'Anonymous'
   }
 })
 

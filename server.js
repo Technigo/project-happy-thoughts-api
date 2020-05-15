@@ -59,10 +59,10 @@ app.get('/thoughts', async (req, res) => {
 
 // Endpoint expecting a JSON body with the thought message
 app.post('/thoughts', async (req, res) => {
-  const { message } = req.body
+  const { message, createdBy } = req.body
 
   try {
-    const thought = await new Thought({ message }).save()
+    const thought = await new Thought({ message, createdBy }).save()
 
     res.status(201).json(thought)
   } catch (err) {
