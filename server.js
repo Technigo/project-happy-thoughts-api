@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 
 // Endpoint returning 20 thoughts
 app.get('/thoughts', async (req, res) => {
-  const { page } = req.query
+  const { page, sort } = req.query
   const pageNo = +page || 1
   const perPage = 20
   // skip: E.g. page 3: 10 * (3-1) = 20, sends 20 as parameter to .skip()
@@ -39,8 +39,18 @@ app.get('/thoughts', async (req, res) => {
   const numThoughts = allThoughts.length
   const pages = Math.ceil(numThoughts / perPage)
 
+  const sortThoughts = (sort) => {
+    if (sort === 'newest') {
+      return { createdAt: -1 }
+    } else if (sort === 'oldest') {
+      return { createdAt: 1 }
+    } else if (sort === 'loved') {
+      return { hearts: -1 }
+    }
+  }
+
   const thoughts = await Thought.find()
-    .sort({ createdAt: -1 })
+    .sort(sortThoughts(sort))
     .skip(skip)
     .limit(perPage)
 
