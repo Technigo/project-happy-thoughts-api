@@ -36,7 +36,7 @@ app.use(cors())
 app.use(bodyParser.json())
 
 // Start defining your routes here
-app.get('/', async (req, res) => {
+app.get('/home', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
   if (thoughts) {
     res.json(thoughts)
@@ -45,7 +45,7 @@ app.get('/', async (req, res) => {
   }
 })
 
-app.post('/', async (req, res) => {
+app.post('/home', async (req, res) => {
   const { message } = req.body
   const thought = new Thought({message})
 
