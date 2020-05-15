@@ -38,11 +38,15 @@ app.use(bodyParser.json())
 // Start defining your routes here
 app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
-  res.json(thoughts)
+  if (thoughts) {
+    res.json(thoughts)
+  } else {
+    res.status(404).json({message: "No thoughts!"})
+  }
 })
 
 app.post('/', async (req, res) => {
-  const { message} = req.body
+  const { message } = req.body
   const thought = new Thought({message})
 
   try {
@@ -53,6 +57,18 @@ app.post('/', async (req, res) => {
   }
 })
 
+app.post('/:thoughtId/like', async (req, res) => {
+  const id = req.params.thoughtId
+
+  try {
+    const likedThought = await Thought.findById(id)
+    likedThought.hearts += 1
+    likedThought.save()
+    res.status(201).json(likedThought)
+  } catch (err) {
+    res.status(404).json({message: `No thought with matching ID: ${id}`, error: err.errors})
+  }
+})
 
 // Start the server
 app.listen(port, () => {
