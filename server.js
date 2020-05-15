@@ -71,8 +71,14 @@ app.get('/thoughts', async (req, res) => {
 app.post('/thoughts', async (req, res) => {
   const { message, createdBy } = req.body
 
+  const name = (createdBy) => {
+    if (createdBy === '') {
+      createdBy === null
+    }
+  }
+
   try {
-    const thought = await new Thought({ message, createdBy }).save()
+    const thought = await new Thought({ message, createdBy: name(createdBy) }).save()
 
     res.status(201).json(thought)
   } catch (err) {
