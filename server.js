@@ -17,11 +17,12 @@ const Thought = mongoose.model('Thought', {
   },
   hearts: {
     type: Number,
-    default: 0
+    default: 0,
+    required: true
   },
   createdAt: {
     type: Date,
-    default: () => new Date(),
+    default: Date.now
   }
 })
 
@@ -29,7 +30,7 @@ const Thought = mongoose.model('Thought', {
 // overridden when starting the server. For example:
 //
 //   PORT=9000 npm start
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 8089
 const app = express()
 
 // Add middlewares to enable cors and json body parsing
@@ -40,7 +41,6 @@ app.use(bodyParser.json())
 // by default, you need to set it to false.
 mongoose.set('useFindAndModify', false);
 
-const listEndpoints = require('express-list-endpoints')
 
 // Start defining your routes here
 app.get('/', (req, res) => {
@@ -67,10 +67,9 @@ app.post('/thoughts', async (req, res) => {
 })
 
 // Post hearts to a specific message
-app.post('/:thougthId/like', async (req, res) => {
-  const { thoughtId } = req.params;
+app.post('/:id/like', async (req, res) => {
   try {
-    const thought = await Thought.findOneAndUpdate({ '_id': thoughtId }, { $inc: { 'hearts': 1 } });
+    const thought = await Thought.findOneAndUpdate({ _id: req.params.id }, { $inc: { hearts: 1 } })
     res.json(thought).status(201);
   } catch (err) {
     res.status(401).json({ message: 'Heart not added to post', error: err })
