@@ -7,6 +7,7 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
+// MODEL
 const Thought = mongoose.model('Thought', {
   message: {
     type: String,
@@ -36,20 +37,16 @@ app.use(cors())
 app.use(bodyParser.json())
 
 // Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Think Happy Thoughts!')
-})
-
-app.get('/home', async (req, res) => {
+app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
-  if (thoughts) {
+  if (thoughts.length > 0) {
     res.json(thoughts)
   } else {
     res.status(404).json({message: "No thoughts!"})
   }
 })
 
-app.post('/home', async (req, res) => {
+app.post('/', async (req, res) => {
   const { message } = req.body
   const thought = new Thought({message})
 
