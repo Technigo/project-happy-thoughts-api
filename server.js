@@ -14,7 +14,7 @@ const Thought = mongoose.model('Thought', {
     minlength: 2,
     maxlength: 140,
   },
-  liked: {
+  hearts: {
     type: Number,
     default: 0,
   },
@@ -66,7 +66,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params;
   const likedThought = await Thought.updateOne(
     { _id: thoughtId },
-    { $inc: { liked: 1 } }
+    { $inc: { hearts: 1 } }
   );
   res.json(likedThought);
 });
