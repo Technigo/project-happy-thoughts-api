@@ -11,7 +11,7 @@ const Thought = mongoose.model("Thought", {
   message: {
     type: String,
     required: true,
-    minlength: 3,
+    minlength: 5,
     maxlength: 140,
   },
   hearts: {
@@ -22,26 +22,24 @@ const Thought = mongoose.model("Thought", {
     type: String,
     default: "Anonymous",
   },
+  type: {
+    type: String,
+    default: "❤️",
+  },
   createdAt: {
     type: Date,
     default: () => new Date(),
   },
 });
 
-// Defines the port the app will run on. Defaults to 8080, but can be
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
 
-// Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(bodyParser.json());
 
 const listEndpoints = require("express-list-endpoints");
 
-// Start defining your routes here
 app.get("/", (req, res) => {
   res.send(listEndpoints(app));
 });
@@ -49,12 +47,12 @@ app.get("/", (req, res) => {
 app.get("/thoughts", async (req, res) => {
   const { page } = req.query;
 
-  const totalThoughts = await Thought.find();
-  const pages = Math.ceil(totalThoughts.length / 20);
-
   const pageNbr = +page || 1;
   const perPage = 20;
   const skip = perPage * (pageNbr - 1);
+
+  const totalThoughts = await Thought.find();
+  const pages = Math.ceil(totalThoughts.length / perPage);
 
   const thoughts = await Thought.find()
     .sort({ createdAt: -1 })
