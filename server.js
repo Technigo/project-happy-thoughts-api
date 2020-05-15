@@ -24,7 +24,6 @@ const Thought = mongoose.model("Thought", {
   },
   theme: {
     type: String,
-    default: "❤️",
   },
   createdAt: {
     type: Date,
