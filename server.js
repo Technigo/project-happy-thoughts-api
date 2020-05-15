@@ -20,9 +20,16 @@ const app = express()
 
 const listEndpoints = require('express-list-endpoints')
 
-// Add middlewares to enable cors and json body parsing
+// Add middlewares to enable cors and json body parsing, and handling if API service is unavailable
 app.use(cors())
 app.use(bodyParser.json())
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: 'Service unavailable' })
+  }
+})
 
 // Root endpoint
 app.get('/', (req, res) => {
