@@ -26,6 +26,7 @@ const Thought = mongoose.model('Thought', {
     type: String,
     required: false,
     default: "anonymous",
+    minlength: 2,
     maxlength: 50
   }
 })
@@ -43,22 +44,23 @@ app.use((req, res, next) => {
   if (mongoose.connection.readyState === 1) {
     next()
   } else {
-    res.status(503).json({ error: 'service unavailable' })
+    res.status(503).json({ error: 'Service unavailable' })
   }
 })
 
 // ROUTES
 app.get('/', async (req, res) => {
-  res.send('Hello Anne-Sophie')
-})
-
-app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+  let thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+  if (thoughts) {
+    res.status(200).json(thoughts)
+  } else {
+    res.status(404).json({ message: "Sorry, no thoughts found", error: err.errors })
+  }
   res.json(thoughts)
 })
 
 // POST 
-app.post('/thoughts', async (req, res) => {
+app.post('/', async (req, res) => {
   // Retrieve the information sent by the client to our API endpoint
   const { message, name } = req.body
   // Use our mongoose model to create the database entry
@@ -70,6 +72,18 @@ app.post('/thoughts', async (req, res) => {
     res.status(201).json(savedThought)
   } catch (err) {
     res.status(400).json({ message: "Could not save thought to the database", error: err.errors })
+  }
+})
+
+app.post('/thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
+
+  try {
+    // https://docs.mongodb.com/manual/reference/operator/update/inc/
+    await Thought.updateOne({ '_id': thoughtId }, { '$inc': { 'hearts': 1 } })
+    res.status(201).json()
+  } catch (err) {
+    res.status(404).json({ message: `Cannot like the thought with this id ${thoughtId}`, error: err.errors })
   }
 })
 
