@@ -12,8 +12,8 @@ const Thought = mongoose.model('Thought', {
   message: {
     type: String,
     required: true,
-    minLenght: 5,
-    maxLenght: 140,
+    minlength: 5,
+    maxlength: 140,
   },
   hearts: {
     type: Number,
@@ -62,7 +62,7 @@ app.post('/thoughts', async (req, res) => {
     const savedThought = await thought.save();
     res.status(201).json(savedThought);
   } catch (err) {
-    res.status(400).json({ message: 'Sorry, could not post this', error: err })
+    res.status(400).json({ message: 'Sorry, could not post this', errors: err.errors })
   }
 })
 
