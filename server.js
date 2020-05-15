@@ -22,9 +22,8 @@ const Thought = mongoose.model("Thought", {
     type: String,
     default: "Anonymous",
   },
-  typeOfThought: {
+  theme: {
     type: String,
-    default: "❤️",
   },
   createdAt: {
     type: Date,
