@@ -19,7 +19,7 @@ const ThoughtSchema = new Schema({
   },
   createdBy: {
     type: String,
-    maxlength: 15,
+    maxlength: 14,
     default: 'Anonymous'
   }
 })
