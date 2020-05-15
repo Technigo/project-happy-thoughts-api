@@ -14,6 +14,10 @@ const Thought = mongoose.model("Thought", {
     minlength: 5,
     maxlength: 140,
   },
+  theme: {
+    type: String,
+    default: "❤️",
+  },
   hearts: {
     type: Number,
     default: 0,
@@ -21,9 +25,6 @@ const Thought = mongoose.model("Thought", {
   name: {
     type: String,
     default: "Anonymous",
-  },
-  theme: {
-    type: String,
   },
   createdAt: {
     type: Date,
