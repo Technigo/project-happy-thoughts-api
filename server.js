@@ -40,22 +40,35 @@ app.get('/', (req, res) => {
   res.send('Hello happy thoughts');
 });
 
+// Get the thoughts from database
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20);
   res.json(thoughts);
 });
 
+// Put new thoughts into the database
 app.post('/thoughts', async (req, res) => {
+  const thought = new Thought({ message: req.body.message });
   try {
-    const thought = new Thought({ message: req.body.message }); // so that user cannot manipulate likes
-    await thought.save();
-    res.json(thought);
+    //Sucess
+    const savedThought = await thought.save();
+    res.status(200).json(savedThought);
   } catch (err) {
     res.status(400).json({
       message: 'Could not save happy thought',
       errors: err.errors,
     });
   }
+});
+
+// Add likes to an existing thought
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params;
+  const likedThought = await Thought.updateOne(
+    { _id: thoughtId },
+    { $inc: { liked: 1 } }
+  );
+  res.json(likedThought);
 });
 
 // Start the server
