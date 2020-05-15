@@ -40,12 +40,12 @@ app.get('/thoughts', async (req, res) => {
   const pages = Math.ceil(numThoughts / perPage)
 
   const sortThoughts = (sort) => {
-    if (sort === 'newest') {
-      return { createdAt: -1 }
-    } else if (sort === 'oldest') {
+    if (sort === 'oldest') {
       return { createdAt: 1 }
     } else if (sort === 'loved') {
       return { hearts: -1 }
+    } else {
+      return { createdAt: -1 }
     }
   }
 
