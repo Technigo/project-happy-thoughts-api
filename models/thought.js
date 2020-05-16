@@ -5,6 +5,7 @@ const thoughtSchema = new mongoose.Schema(
     message: {
       type: String,
       required: true,
+      trim: true,
       minlength: 5,
       maxlength: 140
     },
@@ -18,7 +19,8 @@ const thoughtSchema = new mongoose.Schema(
     },
     name: {
       type: String,
-      default: 'Anonymous',
+      trim: true,
+      default: 'anonymous',
       minlength: 1,
       maxlength: 30
     }
