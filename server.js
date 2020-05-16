@@ -46,6 +46,33 @@ app.get("/", (req, res) => {
   res.send(listEndpoints(app));
 });
 
+//Get the 20 latest thoughts route
+app.get("/thoughts", async (req, res) => {
+  const thoughts = await Thought.find()
+    .sort({ createdAt: "desc" })
+    .limit(20)
+    .exec();
+  res.json(thoughts);
+});
+
+app.post("/thoughts", async (req, res) => {
+  // Retrieve the information sent by client to our API endpoint
+  const { message } = req.body;
+
+  // Use our mongoose model to create the database entry
+  const thought = new Thought({ message });
+
+  try {
+    // Succes
+    const savedThought = await thought.save();
+    res.status(201).json(savedThought);
+  } catch (err) {
+    res
+      .status(400)
+      .json({ message: "Sorry, could not post this", error: err.errors });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
