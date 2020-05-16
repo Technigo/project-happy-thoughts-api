@@ -2,33 +2,13 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import Thought from './models/thought'
+
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts'
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-const Thought = mongoose.model('Thought', {
-  message: {
-    type: String,
-    required: true,
-    minlength: 5,
-    maxlength: 140
-  },
-  hearts: {
-    type: Number,
-    default: 0
-  },
-  createdAt: {
-    type: Date,
-    default: () => new Date()
-  },
-  name: {
-    type: String,
-    default: 'Anonymous',
-    minlength: 1,
-    maxlength: 30
-  }
-})
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
