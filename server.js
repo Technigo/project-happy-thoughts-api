@@ -36,7 +36,18 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-//app.post('/likes/:id')
+app.post('/likes/:id', async (req, res) => {
+  const {hearts} = req.body
+  const like= Thought({hearts})
+
+  try {
+    const savedLike = await like.save()
+    res.status(201).json(savedLike)
+  } catch (err) {
+    res.status(400).json({ message: 'Could not save like to the database', error: err.errors })
+  }
+})
+
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
