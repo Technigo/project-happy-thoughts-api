@@ -49,10 +49,24 @@ app.get('/', (req, res) => {
   res.send(listEndpoints(app))
 })
 
-// Get thoughts – sort by date created in descending order – limit to 20 posts.
+// Get thoughts
 app.get('/thoughts', async (req, res) => {
+  const { sort } = req.query
+
+  // Sort thoughts based on sort query
+  const sorting = (sort) => {
+    if (sort === 'likes') {
+      return { hearts: -1 }
+    } else if (sort === 'date_asc') {
+      return { createdAt: 'asc' }
+    } else {
+      return { createdAt: 'desc' }
+    }
+  }
+
+  // Apply sorting & set limit to 20
   const thoughts = await Thought.find()
-    .sort({ createdAt: 'desc' })
+    .sort(sorting(sort))
     .limit(20)
     .exec()
 
