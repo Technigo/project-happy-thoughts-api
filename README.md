@@ -1,6 +1,6 @@
 # Project Happy Thoughts API
 
-API built in Node using Express. MongoDB and Mongoose is used to store data. The backend is connected to a frontend of a previous project where data is listed and created by using GET and POST request methods.
+API built in Node using Express. MongoDB and Mongoose is used to store data. The backend is connected to a frontend of a previous project where data is listed and created by using `GET` and `POST` request methods.
 
 The following endpoints are available:
 - Root: `/`
@@ -8,8 +8,8 @@ The following endpoints are available:
 - POST like to thought: `/thoughts/:id/like`
 
 Queries are used to sort and paginate the frontend:
-- Sort by newest, oldest, most loved, e.g. /thoughts?sort=newest
-- Select page, e.g. /thoughts?page=2
+- Sort by newest, oldest, most loved, e.g. `/thoughts?sort=newest`
+- Select page, e.g. `/thoughts?page=2`
 
 ## The problem
 
