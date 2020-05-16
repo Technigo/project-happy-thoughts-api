@@ -33,6 +33,6 @@ If I had more time I would look at a filtering function to only display thoughts
 
 ## View it live
 
-API: https://fridamaria-happy-api.herokuapp.com/
-Frontend: https://fridamaria-happy-thoughts.netlify.app/
-Frontend repo: https://github.com/fridamaria/project-happy-thoughts
+- API: https://fridamaria-happy-api.herokuapp.com/
+- Frontend: https://fridamaria-happy-thoughts.netlify.app/
+- Frontend repo: https://github.com/fridamaria/project-happy-thoughts
