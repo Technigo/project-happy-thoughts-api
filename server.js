@@ -21,6 +21,12 @@ const Thought = mongoose.model('Thought', {
   createdAt: {
     type: Date,
     default: () => new Date()
+  },
+  name: {
+    type: String,
+    default: 'Anonymous',
+    minlength: 1,
+    maxlength: 30
   }
 })
 
@@ -45,17 +51,21 @@ app.get('/', (req, res) => {
 
 // Get thoughts – sort by date created in descending order – limit to 20 posts.
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+  const thoughts = await Thought.find()
+    .sort({ createdAt: 'desc' })
+    .limit(20)
+    .exec()
+
   res.json(thoughts)
 })
 
 // Post new Thought
 app.post('/thoughts', async (req, res) => {
   // Retrieve information from client to endpoint
-  const { message } = req.body
+  const { message, name } = req.body
 
   // Create DB entry
-  const thought = new Thought({ message })
+  const thought = new Thought({ message, name })
 
   try {
     // Success
