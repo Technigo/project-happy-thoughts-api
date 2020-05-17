@@ -46,9 +46,9 @@ app.get('/thoughts', async (req, res) => {
   res.json(thoughts);
 });
 
-// Put new thoughts into the database
+// Add new thoughts to the database
 app.post('/thoughts', async (req, res) => {
-  const thought = new Thought({ message: req.body.message });
+  const thought = new Thought({ message: req.body.message }); // stops user from manipulating likes
   try {
     //Sucess
     const savedThought = await thought.save();
