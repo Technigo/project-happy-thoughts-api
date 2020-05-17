@@ -3,9 +3,27 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
+
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
+
+const Thought = mongoose.model('Thought', {
+  message: {
+    type: String,
+    required: true,
+    minlenght: 5,
+    maxlength: 140
+  },
+  heart: {
+    type: Number,
+    default: 0
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+})
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
@@ -21,6 +39,26 @@ app.use(bodyParser.json())
 // Start defining your routes here
 app.get('/', (req, res) => {
   res.send('Hello world')
+})
+
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+  res.json(thoughts)
+})
+
+app.post('/thoughts', async (req, res) => {
+  // retrive info sent by client
+  const { message } = req.body;
+  // use mongoose model to create the database entry
+  const thought = new Thought({ message })
+
+  try {
+    //success
+    const savedThought = await thought.save()
+    res.status(201).json(savedThought)
+  } catch (err) {
+    res.status(400).json({ message: 'could not save thought to the database', error: err.errors })
+  }
 })
 
 // Start the server
