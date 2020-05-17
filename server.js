@@ -29,8 +29,10 @@ app.use(bodyParser.json())
 
 
 app.get('/', async (req, res) => {
-  const thoughts = await Thought.find().limit(20)
-
+  const { page } = req.query
+  const limit = 20
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(limit).skip(limit * (page - 1))
+  console.log(thoughts.length)
   if (thoughts.length > 0) {
     res.json(thoughts)
   } else {
@@ -41,13 +43,13 @@ app.get('/', async (req, res) => {
 
 
 app.post('/', async (req, res) => {
-  const { message } = req.body
-  const thought = new Thought({ message })
+  const { message, tag } = req.body
+  const thought = new Thought({ message, tag })
 
   try {
     const savedThought = await thought.save();
     res.status(201)
-      .json(savedThought);
+      .json(savedThought)
   } catch (err) {
     res.status(400)
       .json({ message: "Could not post ", errors: err.errors })
@@ -55,8 +57,29 @@ app.post('/', async (req, res) => {
 })
 
 
+app.post('/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
+  try {
+    const thought = await Thought.findByIdAndUpdate(thoughtId, { $inc: { likes: 1 } }, { useFindAndModify: false })
+    console.log(thought)
+    res.status(200)
+      .json(thought)
+  } catch (err) {
+    res.status(400).json({ message: 'Could not like post', error: err })
+  }
 
-/// Add delete 
+})
+
+
+
+// Ordered by createdAt in descending order
+// Delete
+// Tag
+// Name
+// filtering and sorting
+// choose to sort by oldest first, or only show thoughts which have a lot of hearts
+// pagination
+
 
 
 

@@ -7,7 +7,11 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 140,
   },
-  hearts: {
+  tag: {
+    type: String,
+    default: "thought",
+  },
+  likes: {
     type: Number,
     default: 0,
   },
