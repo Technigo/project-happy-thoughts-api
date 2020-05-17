@@ -47,7 +47,6 @@ app.get('/thoughts', async (req, res) => {
   // Apply sorting & set limit to 20
   const thoughts = await Thought.find()
     .sort(sorting(sort))
-    .limit(20)
     .exec()
 
   res.json(thoughts)
