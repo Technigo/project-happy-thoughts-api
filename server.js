@@ -17,7 +17,8 @@ const Thought = mongoose.model('Thought', {
   },
   heart: {
     type: Number,
-    default: 0
+    default: 0,
+    required: true
   },
   createdAt: {
     type: Date,
@@ -60,6 +61,15 @@ app.post('/thoughts', async (req, res) => {
     res.status(400).json({ message: 'could not save thought to the database', error: err.errors })
   }
 })
+
+//   app.post('/:id/like', async (req, res) => {
+//   try {
+//     const thought = await Thought.findOneAndUpdate({ _id: req.params.id }, { $inc: { hearts: 1 } })
+//     res.json(thought).status(201);
+//   } catch (err) {
+//     res.status(401).json({ message: 'Heart not added to post', error: err })
+//   }
+// })
 
 // Start the server
 app.listen(port, () => {
