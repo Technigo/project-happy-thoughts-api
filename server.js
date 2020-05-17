@@ -8,6 +8,9 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
 
+// Validation and error checking
+// TODO: Check if mongodb is up
+
 // Mongoose model setup:
 
 const Thought = mongoose.model("Thought", {
@@ -18,12 +21,11 @@ const Thought = mongoose.model("Thought", {
     minlength: 5,
     maxlength: 140,
   },
-
-
  // strict? not assignable  
   heart: {
-    type: Number,
+    type: Number, 
     default: 0,
+    // required: true,
   },
  // strict? not assignable  
   createdAt: {
@@ -32,10 +34,6 @@ const Thought = mongoose.model("Thought", {
   },
 
 })
-
-
-
-
 
 
 
@@ -53,9 +51,30 @@ app.use(cors())
 app.use(bodyParser.json())
 
 // Start defining your routes here
-app.get('/', (req, res) => {
+/* app.get('/', (req, res) => {
   res.send('Hello super world')
-})
+}) */
+
+app.get("/", async (req, res) => {
+  const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20).exec();
+  res.json(thoughts);
+});
+
+// TODO: create app.post '/', to send thought:
+
+
+
+
+// TODO: create app.post '/' for heart/like on thought:
+
+
+
+// TODO: 
+// Validation of user input when POSTing a thought
+// Handling error's
+// Sending back error codes: 400..
+
+
 
 // Start the server
 app.listen(port, () => {
