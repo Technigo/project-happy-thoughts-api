@@ -32,9 +32,10 @@ app.get('/', async (req, res) => {
   const { page } = req.query
   const limit = 20
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(limit).skip(limit * (page - 1))
-  console.log(thoughts.length)
+  const total = (await Thought.find()).length
+  const pages = Math.ceil(total / limit)
   if (thoughts.length > 0) {
-    res.json(thoughts)
+    res.json({ pages, total, thoughts })
   } else {
     res.status(404).json({ error: "No thoughts found" })
   }
@@ -72,9 +73,7 @@ app.post('/:thoughtId/like', async (req, res) => {
 
 
 
-// Ordered by createdAt in descending order
 // Delete
-// Tag
 // Name
 // filtering and sorting
 // choose to sort by oldest first, or only show thoughts which have a lot of hearts
