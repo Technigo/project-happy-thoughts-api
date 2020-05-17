@@ -37,9 +37,9 @@ app.get('/thoughts', async (req, res) => {
   const sorting = (sort) => {
     if (sort === 'likes') {
       return { hearts: -1 }
-    } else if (sort === 'date_desc') {
+    } else if (sort === 'newest') {
       return { createdAt: 'desc' }
-    } else if (sort === 'date_asc') {
+    } else if (sort === 'oldest') {
       return { createdAt: 'asc' }
     }
   }
