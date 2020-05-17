@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import Thought from './models/thoughts'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -22,9 +23,22 @@ app.use(cors())
 app.use(bodyParser.json())
 
 // Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world')
+// app.get('/', (req, res) => {
+//   res.send('Hello world')
+// })
+
+
+app.get('/', async (req, res) => {
+  const thoughts = await Thought.find().limit(20)
+
+  if (thoughts.length > 0) {
+    res.json(thoughts)
+  } else {
+    res.status(404).json({ error: "No thoughts found" })
+  }
+
 })
+
 
 
 /// Add delete 
