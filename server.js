@@ -44,8 +44,8 @@ app.get('/', async (req, res) => {
 
 
 app.post('/', async (req, res) => {
-  const { message, tag } = req.body
-  const thought = new Thought({ message, tag })
+  const { name, message, tag } = req.body
+  const thought = new Thought({ name, message, tag })
 
   try {
     const savedThought = await thought.save();
@@ -74,11 +74,9 @@ app.post('/:thoughtId/like', async (req, res) => {
 
 
 // Delete
-// Name
 // filtering and sorting
 // choose to sort by oldest first, or only show thoughts which have a lot of hearts
-// pagination
-
+// edit with time limit
 
 
 
