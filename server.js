@@ -45,7 +45,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/thoughts", async (req, res) => {
-  const { page } = req.query;
+  const { page, sort } = req.query;
 
   const pageNbr = +page || 1;
   const perPage = 20;
@@ -54,11 +54,28 @@ app.get("/thoughts", async (req, res) => {
   const totalThoughts = await Thought.find();
   const pages = Math.ceil(totalThoughts.length / perPage);
 
+  const sortTheThoughts = (sort) => {
+    if (sort === "likes") {
+      return {
+        hearts: -1,
+      };
+    } else if (sort === "oldest") {
+      return {
+        createdAt: 1,
+      };
+    } else {
+      return {
+        createdAt: -1,
+      };
+    }
+  };
+
   const thoughts = await Thought.find()
-    .sort({ createdAt: -1 })
+    .sort(sortTheThoughts(sort))
     .limit(perPage)
     .skip(skip)
     .exec();
+
   res.json({ pages: pages, thoughts: thoughts });
 });
 
