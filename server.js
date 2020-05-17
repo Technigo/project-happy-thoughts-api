@@ -2,26 +2,12 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import Thought from './model/Thought'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-const Thought = mongoose.model('Thought', {
-  text: {
-    type: String,
-    required: true,
-    minlength: 5,
-  },
-  like: {
-    type: Boolean,
-    default: false,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-})
 
 if (process.env.RESET_DATABASE) {
   console.log('Resetting database...');
