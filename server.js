@@ -2,26 +2,41 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
-import { stringify } from 'querystring'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-const Thought = mongoose.model('Thought', {
+// const Thought = mongoose.model('Thought', {
+//   text: {
+//     type: String,
+//     required: true,
+//     minlength: 5,
+//   },
+//   like: {
+//     type: Boolean,
+//     default: false,
+//   },
+//   createdAt: {
+//     type: Date,
+//     default: Date.now,
+//   },
+// })
+
+const Task = mongoose.model('Task', {
   text: {
     type: String,
     required: true,
-    minlength: 5,
+    minlength: 5
   },
-  like: {
+  complete: {
     type: Boolean,
-    default: false,
+    default: false
   },
   createdAt: {
     type: Date,
-    default: Date.now,
-  },
+    default: Date.now
+  }
 })
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
@@ -35,12 +50,19 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-// Start defining your routes here
 app.get('/', (req, res) => {
   res.send('Root, short description here.')
 })
 
+
+app.get('/tasks', async (req, res) => {
+  const tasks = await Task.find().sort({createdAt: 'desc'}).limit(20).exec()
+  res.json(tasks)
+  res.send('hello')
+})
+
 // POST 
+
 
 // Start the server
 app.listen(port, () => {
