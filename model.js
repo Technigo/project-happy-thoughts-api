@@ -4,6 +4,7 @@ export const Thought = mongoose.model('Thought', {
   message: {
     type: String,
     minlength: 5,
+    maxlength: 140,
     required: true
   },
   createdAt: {
