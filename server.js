@@ -80,16 +80,8 @@ app.get('/thoughts', async (req, res) => {
 app.post('/thoughts', async (req, res) => {
   const { message, createdBy } = req.body
 
-  // Checking if an empty string is returned from frontend
-  // Changes empty strings to null and lists createdBy Anonymous in DB
-  const name = (createdBy) => {
-    if (createdBy === '') {
-      createdBy === null
-    }
-  }
-
   try {
-    const thought = await new Thought({ message, createdBy: name(createdBy) }).save()
+    const thought = await new Thought({ message, createdBy }).save()
 
     res.status(201).json(thought)
   } catch (err) {
