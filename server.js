@@ -37,10 +37,10 @@ app.get('/thoughts', async (req, res) => {
   const sorting = (sort) => {
     if (sort === 'likes') {
       return { hearts: -1 }
+    } else if (sort === 'date_desc') {
+      return { createdAt: 'desc' }
     } else if (sort === 'date_asc') {
       return { createdAt: 'asc' }
-    } else {
-      return { createdAt: 'desc' }
     }
   }
 
