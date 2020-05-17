@@ -40,6 +40,21 @@ app.get('/', async (req, res) => {
 })
 
 
+app.post('/', async (req, res) => {
+  const { message } = req.body
+  const thought = new Thought({ message })
+
+  try {
+    const savedThought = await thought.save();
+    res.status(201)
+      .json(savedThought);
+  } catch (err) {
+    res.status(400)
+      .json({ message: "Could not post ", errors: err.errors })
+  }
+})
+
+
 
 /// Add delete 
 
