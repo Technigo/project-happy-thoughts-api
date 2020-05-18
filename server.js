@@ -3,6 +3,7 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import Thought from './models/thought'
+import Comment from './models/comment'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, {
@@ -113,6 +114,16 @@ app.post('/thoughts/:id/like', async (req, res) => {
     })
   }
 
+})
+
+app.post('thoughts/:id/comment', async (req, res) => {
+  const { id } = req.params
+  const { comment, message } = req.body
+
+  await Thought.updateOne({ _id: id }, { $inc: { comment_count: 1 } })
+  await new Comment({ comment, message }).save()
+
+  res.status(201).json()
 })
 
 // Start the server
