@@ -3,6 +3,8 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
 
+const ERR_CANNOT_FIND_THOUGHTS = 'No thoughts found';
+
 // Mongoose & Database setup:
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -53,6 +55,7 @@ const app = express();
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(bodyParser.json());
+
 // Middleware for handling if "no connection to Mongodb":
 app.use((req, res, next) => {
   if (mongoose.connection.readyState === 1) {
@@ -62,6 +65,10 @@ app.use((req, res, next) => {
   }
 });
 
+
+
+
+
 // Start defining your routes here
 /* app.get('/', (req, res) => {
   res.send('Hello super world')
@@ -69,14 +76,16 @@ app.use((req, res, next) => {
 
 // GET the Thoughts:
 app.get("/", async (req, res) => {
-  const thoughts = await Thought.find()
-    .sort({ createdAt: "desc" })
-    .limit(20)
-    .exec();
-  res.json(thoughts);
+  const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20).exec();
+  if (thoughts) {
+    res.status(200).json(thoughts)
+  } else {
+    res.status(404).json({ message: ERR_CANNOT_FIND_THOUGHTS })
+  }
 });
 
-// TODO: create app.post '/', to send thought:
+
+
 
 // POST the Thoughts:
 
@@ -86,18 +95,19 @@ app.post("/", async (req, res) => {
   // use our mongoose model to create the database entry:
   const thought = new Thought({ message });
   try {
-    // success
+    // success posting:
     const savedThought = await thought.save();
     res.status(201).json(savedThought);
   } catch (err) {
-    res
-      .status(400)
-      .json({
+    // failed posting:
+    res.status(400).json({
         message: "Could not save thought to Database",
         error: err.errors,
       });
   }
 });
+
+
 
 // TODO: create app.post '/' for heart/like on thought:
 
