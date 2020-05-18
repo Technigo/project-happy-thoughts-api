@@ -5,12 +5,12 @@ import mongoose from "mongoose";
 
 // Error message:
 const ERR_CANNOT_FIND_THOUGHTS = 'No thoughts found';
+const ERR_CANNOT_POST_THOUGHT = 'Could not POST thought to Database';
 
 // Mongoose & Database setup:
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
-
 
 // -----------------------------------------------
 // Mongoose model setup:
@@ -21,13 +21,10 @@ const Thought = mongoose.model("Thought", {
     minlength: 5,
     maxlength: 140
   },
-  // strict? not assignable
   hearts: {
     type: Number,
     default: 0
-    // required: true,
   },
-  // strict? not assignable
   createdAt: {
     type: Date,
     default: Date.now
@@ -37,13 +34,11 @@ const Thought = mongoose.model("Thought", {
 // -----------------------------------------------
 // To reset database (and then populate db if needed):
 // $ RESET_DATABASE=true npm run dev
-// Seed DATABASE using Async
 if (process.env.RESET_DATABASE) {
   console.log("Message: Resetting database");
 
   const seedDatabase = async () => {
     await Thought.deleteMany();
-    // await booksData.forEach((book) => new Book(book).save());
   };
   seedDatabase();
 };
@@ -65,15 +60,16 @@ app.use((req, res, next) => {
   if (mongoose.connection.readyState === 1) {
     next();
   } else {
-    res.status(503).json({ error: "Service unavailable " });
+    res.status(503).json({ error: "Service unavailable" });
   }
 });
 
 // -----------------------------------------------
 // Start defining your routes here
 // 1: GET the Thoughts, 2: POST a Thought, 3: POST a Like on a Thought
-
+// -----------------------------------------------
 // 1: GET the Thoughts
+
 app.get("/", async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20).exec();
   if (thoughts) {
@@ -83,6 +79,7 @@ app.get("/", async (req, res) => {
   }
 });
 
+// -----------------------------------------------
 // 2: POST a Thought
 // Validate user input
 // success / failed via try/catch
@@ -96,16 +93,15 @@ app.post("/", async (req, res) => {
     const savedThought = await thought.save();
     res.status(201).json(savedThought);
   } catch (err) {
-    res.status(400).json({
-        message: "Could not save thought to Database",
-        error: err.errors,
-      });
+    res.status(400).json({ message: ERR_CANNOT_POST_THOUGHT, errors: err.errors  })
   }
 });
 
+// -----------------------------------------------
 // 3: POST a Like on a Thought
 // create app.post '/' for heart/like on thought:
-// using POST - as I already have post in my Happy project as method.
+// using POST - as I already used POST in my Happy project as method.
+// (PUT method is idempotent. So if you send retry a request multiple times, that should be equivalent to single request modification.)
 // success / failed via try/catch
 
 app.post('/:thoughtId/like', async (req, res) => {
@@ -122,10 +118,8 @@ app.post('/:thoughtId/like', async (req, res) => {
 // Validation of user input when POSTing a thought
 // Handling error's
 // Sending back error codes: 400..
-
 // Validation and error checking
 // Check if mongodb is up
-
 
 // -----------------------------------------------
 // Start the server
