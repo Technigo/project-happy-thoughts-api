@@ -44,10 +44,10 @@ app.use(bodyParser.json())
 app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
 
-  if (thoughts) {
-    res.status(200).json(thoughts)
+  if (thoughts.length > 0) {
+    res.json(thoughts)
   } else {
-    res.status(400).json({ message: 'Could not post your thought', error: err.errors })
+    res.status(400).json({ message: 'No thoughts to display' })
   }
 })
 
@@ -59,6 +59,21 @@ app.post('/', async (req, res) => {
     res.status(201).json(thought)
   } catch (err) {
     res.status(400).json({ message: 'Could not save thought', error: err.errors })
+  }
+})
+
+app.post('/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
+  const thought = await Thought.findById(thoughtId)
+
+  if (thought) {
+    // Add likes
+    thought.hearts ++
+    thought.save()
+
+    res.status(201).json(thought)
+  } else {
+    res.status(400).json({ message: `${thoughtId} does not exist` })
   }
 })
 
