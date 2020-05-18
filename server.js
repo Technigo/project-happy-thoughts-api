@@ -63,6 +63,7 @@ app.get('/thoughts', async (req, res) => {
     .sort(sortThoughts(sort))
     .skip(skip)
     .limit(perPage)
+    .populate('comments')
 
   if (numThoughts === 0) {
     res.status(200).json({ message: 'There are no happy thoughts yet' })
@@ -118,17 +119,19 @@ app.post('/thoughts/:id/like', async (req, res) => {
 
 app.post('/thoughts/:id/comment', async (req, res) => {
   const { id } = req.params
-  const { comment, message } = req.body
+  const { comment, createdBy, message } = req.body
 
-  try {
-    await Thought.updateOne({ _id: id }, { $inc: { comment_count: 1 } })
-    await new Comment({ comment, message }).save()
+  const commentSent = await new Comment({ comment, createdBy, message }).save()
 
-    res.status(201).json()
-  } catch (err) {
-    res.status(404).json({ error: err.errors })
-  }
-
+  await Thought.findOneAndUpdate(
+    { _id: id },
+    {
+      $inc: { comment_count: 1 },
+      $push: { comments: commentSent._id }
+    },
+    { new: true }
+  )
+  res.status(201).json()
 })
 
 // Start the server

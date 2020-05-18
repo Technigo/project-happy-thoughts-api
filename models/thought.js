@@ -26,10 +26,10 @@ const ThoughtSchema = new Schema({
     type: Number,
     default: 0
   },
-  comments: {
-    type: Array,
-    default: []
-  }
+  comments: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Comment'
+  }]
 })
 
 module.exports = new mongoose.model('Thought', ThoughtSchema)

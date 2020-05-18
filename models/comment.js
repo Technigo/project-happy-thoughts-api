@@ -4,10 +4,20 @@ const Schema = mongoose.Schema
 
 const CommentSchema = new Schema({
   comment: {
-    type: String
+    type: String,
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  createdBy: {
+    type: String,
+    maxlength: 14,
+    default: 'Anonymous'
   },
   message: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Thought'
   }
 })
