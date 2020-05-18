@@ -53,7 +53,7 @@ app.use((req, res, next) => {
   }
 })
 
-if (process.env.RESET_DB===true) {
+if (process.env.RESET_DB === "true") {
   const seedDatabase = async () => {
     await Thought.deleteMany({})
   }
