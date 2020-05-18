@@ -37,6 +37,9 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
+//let mongoose use the function
+mongoose.set('useFindAndModify', false);
+
 // Start defining your routes here
 app.get('/', (req, res) => {
   res.send('Hello world')
@@ -62,14 +65,14 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-//   app.post('/:id/like', async (req, res) => {
-//   try {
-//     const thought = await Thought.findOneAndUpdate({ _id: req.params.id }, { $inc: { hearts: 1 } })
-//     res.json(thought).status(201);
-//   } catch (err) {
-//     res.status(401).json({ message: 'Heart not added to post', error: err })
-//   }
-// })
+app.post('/:id/like', async (req, res) => {
+  try {
+    const thought = await Thought.findOneAndUpdate({ _id: req.params.id }, { $inc: { hearts: 1 } })
+    res.json(thought).status(201);
+  } catch (err) {
+    res.status(401).json({ message: 'Could not add heart', error: err })
+  }
+})
 
 // Start the server
 app.listen(port, () => {
