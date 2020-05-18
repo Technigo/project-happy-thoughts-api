@@ -117,7 +117,13 @@ app.post('/thoughts/:id/like', async (req, res) => {
 
 })
 
-app.post('/thoughts/:id/comment', async (req, res) => {
+app.get('/thoughts/:id/comments', async (req, res) => {
+  const { id } = req.params
+  const comments = await Comment.find({ message: id })
+  res.status(200).json(comments)
+})
+
+app.post('/thoughts/:id/comments', async (req, res) => {
   const { id } = req.params
   const { comment, createdBy, message } = req.body
 
