@@ -94,6 +94,7 @@ app.post('/thoughts', async (req, res) => {
 })
 
 // Endpoint taking in _id as params, updating hearts property to add one heart
+// Incrementing like and not adding new data to DB, therefore using POST and not PUT
 app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params
 
