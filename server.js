@@ -38,7 +38,7 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 app.get('/', async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: '-1'}).limit(20).exec()
+  const thoughts = await Thought.find().sort({createdAt: -1 }).limit(20).exec()
   console.log(thoughts)
   if (thoughts.length > 0) {
     res.json(thoughts)
