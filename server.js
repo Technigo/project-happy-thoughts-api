@@ -74,11 +74,11 @@ app.post('/', async (req, res) => {
   }
 })
 
-app.post('/thoughtId/like', async (req, res) => {
-
+app.post('/:id/like', async (req, res) => {
+  // https://mongoosejs.com/docs/tutorials/findoneandupdate.html
   try {
     const like = await Thought.findOneAndUpdate(
-      { '_id': req.params.thoughtId },
+      { '_id': req.params.id },
       { '$inc': { 'hearts': 1 } },
       { returnNewDocument: true }
     )
