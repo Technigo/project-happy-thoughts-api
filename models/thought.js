@@ -25,6 +25,10 @@ const ThoughtSchema = new Schema({
   comment_count: {
     type: Number,
     default: 0
+  },
+  comments: {
+    type: Array,
+    default: []
   }
 })
 
