@@ -36,11 +36,6 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Start defining your routes here
-/*app.get("/", (req, res) => {
-  res.send("Hello World");
-});*/
-
 const listEndpoints = require("express-list-endpoints");
 app.get("/", (req, res) => {
   res.send(listEndpoints(app));
@@ -55,6 +50,7 @@ app.get("/thoughts", async (req, res) => {
   res.json(thoughts);
 });
 
+// Post new message
 app.post("/thoughts", async (req, res) => {
   // Retrieve the information sent by client to our API endpoint
   const { message } = req.body;
@@ -70,6 +66,18 @@ app.post("/thoughts", async (req, res) => {
     res
       .status(400)
       .json({ message: "Sorry, could not post this", error: err.errors });
+  }
+});
+
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  try {
+    const thought = await Thought.updateOne(
+      { _id: req.params.thoughtId },
+      { $inc: { hearts: 1 } }
+    );
+    res.status(201).json(thought);
+  } catch (err) {
+    res.status(401).json({ message: "Heart not added to post", error: err });
   }
 });
 
