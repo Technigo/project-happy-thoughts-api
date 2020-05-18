@@ -6,6 +6,9 @@ import mongoose from 'mongoose'
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
+/*The following line of code is to avoid deprecation warning when using findOneAndUpdate, which I use for the
+likes as unlike updateOne it also returns the updated object. */
+mongoose.set('useFindAndModify', false)
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
@@ -49,7 +52,9 @@ const Thought = mongoose.model('Thought', {
 app.get('/', async (req, res) => {
   const PAGE_SIZE = 20;
   const page = req.query.page || 1
-  const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(PAGE_SIZE)
+  const order = req.query.order
+  const myOrder = order === 'mostliked' ? { hearts: -1 } : order === 'oldest' ? { createdAt: 1 } : { createdAt: -1 }
+  const thoughts = await Thought.find().sort(myOrder).limit(PAGE_SIZE)
   res.json(thoughts)
 })
 
@@ -74,7 +79,7 @@ app.post('/:thoughtId/like', async (req, res) => {
   try {
     const foundThought = await Thought.findOne({ _id: req.params.thoughtId })
     const oldHeartCount = foundThought.hearts
-    const likedThought = await Thought.findOneAndUpdate({ _id: req.params.thoughtId }, { hearts: oldHeartCount + 1 }, { new: true })
+    const likedThought = await Thought.findOneAndUpdate({ _id: req.params.thoughtId }, { $inc: { hearts: 1 } }, { new: true })
     res.json(likedThought)
 
   } catch (err) {
