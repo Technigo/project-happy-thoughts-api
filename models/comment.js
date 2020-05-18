@@ -12,4 +12,4 @@ const CommentSchema = new Schema({
   }
 })
 
-module.exports = new mongoose.model('Comment', ThoughtSchema)
+module.exports = new mongoose.model('Comment', CommentSchema)
