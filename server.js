@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 
 app.get('/thoughts', async (req, res)=>{
   try {
-    const thoughts = await Thought.find().sort({createdAt:'desc'}).limit(20).exec();
+    const thoughts = await Thought.find().sort({createdAt:'desc'}).limit(20)
     res.json(thoughts)
   }
   catch {
@@ -55,28 +55,32 @@ app.post('/thoughts', async (req, res)=>{
     res.status(400).json({message:"could not save thought", error: err.errors})
   }
 })
+
 app.post('/thoughts/:thoughtId/like', async(req, res)=>{
   const {thoughtId} = req.params
-  Thought.findByIdAndUpdate(thoughtId, {$inc:{hearts: 1}},{new:true},(err, doc)=>{
-    if(doc){
-      res.json(doc)
-    }
-    else {
-      res.status(400).json({message:"could not like this post", error: err})
-    }
-  }) 
+  try {
+    const thought = await Thought.findByIdAndUpdate(thoughtId, {$inc:{hearts: 1}},{new:true})
+    if (thought) {
+    res.status(201).json(thought)
+  }
+  else {
+    res.status(404).json({message: `thought with id ${thoughtId} does not exsist` , error:"couldn't like thought"})
+  }
+  }
+  catch(err){
+    res.status(400).json({message:"not a valid id", error: err})
+  }
 })
 
 app.delete('/thoughts/delete/:id', async (req, res) => {
  const {id} = req.params
-  await Thought.findOneAndDelete({ _id: id },(err)=>{
-    if (!err) {
-      res.json({message:`thought with id: ${id} was deleted`})
-    }
-    else {
-      res.status(400).json({error: err})
-    }
-  })
+ try {
+  await Thought.findOneAndDelete({ _id: id })
+  res.json({message:`thought with id:${id} was delted`})
+  }
+  catch(err) {
+    res.status(400).json({message: "thought could not be deleted", error: err})
+  }
 
 })
 // Start the server
