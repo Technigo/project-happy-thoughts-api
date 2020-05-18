@@ -56,7 +56,6 @@ app.get('/', async (req, res) => {
   } else {
     res.status(404).json({ message: "Sorry, no thoughts found", error: err.errors })
   }
-  res.json(thoughts)
 })
 
 // POST 
@@ -83,7 +82,7 @@ app.post('/thoughtId/like', async (req, res) => {
     await Thought.updateOne({ '_id': thoughtId }, { '$inc': { 'hearts': 1 } })
     res.status(201).json()
   } catch (err) {
-    res.status(404).json({ message: `Cannot like the thought with this id ${thoughtId}`, error: err.errors })
+    res.status(404).json({ message: `Cannot like the thought with this id ${thoughtId}` })
   }
 })
 
