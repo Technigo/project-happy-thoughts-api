@@ -21,6 +21,10 @@ const ThoughtSchema = new Schema({
     type: String,
     maxlength: 14,
     default: 'Anonymous'
+  },
+  comment_count: {
+    type: Number,
+    default: 0
   }
 })
 
