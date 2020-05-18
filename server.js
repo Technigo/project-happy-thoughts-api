@@ -2,28 +2,64 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import { Thought } from './Models/Models'
+
+require('dotenv').config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-// Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
 
-// Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(bodyParser.json())
 
-// Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world')
+app.get('/thoughts', async (req, res) => {
+  try {
+    const thoughts = await Thought.find()
+    res.status(200).json(thoughts)
+  } catch(err) {
+    res.status(404).send(err)
+  }
 })
 
-// Start the server
+app.post('/thoughts', async (req, res) => {
+  try {
+    await new Thought({ message: req.body.message}).save()
+    return res.status(200).json(req.body)
+  } catch(err) {
+    res.status(404).send(err)
+  }
+  
+})
+
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  try {
+    const { thoughtId } = req.params
+    await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 }})
+    res.status(200).json("update successful")
+  } catch(err) {
+    res.status(404).send(err)
+  }
+})
+
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: "Service unavailable"})
+  }
+})
+
+if (process.env.RESET_DB) {
+  const seedDatabase = async () => {
+    await Thought.deleteMany({})
+  }
+  seedDatabase()
+}
+
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
 })
