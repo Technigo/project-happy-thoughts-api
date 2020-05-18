@@ -42,8 +42,15 @@ app.get('/', (req, res) => {
 
 // Get the thoughts from database
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20);
-  res.json(thoughts);
+  try {
+    const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20);
+    res.json(thoughts);
+  } catch (err) {
+    res.status(400).json({
+      message: 'Could not find any happy thoughts',
+      errors: err.errors,
+    });
+  }
 });
 
 // Add new thoughts to the database
@@ -64,11 +71,17 @@ app.post('/thoughts', async (req, res) => {
 // Add likes to an existing thought
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params;
-  const likedThought = await Thought.updateOne(
-    { _id: thoughtId },
-    { $inc: { hearts: 1 } }
-  );
-  res.json(likedThought);
+  try {
+    const likedThought = await Thought.updateOne(
+      { _id: thoughtId },
+      { $inc: { hearts: 1 } }
+    );
+    res.json(likedThought);
+  } catch (err) {
+    res
+      .status(401)
+      .json({ message: 'Heart was not added to thought.', errors: err.errors });
+  }
 });
 
 // Start the server
