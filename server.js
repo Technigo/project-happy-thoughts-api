@@ -116,14 +116,19 @@ app.post('/thoughts/:id/like', async (req, res) => {
 
 })
 
-app.post('thoughts/:id/comment', async (req, res) => {
+app.post('/thoughts/:id/comment', async (req, res) => {
   const { id } = req.params
   const { comment, message } = req.body
 
-  await Thought.updateOne({ _id: id }, { $inc: { comment_count: 1 } })
-  await new Comment({ comment, message }).save()
+  try {
+    await Thought.updateOne({ _id: id }, { $inc: { comment_count: 1 } })
+    await new Comment({ comment, message }).save()
 
-  res.status(201).json()
+    res.status(201).json()
+  } catch (err) {
+    res.status(404).json({ error: err.errors })
+  }
+
 })
 
 // Start the server
