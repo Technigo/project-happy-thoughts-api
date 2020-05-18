@@ -36,10 +36,10 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-// Start defining your routes here
+// HOME - SHOW A FEED OF THE 20 MOST RECENT THOUGHTS
 app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: -1 }).limit(20).exec()
-  console.log(thoughts)
+  
   if (thoughts.length > 0) {
     res.json(thoughts)
   } else {
@@ -47,6 +47,7 @@ app.get('/', async (req, res) => {
   }
 })
 
+// POST A THOUGHT TO THE FEED
 app.post('/', async (req, res) => {
   const { message } = req.body
   const thought = new Thought({message})
@@ -59,6 +60,7 @@ app.post('/', async (req, res) => {
   }
 })
 
+// ADD A LIKE TO A THOUGHT
 app.post('/:thoughtId/like', async (req, res) => {
   const id = req.params.thoughtId
 
