@@ -40,6 +40,43 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
+//GET ENDPOINT
+//return 20 results ordered by createAt
+app.get('/thoughts', async (req, res) => {
+  //Alla thoughts den hittar, sorterad på nyast och endast visa de 20 senaste. Vad betyder exec?
+  const thoughts = await Thought.find()
+    .sort({ createdAt: 'desc' })
+    .limit(20)
+    .exec()
+  res.json(thoughts)
+})
+
+//POST THOUGHT ENDPOINT
+//validate input and return error
+app.post('/thoughts', async (req, res) => {
+  const { message } = req.body
+  const thought = new Thought({ message })
+  try {
+    const saveThought = await thought.save()
+    res.status(201).json(saveThought)
+  } catch (err) {
+    res.status(400).json({ message: 'Could not post thought', error: err.errors })
+  }
+})
+
+//POST LIKE ENDPOINT
+// return error if thought not found
+//CHANGE TO PUT
+app.post('/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
+  try {
+    await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
+    res.status(201).json()
+  } catch (err) {
+    res.status(404).json({ message: 'Thought not found', error: err.errors })
+  }
+})
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
