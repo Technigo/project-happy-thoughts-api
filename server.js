@@ -75,14 +75,16 @@ app.post('/', async (req, res) => {
 })
 
 app.post('/thoughtId/like', async (req, res) => {
-  const { thoughtId } = req.params
 
   try {
-    // https://docs.mongodb.com/manual/reference/operator/update/inc/
-    await Thought.updateOne({ '_id': thoughtId }, { '$inc': { 'hearts': 1 } })
-    res.status(201).json()
+    const like = await Thought.findOneAndUpdate(
+      { '_id': req.params.thoughtId },
+      { '$inc': { 'hearts': 1 } },
+      { returnNewDocument: true }
+    )
+    res.status(201).json(like)
   } catch (err) {
-    res.status(404).json({ message: `Cannot like the thought with this id ${thoughtId}` })
+    res.status(400).json({ message: `Cannot like the thought with this id ${thoughtId}` })
   }
 })
 
