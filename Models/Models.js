@@ -14,4 +14,4 @@ export const Thought = mongoose.model('Thought', {
     type: String,
     default: new Date()
   }
-})
+}, "thoughts")
