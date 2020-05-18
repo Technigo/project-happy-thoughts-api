@@ -31,7 +31,14 @@ app.get('/', (req, res) => {
 
 // Get thoughts
 app.get('/thoughts', async (req, res) => {
-  const { sort } = req.query
+  const { page, sort } = req.query
+
+  const pageNum = +page || 1
+  const perPage = 20
+  const skip = perPage * (pageNum - 1)
+
+  const allThoughts = await Thought.find()
+  const pages = Math.ceil(allThoughts.length / perPage)
 
   // Sort thoughts based on sort query
   const sorting = (sort) => {
@@ -47,9 +54,11 @@ app.get('/thoughts', async (req, res) => {
   // Apply sorting & set limit to 20
   const thoughts = await Thought.find()
     .sort(sorting(sort))
+    .limit(perPage)
+    .skip(skip)
     .exec()
 
-  res.json(thoughts)
+  res.json({ thoughts, pages })
 })
 
 // Post new Thought
