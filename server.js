@@ -66,7 +66,7 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-// Post hearts to a specific message
+// Posts a liking heart to a specific message when clicked in frontend. I used post here since to match the frontend in the prior project. 
 app.post('/:id/like', async (req, res) => {
   try {
     const thought = await Thought.findOneAndUpdate({ _id: req.params.id }, { $inc: { hearts: 1 } })
