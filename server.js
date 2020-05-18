@@ -124,6 +124,7 @@ app.post('/thoughts/:id/comment', async (req, res) => {
     await Thought.updateOne({ _id: id }, { $inc: { comment_count: 1 } })
     await new Comment({ comment, message }).save()
 
+    console.log(id)
     res.status(201).json()
   } catch (err) {
     res.status(404).json({ error: err.errors })
