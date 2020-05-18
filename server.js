@@ -25,19 +25,21 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
+// Root
 app.get('/', (req, res) => {
   res.send('Root, short description here.')
 })
 
-
+// GET All Thoughts sort by createdAt
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
   res.json(thoughts)
 })
 
+// POST new thought
 app.post('/thoughts', async (req, res) => {
-  const {text, like} = req.body
-  const thought = new Thought({ text, like })
+  const { message, hearts } = req.body
+  const thought = new Thought({ message, hearts })
 
   try{
     const savedThought = await thought.save()

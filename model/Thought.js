@@ -1,14 +1,14 @@
 import mongoose from 'mongoose'
 
 const Thought = mongoose.model('Thought', {
-  text: {
+  message: {
     type: String,
     required: true,
     minlength: 5,
   },
-  like: {
-    type: Boolean,
-    default: false,
+  hearts: {
+    type: Number,
+    default: 0,
   },
   createdAt: {
     type: Date,
