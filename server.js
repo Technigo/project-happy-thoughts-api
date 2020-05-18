@@ -2,7 +2,6 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
-import { EventEmitter } from 'events'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -13,16 +12,23 @@ const Thought = mongoose.model('Thought', {
   message: {
     type: String,
     required: true,
-    minlength: 5
+    minlength: 5,
+    maxlength: 140
+  },
+  name: {
+    type: String,
+    minlength: 2,
+    maxlength: 50,
+    default: "Anonymus"
+  },
+  heart: {
+    type: Number,
+    default: 0
   },
   createdAt: {
     type: Date,
     default: Date.now
   },
-  heart: {
-    type: Number,
-    default: 0
-  }
 })
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
@@ -36,19 +42,17 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-
-
-//This endpoint should return a maximum of 20 thoughts,
-//sorted by `createdAt` to show the most recent thoughts first.
-
 app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
   res.json(thoughts)
 })
 
 app.post('/', async (req, res) => {
-  const { message } = req.body
-  const thought = new Thought({ message })
+  const { message, name } = req.body
+  const thought = new Thought({
+    message: message,
+    name: name,
+  })
 
   try {
     const savedThought = await thought.save()
@@ -58,12 +62,14 @@ app.post('/', async (req, res) => {
   }
 })
 
-app.post('/:thoughtId/like', async (req, res) => {
-  const heart = await Thought.findById(req.params.id)
-  if (heart) {
-    res.json(heart)
-  } else {
-    res.status(404).json({ error: 'Could not like message' })
+app.post('/:id/like', async (req, res) => {
+  try {
+    const savedLike = await Thought.findOneAndUpdate(
+      { _id: req.params.id }, { $inc: { heart: 1 } }
+    )
+    res.json(savedLike)
+  } catch (err) {
+    res.status(400).json({ message: 'Could not like, thought not found', error: err.errors })
   }
 })
 
