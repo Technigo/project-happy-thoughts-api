@@ -2,7 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
-//import Thought from './models/thought'
+import Thought from './models/thought'
 
 
 const ERR_CANNOT_FIND_Thought = 'Cannot find thought'
