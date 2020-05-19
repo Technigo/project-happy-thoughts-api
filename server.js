@@ -39,8 +39,9 @@ app.post('/thoughts', async (req, res) => {
 })
 
 app.put('/thoughts/:id/like', async (req, res) => {
-  const { _id } =req.params
-  await Thought.updateOne({ _id: id }, {hearts: +1})
+  const { _id } = req.params
+  await Thought.updateOne({ _id: id }, { hearts: +1 })
+  res.status(201).json
 })
 
 /*
