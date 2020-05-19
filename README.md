@@ -4,7 +4,7 @@ This was a project I did while attending Technigo frontend bootcamp. The assignm
 
 ## The problem
 
-The techniques I used was Express - Node.js and Mongodb. Besides that I used the recorded codealongs provided by Technigo, StackOverflow och the Mongoose documentation.
+The techniques I used was Express.js / Node.js and Mongodb. Besides that I used the recorded codealongs provided by Technigo, StackOverflow and the Mongoose documentation.
 
 ## View it live
 
