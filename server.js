@@ -8,6 +8,15 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
+if (process.env.RESET_DATABASE) {
+  console.log('Resetting database ...')
+  const seedDatabase = async () => {
+    await Thought.deleteMany()
+    await Thought.forEach((happy) => new Thought(happy).save())
+  }
+  seedDatabase()
+}
+
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
 //
@@ -18,15 +27,6 @@ const app = express()
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(bodyParser.json())
-
-if (process.env.RESET_DATABASE) {
-  console.log('Resetting database ...')
-  const seedDatabase = async () => {
-    await Thought.deleteMany()
-    await Thought.forEach((happy) => new Thought(happy).save())
-  }
-  seedDatabase()
-}
 
 // Start defining your routes here
 app.get('/', (req, res) => {
