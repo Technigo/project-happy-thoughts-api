@@ -3,26 +3,31 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts2"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-const Tought = mongoose.model('Tought', {
-  text: {
+const Thought = mongoose.model('Thought', {
+  message: {
     type: String,
     required: true,
     minlength: 5,
     maxlength: 140
   },
-  hearts: {
+  name: {
+    type: String,
+    minlength: 2,
+    maxlength: 50,
+    default: "Anonymus"
+  },
+  heart: {
     type: Number,
     default: 0
   },
   createdAt: {
     type: Date,
     default: Date.now
-  }
-
+  },
 })
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
@@ -35,30 +40,31 @@ const app = express()
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(bodyParser.json())
-
-// Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world')
+app.get('/', async (req, res) => {
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+  res.json(thoughts)
 })
-
-// Get the 20 most recent toughts
-app.get('/toughts', async (req, res) => {
-  const toughts = await Tought.find().sort({ createdAt: 'desc' }).limit(20).exec()
-  res.json(toughts)
-})
-
-app.post('/toughts', async (req, res) => {
-  // retrieve the information sent from the client to out API endpoint
-  const { text, complete } = req.body
-  // use our mongoose model to create the database entry
-  const tought = new Tought({ text, complete })
+app.post('/', async (req, res) => {
+  const { message, name } = req.body
+  const thought = new Thought({
+    message: message,
+    name: name,
+  })
   try {
-    // sucess
-    const savedTought = await tought.save()
-    res.status(201).json(savedTought)
+    const savedThought = await thought.save()
+    res.status(201).json(savedThought)
   } catch (err) {
-    res.status(400).json({ message: 'Could not save tought to the Database', error: err.errors })
-
+    res.status(400).json({ message: 'Could not save happy thought to database', error: err.errors })
+  }
+})
+app.post('/:id/like', async (req, res) => {
+  try {
+    const savedLike = await Thought.findOneAndUpdate(
+      { _id: req.params.id }, { $inc: { heart: 1 } }
+    )
+    res.json(savedLike)
+  } catch (err) {
+    res.status(400).json({ message: 'Could not like, thought not found', error: err.errors })
   }
 })
 
