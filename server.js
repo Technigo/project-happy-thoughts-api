@@ -27,8 +27,8 @@ app.get('/thoughts', async (req, res) => {
 })
 
 app.post('/thoughts', async (req, res) => {
-  const { message } = req.body
-  const thought = Thought({ message })
+  const { message, hearts } = req.body
+  const thought = Thought({ message, hearts })
 
   try {
     const savedThought = await thought.save()
