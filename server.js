@@ -18,13 +18,6 @@ app.use(bodyParser.json())
 
 app.get('/thoughts', async (req, res) => {
   try {
-    const { hearts } = req.query
-    let myFilter = []
-
-    if (likes) {
-      myFilter['hearts'] = hearts
-    }
-
     const thoughts = await Thought.find().limit(20).sort({ createdAt: 1 })
     res.status(200).json(thoughts)
   } catch(err) {
