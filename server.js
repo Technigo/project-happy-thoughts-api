@@ -8,6 +8,11 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
 const Thought = mongoose.model('Thought', {
+  name: {
+    type: String,
+    default: 'Anonymous',
+    maxlength: 15
+  },
   message: {
     type: String,
     required: true,
@@ -56,8 +61,8 @@ app.get('/thoughts', async (req, res) => {
 //POST THOUGHT ENDPOINT
 //validate input and return error
 app.post('/thoughts', async (req, res) => {
-  const { message } = req.body
-  const thought = new Thought({ message })
+  const { message, name } = req.body
+  const thought = new Thought({ message, name })
   try {
     const saveThought = await thought.save()
     res.status(201).json(saveThought)
