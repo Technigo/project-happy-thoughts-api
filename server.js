@@ -54,7 +54,7 @@ app.get('/', async (req, res) => {
   const page = req.query.page || 1
   const order = req.query.order
   const myOrder = order === 'mostliked' ? { hearts: -1 } : order === 'oldest' ? { createdAt: 1 } : { createdAt: -1 }
-  const thoughts = await Thought.find().sort(myOrder).limit(PAGE_SIZE)
+  const thoughts = await Thought.find().sort(myOrder).limit(PAGE_SIZE).skip((page * PAGE_SIZE) - PAGE_SIZE)
   res.json(thoughts)
 })
 
