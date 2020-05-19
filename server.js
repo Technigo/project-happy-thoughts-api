@@ -35,8 +35,8 @@ const Thought = mongoose.model('Thought', {
     default: 0
   },
   createdAt: {
-    type: Date,
-    default: new Date(Date.now())
+    type: Number
+
   },
   postedBy: {
     type: String,
@@ -64,7 +64,8 @@ app.post('/', async (req, res) => {
   try {
     const newThought = await new Thought({
       message: req.body.message,
-      postedBy: req.body.user || 'Anonymous'
+      postedBy: req.body.user || 'Anonymous',
+      createdAt: Date.now()
     }).save()
 
     res.status(200).json(newThought)
