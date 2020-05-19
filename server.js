@@ -44,6 +44,10 @@ const Thought = mongoose.model('Thought', {
     type: String,
     default: 'Anonymous',
     maxlength: 20
+  },
+  theme: {
+    type: String,
+    default: false
   }
 
 })
@@ -73,10 +77,13 @@ app.post('/', async (req, res) => {
 
 
   try {
+    const userRegExp = req.body.message.match(/~.*/i)
+    const username = userRegExp ? userRegExp.toString().substr(1, 20) : null
     const newThought = await new Thought({
-      message: req.body.message,
-      postedBy: req.body.user || 'Anonymous',
-      createdAt: Date.now()
+      message: req.body.message.replace(/~(.*)/i, ''),
+      postedBy: username || 'Anonymous',
+      createdAt: Date.now(),
+      theme: req.body.theme || false
     }).save()
     const PAGE_SIZE = 20;
     const page = req.query.page || 1
