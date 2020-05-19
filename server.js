@@ -2,30 +2,16 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import Thought from './models/thought'
+
+const ERR_CAN_NOT_SAVE_THOUGHT = 'Could not save thought to database'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-// Seed database to test endpoints
 
-// Hearts should not be assignable when adding a new thought, how to fix?
-const Thought = mongoose.model('/thought', {
-  message: {
-    type: String,
-    required: true,
-    minlength: 5,
-    maxlength: 140
-  },
-  hearts: {
-    type: Number,
-    default: 0,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
-})
+// Seed database to test endpoints?
 
 const port = process.env.PORT || 8080
 const app = express()
@@ -45,11 +31,11 @@ app.get('/thoughts', async (req, res) => {
   res.json(thoughts)
 })
 
-// Retreive the information sent by the client to our API endpoint
+// Retreive the information sent by the client to our API endpoint, don't include hearts
 app.post('/thoughts', async (req, res) => {
-  const { message, hearts } = req.body
-  // Use our mongoose model to create the database entry
-  const thought = new Thought({ message, hearts })
+  const { message } = req.body
+  // Use our mongoose model to create the database entry, no hearts included
+  const thought = new Thought({ message })
 
   try {
     //Success
@@ -57,8 +43,16 @@ app.post('/thoughts', async (req, res) => {
     res.status(201).json(savedThought)
     // Fail
   } catch (err) {
-    res.status(400).json({ message: 'Could not save thought to database', error: err.errors })
+    res.status(400).json({ message: ERR_CAN_NOT_SAVE_THOUGHT })
   }
+})
+
+// PUT add hearts to thought, increment by 1
+app.put('/thoughts/:thoughtId/like', async (req, res) => {
+  const { id } = req.params
+  /*  console.log(`PUT /thougts/${id}/like`) */
+  await Thought.updateOne({ _id: id }, { $inc: { hearts: 1 } })
+  res.status(201).json()
 })
 
 // Start the server
