@@ -2,6 +2,10 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
+//import Thought from './models/thought'
+
+
+const ERR_CANNOT_FIND_Thought = 'Cannot find thought'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -18,9 +22,64 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
+app.use((req, res, next) =>{
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: 'Service unavailable'})
+  }
+})
+
+// Model
+const Thought = mongoose.model('Thought', {
+  nominee: String,
+  year_award: Number,
+  year_film: Number,
+  category: String,
+  win: Boolean
+})
+
+if (process.env.RESET_DB) {
+  console.log('reseting the database...')
+  const seedDatabase = async () => {
+    await Thought.deleteMany()
+    // Send all the json from Thought
+    await Thought.forEach((happy) => new Thought(happy).save())
+  }
+  seedDatabase()
+}
+
 // Start defining your routes here
 app.get('/', (req, res) => {
   res.send('Hello world')
+})
+
+app.get('/GET', async (req, res) => {
+  const happyThoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+  if (happyThoughts) {
+    res.status(201).json(happyThoughts)
+  } else {
+    res.status(401).json({ message: 'Could not find any happy thoughts' })
+  }
+
+})
+
+app.post('/POST', async (req, res) => {
+  const { message } = req.body
+  console.log( `message: ${message}` )
+  const happyThought = new Thought({ message })
+  try {
+    const savedHappyThought = await happyThought.save()
+    res.status(201).json(savedHappyThought)
+  } catch (err) {
+    res.status(400).json({ message: 'Could not save the thought to the database', error: err.errors })
+  }
+})
+app.post('/POST/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
+  console.log(`POST /POST/ ${thoughtId}/like`)
+  await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
+  res.status(201).json()
 })
 
 // Start the server
