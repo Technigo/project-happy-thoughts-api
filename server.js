@@ -78,6 +78,10 @@ app.post('/', async (req, res) => {
       postedBy: req.body.user || 'Anonymous',
       createdAt: Date.now()
     }).save()
+    const PAGE_SIZE = 20;
+    const page = req.query.page || 1
+    const order = req.query.order
+    const myOrder = order === 'mostliked' ? { hearts: -1 } : order === 'oldest' ? { createdAt: 1 } : { createdAt: -1 }
 
     const allThoughts = await Thought.find()
     const thoughts = await Thought.find().sort(myOrder).limit(PAGE_SIZE).skip((page * PAGE_SIZE) - PAGE_SIZE)
