@@ -24,10 +24,6 @@ const Thought = mongoose.model('Thought', {
   }
 })
 
-// Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
 
@@ -35,32 +31,41 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-// Start defining your routes here
-// app.get('/', (req, res) => {
-//   res.send('Hello world')
-// })
 
 app.get('/', async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
-  
-  if(thoughts.length > 0){
-      res.json(thoughts)
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20)
+
+  if (thoughts.length > 0) {
+    res.json(thoughts)
   }
-  else{
-    res.status(404).json({message:'No thoughts yet'})
+  else {
+    res.status(404).json({ message: 'No thoughts yet' })
   }
 })
 
 app.post('/', async (req, res) => {
   const { message } = req.body
-  const thought = new Thought({message})
+  const thought = new Thought({ message })
 
-  try{
+  try {
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
   }
-  catch(err){
-    res.status(400).json({message:'Could not save thought to Database', error:err.error})
+  catch (err) {
+    res.status(400).json({ message: 'Could not save thought to Database', error: err.error })
+  }
+})
+
+app.post('/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
+  //a thought with a specific id
+  const thought = await Thought.findById(thoughtId)
+
+  if (thought) {
+    thought.hearts++
+  }
+  else {
+    res.status(400).json({ message: `${thoughtId} does not exist `})
   }
 })
 // Start the server
