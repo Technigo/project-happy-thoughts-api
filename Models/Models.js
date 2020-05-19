@@ -12,6 +12,6 @@ export const Thought = mongoose.model('Thought', {
   },
   createdAt: {
     type: String,
-    default: new Date()
   }
 }, "thoughts")
+//.toISOString()
