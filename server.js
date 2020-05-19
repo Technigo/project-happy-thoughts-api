@@ -30,15 +30,6 @@ app.use((req, res, next) =>{
   }
 })
 
-// Model
-const Thought = mongoose.model('Thought', {
-  nominee: String,
-  year_award: Number,
-  year_film: Number,
-  category: String,
-  win: Boolean
-})
-
 if (process.env.RESET_DB) {
   console.log('reseting the database...')
   const seedDatabase = async () => {
