@@ -6,10 +6,10 @@ import mongoose from 'mongoose'
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
-mongoose.set('useCreateIndex', true)
+//mongoose.set('useCreateIndex', true)
 
 const Thought = mongoose.model('Thought', {
-    message:{
+    message:  {
       type: String,
       required: true,
       minlength: 5,
@@ -38,13 +38,11 @@ app.use(cors())
 app.use(bodyParser.json())
 
 //Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world')
-})
+
 
 // This endpoint should return a maximum of 20 thoughts, 
 // sorted by createdAt to show the most recent thoughts first
-app.get('/thoughts', async (req, res) => {
+app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
   res.json(thoughts)
 })
@@ -53,23 +51,36 @@ app.get('/thoughts', async (req, res) => {
 //If the thought is valid it should be saved and should include _id 
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body
-  const thought = new Thought({ message })
-  try {
-    //Sucess
+  const thought = new Thought({message})
+   console.log(thought)
+   try {
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
-  } catch (err) {
-    // Failed
-    res.status(400).json({ message: 'Could not send thought', error: err.errors })
+    } catch (err) {
+    res.status(400).json({ message: 'Could not save thought', error: err.errors })
   }
- })
+})
+  //const savedThought = await new Thought({ message }).save()
+
+// app.post('/thoughts', async (req, res) => {
+//   const { message } = req.body
+//   const thought = new Thought({ message, })
+//   try {
+//     //Sucess
+//     const savedThought = await thought.save()
+//     res.status(201).json(savedThought)
+//   } catch (err) {
+//     // Failed
+//     res.status(400).json({ message: 'Could not save thought', error: err.errors })
+//   }
+//  })
 
 
 //Dont require a json body.Given a valid thought id in the url, 
 //the API should find that thought, and update its hearts property to add one heart.
-app.post('/:thoughtId/like', (req, res) => {
-  res.send('Hello world')
-})
+// app.post('/:thoughtId/like', (req, res) => {
+//   res.send('Hello world')
+// })
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
