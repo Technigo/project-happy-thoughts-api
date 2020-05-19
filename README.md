@@ -4,6 +4,8 @@ Using Express and Mongodb to build an API which includes both GET request endpoi
 
 ## The problem
 
+I had really problem to understand how I was able to check if "like" worked.
+
 ## Learning objectives
 
 - How to build a full API which includes handling of user input
@@ -18,4 +20,4 @@ Using Express and Mongodb to build an API which includes both GET request endpoi
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://happy-thoughts-api-kajsa.herokuapp.com/
