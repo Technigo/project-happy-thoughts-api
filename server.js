@@ -28,8 +28,10 @@ const Thought = mongoose.model('Thought', {
 // overridden when starting the server. For example:
 //
 //   PORT=9000 npm start
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 8041
 const app = express()
+
+const listEndpoints = require('express-list-endpoints')
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
@@ -37,7 +39,7 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send(listEndpoints(app))
 })
 
 //GET ENDPOINT
