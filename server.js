@@ -137,7 +137,7 @@ app.post('/thoughts/:id/comments', async (req, res) => {
     },
     { new: true }
   )
-  res.status(201).json()
+  res.status(201).json(commentSent)
 })
 
 // Start the server
