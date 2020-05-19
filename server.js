@@ -36,6 +36,9 @@ const Thought = mongoose.model("Thought", {
   },
   tag: {
     type: String
+  },
+  name: {
+    type: String,
   }
 })
 
@@ -44,14 +47,22 @@ app.get('/', async (req, res) => {
   const thoughts = await Thought.find()
     .sort({ createdAt: "desc" })
     .limit(20)
+  /* const { tag } = req.query
+   if (tag) {
+     const filteredThoughts = await Thought.find({ tag: tag })
+     res.json(filteredThoughts)
+   } else {*/
   res.json(thoughts)
   //res.send('Hello world')
+  //}
 })
 
 app.post('/', async (req, res) => {
   const thought = new Thought({
     message: req.body.message,
-    hearts: 0
+    hearts: 0,
+    tag: req.body.tag,
+    name: req.body.name
   })
   try {
     const saved = await thought.save()
