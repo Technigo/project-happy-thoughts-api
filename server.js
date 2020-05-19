@@ -3,7 +3,7 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughtsVersion3"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 //mongoose.set('useCreateIndex', true)
@@ -49,7 +49,7 @@ app.get('/', async (req, res) => {
 
 //This point expects a json body with the message like {message:"hello"}
 //If the thought is valid it should be saved and should include _id 
-app.post('/thoughts', async (req, res) => {
+app.post('/', async (req, res) => {
   const { message } = req.body
   const thought = new Thought({message})
    console.log(thought)
@@ -57,30 +57,65 @@ app.post('/thoughts', async (req, res) => {
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
     } catch (err) {
-    res.status(400).json({ message: 'Could not save thought', error: err.errors })
+    res.status(400).json({ message: 'Could not save thought', error: err})
   }
 })
-  //const savedThought = await new Thought({ message }).save()
-
-// app.post('/thoughts', async (req, res) => {
-//   const { message } = req.body
-//   const thought = new Thought({ message, })
-//   try {
-//     //Sucess
-//     const savedThought = await thought.save()
-//     res.status(201).json(savedThought)
-//   } catch (err) {
-//     // Failed
-//     res.status(400).json({ message: 'Could not save thought', error: err.errors })
-//   }
-//  })
-
+ 
 
 //Dont require a json body.Given a valid thought id in the url, 
 //the API should find that thought, and update its hearts property to add one heart.
-// app.post('/:thoughtId/like', (req, res) => {
-//   res.send('Hello world')
+
+
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+
+  const {thoughtId} = req.params
+  const like = await Thought.findById(thoughtId)
+  
+  if(like) {
+    like.hearts += 1
+    like.save()
+    res.json(like)
+  } else {
+    res.status(404).json({message: 'Could not find happy thought', error: err.errors})
+  }
+  })
+
+// app.post('/:thoughtId/like', async (req, res) => {
+//   const {thoughtId} = req.params
+//   try {
+//      const like = await Thought.updateOne({thoughtId: thoughtId}, {$inc : {hearts: 1} })
+//      like.save()
+//      res.status(201).json(like)
+//     } catch (err) {
+//       res.status(400).json({ message: 'Could not save your like', error: err.errors })
+//     }
+//   })
+//     const { thoughtId } = req.params
+//     try {
+//       const thoughLiked = await Thought.findById(thoughtId)
+//       thoughtLiked.hearts +=1
+//       thoughtLiked.save()
+//       res.status(201).json(thoughLiked)
+//     } catch (err) {
+//       res.status(400).json({ message: 'Could not save your like', error: err.errors })
+//     }
 // })
+  // try{
+  //   const like = await Thought.uodateOne(
+  //     {"_id": req.params.id},
+  //     {$inc: {"hearts": 1}},
+  //     {new: true}
+  //   )
+  //   res.status(201).json(like)
+  // } catch (err) {
+  //   res.status(400).json({ message: 'Could not save your like', error: err.errors })
+  // }
+  // })
+  
+//   const {thoughtId} = req.params
+//   await Thought.updateOne({thoughtId: thoughtId}, {$inc : {hearts: 1} })
+// })
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
