@@ -14,12 +14,6 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 140
   },
-  name: {
-    type: String,
-    minlength: 2,
-    maxlength: 50,
-    default: "Anonymus"
-  },
   heart: {
     type: Number,
     default: 0
@@ -30,9 +24,7 @@ const Thought = mongoose.model('Thought', {
   },
 })
 
-// Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
+
 //   PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
@@ -40,15 +32,18 @@ const app = express()
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(bodyParser.json())
+
+// Get the 20 most recent thoughts
 app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
   res.json(thoughts)
 })
+
+// Send a new thought
 app.post('/', async (req, res) => {
-  const { message, name } = req.body
+  const { message } = req.body
   const thought = new Thought({
     message: message,
-    name: name,
   })
   try {
     const savedThought = await thought.save()
@@ -57,6 +52,8 @@ app.post('/', async (req, res) => {
     res.status(400).json({ message: 'Could not save happy thought to database', error: err.errors })
   }
 })
+
+// Like a thought
 app.post('/:id/like', async (req, res) => {
   try {
     const savedLike = await Thought.findOneAndUpdate(
@@ -67,7 +64,6 @@ app.post('/:id/like', async (req, res) => {
     res.status(400).json({ message: 'Could not like, thought not found', error: err.errors })
   }
 })
-
 
 // Start the server
 app.listen(port, () => {
