@@ -79,7 +79,10 @@ app.post('/', async (req, res) => {
       createdAt: Date.now()
     }).save()
 
-    res.status(200).json(newThought)
+    const allThoughts = await Thought.find()
+    const thoughts = await Thought.find().sort(myOrder).limit(PAGE_SIZE).skip((page * PAGE_SIZE) - PAGE_SIZE)
+
+    res.status(200).json({ thoughts: thoughts, length: Math.ceil(allThoughts.length / PAGE_SIZE) })
   } catch (err) {
     res.status(400).json({
       message: 'Could not save thought', error: err.message
