@@ -38,6 +38,13 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
+app.put('/thoughts/:id/like', async (req, res) => {
+  const { _id } =req.params
+  await Thought.updateOne({ _id: id }, {hearts: +1})
+})
+
+/*
+
 app.post('/:id/like', async (req, res) => {
   try {
     const thought = await Thought.findOneAndUpdate({ _id: req.params.id }, { $inc: { hearts: 1 } })
@@ -47,7 +54,6 @@ app.post('/:id/like', async (req, res) => {
   }
 })
 
-/*
 app.get('/thoughts/:id', async (req, res) => {
   const { _id } = req.params
   console.log(`GET /thought/${_id}`)
