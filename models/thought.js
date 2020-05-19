@@ -4,7 +4,7 @@ const Thought = mongoose.model('Thought', {
     message: {
       type: String,
       required: true,
-      minlength: [5, 'Min 5'],
+      minlength: [5, 'Thought needs to be longer then 5 characters'],
       maxlength: [140, 'This thought is to long']
     },
     likes: {
@@ -17,7 +17,7 @@ const Thought = mongoose.model('Thought', {
     },
     createdAt: {
       type: Date,
-      default: Date.now
+      default: Date.now // Or new Date()?
     }
   }
 )

@@ -41,16 +41,17 @@ if (process.env.RESET_DB) {
 }
 
 // Start defining your routes here
-app.get('/', (req, res) => {
+  app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
 app.get('/GET', async (req, res) => {
   const happyThoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+
   if (happyThoughts) {
     res.status(201).json(happyThoughts)
   } else {
-    res.status(401).json({ message: 'Could not find any happy thoughts' })
+    res.status(401).json({ message: ERR_CANNOT_FIND_Thought })
   }
 
 })
@@ -60,10 +61,10 @@ app.post('/POST', async (req, res) => {
   console.log( `message: ${message}` )
   const happyThought = new Thought({ message })
   try {
-    const savedHappyThought = await happyThought.save()
-    res.status(201).json(savedHappyThought)
+    const savedThought = await happyThought.save()
+    res.status(201).json(savedThought)
   } catch (err) {
-    res.status(400).json({ message: 'Could not save the thought to the database', error: err.errors })
+    res.status(400).json({ message: 'Could not save thought to the database', error: err.errors })
   }
 })
 app.post('/POST/:thoughtId/like', async (req, res) => {
