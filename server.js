@@ -46,6 +46,14 @@ const Thought = mongoose.model('Thought', {
 
 })
 
+if (process.env.RESET_DB) {
+  const reset = async () => {
+    await Thought.deleteMany()
+
+  }
+  reset()
+}
+
 // Start defining your routes here
 
 
