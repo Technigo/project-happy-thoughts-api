@@ -35,6 +35,8 @@ const Thought = mongoose.model('Thought', {
     default: 0
   },
   createdAt: {
+    /*I made this a number instead of a date because type: date would convert the Date.now string into
+    a date which was behaving erratically with react moment on my frontend. */
     type: Number
 
   },
@@ -62,8 +64,9 @@ app.get('/', async (req, res) => {
   const page = req.query.page || 1
   const order = req.query.order
   const myOrder = order === 'mostliked' ? { hearts: -1 } : order === 'oldest' ? { createdAt: 1 } : { createdAt: -1 }
+  const allThoughts = await Thought.find()
   const thoughts = await Thought.find().sort(myOrder).limit(PAGE_SIZE).skip((page * PAGE_SIZE) - PAGE_SIZE)
-  res.json(thoughts)
+  res.json({ thoughts: thoughts, length: Math.ceil(allThoughts.length / PAGE_SIZE) })
 })
 
 app.post('/', async (req, res) => {
