@@ -6,7 +6,7 @@ import { Thought } from './Models/Models'
 
 require('dotenv').config()
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
+const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts'
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
@@ -18,6 +18,13 @@ app.use(bodyParser.json())
 
 app.get('/thoughts', async (req, res) => {
   try {
+    const { hearts } = req.query
+    let myFilter = []
+
+    if (likes) {
+      myFilter['hearts'] = hearts
+    }
+
     const thoughts = await Thought.find().limit(20).sort({ createdAt: 1 })
     res.status(200).json(thoughts)
   } catch(err) {
