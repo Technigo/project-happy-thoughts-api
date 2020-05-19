@@ -62,10 +62,10 @@ app.post("/thoughts", async (req, res) => {
   try {
     // Success-case, send good status code to the client
     const savedThought = await thought.save({ message });
-    res.status(201).json(savedThought);
+    res.status(200).json(savedThought);
   } catch (err) {
     // Bad-req, send bad status code to the client
-    res.status(400).json({
+    res.status(404).json({
       message: "Sorry, could not save this thought to database.",
       errors: err.errors,
     });
@@ -80,10 +80,10 @@ app.post("/:id/like", async (req, res) => {
       //increment by 1
       { $inc: { hearts: 1 } }
     );
-    res.json(thought).status(201);
+    res.json(thought).status(200);
   } catch (err) {
     res
-      .status(401)
+      .status(404)
       .json({ message: "Sorry, could not find thought", error: err });
   }
 });
