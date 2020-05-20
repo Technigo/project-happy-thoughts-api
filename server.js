@@ -72,7 +72,8 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
-// Post hearts to a specific message
+// Post likes to a specific message
+// Using POST and not PUT because I increment likes, not adding new data to database.
 app.post("/:id/like", async (req, res) => {
   try {
     const thought = await Thought.findOneAndUpdate(

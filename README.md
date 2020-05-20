@@ -1,13 +1,29 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+API built in Node using Express. MongoDB and Mongoose is used to store data. Backend connected to my previous project "Happy thoughts".
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## Learning
 
-## The problem
+- How to build an API which includes handling of user input
+- How to include error handling to return good validation errors
+- How to build an API to work with an existing frontend
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+## Tech
+
+- Heroku
+- Postman
+- Node.js
+- Express
+- MongoDB
+- Mongoose
+- JavaScript ES6
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://elins-happy-thoughts-api.herokuapp.com
+
+### Frontend
+
+https://happythoughtsapp.netlify.com/
+
+https://github.com/elinaarenstrup/project-happy-thoughts
