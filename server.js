@@ -63,7 +63,7 @@ app.post('/thoughts', async (req, res) => {
 
 app.post('/:id/like', async (req, res) => {
   try {
-    const savedLike = await Thought.findOneAndUpdate(
+    const savedLike = await Thought.updateOne(
       { _id: req.params.id }, { $inc: { hearts: 1 } }
     )
     res.json(savedLike)
