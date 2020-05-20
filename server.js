@@ -45,7 +45,7 @@ app.use((req, res, next) =>{
   res.send('Hello world')
 })
 
-app.get('/GET', async (req, res) => {
+app.get('/thoughts', async (req, res) => {
   const happyThoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
 
   if (happyThoughts) {
@@ -56,7 +56,7 @@ app.get('/GET', async (req, res) => {
 
 })
 
-app.post('/POST', async (req, res) => {
+app.post('/thoughts', async (req, res) => {
   const { message } = req.body
   console.log( `message: ${message}` )
   const happyThought = new Thought({ message })
@@ -67,7 +67,7 @@ app.post('/POST', async (req, res) => {
     res.status(400).json({ message: 'Could not save thought to the database', error: err.errors })
   }
 })
-app.post('/POST/:thoughtId/like', async (req, res) => {
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
   console.log(`POST /POST/ ${thoughtId}/like`)
   await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
