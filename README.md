@@ -6,6 +6,7 @@ The following endpoints are available:
 - Root: `/`
 - GET and POST thoughts: `/thoughts`
 - POST like to thought: `/thoughts/:id/like`
+- GET and POST comments: `/thoughts/:id/comments`
 
 Queries are used to sort and paginate the frontend:
 - Sort by newest, oldest, most loved, e.g. `/thoughts?sort=newest`
