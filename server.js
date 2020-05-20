@@ -13,15 +13,14 @@ mongoose.connect(mongoUrl, {
 mongoose.Promise = Promise
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
+// overridden when starting the server. For example: PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
 
 const listEndpoints = require('express-list-endpoints')
 
-// Add middlewares to enable cors and json body parsing, and handling if API service is unavailable
+// Add middlewares to enable cors and json body parsing,
+// and handling if API service is unavailable
 app.use(cors())
 app.use(bodyParser.json())
 app.use((req, res, next) => {
@@ -31,6 +30,16 @@ app.use((req, res, next) => {
     res.status(503).json({ error: 'Service unavailable' })
   }
 })
+
+// Error messages
+const ERR_NO_THOUGHTS = 'There are no happy thoughts yet'
+const ERR_NO_PAGE = 'Requested page not found, could not get thoughts'
+const ERR_GET_THOUGHTS = 'Invalid request, could not get thoughts'
+const ERR_POST_THOUGHT = 'Invalid request, could not save thought'
+const ERR_POST_LIKE = 'Invalid request, could not save like'
+const ERR_NO_COMMENTS = 'The thought has no comments'
+const ERR_GET_COMMENTS = 'Invalid request, could not get comments'
+const ERR_POST_COMMENT = 'Invalid request, could not save comment'
 
 // Root endpoint
 app.get('/', (req, res) => {
@@ -59,23 +68,28 @@ app.get('/thoughts', async (req, res) => {
     }
   }
 
-  const thoughts = await Thought.find()
-    .sort(sortThoughts(sort))
-    .skip(skip)
-    .limit(perPage)
-    .populate('comments')
+  try {
+    const thoughts = await Thought.find()
+      .sort(sortThoughts(sort))
+      .skip(skip)
+      .limit(perPage)
+      .populate('comments')
 
-  if (numThoughts === 0) {
-    res.status(200).json({ message: 'There are no happy thoughts yet' })
-  } else if (+page > pages) {
-    res.status(404).json({ message: `There is no page ${page}` })
-  } else {
-    res.json({
-      total_pages: pages,
-      page: pageNo,
-      thoughts: thoughts
-    })
+    if (numThoughts === 0) {
+      res.status(200).json({ message: ERR_NO_THOUGHTS })
+    } else if (+page > pages) {
+      res.status(404).json({ message: ERR_NO_PAGE })
+    } else {
+      res.status(200).json({
+        total_pages: pages,
+        page: pageNo,
+        thoughts: thoughts
+      })
+    }
+  } catch (err) {
+    res.status(400).json({ message: ERR_GET_THOUGHTS })
   }
+
 })
 
 // Endpoint expecting a JSON body with the thought message
@@ -87,10 +101,7 @@ app.post('/thoughts', async (req, res) => {
 
     res.status(201).json(thought)
   } catch (err) {
-    res.status(400).json({
-      message: 'Could not save thought',
-      errors: err.errors
-    })
+    res.status(400).json({ message: ERR_POST_THOUGHT })
   }
 
 })
@@ -109,35 +120,47 @@ app.post('/thoughts/:id/like', async (req, res) => {
 
     res.status(201).json(thoughtLiked)
   } catch (err) {
-    res.status(404).json({
-      message: `Could not save like, no thought with id ${id}`,
-      errors: err.errors
-    })
+    res.status(400).json({ message: ERR_POST_LIKE })
   }
 
 })
 
 app.get('/thoughts/:id/comments', async (req, res) => {
   const { id } = req.params
-  const comments = await Comment.find({ message: id })
-  res.status(200).json(comments)
+
+  try {
+    const comments = await Comment.find({ message: id })
+
+    if (comments.length > 0) {
+      res.status(200).json(comments)
+    } else {
+      res.status(200).json({ message: ERR_NO_COMMENTS })
+    }
+  } catch (err) {
+    res.status(400).json({ message: ERR_GET_COMMENTS })
+  }
 })
 
 app.post('/thoughts/:id/comments', async (req, res) => {
   const { id } = req.params
   const { comment, createdBy, message } = req.body
 
-  const commentSent = await new Comment({ comment, createdBy, message }).save()
+  try {
+    const commentSent = await new Comment({ comment, createdBy, message }).save()
 
-  await Thought.findOneAndUpdate(
-    { _id: id },
-    {
-      $inc: { comment_count: 1 },
-      $push: { comments: commentSent._id }
-    },
-    { new: true }
-  )
-  res.status(201).json(commentSent)
+    await Thought.findOneAndUpdate(
+      { _id: id },
+      {
+        $inc: { comment_count: 1 },
+        $push: { comments: commentSent._id }
+      },
+      { new: true }
+    )
+    res.status(201).json(commentSent)
+  } catch (err) {
+    res.status(400).json({ message: ERR_POST_COMMENT })
+  }
+
 })
 
 // Start the server
