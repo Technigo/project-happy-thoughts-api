@@ -36,7 +36,7 @@ app.use((req, res, next) =>{
 })
 
 app.get('/thoughts', async (req, res) => {
-  const happyThoughts = await Thought.find().sort({ createdAt: 'inc' }).limit(30).exec()
+  const happyThoughts = await Thought.find().sort({ createdAt: 'asc' }).limit(30).exec()
 
   if (happyThoughts) {
     res.status(201).json(happyThoughts)
