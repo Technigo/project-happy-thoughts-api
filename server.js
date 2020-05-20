@@ -38,7 +38,7 @@ if (process.env.RESET_DATABASE) {
   seedDatabase();
 };
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 9000;
 const app = express();
 
 app.use(cors());
@@ -61,16 +61,18 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
   try {
     const { message, name } = req.body;
-    const thought = await new Thought({ message, name }).save();
-    res.status(200).json(thought);
+    const thought = new Thought({ message, name })
+    const savedThought = await thought.save();
+    res.status(200).json(savedThought);
   } catch (err) {
     res.status(400).json({error: 'Could not save thought to the Database', errors:err.errors});
   }
 });
 
-app.put('/:thoughtID/like', async (req, res) => {
+app.post('/:thoughtId/like', async (req, res) => {
   try {
-    await Thought.updateOne({ _id: _id }, { $inc : {hearts: 1} }).save();
+    const { thoughtId } = req.paramas
+    await Thought.updateOne({ _id: thoughtId }, { $inc : {hearts: 1} }).save();
     res.status(201).json();
   } catch (err) {
     res.status(400).json({error: 'Could not save like to the Database', errors:err.errors});
