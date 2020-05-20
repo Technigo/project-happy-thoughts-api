@@ -15,7 +15,7 @@ const Thought = mongoose.model('Thought', {
     minlenght: 5,
     maxlength: 140
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0,
     required: true
@@ -35,14 +35,6 @@ const app = express()
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(bodyParser.json())
-
-app.use((req, res, next) => {
-  if (mongoose.connection.readyState === 1) {
-    next()
-  } else {
-    res.status(503).json({ error: 'Service unavailable' })
-  }
-})
 
 //let mongoose use the function
 mongoose.set('useFindAndModify', false);
@@ -74,10 +66,12 @@ app.post('/thoughts', async (req, res) => {
 
 app.post('/:id/like', async (req, res) => {
   try {
-    const thought = await Thought.findOneAndUpdate({ _id: req.params.id }, { $inc: { hearts: 1 } })
-    res.json(thought).status(201);
+    const savedLike = await Thought.findOneAndUpdate(
+      { _id: req.params.id }, { $inc: { hearts: 1 } }
+    )
+    res.json(savedLike)
   } catch (err) {
-    res.status(401).json({ message: 'Could not add heart', error: err })
+    res.status(400).json({ message: 'Could not like post, id not found', error: err.errors })
   }
 })
 
