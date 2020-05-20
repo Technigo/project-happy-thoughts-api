@@ -13,7 +13,7 @@ const Thought = mongoose.model('Thought', {
     },
     postedBy: {
       type: mongoose.Schema.Types.ObjectId, ref: 'User',
-      required: true
+      required: false
     },
     createdAt: {
       type: Date,
