@@ -3,6 +3,7 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import Thought from './models/thought'
+import thoughtsData from './data/thoughts.json'
 
 const ERR_CAN_NOT_SAVE_THOUGHT = 'Could not save thought to database'
 
@@ -12,6 +13,15 @@ mongoose.Promise = Promise
 
 
 // Seed database to test endpoints?
+if (process.env.RESET_DATABASE) {
+  console.log('Resetting database ...')
+
+  const seedDatabase = async () => {
+    await Thought.deleteMany()
+    await thoughtsData.forEach((thought) => new Thought(thought).save())
+  }
+  seedDatabase()
+}
 
 const port = process.env.PORT || 8080
 const app = express()
@@ -49,10 +59,13 @@ app.post('/thoughts', async (req, res) => {
 
 // PUT add hearts to thought, increment by 1
 app.put('/thoughts/:thoughtId/like', async (req, res) => {
-  const { id } = req.params
-  /*  console.log(`PUT /thougts/${id}/like`) */
-  await Thought.updateOne({ _id: id }, { $inc: { hearts: 1 } })
-  res.status(201).json()
+  const { thoughtId } = req.params
+  console.log(`PUT /thougts/${thoughtId}/like`)
+  const updatedThought = await Thought.updateOne(
+    { _id: thoughtId },
+    { $inc: { hearts: 1 } }
+  )
+  res.status(201).json(updatedThought)
 })
 
 // Start the server
