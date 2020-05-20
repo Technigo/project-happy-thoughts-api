@@ -11,14 +11,14 @@ const Thought = mongoose.model('Thought', {
       type: Number,
       default: 0
     },
-    postedBy: {
+   /* postedBy: {
       type: mongoose.Schema.Types.ObjectId, ref: 'User',
       required: false
     },
     createdAt: {
       type: Date,
       default: Date.now // Or new Date()?
-    }
+    }*/
   }
 )
 
