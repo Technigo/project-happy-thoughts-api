@@ -1,13 +1,11 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+A project for practicing an API which includes both GET request endpoints to return data and POST endpoints to create data. The API was built to be used by a happy thought twitter built using React (https://github.com/elsareutersward/project-happy-thoughts).
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+To build the API I used Express and MongoDB. During the project I learnt how to model data in Mongoose, how to fetch items from a Mongo database using Mongoose and how to seed large amounts of data to a database. I also learnt to build a full API which includes handling of user input and includes error handling to return good validation errors. I also practiced creating an API that would work well with an existing frontend. 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://er-project-happy-thought-api.herokuapp.com/
