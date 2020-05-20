@@ -6,6 +6,10 @@ The backend is connected to my previous frontend project "Happy thoughts" and it
 
 The API is deployed to Heroku and database MongoDB Atlas cloud.
 
+## Tech used: 
+- Node.js, Express, MongoDB, MongoDB Atlas
+- MongoDB Compass, Postman and Chrome.
+
 ## View it live
 
 Backend: https://happylove-api.herokuapp.com
