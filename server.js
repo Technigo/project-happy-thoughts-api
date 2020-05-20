@@ -109,8 +109,8 @@ app.post('/thoughts/:id/like', async (req, res) => {
 
     res.status(201).json(thoughtLiked)
   } catch (err) {
-    res.status(400).json({
-      message: `No thought with id ${id}`,
+    res.status(404).json({
+      message: `Could not save like, no thought with id ${id}`,
       errors: err.errors
     })
   }
