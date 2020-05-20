@@ -50,12 +50,22 @@ app.get('/', (req, res) => {
 //GET ENDPOINT
 //return 20 results ordered by createAt
 app.get('/thoughts', async (req, res) => {
-  //Alla thoughts den hittar, sorterad på nyast och endast visa de 20 senaste. Vad betyder exec?
+  const { page } = req.query
+
+  //pagination
+  const pageNumber = +page || 1
+  const perPage = 20
+  const skip = perPage * (pageNumber - 1)
+
+  const totalThoughts = await Thought.find()
+  const pages = Math.ceil(totalThoughts.length / perPage)
+
   const thoughts = await Thought.find()
     .sort({ createdAt: 'desc' })
-    .limit(20)
-    .exec()
-  res.json(thoughts)
+    .limit(perPage)
+    .skip(skip)
+
+  res.json({ thoughts, pages })
 })
 
 //POST THOUGHT ENDPOINT
