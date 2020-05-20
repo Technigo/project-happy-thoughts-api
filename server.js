@@ -30,16 +30,6 @@ app.use((req, res, next) =>{
   }
 })
 
-/*if (process.env.RESET_DB) {
-  console.log('reseting the database...')
-  const seedDatabase = async () => {
-    await Thought.deleteMany()
-    // Send all the json from Thought
-    await Thought.forEach((happy) => new Thought(happy).save())
-  }
-  seedDatabase()
-}*/
-
 // Start defining your routes here
   app.get('/', (req, res) => {
   res.send('Hello world')

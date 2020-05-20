@@ -5,7 +5,7 @@ const Thought = mongoose.model('Thought', {
       type: String,
       required: true,
       minlength: [5, 'Thought needs to be longer then 5 characters'],
-      maxlength: [140, 'This thought is to long']
+      maxlength: [140, 'This thought is to long, 140 is max']
     },
     hearts: {
       type: Number,
