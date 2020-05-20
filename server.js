@@ -47,14 +47,14 @@ app.get('/', async (req, res) => {
   const thoughts = await Thought.find()
     .sort({ createdAt: "desc" })
     .limit(20)
-  /* const { tag } = req.query
-   if (tag) {
-     const filteredThoughts = await Thought.find({ tag: tag })
-     res.json(filteredThoughts)
-   } else {*/
-  res.json(thoughts)
-  //res.send('Hello world')
-  //}
+  const { tag } = req.query
+  if (tag) {
+    const filteredThoughts = await Thought.find({ tag: tag })
+    res.json(filteredThoughts)
+  } else {
+    res.json(thoughts)
+    //res.send('Hello world')
+  }
 })
 
 app.post('/', async (req, res) => {
