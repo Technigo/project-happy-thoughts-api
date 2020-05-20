@@ -6,8 +6,9 @@ import mongoose from 'mongoose'
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
+
 /*The following line of code is to avoid deprecation warning when using findOneAndUpdate, which I use for the
-likes as unlike updateOne it also returns the updated object. */
+likes as in contrast to updateOne it also returns the updated object. */
 mongoose.set('useFindAndModify', false)
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
@@ -67,23 +68,15 @@ app.get('/', async (req, res) => {
   const PAGE_SIZE = 20;
   const page = req.query.page || 1
   const order = req.query.order
-  const theme = req.query.theme
+  const theme = { theme: req.query.theme } || {}
   const myOrder = order === 'mostliked' ? { hearts: -1 } : order === 'oldest' ? { createdAt: 1 } : { createdAt: -1 }
   const allThoughts = await Thought.find()
-
-  if (theme) {
-    const thoughts = await Thought.find({ theme: theme }).sort(myOrder).limit(PAGE_SIZE).skip((page * PAGE_SIZE) - PAGE_SIZE)
-    res.json({ thoughts: thoughts, length: Math.ceil(allThoughts.length / PAGE_SIZE) })
-  } else {
-    const thoughts = await Thought.find().sort(myOrder).limit(PAGE_SIZE).skip((page * PAGE_SIZE) - PAGE_SIZE)
-    res.json({ thoughts: thoughts, length: Math.ceil(allThoughts.length / PAGE_SIZE) })
-  }
+  const thoughts = await Thought.find(theme).sort(myOrder).limit(PAGE_SIZE).skip((page * PAGE_SIZE) - PAGE_SIZE)
+  res.json({ thoughts: thoughts, length: Math.ceil(allThoughts.length / PAGE_SIZE) })
 
 })
 
 app.post('/', async (req, res) => {
-
-
   try {
     const userRegExp = req.body.message.match(/~.*/i)
     const username = userRegExp ? userRegExp.toString().substr(1, 20) : null
@@ -93,15 +86,16 @@ app.post('/', async (req, res) => {
       createdAt: Date.now(),
       theme: req.body.theme || ''
     }).save()
+    //I return the whole list of thoughts below because if I only return the new thought and add it to the existing state locally
+    //it allows more than the number of thoughts defined in PAGE_SIZE to be displayed simultaneously. 
     const PAGE_SIZE = 20;
     const page = req.query.page || 1
     const order = req.query.order
     const myOrder = order === 'mostliked' ? { hearts: -1 } : order === 'oldest' ? { createdAt: 1 } : { createdAt: -1 }
-
     const allThoughts = await Thought.find()
     const thoughts = await Thought.find().sort(myOrder).limit(PAGE_SIZE).skip((page * PAGE_SIZE) - PAGE_SIZE)
-
     res.status(200).json({ thoughts: thoughts, length: Math.ceil(allThoughts.length / PAGE_SIZE) })
+
   } catch (err) {
     res.status(400).json({
       message: 'Could not save thought', error: err.message
@@ -111,17 +105,12 @@ app.post('/', async (req, res) => {
 
 app.post('/:thoughtId/like', async (req, res) => {
   try {
-    const foundThought = await Thought.findOne({ _id: req.params.thoughtId })
-    const oldHeartCount = foundThought.hearts
     const likedThought = await Thought.findOneAndUpdate({ _id: req.params.thoughtId }, { $inc: { hearts: 1 } }, { new: true })
     res.json(likedThought)
 
   } catch (err) {
     res.status(400).json({ error: 'Thought not found.' })
   }
-
-
-
 })
 
 // Start the server
