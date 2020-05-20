@@ -1,13 +1,36 @@
-# Project Happy Thoughts API
+# Happy Thoughts API
 
-Replace this readme with your own information about your project.
+API created with Express & MongoDB.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## Description
 
-## The problem
+An Express API that returns happy thoughts from a MongoDB, uses `POST` requests to post new thoughts & like existing thoughts.
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Available endpoints:
 
-## View it live
+Routes | Path
+--- | ---
+root | `/`
+thoughts | `/thoughts`
+like thought | `/:thoughtId/like`
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Queries can be used to filter the `/thoughts` endpoint.
+
+Query | Path | Value
+--- | --- | ---
+page | `?page=:page` | *number*
+sort | `?sort=:sort` | `likes` / `newest`/ `oldest`
+
+
+## Tech
+- Mongo DB
+- Mongoose
+- Express
+- Node.js
+- Javascript
+
+## ToDo
+- Implement infinite scroller
+
+## Deployed
+https://api-happy-thoughts.herokuapp.com/
