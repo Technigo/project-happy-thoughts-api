@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 
 // Update this model according to technigo notion project description!
-// You should not be able to se the number of hearts when posting a new message
+// You should not be able to set the number of hearts when posting a new message
 // createdAt should not be able to be modifed when posting a new message
 const Thought = mongoose.model('Thought', {
   message: {

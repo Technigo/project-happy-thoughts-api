@@ -21,13 +21,14 @@ if (process.env.RESET_DATABASE) {
 
 const port = process.env.PORT || 8080
 const app = express()
+const listEndpoints = require('express-list-endpoints')
 
 app.use(cors())
 app.use(bodyParser.json())
 
 // Root
 app.get('/', (req, res) => {
-  res.send('Root, short description here.')
+  res.send(listEndpoints(app))
 })
 
 // GET All Thoughts sort by createdAt
