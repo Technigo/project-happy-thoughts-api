@@ -41,12 +41,12 @@ app.get('/thoughts', async (req, res) => {
 // POST new thought
 // This enpoind expects a json body with thought message like:
 app.post('/thoughts', async (req, res) => {
-  const { message, hearts } = req.body
-  const thought = new Thought({ message, hearts })
+  const { message } = req.body
+  const thought = new Thought({ message })
 
   try{
     const savedThought = await thought.save()
-    res.status(200).json(savedThought)
+    res.status(201).json(savedThought)
   } catch (err) {
     res.status(400).json({ message: 'Could not save thought to the databse' , error:err.errors})
   }
