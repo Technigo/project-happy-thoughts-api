@@ -16,4 +16,5 @@ Looking at the previous project Happy Thoughts and look which endpoints and HTTP
 ## View it live
 
 [Frontend](https://relaxed-shockley-ec05e0.netlify.app/)
+
 [Backend](https://plunta-happy-thought-api.herokuapp.com/)
