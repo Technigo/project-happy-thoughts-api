@@ -11,6 +11,7 @@ This is my API built by express and mongodb. The API includes both POST and GET 
 ## View it live
 
 Deployed backend: 
+https://happy-thoughts-api-johanna.herokuapp.com/thoughts
 
 Deployed frontend: 
 https://infallible-archimedes-9a857b.netlify.app/
