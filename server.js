@@ -52,7 +52,7 @@ app.get('/thoughts', async (req, res) => {
   const pageNo = +page || 1
   const perPage = 20
   // skip: E.g. page 3: 10 * (3-1) = 20, sends 20 as parameter to .skip()
-  // skips index 0-19 so that page 3 starts with the book that has index 20
+  // skips index 0-19, page 3 starts with the book that has index 20
   const skip = perPage * (pageNo - 1)
   const allThoughts = await Thought.find()
   const numThoughts = allThoughts.length
@@ -89,25 +89,23 @@ app.get('/thoughts', async (req, res) => {
   } catch (err) {
     res.status(400).json({ message: ERR_GET_THOUGHTS })
   }
-
 })
 
-// Endpoint expecting a JSON body with the thought message
+// Endpoint used to post new thought
+// Expects JSON body with thought message and createdBy
 app.post('/thoughts', async (req, res) => {
   const { message, createdBy } = req.body
 
   try {
     const thought = await new Thought({ message, createdBy }).save()
-
     res.status(201).json(thought)
   } catch (err) {
     res.status(400).json({ message: ERR_POST_THOUGHT })
   }
-
 })
 
-// Endpoint taking in _id as params, updating hearts property to add one heart
-// Incrementing like and not adding new data to DB, therefore using POST and not PUT
+// Endpoint incrementing likes of given thought
+// Does not add new data to DB, therefore using POST and not PUT
 app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params
 
@@ -122,9 +120,9 @@ app.post('/thoughts/:id/like', async (req, res) => {
   } catch (err) {
     res.status(400).json({ message: ERR_POST_LIKE })
   }
-
 })
 
+// Endpoint listing comments of a given thought
 app.get('/thoughts/:id/comments', async (req, res) => {
   const { id } = req.params
 
@@ -141,6 +139,9 @@ app.get('/thoughts/:id/comments', async (req, res) => {
   }
 })
 
+// Endpoint used to post comments connected to a given thought
+// Expects JSON body with comment, createdBy and connection to thought message
+// Increments comment_count with 1
 app.post('/thoughts/:id/comments', async (req, res) => {
   const { id } = req.params
   const { comment, createdBy, message } = req.body
@@ -156,11 +157,11 @@ app.post('/thoughts/:id/comments', async (req, res) => {
       },
       { new: true }
     )
+
     res.status(201).json(commentSent)
   } catch (err) {
     res.status(400).json({ message: ERR_POST_COMMENT })
   }
-
 })
 
 // Start the server
