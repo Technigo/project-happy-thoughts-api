@@ -67,7 +67,16 @@ app.post('/', async (req, res) => {
 
 
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
+// const {thoughtId} = req.params
+// const like = await Thought.updateOne({ '_Id': thoughtId}, {'$inc': { 'hearts': 1 } })
 
+//   try {
+//  //   like.save()
+//     res.status(201).json(like)
+//   } catch (err) {
+//     res.status(400).json({message: 'Could not save your like', error: err.errors})
+//   }
+// })
   const {thoughtId} = req.params
   const like = await Thought.findById(thoughtId)
   
