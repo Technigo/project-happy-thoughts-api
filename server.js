@@ -47,10 +47,9 @@ app.get('/', async (req, res) => {
 })
 
 app.post('/', async (req, res) => {
-  const { message, name } = req.body
+  const { message } = req.body
   const thought = new Thought({
-    message: message,
-    name: name,
+    message: message
   })
 
   try {
