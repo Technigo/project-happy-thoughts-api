@@ -7,18 +7,10 @@ const Thought = mongoose.model('Thought', {
       minlength: [5, 'Thought needs to be longer then 5 characters'],
       maxlength: [140, 'This thought is to long']
     },
-    likes: {
+    hearts: {
       type: Number,
       default: 0
-    },
-   /* postedBy: {
-      type: mongoose.Schema.Types.ObjectId, ref: 'User',
-      required: false
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now // Or new Date()?
-    }*/
+    }
   }
 )
 
