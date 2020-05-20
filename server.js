@@ -17,7 +17,6 @@ const Thought = mongoose.model('Thought', {
   },
   name: {
     type: String,
-    minlength: 2,
     maxlength: 50,
     default: "Anonymus"
   },
