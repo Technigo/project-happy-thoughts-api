@@ -26,20 +26,15 @@ const listEndpoints = require('express-list-endpoints')
 app.use(cors())
 app.use(bodyParser.json())
 
-// Root
 app.get('/', (req, res) => {
   res.send(listEndpoints(app))
 })
 
-// GET All Thoughts sort by createdAt
-// Limit to 20
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
   res.json(thoughts)
 })
 
-// POST new thought
-// This enpoind expects a json body with thought message like:
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body
   const thought = new Thought({ message })
@@ -52,10 +47,8 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-// POST /thoughtId/like
-//This endpoint doesn't require a JSON body. Given a valid thought id in the url, tha api should find that thought and uptade its hearts property to add one heart
 app.post('/:thoughtId/like', async (req, res) => {
-  const {thoughtId} = req.params
+  const { thoughtId } = req.params
   
   try{
     const likeThought = await Thought.updateOne({ _id: thoughtId } , { $inc: { hearts: 1} })
@@ -65,7 +58,6 @@ app.post('/:thoughtId/like', async (req, res) => {
   }
 })
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
 })
