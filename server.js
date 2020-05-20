@@ -38,7 +38,7 @@ if (process.env.RESET_DATABASE) {
   seedDatabase();
 };
 
-const port = process.env.PORT || 9000;
+const port = process.env.PORT || 2020;
 const app = express();
 
 app.use(cors());
@@ -71,9 +71,12 @@ app.post('/', async (req, res) => {
 
 app.post('/:thoughtId/like', async (req, res) => {
   try {
-    const { thoughtId } = req.paramas
-    await Thought.updateOne({ _id: thoughtId }, { $inc : {hearts: 1} }).save();
-    res.status(201).json();
+    const { thoughtId } = req.params;
+    const like = await Thought.findOneAndUpdate(
+      { '_id': thoughtId }, 
+      { $inc : {'hearts': 1} }
+    )
+    res.status(201).json(like);
   } catch (err) {
     res.status(400).json({error: 'Could not save like to the Database', errors:err.errors});
   }
