@@ -6,6 +6,10 @@ export const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 140
   },
+  name: {
+    type: String,
+    default: "Anonymous"
+  },
   hearts: {
     type: Number,
     default: 0
@@ -14,4 +18,3 @@ export const Thought = mongoose.model('Thought', {
     type: String,
   }
 }, "thoughts")
-//.toISOString()

@@ -18,19 +18,18 @@ app.use(bodyParser.json())
 
 app.get('/thoughts', async (req, res) => {
   const hearts = req.query.hearts
-    let myFilter = []
+  let myFilter = []
 
-    if ( hearts ) {
-      myFilter = {
-        "hearts": hearts
-    }} else {
-      myFilter = {
-        "createdAt": -1
-      }
+  if ( hearts ) {
+    myFilter = {
+      "hearts": hearts
+  }} else {
+    myFilter = {
+      "createdAt": -1
     }
+  }
     
   try {
-
     const thoughts = await Thought.find().limit(20).sort( myFilter ) 
     res.status(200).json(thoughts)
   } catch(err) {
@@ -40,7 +39,7 @@ app.get('/thoughts', async (req, res) => {
 
 app.post('/thoughts', async (req, res) => {
   try {
-    await new Thought({ message: req.body.message, createdAt: new Date().toISOString()}).save()
+    await new Thought({ message: req.body.message, name: req.body.name, createdAt: new Date().toISOString()}).save()
     return res.status(200).json(req.body)
   } catch(err) {
     res.status(404).send(err)
