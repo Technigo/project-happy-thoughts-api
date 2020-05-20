@@ -29,8 +29,6 @@ sort | `?sort=:sort` | `likes` / `newest`/ `oldest`
 - Node.js
 - Javascript
 
-## ToDo
-- Implement infinite scroller
 
 ## Deployed
 https://api-happy-thoughts.herokuapp.com/
