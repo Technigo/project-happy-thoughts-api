@@ -10,6 +10,10 @@ const Thought = mongoose.model('Thought', {
     hearts: {
       type: Number,
       default: 0
+    },
+    createdAt: {
+      type: Date,
+      default: () => new Date()
     }
   }
 )
