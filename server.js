@@ -46,7 +46,7 @@ app.use((req, res, next) =>{
 })
 
 app.get('/thoughts', async (req, res) => {
-  const happyThoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+  const happyThoughts = await Thought.find().sort({ createdAt: 'asc' }).limit(50).exec()
 
   if (happyThoughts) {
     res.status(201).json(happyThoughts)
@@ -69,7 +69,7 @@ app.post('/thoughts', async (req, res) => {
 })
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
-  console.log(`POST /POST/ ${thoughtId}/like`)
+  console.log(`POST /thought/ ${thoughtId}/like`)
   await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
   res.status(201).json()
 })
