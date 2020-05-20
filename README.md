@@ -16,5 +16,5 @@ Use of Express and Mongodb to build an API which includes both GET request endpo
 
 ## View it live
 
-API: 
-Frontend part to try it out:
+API: https://happythoughts-api-annesophie.herokuapp.com/
+Frontend part to try it out: https://happythoughts-annesophie.netlify.app/
