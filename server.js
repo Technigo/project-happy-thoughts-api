@@ -54,7 +54,16 @@ app.post('/thoughts', async (req, res) => {
 
 // POST /thoughtId/like
 //This endpoint doesn't require a JSON body. Given a valid thought id in the url, tha api should find that thought and uptade its hearts property to add one heart
-
+app.post('/:thoughtId/like', async (req, res) => {
+  const {thoughtId} = req.params
+  
+  try{
+    const likeThought = await Thought.updateOne({ _id: thoughtId } , { $inc: { hearts: 1} })
+    res.status(201).json(likeThought)
+  } catch (err) {
+    res.status(400).json({ message: 'Could not find Id to update', error:err.errors})
+  }
+})
 
 // Start the server
 app.listen(port, () => {
