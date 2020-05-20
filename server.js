@@ -19,6 +19,9 @@ const app = express()
 
 const listEndpoints = require('express-list-endpoints')
 
+const error_couldNotSave = 'Could not save thought to the database'
+const error_notFound = 'Thought was not found'
+
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
@@ -74,11 +77,11 @@ app.post('/thoughts', async (req, res) => {
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
   } catch (err) {
-    res.status(400).json({ message: 'Could not save thought to the database', error: err.errors })
+    res.status(400).json({ message: error_couldNotSave, error: err.errors })
   }
 })
 
-// Like thought
+// Like thought (POST because did as instructed in the codealong – could this be changed into a PUT though?)
 app.post('/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
 
@@ -87,7 +90,7 @@ app.post('/:thoughtId/like', async (req, res) => {
     await Thought.updateOne({ '_id': thoughtId }, { '$inc': { 'hearts': 1 } })
     res.status(201).json()
   } catch (err) {
-    res.status(404).json({ message: 'Thought not found', error: err.errors })
+    res.status(404).json({ message: error_notFound, error: err.errors })
   }
 
 })
