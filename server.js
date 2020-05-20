@@ -36,9 +36,6 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-//let mongoose use the function
-mongoose.set('useFindAndModify', false);
-
 // Start defining your routes here
 app.get('/', (req, res) => {
   res.send('Hello world')
