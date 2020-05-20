@@ -32,3 +32,7 @@ sort | `?sort=:sort` | `likes` / `newest`/ `oldest`
 
 ## Deployed
 https://api-happy-thoughts.herokuapp.com/
+
+## Frontend
+- Deployed: https://happythoughts.netlify.com/
+- Repo: https://github.com/crushoftheyear/project-happy-thoughts
