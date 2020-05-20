@@ -37,7 +37,6 @@ const ERR_NO_PAGE = 'Requested page not found, could not get thoughts'
 const ERR_GET_THOUGHTS = 'Invalid request, could not get thoughts'
 const ERR_POST_THOUGHT = 'Invalid request, could not save thought'
 const ERR_POST_LIKE = 'Invalid request, could not save like'
-const ERR_NO_COMMENTS = 'The thought has no comments'
 const ERR_GET_COMMENTS = 'Invalid request, could not get comments'
 const ERR_POST_COMMENT = 'Invalid request, could not save comment'
 
@@ -129,11 +128,7 @@ app.get('/thoughts/:id/comments', async (req, res) => {
   try {
     const comments = await Comment.find({ message: id })
 
-    if (comments.length > 0) {
-      res.status(200).json(comments)
-    } else {
-      res.status(200).json({ message: ERR_NO_COMMENTS })
-    }
+    res.status(200).json(comments)
   } catch (err) {
     res.status(400).json({ message: ERR_GET_COMMENTS })
   }
