@@ -68,10 +68,10 @@ app.get('/', async (req, res) => {
   const PAGE_SIZE = 20;
   const page = req.query.page || 1
   const order = req.query.order
-  const theme = { theme: req.query.theme } || {}
+  const userTheme = req.query.theme ? { theme: req.query.theme } : {}
   const myOrder = order === 'mostliked' ? { hearts: -1 } : order === 'oldest' ? { createdAt: 1 } : { createdAt: -1 }
   const allThoughts = await Thought.find()
-  const thoughts = await Thought.find(theme).sort(myOrder).limit(PAGE_SIZE).skip((page * PAGE_SIZE) - PAGE_SIZE)
+  const thoughts = await Thought.find(userTheme).sort(myOrder).limit(PAGE_SIZE).skip((page * PAGE_SIZE) - PAGE_SIZE)
   res.json({ thoughts: thoughts, length: Math.ceil(allThoughts.length / PAGE_SIZE) })
 
 })
