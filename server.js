@@ -62,7 +62,10 @@ app.post('/:thoughtId/like', async (req, res) => {
   const thought = await Thought.findById(thoughtId)
 
   if (thought) {
+    //likes
     thought.hearts++
+    thought.save()
+    res.status(201).json(thought)
   }
   else {
     res.status(400).json({ message: `${thoughtId} does not exist `})
