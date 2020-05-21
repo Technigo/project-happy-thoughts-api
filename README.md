@@ -3,9 +3,9 @@ API built in Node using Express. MongoDB and Mongoose is used to store data. The
 
 The following endpoints are available:
 
-Root: /
-GET and POST thoughts: /thoughts
-POST like to thought: /thoughts/:id/like
+- Root: /
+- GET and POST thoughts: /thoughts
+- POST like to thought: /thoughts/:id/like
 
 ## The problem
 The backend was built to replace a working backend for a previous project, so I started by looking at the data the previous backend sent and received in Postman. That way I knew how to structure my model. 
@@ -18,13 +18,13 @@ If I had more time I would implement pagination, additional sorting and a name p
 - How to build an API which works well with an existing frontend
 
 ## Technologies used
-Node.js
-Express
-MongoDB
-Mongoose
-JavaScript ES6
+- Node.js
+- Express
+- MongoDB
+- Mongoose
+- JavaScript ES6
 
 ## View it live
-API: https://annas-happy-thoughts.herokuapp.com/
-Frontend: https://annas-happy-thought-app.netlify.app/
-Frontend repo: https://github.com/annatakman/project-happy-thoughts 
+- API: https://annas-happy-thoughts.herokuapp.com/
+- Frontend: https://annas-happy-thought-app.netlify.app/
+- Frontend repo: https://github.com/annatakman/project-happy-thoughts 
