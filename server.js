@@ -32,11 +32,11 @@ app.use((req, res, next) =>{
 
 // Start defining your routes here
   app.get('/', (req, res) => {
-  res.send('Hello this is start/')
+  res.send('Hello, this is start')
 })
 
 app.get('/thoughts', async (req, res) => {
-  const happyThoughts = await Thought.find().sort({ createdAt: 'asc' }).limit(30).exec()
+  const happyThoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(30).exec()
 
   if (happyThoughts) {
     res.status(201).json(happyThoughts)
