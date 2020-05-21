@@ -1,0 +1,57 @@
+.card, form {
+    border: 1px solid black;
+    width: 25em;
+    margin: 2em auto;
+    padding: 2em 2em 3em 2em;
+    -webkit-box-shadow: 7px 7px 0px 1px rgba(0,0,0);
+    -moz-box-shadow: 7px 7px 0px 1px rgba(0,0,0);
+    -ms-box-shadow: 7px 7px 0px 1px rgba(0,0,0);
+    box-shadow: 7px 7px 0px 1px rgba(0,0,0);
+}
+
+form {
+    padding-bottom: 3em;
+}
+
+form input {
+    padding: 1em;
+}
+
+.heart {
+    transform: scale(0.6);
+}
+
+.card-details {
+    display: flex;
+}
+
+.time {
+    margin-left: auto;
+}
+
+.lots, .few, .none {
+    padding: .3em;
+    padding-bottom: .05em;
+    border-radius: 50%;
+    margin-right: .5em;
+}
+
+.lots {
+    background: rgb(247, 104, 104);
+}
+
+.few {
+    background: rgb(235, 158, 158);
+}
+
+.none {
+    background-color: rgb(185, 185, 185);
+}
+
+.lots, .few, .none:hover {
+    cursor: pointer;
+}
+
+.like-p {
+    font-size: 16px;
+}
