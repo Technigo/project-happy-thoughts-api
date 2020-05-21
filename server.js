@@ -37,7 +37,7 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Happy Thoughts API')
 })
 
 // Get thoughts
