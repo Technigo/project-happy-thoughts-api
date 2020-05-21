@@ -69,6 +69,21 @@ app.post('/thoughts', async (req, res) => {
     }
 })
 
+
+app.post('/thoughts/:thoughtId/like', async (req, res)=> {
+  const { thoughtId } = req.params
+  const errMessage = ' could not found ${thoughtId}'
+  
+  try {
+  
+  const updateThought = await Thought.updateOne({ '_id': thoughtId },
+     {'$inc':{ 'heart':1  }})
+     res.status(201).json(updateThought)
+    } catch (err) {
+      res.status(404).json({ message: errMessage })
+     }
+    }) 
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
