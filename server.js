@@ -35,9 +35,11 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-// Start defining your routes here
+// Home page
+const listEndpoints = require('express-list-endpoints')
+
 app.get('/', (req, res) => {
-  res.send('Happy Thoughts API')
+  res.send(listEndpoints(app))
 })
 
 // Get thoughts
