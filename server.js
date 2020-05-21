@@ -70,13 +70,13 @@ app.post('/thoughts', async (req, res) => {
 })
 
 
-app.post('/thoughts/:_id/like', async (req, res)=> {
-  const { _id } = req.params
+app.post('/thoughts/:id/like', async (req, res)=> {
+  const { id } = req.params
   const errMessage = 'could not found ${_id}'
   
   try {
   
-  const updateThought = await Thought.updateOne({ '_id': _id },
+  const updateThought = await Thought.updateOne({ '_id': id },
      {'$inc':{ 'heart':1  }})
      res.status(201).json(updateThought)
     } catch (err) {
