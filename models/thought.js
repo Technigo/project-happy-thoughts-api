@@ -1,9 +1,6 @@
 import mongoose from 'mongoose'
 
 const Thought = mongoose.model('/thought', {
-  /*   _id: {
-      type: String,
-    }, */
   message: {
     type: String,
     required: true,
