@@ -44,39 +44,6 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   res.status(201).json
 })
 
-/*
-
-app.post('/:id/like', async (req, res) => {
-  try {
-    const thought = await Thought.findOneAndUpdate({ _id: req.params.id }, { $inc: { hearts: 1 } })
-    res.json(thought).status(201);
-  } catch (err) {
-    res.status(401).json({ message: 'Could not add heart', error: err })
-  }
-})
-
-app.get('/thoughts/:id', async (req, res) => {
-  const { _id } = req.params
-  console.log(`GET /thought/${_id}`)
-  const thoughtById = Thought.findOne({ _id })
-  if (thoughtById) {
-    res.status(200).json(thoughtById)
-  } else {
-    res.status(404).json({message:ERR_CANNOT_FIND_ID })
-  }
-})
-app.post('/:id', async (req, res) => {
-  const {hearts} = req.body
-  const like= Thought({hearts})
-
-  try {
-    const savedLike = await like.save()
-    res.status(201).json(savedLike)
-  } catch (err) {
-    res.status(400).json({ message: 'Could not save like to the database', error: err.errors })
-  }
-})*/
-
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
 })
