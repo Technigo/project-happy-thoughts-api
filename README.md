@@ -1,13 +1,15 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Create a database for a twitter-like message board which would allow users to post and like thoughts.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+The mongoose model for each thought was very simple to implement and display to the user using simple GET requests.
+I implemented the 'like' function using findOneAndUpdate which returns a new object after it has completed its job.
+I used regex to allow users to 'sign' their messages by writing a name after a '~' symbol. 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+
+Back-end: https://williamjensen-happythoughts.herokuapp.com/
+Front-end: https://festive-heyrovsky-dd1229.netlify.app/
