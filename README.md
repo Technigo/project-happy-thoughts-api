@@ -1,13 +1,11 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+In this project I've built my very own API to a front end project I did earlier.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I have build an API with some endpoints that matches another project I've build earlier this year. I have built it with Express and Mongodb. I have used GET request endpoints to return data (which renturn 20 results ordered by createdAt in decending order) and POST endpoints to create data. I have also included error handling to return good validation errors. I've also used Postman a lot to test my database. 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://amazing-borg-5e3b05.netlify.app/ 
