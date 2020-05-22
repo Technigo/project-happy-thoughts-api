@@ -1,13 +1,23 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+RESTful API to use in earlier frontend project. It's possible to post messages, add likes and scroll the feed 💓👋💌🍻
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## Code
+
+I've used:
+  * **Node.js**
+  * **Express**
+  * **MongoDB**
+  * **Mongoose**
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Created a model that requires a message with a minimun of 5 letters and max 140. The message model also consist of the date when it's created and number of likes, default is 0. 
+Made a GET request that finds and sorts the messages recieved and a POST request to actually create something to send and save. The endpoint to add likes uses the message unique id to add och save likes for each time it's clicked.
+This project was pretty hands on and it easy to understand the backend even more. Also great to have a previous frontend project to use this in a fetch. Maybe I'll go back and make tags or a user name but for now I'm happy that it works and that I truly understand this project.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+My API: https://happy-thoughts-bealun.herokuapp.com
+
+Deployed frontend: https://happy-thoughts-bealun.netlify.app
