@@ -41,6 +41,22 @@ const Thought = mongoose.model('Thought', {
 app.use(cors())
 app.use(bodyParser.json())
 
+
+// Adding middleware for targeting server error for every request
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: 'Service unavailable'})
+  }
+})  
+
+// My endpoints
+
+app.get('/', (req, res) => {
+  res.send(`<h2>Hello!</h2><h4>Structure for this API.</h4><ul><li>'/thoughts' shows the 20 latest thoughts in the database</li><li>POST method '/thoughts' gives the user the possibility to post their own thought. </li><li> POST method '/thoughts/:id/like' adds a like to that specific thought.</li></ul>`)
+})
+
 // Get 20 of the latest thoughts in descending order starting from the last posted one.
 
 app.get('/thoughts', async (req, res) => {
