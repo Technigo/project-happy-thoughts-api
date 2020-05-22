@@ -41,13 +41,7 @@ const Thought = mongoose.model('Thought', {
 app.use(cors())
 app.use(bodyParser.json())
 
-// Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world')
-})
-
-
-// Get 20 of the latest thoughts
+// Get 20 of the latest thoughts in descending order starting from the last posted one.
 
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
@@ -74,28 +68,16 @@ app.post('/thoughts', async (req, res) => {
 
 // POST /:thoughtId/like - add a like
 
-// app.post('/thoughts/:id/like', async (req, res) => {
-//   // const { id } = req.params.id
-//   // console.log('Post likes', id)
-//   // const thoughtLiked = await Thought.findById(id)
-//   try {
-//   const likedThought = await Thought.findOneAndUpdate(
-//     { _id: req.params.id },
-//     { $inc: { hearts: 1 } })
-//     console.log(likedThought)
-//   } catch {
-//     res.status(404).json({message: `Cannot update likes for this thought ${thoughtLiked}`})
-//    }
-//   } http://localhost:8080/thoughts/:id/like
-// )
-
-
 app.post('/thoughts/:id/like', async (req, res) => {
-  const { id } = req.params;
-  console.log(`POST /thoughts/${id}/like`);
-  await Thought.updateOne({ _id: id }, { $inc: { hearts: 1 } });
-  res.status(201).json();
-});
+  const { id } = req.params
+  console.log(`POST /thoughts/${id}/like`)
+  try {
+    await Thought.updateOne({ _id: id }, { $inc: { hearts: 1 } })
+    res.status(201).json()
+  } catch {
+    res.status(404).json({message: 'Could not update likes to an undefined thougt.'})
+  }
+})
 
 // Start the server
 app.listen(port, () => {
