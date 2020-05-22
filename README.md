@@ -4,8 +4,13 @@ This week I've build my own API which includes both GET request endpoints to ret
 
 ## The problem
 
-
+I wasn't sure how to send an error message when the id of a happy thought that has been liked doesn't match an existing id. This was solved by using `try {} catch (err) {}`. 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://jihyeon-happy-thoughts-api.herokuapp.com/
+/GET : prints out all the happy thoughts
+
+You can try posting a happy thought to my API at :
+https://trusting-shannon-7747f8.netlify.app/
+
