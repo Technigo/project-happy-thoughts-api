@@ -33,7 +33,7 @@ const Thought = mongoose.model('Thought', {
   },
   createdAt: {
     type: Date,
-    default: Date.now()
+    default: () => new Date()
   }
 })
 
