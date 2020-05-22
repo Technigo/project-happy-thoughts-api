@@ -30,7 +30,7 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Welcome to Happy Thoughts API by Jihyun')
 })
 
 app.get('/GET', async (req, res) => {
@@ -57,8 +57,14 @@ app.post('/POST', async (req, res) => {
 app.post('/POST/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
   console.log(`POST /POST/${thoughtId}/like`)
-  await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
-  res.status(201).json()
+  try {
+    await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
+    res.status(201).json()
+  } catch (err) {
+    res.status(400).json({ message: 'Could not find the Happy Thought' })
+  }
+
+
 })
 // Start the server
 app.listen(port, () => {
