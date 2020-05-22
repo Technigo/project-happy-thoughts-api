@@ -62,7 +62,7 @@ app.get('/', (req, res) => {
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
   if(thoughts){
-  res.json(thoughts)
+  res.status(201).json(thoughts)
   } else {
     res.status(404).json({message: ERR_NO_THOUGHTS})
   }
