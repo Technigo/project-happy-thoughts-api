@@ -1,13 +1,12 @@
 # Project Happy Thoughts API
-
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Project for Technigo emote Bootcamp, creating a database for the "Happy Thoughts" project.
 
 ## The problem
-
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Creating a database ssing Express and Mongo DB, and seting up endpoints with Mongoose and restful APIs.
 
 ## View it live
+The databse:
+https://happy-thoughts-week19.herokuapp.com/thoughts
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+And the Front end Happy Thoughts:
+https://compassionate-hamilton-850c95.netlify.app/
