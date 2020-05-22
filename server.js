@@ -72,7 +72,7 @@ app.post('/thoughts', async (req, res) => {
 
 app.post('/thoughts/:id/like', async (req, res)=> {
   const { id } = req.params
-  const errMessage = 'could not found ${_id}'
+  const errMessage = 'could not found ${id}'
   
   try {
   
