@@ -16,7 +16,7 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-app.get('/thoughts', async (req, res) => {
+app.get('/', async (req, res) => {
   const hearts = req.query.hearts
   let myFilter = []
 
@@ -37,7 +37,7 @@ app.get('/thoughts', async (req, res) => {
   }
 })
 
-app.post('/thoughts', async (req, res) => {
+app.post('/', async (req, res) => {
   try {
     await new Thought({ message: req.body.message, name: req.body.name, createdAt: new Date().toISOString()}).save()
     return res.status(200).json(req.body)
@@ -47,7 +47,7 @@ app.post('/thoughts', async (req, res) => {
   
 })
 
-app.post('/thoughts/:thoughtId/like', async (req, res) => {
+app.post('/:thoughtId/like', async (req, res) => {
   try {
     const { thoughtId } = req.params
     await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 }})
