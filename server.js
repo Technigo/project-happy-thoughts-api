@@ -53,13 +53,13 @@ app.use((req, res, next) => {
 
 // My endpoints
 
-app.get('/', (req, res) => {
-  res.send(`<h2>Hello!</h2><h4>Structure for this API.</h4><ul><li>'/thoughts' shows the 20 latest thoughts in the database</li><li>POST method '/thoughts' gives the user the possibility to post their own thought. </li><li> POST method '/thoughts/:id/like' adds a like to that specific thought.</li></ul>`)
+app.get('/desc', (req, res) => {
+  res.send(`<h2>Hello!</h2><h4>Structure for this API.</h4><ul><li>'/' shows the 20 latest thoughts in the database</li><li>POST method '/' gives the user the possibility to post their own thought. </li><li> POST method '/:thoughtId/like' adds a like to that specific thought.</li></ul>`)
 })
 
 // Get 20 of the latest thoughts in descending order starting from the last posted one.
 
-app.get('/thoughts', async (req, res) => {
+app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
   if(thoughts){
   res.status(201).json(thoughts)
@@ -70,7 +70,7 @@ app.get('/thoughts', async (req, res) => {
 
 // Post your own thought
 
-app.post('/thoughts', async (req, res) => {
+app.post('/', async (req, res) => {
   const { message } = req.body
   const thought = new Thought({message})
   try {
@@ -84,11 +84,11 @@ app.post('/thoughts', async (req, res) => {
 
 // POST /:thoughtId/like - add a like
 
-app.post('/thoughts/:id/like', async (req, res) => {
-  const { id } = req.params
-  console.log(`POST /thoughts/${id}/like`)
+app.post('/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
+  console.log(`POST //${thoughtId}/like`)
   try {
-    await Thought.updateOne({ _id: id }, { $inc: { hearts: 1 } })
+    await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
     res.status(201).json()
   } catch {
     res.status(404).json({message: 'Could not update likes to an undefined thougt.'})
