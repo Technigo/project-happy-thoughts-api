@@ -61,7 +61,7 @@ app.post("/thoughts", async (req, res) => {
 
   try {
     // Success-case, send good status code to the client
-    const savedThought = await thought.save({ message });
+    const savedThought = await thought.save();
     res.status(200).json(savedThought);
   } catch (err) {
     // Bad-req, send bad status code to the client
