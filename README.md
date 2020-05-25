@@ -1,13 +1,20 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+Creating my own API using Express, Mongodb and connect it with previous project Happy Thoughts. Using HTTP request GET, POST or PUT depending on Happy Thought project source code.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## The problem / Solution
 
-## The problem
+Looking at the previous project Happy Thoughts and look which endpoints and HTTP requests I used in order to make as litte change as possible to that project.
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+## Build with 
+
+* Javascript
+* Node.js
+* Express
+* Mongodb
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+[Frontend](https://relaxed-shockley-ec05e0.netlify.app/)
+
+[Backend](https://plunta-happy-thought-api.herokuapp.com/)
