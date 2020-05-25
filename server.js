@@ -11,7 +11,7 @@ const Thought = mongoose.model('Thought', {
   message: {
     type: String,
     required: true,
-    minlength: 2,
+    minlength: 5,
     maxlength: 140,
   },
   hearts: {
@@ -41,7 +41,7 @@ app.get('/', (req, res) => {
 });
 
 // Get the thoughts from database
-app.get('/thoughts', async (req, res) => {
+app.get('/', async (req, res) => {
   try {
     const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20);
     res.json(thoughts);
@@ -54,7 +54,7 @@ app.get('/thoughts', async (req, res) => {
 });
 
 // Add new thoughts to the database
-app.post('/thoughts', async (req, res) => {
+app.post('/', async (req, res) => {
   const thought = new Thought({ message: req.body.message }); // stops user from manipulating likes
   try {
     //Sucess
@@ -69,7 +69,7 @@ app.post('/thoughts', async (req, res) => {
 });
 
 // Add likes to an existing thought
-app.post('/thoughts/:thoughtId/like', async (req, res) => {
+app.post('/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params;
   try {
     const likedThought = await Thought.updateOne(
