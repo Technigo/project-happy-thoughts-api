@@ -17,8 +17,7 @@ const Thought = mongoose.model('Thought', {
   },
   hearts: {
     type: Number,
-    default: 0,
-    required: true
+    default: 0
   },
   createdAt: {
     type: Date,
@@ -37,16 +36,12 @@ app.use(cors())
 app.use(bodyParser.json())
 
 // Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world')
-})
-
-app.get('/thoughts', async (req, res) => {
+app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
   res.json(thoughts)
 })
 
-app.post('/thoughts', async (req, res) => {
+app.post('/', async (req, res) => {
   // retrive info sent by client
   const { message } = req.body;
   // use mongoose model to create the database entry
@@ -61,7 +56,7 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-app.post('/thoughts/:id/like', async (req, res) => {
+app.post('/:thoughtId/like', async (req, res) => {
   try {
     const savedLike = await Thought.updateOne(
       { _id: req.params.id }, { $inc: { hearts: 1 } }
