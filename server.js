@@ -26,16 +26,12 @@ const listEndpoints = require('express-list-endpoints')
 app.use(cors())
 app.use(bodyParser.json())
 
-app.get('/', (req, res) => {
-  res.send(listEndpoints(app))
-})
-
-app.get('/thoughts', async (req, res) => {
+app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
   res.json(thoughts)
 })
 
-app.post('/thoughts', async (req, res) => {
+app.post('/', async (req, res) => {
   const { message } = req.body
   const thought = new Thought({ message })
 
