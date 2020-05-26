@@ -29,11 +29,9 @@ app.use((req, res, next)=>{
 })
 
 // Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world')
-})
 
-app.get('/thoughts', async (req, res)=>{
+// getting all messages
+app.get('/', async (req, res)=>{
   try {
     const thoughts = await Thought.find().sort({createdAt:'desc'}).limit(20)
     res.json(thoughts)
@@ -42,8 +40,8 @@ app.get('/thoughts', async (req, res)=>{
     res.status(404).json({error:"cannot find thoughts"})
   }
 })
-
-app.post('/thoughts', async (req, res)=>{
+// creating a new message
+app.post('/', async (req, res)=>{
   
   try {
     const {message} = req.body
@@ -56,7 +54,8 @@ app.post('/thoughts', async (req, res)=>{
   }
 })
 
-app.post('/thoughts/:thoughtId/like', async(req, res)=>{
+// liking a thought
+app.post('/:thoughtId/like', async(req, res)=>{
   const {thoughtId} = req.params
   try {
     const thought = await Thought.findByIdAndUpdate(thoughtId, {$inc:{hearts: 1}},{new:true})
@@ -72,7 +71,8 @@ app.post('/thoughts/:thoughtId/like', async(req, res)=>{
   }
 })
 
-app.delete('/thoughts/delete/:id', async (req, res) => {
+// deleting a thought
+app.delete('/:id', async (req, res) => {
  const {id} = req.params
  try {
   await Thought.findOneAndDelete({ _id: id })
@@ -83,6 +83,7 @@ app.delete('/thoughts/delete/:id', async (req, res) => {
   }
 
 })
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
