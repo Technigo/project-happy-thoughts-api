@@ -24,41 +24,15 @@ const Thought = mongoose.model('Thought', {
   }
 })
 
-// if (process.env.RESET_DATABASE) {
-//   console.log('Resetting database')
-
-//   const deleteDatabase = async () => {
-//     await Thought.deleteMany()
-//     console.log(`Deleting database`)
-//   };
-//   deleteDatabase()
-// }
-
 const port = process.env.PORT || 8080
 const app = express()
 
 app.use(cors())
 app.use(bodyParser.json())
 
-
-// message, heart, createdAt
-// get/ 20 thoughts sorted by created at
-//### `POST /`
-
-// This endpoint expects a JSON body with the thought `message`, like this: `{ "message": "Express is great!" }` . If the input is valid (more on that below), the thought should be saved, and the response should include the saved thought object, including its `_id`.
-
-// ### `POST /:thoughtId/like`
-
-// This endpoint doesn't require a JSON body. Given a valid thought id in the url, the API should find that thought, and update its `hearts` property to add one heart.
-
 app.get('/', (req, res) => {
   res.send('Hello world')
 })
-
-// app.post('/thoughts', (req, res) => {
-//   const thought = new Thought(req.body)
-//   await note.save
-// })
 
 app.get('/thoughts', async (req, res) => {
   try {
@@ -69,7 +43,6 @@ app.get('/thoughts', async (req, res) => {
     res.status(404).json({ error: "Can not find thoughts" })
   }
 })
-
 
 app.post('/thoughts', async (req, res) => {
   try {
@@ -83,7 +56,7 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-app.post('/:thoughtId/like', async (req, res) => {
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
 
   try {
