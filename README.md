@@ -1,13 +1,16 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+API built in Node using Express. MongoDB and Mongoose is used to store the data. The backend is connected to a frontend of a previous project where data is listed and created by using GET and POST request methods.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
-
-## The problem
-
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+## Tech
+Backend Tech
+Node.js
+Express
+MongoDB
+Mongoose
+JavaScript ES6
 
 ## View it live
-
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+API: https://emmas-happy-thoughts.herokuapp.com/
+Frontend: https://happy-thoughts-emma.netlify.com/
+Frontend repo: https://github.com/emmapre/project-happy-thoughts/
