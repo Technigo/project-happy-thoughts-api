@@ -37,11 +37,13 @@ app.use(bodyParser.json())
  //Start defining your routes here
   app.get('/', (req, res) => {
   res.send('Hello world')
-})
+});
+
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
   res.json(thoughts);
-})
+});
+
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body;
   const thought = new Thought({ message });
@@ -50,18 +52,19 @@ app.post('/thoughts', async (req, res) => {
     res.status(201).json(savedThought);
   } catch(err){
     res.status(400).json({ message:'Could not save thought', error:err.errors });
-  }
-})
+  };
+});
+
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
   try {
   await Thought.updateOne({ '_id': thoughtId },
   { '$inc': { 'heart':1 } })
- res.status(201).json()
-} catch {
-  res.status(400).json({ message:'Could not find thought', error:err.errors });
-}
-})
+  res.status(201).json()
+  } catch {
+    res.status(400).json({ message:'Could not find thought', error:err.errors });
+  };
+});
 
 // Start the server
 app.listen(port, () => {
