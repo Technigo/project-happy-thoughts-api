@@ -54,9 +54,13 @@ app.post('/thoughts', async (req, res) => {
 })
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
+  try {
   await Thought.updateOne({ '_id': thoughtId },
   { '$inc': { 'heart':1 } })
  res.status(201).json()
+} catch {
+  res.status(400).json({ message:'Could not find thought', error:err.errors });
+}
 })
 
 // Start the server
