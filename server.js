@@ -30,15 +30,16 @@ const Thought = mongoose.model("Thought", {
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 120
+    maxlength: 140
   },
   hearts: {
     type: Number,
-    /*  default: 0  - better here or below?*/
+    require: true
   },
+
   createdAt: {
     type: Date,
-    default: () => new Date() // or default: Date.now??
+    default: () => new Date()
   },
   tag: {
     type: String
@@ -48,28 +49,29 @@ const Thought = mongoose.model("Thought", {
 // Start defining your routes here
 app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20)
-  res.json(thoughts)
+
+  const { tag } = req.query
+  if (tag) {
+    const filteredThoughts = await Thought.find({ tag })
+    res.json(filteredThoughts)
+  } else {
+    res.json(thoughts)
+  }
 })
 
-/* app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20).exec() WHY .exec()??
-  res.json(thoughts)
-}) */
-
 app.post("/", async (req, res) => {
-  //get the info from api
-  //const { message } = req.body <- why not, used in other code along?
-  // create database entry
+  const { message, tag } = req.body
   const thought = new Thought({
-    message: req.body.message,
+    message,
     hearts: 0,
-    tag: req.body.tag
+    tag
   })
+
   try {
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
   } catch (err) {
-    res.status(400).json({ message: "Sorry cant save task to Database", error: err.errors })
+    res.status(400).json({ message: "Sorry cant save that to Database", error: err.errors })
   }
 })
 
