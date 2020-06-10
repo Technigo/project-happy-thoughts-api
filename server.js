@@ -23,7 +23,6 @@ app.use(cors())
 app.use(bodyParser.json())
 
 // THoughts model
-
 const Thought = mongoose.model("Thought", {
 
   message: {
