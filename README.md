@@ -11,4 +11,4 @@ Javascript
 
 ## View it live
 
-https://practical-torvalds-64a6e7.netlify.app/
+https://trusting-leakey-6f3d85.netlify.app/
