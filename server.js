@@ -14,7 +14,7 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 140
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -33,6 +33,14 @@ const app = express()
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(bodyParser.json())
+
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: 'Service unavailable' })
+  }
+})
 
  //Start defining your routes here
   app.get('/', (req, res) => {
@@ -55,11 +63,11 @@ app.post('/thoughts', async (req, res) => {
   };
 });
 
-app.post('/thoughts/:thoughtId/like', async (req, res) => {
-  const { thoughtId } = req.params
+app.post('/thoughts/:id/like', async (req, res) => {
+  const { id } = req.params
   try {
-  await Thought.updateOne({ '_id': thoughtId },
-  { '$inc': { 'heart':1 } })
+  await Thought.updateOne({ '_id': id },
+  { '$inc': { 'hearts':1 } })
   res.status(201).json()
   } catch {
     res.status(400).json({ message:'Could not find thought', error:err.errors });
