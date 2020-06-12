@@ -35,18 +35,15 @@ if (process.env.RESET_DATABASE) {
 }
 
 // ROUTES
-app.get('/', (req, res) => {
-  res.send('Hello world')
-})
 
 // Get 20 thoughts in descending order from when they were created
-app.get('/thoughts', async (req, res) => {
+app.get('/', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
   res.json(thoughts)
 })
 
 // Find a thought
-app.get('/thoughts/:id', async (req, res) => {
+app.get('/:id', async (req, res) => {
   const { id } = req.params
   const thought = await Thought.findById(id)
   if (thought) {
@@ -57,7 +54,7 @@ app.get('/thoughts/:id', async (req, res) => {
 })
 
 // Add a thought
-app.post('/thoughts', async (req, res) => {
+app.post('/', async (req, res) => {
   // Retrieve the information sent by the client to the API endpoint
   const { message, createdBy, tag } = req.body
 
