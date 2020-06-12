@@ -4,7 +4,11 @@ An API used for fetching and posting data with MongoDB. Similar to Twitter, the 
 
 ## View it live
 
+API
 https://rautellin-happy-thoughts-api.herokuapp.com/
+
+Frontend
+https://rautellin-happy-thoughts.netlify.app/
 
 ## What I learned 🧠
 
