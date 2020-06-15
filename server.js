@@ -33,7 +33,7 @@ app.use(bodyParser.json())
 
 
 app.get('/', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20)
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
 
   if (thoughts.length > 0) {
     res.json(thoughts)
@@ -68,7 +68,7 @@ app.post('/:thoughtId/like', async (req, res) => {
     res.status(201).json(thought)
   }
   else {
-    res.status(400).json({ message: `${thoughtId} does not exist `})
+    res.status(400).json({ message: `${thoughtId} does not exist ` })
   }
 })
 // Start the server
