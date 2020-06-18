@@ -1,13 +1,17 @@
-# Project Happy Thoughts API
+# Happy Thoughts API
 
-Replace this readme with your own information about your project.
+Backend to the Happy Thoughts App using Node and Express.
+Messages and likes stored with mongoDB and mongoose. 
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## Core Tech
+* Node.js
+* Express.js
+* MongoDB
+* Mongoose
+* RESTful API
 
-## The problem
-
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
-
-## View it live
-
+## Backend link
 https://olle-happy-thoughts.herokuapp.com/
+
+## Frontend repo
+https://github.com/ollealm/project-happy-thoughts-frontend
