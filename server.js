@@ -7,22 +7,20 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-// Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
+const listEndpoints = require('express-list-endpoints')
 
-// Add middlewares to enable cors and json body parsing
-app.use(cors());
-app.use(bodyParser.json());
+app.use(cors())
+app.use(bodyParser.json())
+
 
 const thoughts = mongoose.model('thoughts', { 
   message: {
         type: String,
         required: true,
         minlenght: [2, "At least 2 characters"],
+        maxlength: [40, "Maximum length, 140 characters"]
     },
   hearts: {
        type: Number,
@@ -32,52 +30,50 @@ const thoughts = mongoose.model('thoughts', {
         type: Date,
         default: Date.now
     }
-  });
-  // Start defining your routes here;
+  })
+//Start defining your routes here
+  app.get('/', (req, res) => {
+    res.send(listEndpoints(app))
+  })
 
-  app.get("/", async (req, res) => {
-    const resPerPage = 20; // results per page
-    const { page } = req.query || 1; // Page
-    Thought.find((err, thoughts) => {
-      if (err) {
-        console.log(err);
-        res.status(404).json({ error: "Not found" });
-      } else {
-        res.json(thoughts);
-      }
-    })
-      .skip(resPerPage * page - resPerPage)
+//Getting the endpoints
+  app.get("/thoughts", async (req, res) => {
+    
+    const { page } = req.query  
+    const resPerPage = 20
+    const pageNumber = +page || 1
+    const skip = perPage * (pageNumber - 1)
+
+    const allThoughts = await Thought.find() 
+    const pages = Math.ceil(allThoughts.length/perPage)
+   
+    const thougths = await thought.find()
       .sort({ createdAt: "desc" })
-      .limit(resPerPage);
-  });
-  
-  app.post("/", async (req, res) => {
+      .limit(resPerPage)
+      .skip(skip)
+   })
+  //Posting the thoughts
+  app.post("/thoughts", async (req, res) => {
+    const { message } = req.body
+    const thought = new Thought({ message })
     try {
-      const thought = new Thought({ message: req.body.message });
-      await thought.save();
-      res.json(thought);
+      const saveThought = await thought.save()
+      res.status(201).json(saveThought)
     } catch (err) {
-      res
-        .status(400)
-        .json({ errors: err.errors, message: "Unable to add new thought" });
+      res.status(400).json({ errors: err.errors, message: "Unable to add new thought" })
     }
-  });
+  })
   
   app.post("/:thoughtId/like", async (req, res) => {
-    const { thoughtId } = req.params;
+    const { thoughtId } = req.params
   
     try {
-      const like = await Thought.findById(thoughtId);
-      like.hearts += 1;
-      like.save();
-      res.status(201).json(like);
+    await Thought.updateOne({ _id: thoughtId }, { $inc: {hearts: 1} })
+      res.status(201).json(like)
     } catch (err) {
-      res.status(400).json({
-        message: "unable to add like, no thought available",
-        errors: err.errors
-      });
+      res.status(400).json({message: "unable to add like, no thought available", error: err.errors})
     }
-  });
+  })
 
 // Start the server
 app.listen(port, () => {
