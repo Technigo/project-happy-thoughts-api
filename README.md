@@ -2,7 +2,7 @@
 Project for Technigo emote Bootcamp, creating a database for the "Happy Thoughts" project.
 
 ## The problem
-Creating a database ssing Express and Mongo DB, and seting up endpoints with Mongoose and restful APIs.
+Creating a database using Express and Mongo DB, and seting up endpoints with Mongoose and restful APIs.
 
 ## View it live
 The databse:
