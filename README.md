@@ -9,4 +9,4 @@ The databse:
 https://happy-thoughts-week19.herokuapp.com/thoughts
 
 And the Front end Happy Thoughts:
-https://compassionate-hamilton-850c95.netlify.app/
+https://happy-thoughts-project-2020.netlify.app
