@@ -5,6 +5,7 @@
   "scripts": {
     "start": "babel-node server.js",
     "dev": "nodemon server.js --exec babel-node"
+    "lint": "node ./node_modules/eslint/bin/eslint --ignore-path .gitignore ."
   },
   "author": "",
   "license": "ISC",
