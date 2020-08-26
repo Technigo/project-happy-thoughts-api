@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const Thought = mongoose.model('Thought', {
+const Thought = mongoose.model("Thought", {
   name: {
     type: String,
     default: null,
@@ -24,8 +24,8 @@ const Thought = mongoose.model('Thought', {
   },
   createdAt: {
     type: Date,
-    default: Date.now
-  }
-})
+    default: Date.now,
+  },
+});
 
-export default Thought
+export default Thought;
