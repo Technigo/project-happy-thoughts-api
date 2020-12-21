@@ -2,8 +2,13 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
+/*ENVIRONMENT VARIABLES*/
+require("dotenv").config();
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
+const mongoUrl =
+	process.env.MONGO_URL ||
+	`mongodb+srv://${process.env.DB_USER}:${process.env.DB_KEY}@cluster0.qxpka.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -56,7 +61,7 @@ app.post("/thoughts", async (req, res) => {
 });
 
 //Like a thought
-app.post("/thoughts/:thoughtid", async (req, res) => {
+app.post("/thoughts/:thoughtid/like", async (req, res) => {
 	try {
 		const thoughtId = req.params.thoughtid;
 		const thought = await Thought.findOneAndUpdate(
