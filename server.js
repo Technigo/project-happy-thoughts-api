@@ -60,14 +60,17 @@ app.post("/thoughts", async (req, res) => {
 	}
 });
 
-//Like a thought
+//Like a thought. added new= true in order for mongoose to return the updated document, not the original which is default.
 app.post("/thoughts/:thoughtid/like", async (req, res) => {
 	try {
 		const thoughtId = req.params.thoughtid;
 		const thought = await Thought.findOneAndUpdate(
 			{ _id: thoughtId },
-			{ $inc: { hearts: 1 } }
+			{ $inc: { hearts: 1 } },
+			{ new: true }
 		);
+		console.log(thought);
+
 		res.status(200).json(thought);
 	} catch (err) {
 		res
