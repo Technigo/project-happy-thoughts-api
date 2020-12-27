@@ -27,7 +27,7 @@ const Thought = mongoose.model('Thought', {
     type: String,
     required: true,
     minlength: 5,
-    maxlenght: 140
+    maxlength: 140
   },
   hearts: {
     type: Number,
@@ -35,7 +35,7 @@ const Thought = mongoose.model('Thought', {
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now()
   }
 });
 
@@ -60,31 +60,40 @@ app.get('/', (req, res) => {
 // 3 endpoints required 
 
 // GET /thoughts
-app.get('/thoughts', (req, res) => {
-  /****
-  - Maximum of 20 results limit(20)
-  - Sorted by createdAt sort({ createdAt: 'desc' })
-  - exec()
-  - find method
-  ****/
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20).exec()
+  //'desc' instead of -1
+  if (thoughts) {
+    res.status(200).send({ results: thoughts})
+  } else {
+    res.status(400).send({ error: "Bad request", error: err.errors })
+  }
 })
 
-
 // POST /thoughts
-app.post('/thoughts', (req, res) => {
-  /****
-  - Async / await 
-  - req.body 
-  - try (success) / catch (error)
-  ****/
+app.post('/thoughts', async (req, res) => {
+  try {
+    //success
+    const thought = await new Thought({ message: req.body.message }).save()
+    res.status(201).send(thought)
+  } catch (err) {
+    //bad request
+    res.status(400).send({ message: "Could not save thought", errors: err.errors })
+  }
 })
 
 // POST thoughts/:thoughtId/like
-app.post('/thoughts/:_id/like', (req, res) => {
+app.post('/thoughts/:id/like', async (req, res) => {
+  const { id } = req.params
+  try {
+    await Thought.updateOne({ _id: id }, { $inc: { hearts: 1 }})
+    res.status(201).send()
+  } catch (err) {
+    res.status(400).send({ message: `${id} was not found` })
+  }
+  
   /****
-  - use params for _id 
   - findOneAndUpdate https://mongoosejs.com/docs/api.html#model_Model.findOneAndUpdate 
-  - $inc https://docs.mongodb.com/manual/reference/operator/update/inc/
   - try (success) / catch (error)
   ****/
 })
