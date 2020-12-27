@@ -49,7 +49,7 @@ app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20).exec()
   //'desc' instead of -1
   if (thoughts) {
-    res.status(200).send({thoughts})
+    res.status(200).send(thoughts)
   } else {
     res.status(400).send({ error: "Bad request", error: err.errors })
   }
