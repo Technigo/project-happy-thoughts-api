@@ -7,21 +7,6 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-//____________Create model
-
-// INCLUDES: Message, Hearts, CreatedAt
-
-// required fields for message: 
-//→ Required
-//→ Min length of 5 characters
-// → Max length of 140 characters
-
-// required fields for hearts: 
-//→ Defaults to 0  ----> default: 0 
-
-// required fields for createdAt:
-//→ Defaults to the current time ----> default: Date.now
-
 const Thought = mongoose.model('Thought', {
   message: {
     type: String,
@@ -64,7 +49,7 @@ app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20).exec()
   //'desc' instead of -1
   if (thoughts) {
-    res.status(200).send({ results: thoughts})
+    res.status(200).send({thoughts})
   } else {
     res.status(400).send({ error: "Bad request", error: err.errors })
   }
