@@ -97,7 +97,7 @@ app.get('/thoughts', async (req, res) => {
 
 // POST /thoughts endpoint
 app.post('/thoughts', async (req, res) => {
-  const { name, message } = req.body;
+  const { message, name } = req.body;
   try {
     //success
     const thought = await new Thought({ message, name }).save();
@@ -108,7 +108,7 @@ app.post('/thoughts', async (req, res) => {
   }
 });
 
-// POST thoughts/:thoughtId/like endpoint
+// POST thoughts/:id/like endpoint
 app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params;
   try {
