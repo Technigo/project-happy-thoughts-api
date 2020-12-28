@@ -74,7 +74,7 @@ app.get('/', (req, res) => {
 
 //____________List all thoughts
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20).save()
+  const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20).exec()
   //'desc' instead of -1
   if (thoughts) {
     res.status(200).send(thoughts)
