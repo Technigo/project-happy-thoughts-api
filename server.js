@@ -30,10 +30,8 @@ const Thought = mongoose.model('Thought', {
 
 /*
 ATT GÖRA
-- Red level - name 
 - infinate scroll instad of limit 20. (black)
 - filter and sorting (black)
-- create error messages as variables 
 */
 
 
@@ -51,8 +49,8 @@ app.use(bodyParser.json())
 //_____________Different error messages
 const SERVICE_UNAVAILABLE = "service unavailable"
 const BAD_REQUEST = "Bad request"
-const SAVE_POST_FAILED = "Could not save thought"
-
+const POST_THOUGHT_FAILED = "Could not save thought"
+const ID_NOT_FOUND = "Thought ID was not found"
 
 const listEndpoints = require('express-list-endpoints')
 
@@ -74,9 +72,27 @@ app.get('/', (req, res) => {
 
 //____________List all thoughts
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20).exec()
-  //'desc' instead of -1
-  if (thoughts) {
+  const { sort } = req.query
+  //most likes, oldest, newest 
+
+  const sortThoughts = (sort) => {
+    if (sort === "likes") {
+      return { hearts: -1 }  
+    }
+    else if (sort === "oldest") {
+      return { createdAt: 1 }
+    }
+    else {
+     return { createdAt: - 1 }
+    }
+  } 
+
+  const thoughts = await Thought.find()
+    .sort(sortThoughts(sort))
+    .limit(20)
+    .exec()
+
+    if (thoughts) {
     res.status(200).send(thoughts)
   } else {
     res.status(400).send({ error: BAD_REQUEST, error: err.errors })
@@ -92,7 +108,7 @@ app.post('/thoughts', async (req, res) => {
     res.status(201).send(thought)
   } catch (err) {
     //bad request
-    res.status(400).send({ message: SAVE_POST_FAILED, errors: err.errors })
+    res.status(400).send({ message: POST_THOUGHT_FAILED, errors: err.errors })
   }
 })
 
@@ -103,7 +119,7 @@ app.post('/thoughts/:id/like', async (req, res) => {
     await Thought.updateOne({ _id: id }, { $inc: { hearts: 1 }})
     res.status(201).send()
   } catch (err) {
-    res.status(400).send({ message: `${id} was not found` })
+    res.status(400).send({ message: ID_NOT_FOUND })
   }
 })
 
