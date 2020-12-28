@@ -85,9 +85,10 @@ app.get('/thoughts', async (req, res) => {
 
 //____________Post a thought
 app.post('/thoughts', async (req, res) => {
+  const { name, message } = req.body
   try {
     //success
-    const thought = await new Thought({ message: req.body.message }).save()
+    const thought = await new Thought({ message: message, name: name}).save()
     res.status(201).send(thought)
   } catch (err) {
     //bad request
