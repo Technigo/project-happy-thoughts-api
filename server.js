@@ -18,6 +18,10 @@ const Thought = mongoose.model('Thought', {
     type: Number,
     default: 0,
   },
+  name: {
+    type: String,
+    default: 'Anonymous',
+  },
   createdAt: {
     type: Date,
     default: () => new Date(),
@@ -31,59 +35,88 @@ const Thought = mongoose.model('Thought', {
 const port = process.env.PORT || 8080;
 const app = express();
 
-//____________Add middlewares to enable cors and json body parsing
+// Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(bodyParser.json());
 
-//____________Defining routes
-app.get('/', (req, res) => {
-  res.send('Hello world');
+// Error variables
+const SERVICE_UNAVAILABLE = 'Service unavailable';
+const BAD_REQUEST = 'Bad request';
+const POST_FAILED = 'Could not post thought';
+const NOT_FOUND = 'Thought was not found';
+
+const listEndpoints = require('express-list-endpoints');
+
+// Error message if database connection is down
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next();
+  } else {
+    res.status(503).send({ error: SERVICE_UNAVAILABLE });
+  }
 });
 
-// 3 endpoints required
+// / endpoint (root)
+// RETURNS: A list of all endpoints as an array
+//
+app.get('/', (req, res) => {
+  res.send(listEndpoints(app));
+});
 
-// GET /thoughts
+// GET /thoughts endpoint
+// RETURNS: A collection of all thoughts from MongoDB as an array
+//
+// PARAMETERS:
+// - sort: a string
+//    usage: /eruptions?sort=hearts
 app.get('/thoughts', async (req, res) => {
+  const { sort } = req.query;
+
+  // Sort thoughts on query, newest by default
+  const sortThoughts = sort => {
+    if (sort === 'hearts') {
+      return { hearts: -1 };
+    } else if (sort === 'oldest') {
+      return { createdAt: 1 };
+    } else {
+      return { createdAt: -1 };
+    }
+  };
+
   const thoughts = await Thought.find()
-    .sort({ createdAt: -1 })
+    .sort(sortThoughts(sort))
     .limit(20)
     .exec();
-  //'desc' instead of -1
+
   if (thoughts) {
     res.status(200).send(thoughts);
   } else {
-    res.status(400).send({ error: 'Bad request', error: err.errors });
+    res.status(400).send({ error: BAD_REQUEST, error: err.errors });
   }
 });
 
-// POST /thoughts
+// POST /thoughts endpoint
 app.post('/thoughts', async (req, res) => {
+  const { name, message } = req.body;
   try {
     //success
-    const thought = await new Thought({ message: req.body.message }).save();
+    const thought = await new Thought({ message, name }).save();
     res.status(201).send(thought);
   } catch (err) {
     //bad request
-    res
-      .status(400)
-      .send({ message: 'Could not save thought', errors: err.errors });
+    res.status(400).send({ message: POST_FAILED, errors: err.errors });
   }
 });
 
-// POST thoughts/:thoughtId/like
+// POST thoughts/:thoughtId/like endpoint
 app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params;
   try {
     await Thought.updateOne({ _id: id }, { $inc: { hearts: 1 } });
     res.status(201).send();
   } catch (err) {
-    res.status(400).send({ message: `${id} was not found` });
+    res.status(400).send({ message: NOT_FOUND });
   }
-
-  /****
-  - findOneAndUpdate https://mongoosejs.com/docs/api.html#model_Model.findOneAndUpdate 
-  - try (success) / catch (error)
-  ****/
 });
 
 //____________Start the server
