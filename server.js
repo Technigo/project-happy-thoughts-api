@@ -18,11 +18,23 @@ const Thought = mongoose.model('Thought', {
     type: Number,
     default: 0
   },
+  name: {
+    type: String,
+    default: "Anonymous"
+  },
   createdAt: {
     type: Date,
     default: () => new Date()
   }
-});
+})
+
+/*
+ATT GÖRA
+- Red level - name 
+- infinate scroll instad of limit 20. (black)
+- filter and sorting (black)
+- create error messages as variables 
+*/
 
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
@@ -36,26 +48,42 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
+//_____________Different error messages
+const SERVICE_UNAVAILABLE = "service unavailable"
+const BAD_REQUEST = "Bad request"
+const SAVE_POST_FAILED = "Could not save thought"
+
+
+const listEndpoints = require('express-list-endpoints')
+
+//_____________Error message in case server is down
+app.use((req, res, next) => {
+  if(mongoose.connection.readyState === 1) {
+    next();
+  } else {
+    res
+    .status(503)
+    .send({ error: SERVICE_UNAVAILABLE});
+  };
+});
 
 //____________Defining routes
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send(listEndpoints(app))
 })
 
-// 3 endpoints required 
-
-// GET /thoughts
+//____________List all thoughts
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20).exec()
+  const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20).save()
   //'desc' instead of -1
   if (thoughts) {
     res.status(200).send(thoughts)
   } else {
-    res.status(400).send({ error: "Bad request", error: err.errors })
+    res.status(400).send({ error: BAD_REQUEST, error: err.errors })
   }
 })
 
-// POST /thoughts
+//____________Post a thought
 app.post('/thoughts', async (req, res) => {
   try {
     //success
@@ -63,11 +91,11 @@ app.post('/thoughts', async (req, res) => {
     res.status(201).send(thought)
   } catch (err) {
     //bad request
-    res.status(400).send({ message: "Could not save thought", errors: err.errors })
+    res.status(400).send({ message: SAVE_POST_FAILED, errors: err.errors })
   }
 })
 
-// POST thoughts/:thoughtId/like
+//____________Like a thought
 app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params
   try {
@@ -76,13 +104,7 @@ app.post('/thoughts/:id/like', async (req, res) => {
   } catch (err) {
     res.status(400).send({ message: `${id} was not found` })
   }
-  
-  /****
-  - findOneAndUpdate https://mongoosejs.com/docs/api.html#model_Model.findOneAndUpdate 
-  - try (success) / catch (error)
-  ****/
 })
-
 
 //____________Start the server
 app.listen(port, () => {
