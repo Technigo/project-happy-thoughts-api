@@ -2,7 +2,9 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
-import { restart } from 'nodemon'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -43,8 +45,8 @@ app.get('/thoughts', async (req, res) => {
 })
 
 app.post('/thoughts', async (req, res) => {
-  const {message, hearts} = req.body
-  const thoughts = new Thought({message, hearts})
+  const {message} = req.body
+  const thoughts = new Thought({message})
 
   try {
     const saveThought = await thoughts.save()
@@ -52,6 +54,19 @@ app.post('/thoughts', async (req, res) => {
   } catch (err) {
     res.status(400).json({message: 'could not save task to db', error:err.errors})
   }
+})
+
+app.post('/thoughts/:id/like', async (req, res) => {
+  const { id } = req.params
+  const findThought = await Thought.findOne({_id: id})
+
+  if (findThought) {
+    await Thought.updateOne({_id: id}, {$inc : {hearts: 1}})
+    res.status(201).json({message: `added like to ${id}`})
+  } else {
+    res.status(400).json({message: "can not find thought"})
+  }
+
 })
 
 // Start the server
