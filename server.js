@@ -8,11 +8,11 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
 const Thought = mongoose.model('Thought', {
-  text: {
+  message: {
     type: String,
     required: true,
-    minLength: 5,
-    maxLength: 140
+    minlength: 5,
+    maxlength: 140
   },
   createdAt: {
     type: Date,
@@ -48,9 +48,23 @@ app.get('/thoughts', async (req, res) => {
 app.post('/thoughts', async (req, res) => {
  const { message } = req.body
  const thought = new Thought({ message })
- await thought.save()
- res.json(thought)
+ 
+ try {
+  const savedThought = await thought.save()
+  res.status(201).json(savedThought)
+ } catch (err) {
+  res.status(400).json({message: 'Could not save message to the Database', error: err.errors })
+ }
 })
+
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const thoughtId = req.params.thoughtId
+  const onLike = await Thought.update(
+    {_id: thoughtId}, 
+    {
+      $inc: {hearts: 1}})
+  res.json(Thought)
+ })
 
 // Start the server
 app.listen(port, () => {
