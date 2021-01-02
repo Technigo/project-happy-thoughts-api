@@ -70,6 +70,19 @@ app.post('/thoughts', async (req, res ) => {
 })
 
 // ENDPOINT POST THOUGHTS/:thoughtId/like
+app.post('/thoughts:id/like', async (req, res) => {
+  const {thoughtId} = req.params
+
+  try {
+    await Thought.updateOne(
+      {_id: thoughtId}, 
+      { $inc: { hearts: 1}}
+    )
+    res.status(201).send()
+  } catch (err) {
+    res.status(400).json({message: 'Could not find that id'})
+  }
+})
 
 // Start the server
 app.listen(port, () => {
