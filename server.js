@@ -30,8 +30,8 @@ const Thought = mongoose.model('Thought', {
 
 /*
 ATT GÖRA
-- infinate scroll instad of limit 20. (black)
-- filter and sorting (black)
+- infinate scroll instad of limit 20. (black) 
+//https://www.npmjs.com/package/react-infinite-scroller
 */
 
 
