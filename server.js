@@ -8,10 +8,18 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
 const Thought = mongoose.model('Thought', {
-  message: String,
-  heart: Number,
+  message: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlenght: 140
+  } ,
+  heart: {
+    type: Number, 
+    default: 0
+  } ,
   createdAt: {
-    type:Date,
+    type: Date,
     default: () => new Date()
   }
 })
@@ -26,15 +34,6 @@ if (process.env.RESET_DB) {
   }
   seedDatabase()
 }
-
-//required: true
-
-//min: [5, 'Too few words'],
-//max: 140
-
-//default: 0
-
-//default: Date.now
 
 const port = process.env.PORT || 8080
 const app = express()
@@ -53,11 +52,18 @@ app.get('/thoughts', (req, res) => {
 })
 
 app.post('/thoughts', async (req, res) => {
-  const { message } = req.body 
-  const thought = new Thought({ message })
-  await thought.save()
-  res.json(thought)
+  try {
+    const { message } = req.body 
+    const thought = new Thought({ message })
+    await thought.save()
+    res.status(200).json(thought)
+    res.json(thought)
+  } catch (err) {
+  res.status(400).json({ message: 'could not post happy thought', errors:err.errors})
+}
 })
+
+//res.join(savedthought)
 
 app.post('thoughts/:thoughtId/like', (req, res) => {
 
