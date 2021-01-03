@@ -10,8 +10,22 @@ mongoose.Promise = Promise
 const Thought = mongoose.model('Thought', {
   message: String,
   heart: Number,
-  createdAt: Number,
+  createdAt: {
+    type:Date,
+    default: () => new Date()
+  }
 })
+
+if (process.env.RESET_DB) {
+  const seedDatabase = async () => {
+    await Thought.deleteMany()
+
+    booksData.forEach((item) => {
+      new Thought(item).save()
+    }) 
+  }
+  seedDatabase()
+}
 
 //required: true
 
@@ -38,8 +52,11 @@ app.get('/thoughts', (req, res) => {
   res.send('hello new')
 })
 
-app.post('/thoughts', (req, res) => {
-
+app.post('/thoughts', async (req, res) => {
+  const { message } = req.body 
+  const thought = new Thought({ message })
+  await thought.save()
+  res.json(thought)
 })
 
 app.post('thoughts/:thoughtId/like', (req, res) => {
