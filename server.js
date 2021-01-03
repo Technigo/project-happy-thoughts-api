@@ -10,9 +10,11 @@ mongoose.Promise = Promise;
 const Thought = mongoose.model("Thought", {
   message: {
     type: String,
-    required: true
+    required: true,
+    minlength: 5,
+    maxlength: 140
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
