@@ -2,8 +2,10 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import Thought from './models/thought'
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
+// DEFAULT SETUP
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts" // The name of the database when using Mongo DB Compass.
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
@@ -14,16 +16,37 @@ mongoose.Promise = Promise
 const port = process.env.PORT || 8080
 const app = express()
 
-// Add middlewares to enable cors and json body parsing
+// MIDDLEWARES (to enable cors and json body parsing)
 app.use(cors())
 app.use(bodyParser.json())
 
-// Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world')
+// RESET DATABASE
+//Note to self: in Heroku make sure to set config vars: RESET_DATABASE = true
+if (process.env.RESET_DATABASE) {
+  const seedDatabase = async () => {
+    await Thought.deleteMany()
+  }
+  seedDatabase()
+}
+
+// ROUTES (ENDPOINTS)
+// app.get('/', (req, res) => {
+//   res.send('Hello world')
+// })
+
+//GET: 20 THOUGHTS IN DESC. ORDER SORTED ON TIMESTAMP
+app.get('/', async (req, res) => {
+ const thoughts
 })
 
-// Start the server
+//POST: ADD A THOUGHT 
+
+
+//POST: LIKE A THOUGHT
+
+
+
+// START SERVER
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
 })
