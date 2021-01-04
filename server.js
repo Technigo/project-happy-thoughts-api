@@ -12,7 +12,7 @@ mongoose.Promise = Promise
 //
 //   PORT=9000 npm start
 
-const Thoughts = mongoose.model("Task", {
+const Thoughts = mongoose.model("Thoughts", {
   message: {
     type: String,
     required: true,
@@ -21,14 +21,12 @@ const Thoughts = mongoose.model("Task", {
   },
   heart: {
     type: Number,
-    default: 0
   },
   createdAt: {
     type: Date,
     default: Date.now
   }
 })
-
 
 const port = process.env.PORT || 8080
 const app = express()
@@ -41,6 +39,19 @@ app.use(bodyParser.json())
 app.get('/', (req, res) => {
   res.send('Hello world')
 })
+
+app.get('/thoughts', async (req, res) => {
+  
+  try {
+    const thoughts = await Thoughts.find().sort({createdAt: 'desc'}).limit(20).exec();
+    res.status(201).json(thoughts);
+  } catch (err) {
+    res.status(400).json({message: "could not load the database" })
+  }
+  
+})
+
+
 
 // Start the server
 app.listen(port, () => {
