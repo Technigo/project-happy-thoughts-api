@@ -11,8 +11,8 @@ const Thought = mongoose.model('Thought', {
   message: {
     type: String,
     required: [true, 'Message required]'],
-    minLength: [5, 'Too short message, minimum 5 characters'],
-    maxLength: [140, 'Too long message, maximum 140 characters']
+    minLength: [5, 'Message too short, minimum 5 characters'],
+    maxLength: [140, 'Message too long, maximum 140 characters']
   },
   createdAt: {
     type: Date,
@@ -41,7 +41,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ created: 'desc' }).limit(20).exec()
+  const thoughts = await Thought.find().sort({ created: 'asc' }).limit(20).exec()
   res.json(thoughts)
 })
 
