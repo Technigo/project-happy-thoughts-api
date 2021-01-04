@@ -6,6 +6,8 @@ Backend part for the Happy Projects frontend project: https://github.com/ankimel
 
 After thinking about which endpoints to build and what those should do, I implemented those one at a time, testing each and every endpoint in Postman before moving on to the next one. 
 
+Next step: bring error messages from backend to frontend.
+
 ## View it live
 
 https://happy-thoughts-annika.herokuapp.com/
