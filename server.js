@@ -26,13 +26,13 @@ const Thought = mongoose.model('Thought', {
   },
 });
 
-// Seed database
-// const seedDatabase = async => {
-//   await Message.deleteMany({});
-//   new.Message().save();
-// };
-
-// seedDatabase();
+// Seed database with the new thoughts when the database is re-booted. Should also show the old thoughts as well. 
+if(process.env.RESET_DB) {
+  const seedDatabase = async () =>  {
+    new Thought().save();
+}
+seedDatabase();
+};
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
@@ -51,7 +51,7 @@ app.get('/', (req, res) => {
 
 // thoughts get route which will show a max of 20 thoughts, sorted by createdAt to show the most recent 20 thoughts first 
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
+  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20);
   // returning a good status code and the json object that we saved to the database
   res.status(200).json(thoughts);
 });
@@ -65,16 +65,20 @@ app.post('/thoughts', async (req, res) => {
     // returning a good status code and the json object that we saved to the database
     res.status(200).json(thought);
   } catch (error) {
-    // returning a bad erorro code and a message with some more information to the user as to why the thought wasn't sent.
-    res.status(400).json({message: "Could not save new thought. Please make sure that you've entered a valid thought that is between 5-140 letters long.", errors:error.errors})
+    // returning a bad error code and a message with some more information to the user as to why the thought wasn't sent.
+    res.status(400).json({message: "Could not save new thought to the database. Please make sure that you've entered a valid thought that is between 5-140 letters long.", errors:error.errors})
   }
 });
 
-// like/heart post route that will allow for a specific thought to be targeted using it's id and then post a like for that id - must include id
-app.post('/thoughts/:thoughtId/like', async (req, res) => {
-  const thoughtId = new Thought({_id: req.id});
-  const newHeart = await thoughtId.save({hearts: hearts +1});
-  res.status(200).json(newHeart);
+// like put route that targets a specific thought id when queried in the url.Then updateOne mongoose function is used update the hearts property for the thought with the id requested. Used put as I want to update the thought object queried.
+app.put('/thoughts/:thoughtId/like', async (req, res) => {
+  try {
+    const { thoughtId } = req.params;
+    await Thought.updateOne({ _id: thoughtId}, {$inc: {hearts: +1}});
+    res.status(201).json({message:"You're thought has been liked"}); 
+  }  catch (error) {
+    res.status(404).json({message: "That thought id is not valid. Please enter a valid thought id."})
+  }
 });
 
 // Start the server
