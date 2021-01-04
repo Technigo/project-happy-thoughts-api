@@ -56,9 +56,26 @@ app.post('/thoughts', async (req, res) => {
     const savedMessage = await message.save()
     res.json(savedMessage)
   } catch (err) {
-    res.json({message: "could not save message", errors: err.errors})
+    res.status(400).json({message: "could not save message", errors: err.errors})
   }
-  // res.json(message)
+})
+
+// DELETE in the database by ID
+// this is the path to the ID (which I have not created yet...)
+app.delete('/thoughts/:thoughtId', async(req, res) => {
+  
+  try{
+    // try to delete the user
+    await Message.deleteOne({_id: req.params.id})
+
+    // send a successful response
+    res.status(200).json({success: true})
+  }catch(error) {
+    // this console.log is ok to save for troubleshooting 
+    console.log(error)
+    // notify the client that attempt to delete was unsuccessful
+    res.status(400).json({ success: false})
+  }
 })
 
 // Start the server
