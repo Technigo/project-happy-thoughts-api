@@ -1,6 +1,6 @@
 import mongoose from 'mongoose' 
 
-const Thought = mongoose.model('Thought', {
+const Thought = new mongoose.model('Thought', {
   message: {
     type: String,
     required: true,
