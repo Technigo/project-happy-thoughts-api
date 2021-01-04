@@ -46,22 +46,39 @@ app.get('/thoughts', async (req, res) => {
   res.json(thoughts);
 });
 
-// Endpoint for posting thoughts and adding it to the database
+// Endpoint for POSTing thoughts and adding it to the database
 app.post('/thoughts', async (req, res) => {
   // Retrieves the information sent by the client to our API endpoint
   const { message } = req.body;
 
   // Use our mongoose model to create the database entry
-  const thought = new Thought({ message });
+  const newThought = await new Thought({ message }).save();
 
   try {
-    // Sucess case
-    const savedThought = await thought.save();
-    res.status(200).json(savedThought);
+    // Success case
+    res.status(200).json(newThought);
   } catch (err) {
     // Bad request
     res.status(400).json({
       message: 'Could not save thought to the Database',
+      error: err.errors
+    });
+  }
+});
+
+// Endpoint for POSTing likes to thoughts in the list, recognize thought by ID
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params;
+  const like = req.body;
+  try {
+    // Success case
+    await Thought.updateOne({ _id: req.params.thoughtId }, { $inc: { hearts: 1 } });
+    res.status(200).json();
+  }
+  catch (err) {
+    // Bad request
+    res.status(400).json({
+      message: 'Could not like this thought',
       error: err.errors
     });
   }
