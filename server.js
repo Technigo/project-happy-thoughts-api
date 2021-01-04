@@ -57,6 +57,15 @@ app.post("/thoughts", async (req, res) => {
     });
 });
 
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const thought = await Thought.findOneAndUpdate(
+    { _id: req.params.thoughtId },
+    { $inc: { hearts: 1 } },
+    { new: true }
+  );
+  res.json(thought);
+})
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
