@@ -3,7 +3,7 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
+const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts'
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
@@ -12,15 +12,16 @@ mongoose.Promise = Promise
 //
 //   PORT=9000 npm start
 
-const Thoughts = mongoose.model("Thoughts", {
+const Thoughts = mongoose.model('Thoughts', {
   message: {
     type: String,
     required: true,
-    minLength: 5,
-    maxLenght: 140
+    minlength: 5,
+    maxlength: 140
   },
   heart: {
     type: Number,
+    default: 0
   },
   createdAt: {
     type: Date,
@@ -41,17 +42,25 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-  
   try {
-    const thoughts = await Thoughts.find().sort({createdAt: 'desc'}).limit(20).exec();
-    res.status(201).json(thoughts);
+    const thoughts = await Thoughts.find().sort({createdAt: 'desc'}).limit(20).exec()
+    res.status(201).json(thoughts)
   } catch (err) {
-    res.status(400).json({message: "could not load the database" })
+    res.status(400).json({message: 'could not load the database' })
   }
-  
 })
 
+app.post('/thoughts', async (req, res) => {
+  try {
+    const {message} = req.body
+    const thought = new Thoughts({message})
 
+    const savedThought = await thought.save()
+    res.status(201).json(savedThought)
+  } catch (err) {
+    res.status(400).json({message: "could not save thought to the database", error: err.errors})
+  }
+})
 
 // Start the server
 app.listen(port, () => {
