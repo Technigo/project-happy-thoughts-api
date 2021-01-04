@@ -11,6 +11,25 @@ mongoose.Promise = Promise
 // overridden when starting the server. For example:
 //
 //   PORT=9000 npm start
+
+const Thoughts = mongoose.model("Task", {
+  message: {
+    type: String,
+    required: true,
+    minLength: 5,
+    maxLenght: 140
+  },
+  heart: {
+    type: Number,
+    default: 0
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+})
+
+
 const port = process.env.PORT || 8080
 const app = express()
 
