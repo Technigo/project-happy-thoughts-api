@@ -7,6 +7,23 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
+const Thought = mongoose.model('Thought', {
+  message: {
+    type: String,
+    required: true,
+    minLength: 5,
+    maxLength: 140
+  },
+  hearts: {
+    type: Number,
+    default: 0
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+})
+
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
 //
@@ -22,6 +39,22 @@ app.use(bodyParser.json())
 app.get('/', (req, res) => {
   res.send('Hello world')
 })
+
+// GET endpoint to show messages and hearts
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
+  res.json(thoughts)
+})
+
+// POST endpoint to show messages
+// app.post('/thoughts', async (req, res) => {
+ 
+// })
+
+// POST endpoint to send hearts
+// app.post('/thoughts/:thoughtId/like', async (req, res) => {
+
+// })
 
 // Start the server
 app.listen(port, () => {
