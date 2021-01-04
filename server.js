@@ -23,6 +23,11 @@ const Thought = mongoose.model('Thought', {
     minLength: 5,
     maxLength: 140
   },
+  username: {
+    type: String,
+    maxLength: 20,
+    default: 'Anonymous'
+  },
   hearts: {
     type: Number,
     default: 0
@@ -48,11 +53,11 @@ app.get('/thoughts', async (req, res) => {
 
 // POST /thoughts : Endpoint to add a new Thought to the database----------------------------------------------
 app.post('/thoughts', async (req, res) => {
-  // Retrieve message sent by the client in the POST request body
-  const message = req.body.message;
+  // Retrieve message and username sent by the client in the POST request body
+  const { message, username } = req.body;
 
   // use mongoose model to create a new Thought using the message we got from the client
-  const thought = new Thought({ message });
+  const thought = new Thought({ message, username });
 
   try {
     // Success case: Add a new instance of Thought to the database by calling save() on it
