@@ -7,6 +7,8 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
+// server ready
+
 
 // post model 
 const Message = mongoose.model('post', {
@@ -23,7 +25,11 @@ const Message = mongoose.model('post', {
   hearts: {
     type: Number,
     default: 0
-  }
+  },
+  // name: {
+  //   type: String,
+  //   default: "Anonymous"
+  // }
 })
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
@@ -37,14 +43,27 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-// Start defining your routes here
+// GET endpoints
+// const listEndpoints = require('express-list-endpoints')
 app.get('/', (req, res) => {
   res.send('Hello world')
+  // res.send(listEndpoints(app))
 })
 
-// GET routes
+// GET Messages routes
+app.get('/thoughts', async (req, res) => {
+  try {
+    const messages = await Message.find()
+      .sort({ createdAt: 'desc' })
+      .limit(20)
+      .exec()
+    res.status(200).json(messages)
+  } catch (error) {
+    res.status(400).json({ message: "could not find messages", errors: err.errors })
+  }
+})
 
-// post route
+// post Message route
 app.post('/thoughts', async (req, res) => {
   // send a request body in order to pass information into the API
   // if a lot of values (which I'll have) create const
@@ -54,16 +73,26 @@ app.post('/thoughts', async (req, res) => {
     // success case
     const NewMessage = new Message({ message: req.body.message })
     const savedMessage = await NewMessage.save()
-    res.json(savedMessage)
+    res.status(200).json(savedMessage)
   } catch (err) {
-    // notify the client that attempt to post was unsuccessful
+    // Bad request - notify the client that attempt to post was unsuccessful
     res.status(400).json({ message: "could not save message", errors: err.errors })
   }
 })
 
+// Add hearts 
+app.post('/thoughts/:id/like', async (req, res) => {
+  try {
+    const { id } = req.params
+    await Message.updateOne({ _id: id }, { $inc: { hearts: 1 } })
+    res.status(200).send()
+  } catch (error) {
+    res.status(404).json({ error: 'No thought found' })
+  }
+})
+
 // DELETE in the database by ID
-// this is the path to the ID (which I have not created yet...)
-app.delete('/thoughts/:thoughtId', async (req, res) => {
+app.delete('/thoughts/:id', async (req, res) => {
 
   try {
     // try to delete the user
