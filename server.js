@@ -41,19 +41,32 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find()
-  res.json(thoughts)
+  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20)
+  if (thoughts.length > 0)
+  {res.json(thoughts)}
+  else {res.json({message: "No thoughts found"})}
+
 })
 
 app.post('/thoughts', async (req, res) => {
-  const {message} = req.body
-  const thought = await new Thought({message}).save()
-  res.json(thought)
+  try { 
+    const {message} = req.body
+    const thought = await new Thought({message}).save()
+    res.json(thought)
+    
+  } catch (error) {
+    res.status(400).json({message:"Invalid input" , error: error})
+  }
+
 })
 
 app.post('/thoughts/:thoughtId/like', async (req,res) => {
-  const thought = await Thought.findOneAndUpdate({_id: req.params.thoughtId}, { $inc: {hearts: 1}}, {new:true, useFindAndModify: false})
-  res.json(thought)
+  try {
+    const thought = await Thought.findOneAndUpdate({_id: req.params.thoughtId}, { $inc: {hearts: 1}}, {new:true, useFindAndModify: false})
+    res.json(thought)
+  } catch (error) {
+    res.status(400).json({message: "Invalid input", error: error})
+  }
  })
 
 // Start the server
