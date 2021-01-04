@@ -57,6 +57,7 @@ app.post('/thoughts', async (req, res) => {
   const { message, username } = req.body;
 
   // use mongoose model to create a new Thought using the message we got from the client
+  // If the username field is empty, the username will show as Anonymous
   const thought = new Thought({ message, username: username || 'Anonymous' });
 
   try {
