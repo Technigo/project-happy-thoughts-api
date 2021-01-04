@@ -47,8 +47,29 @@ app.get('/', (req, res) => {
 
 // GET /thoughts : Endpoint showing the 20 most recent thoughts------------------------------------------------
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20);
-  res.json(thoughts);
+  // Pagination: destructure page and limit and set default values
+  const { page = 1, limit = 20 } = req.query;
+
+  try {
+    // execute query with page and limit values
+    const thoughts = await Thought.find()
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .sort({ createdAt: 'desc' })
+      .exec();
+
+    // get total entries in the Thought collection
+    const count = await Thought.countDocuments();
+
+    // return response with thoughts, total pages and current page
+    res.json({
+      thoughts,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page
+    });
+  } catch (err) {
+    console.error(err.message);
+  };
 });
 
 // POST /thoughts : Endpoint to add a new Thought to the database----------------------------------------------
