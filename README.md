@@ -1,13 +1,40 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+In this week's project it was time to use my new skills with Express and MongoDB to build my own HAPPY THOUGHTS API which includes both GET request endpoints to return data and POST endpoints to create data.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## What I have learnt
 
-## The problem
+* How to use POST requests to send data to my API
+* How to update data in my database from POST requests
+* How to validate data and ensure my database only contains 'good' data
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+## The process and structure
+
+I decided to keep it simple and stay at **BLUE LEVEL** 🔵
+
+Avaialble endpoints:
+
+* Root: /
+* List 20 Thoughts: GET /thoughts
+* Post a thought message: POST /thoughts
+* Like a thought: POST /thoughts/:thoughtId/like
+
+### Core Tech
+
+* Javascript
+* Express
+* Mongo DB
+* Moongoose
+* Heroku
+* Postman
+* MongoDB Compass
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+### Backend
+[TO BE REPLACED WITH NEW API URL](https://book-api-mongodb-by-ylva.herokuapp.com/)
+
+### Frontend
+[Happy Thoughts at Netlify](https://awesome-mcclintock-31dad3.netlify.app/)
+
+[https://github.com/ylvan75/project-happy-thoughts](https://github.com/ylvan75/project-happy-thoughts)
