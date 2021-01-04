@@ -9,7 +9,7 @@ mongoose.Promise = Promise
 
 
 // post model 
-const Message = mongoose.model('post', { 
+const Message = mongoose.model('post', {
   message: {
     type: String,
     minlength: 5,
@@ -20,10 +20,10 @@ const Message = mongoose.model('post', {
     type: Date,
     default: () => new Date()
   },
-  // hearts: {
-  //   type: Number,
-  //   default: 0 
-  // }
+  hearts: {
+    type: Number,
+    default: 0
+  }
 })
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
@@ -42,39 +42,39 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
+// GET routes
+
 // post route
 app.post('/thoughts', async (req, res) => {
   // send a request body in order to pass information into the API
   // if a lot of values (which I'll have) create const
-  // const { message, heart } = req.body
-  // handling error by try {}
 
-    // Van shortens this around 13 min into the video
+  // Van shortens this around 13 min into the video
   try {
     // success case
-    const message = new Message ({message: req.body.message})
-    const savedMessage = await message.save()
+    const NewMessage = new Message({ message: req.body.message })
+    const savedMessage = await NewMessage.save()
     res.json(savedMessage)
   } catch (err) {
-    res.status(400).json({message: "could not save message", errors: err.errors})
+    // notify the client that attempt to post was unsuccessful
+    res.status(400).json({ message: "could not save message", errors: err.errors })
   }
 })
 
 // DELETE in the database by ID
 // this is the path to the ID (which I have not created yet...)
-app.delete('/thoughts/:thoughtId', async(req, res) => {
-  
-  try{
-    // try to delete the user
-    await Message.deleteOne({_id: req.params.id})
+app.delete('/thoughts/:thoughtId', async (req, res) => {
 
+  try {
+    // try to delete the user
+    await Message.deleteOne({ _id: req.params.id })
     // send a successful response
-    res.status(200).json({success: true})
-  }catch(error) {
+    res.status(200).json({ success: true })
+  } catch (error) {
     // this console.log is ok to save for troubleshooting 
     console.log(error)
     // notify the client that attempt to delete was unsuccessful
-    res.status(400).json({ success: false})
+    res.status(400).json({ success: false })
   }
 })
 
