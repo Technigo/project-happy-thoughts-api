@@ -55,7 +55,7 @@ app.post('/thoughts', async (req, res) => {
     res.json(thought)
     
   } catch (error) {
-    res.status(400).json({message:"Invalid input" , error: error})
+    res.status(400).json({message:"Invalid input" , errors: error.errors})
   }
 
 })
