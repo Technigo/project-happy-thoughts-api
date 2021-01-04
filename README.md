@@ -1,13 +1,17 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Backend part for the Happy Projects frontend project: https://github.com/ankimelin/project-happy-thoughts, including a database (MongoDB) and an API on top of that (Mongoose).
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+After thinking about which endpoints to build and what those should do, I implemented those one at a time, testing each and every endpoint in Postman before moving on to the next one. 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://happy-thoughts-annika.herokuapp.com/
+
+Endpoints:
+
+https://happy-thoughts-annika.herokuapp.com/thoughts - both get and post request
+
+https://happy-thoughts-annika.herokuapp.com/thoughts/:id/like - post request for liking a thought
