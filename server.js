@@ -7,6 +7,15 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
+// Defines the port the app will run on. 
+//   PORT=9000 npm start
+const port = process.env.PORT || 8080;
+const app = express();
+
+// Add middlewares to enable cors and json body parsing
+app.use(cors());
+app.use(bodyParser.json());
+
 
 // Thought model
  const Thought = mongoose.model('Thought', {
@@ -28,44 +37,32 @@ mongoose.Promise = Promise;
    }
  });
 
- if (process.env.RESET_DATABASE) { 
-  console.log('Resetting Database!');
+//  if (process.env.RESET_DATABASE) { 
+//   console.log('Resetting Database!');
 
-  const seedDatabase = async () => { 
-    await Thought.deleteMany({});
+//   const seedDatabase = async () => { 
+//     await Thought.deleteMany({});
 
-    thoughtsData.forEach((thoughtData) => { 
-      new Thought(thoughtData).save();
-    });
-  };
-  seedDatabase();
-};
-
-
- // Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
-const port = process.env.PORT || 8080;
-const app = express();
-
-// Add middlewares to enable cors and json body parsing
-app.use(cors());
-app.use(bodyParser.json());
+//     thoughtsData.forEach((thoughtData) => { 
+//       new Thought(thoughtData).save();
+//     });
+//   };
+//   seedDatabase();
+// };
 
 // ROUTES
 app.get('/', (req, res) => {
-  res.send('Hello and Welcome to Happy thoughts, where feeling blue is not allowed!');
+  res.send('Hello and Welcome to the Happy thoughts API, where feeling blue is not allowed! :)');
 });
 
-// GET REQUESTS
+// GET REQUESTS 
 app.get('/thoughts', async (req, res) => { 
   const thoughts = await Thought.find().sort({ createdAt: 'desc'}).limit(20);
   res.json(thoughts);
 });
 
 // POST REQUESTS
-app.post('/thoughts'), async (req,res) => { 
+app.post('/thoughts', async (req,res) => { 
   try { 
     const newThought = await new Thought(req.body).save();
     res.status(200).json(newThought);
@@ -73,8 +70,8 @@ app.post('/thoughts'), async (req,res) => {
     console.log(error);
     res.status(400).json({ success:false, error });
   };
-};
-
+});
+ 
 
 
 // Start the server
