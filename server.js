@@ -7,24 +7,7 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-const Thought = mongoose.model('Thought', {
-  message:{
-    type: String,
-    required: true,
-    minlength: 5,
-    maxlength: 140
-  },
-  hearts:{
-    type: Number,
-    default: 0,
-  },
-  createdAt:{
-    type: Date,
-    default: Date.now
-  }
-})
-
-const port = process.env.PORT || 3200
+const port = process.env.PORT || 3100
 const app = express()
 
 // Add middlewares to enable cors and json body parsing
@@ -38,13 +21,30 @@ app.get('/', (req, res) => {
 
 //GET AND POST THOUGHTS
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: "desc"}).limit(20).exec()
+  const thoughts = await Thought.find().sort({createdAt: 1}).limit(20).exec()
   res.json(thoughts)
+})
+
+const Thought = mongoose.model('Thought', {
+  message:{
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 140
+  },
+  hearts:{
+    type: Number,
+    default: 0,
+  },
+  createdAt:{
+    type: Date,
+    default: () => new Date ()
+  }
 })
 
 app.post('/thoughts', async(req, res) => {
   const {message, hearts} = req.body
-  const thought = new Thought({message, hearts})
+  const thought = new Thought({message: message, hearts: hearts})
 
   try {
     const savedThought = await thought.save()
