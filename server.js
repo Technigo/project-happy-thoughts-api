@@ -33,7 +33,7 @@ app.use(bodyParser.json());
 
    createdAt: { 
      type: Date, 
-     default: Date.now()
+     default: Date.now
    }
  });
 
