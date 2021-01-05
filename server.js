@@ -74,7 +74,7 @@ app.get('/', (req, res) => {
 app.get('/thoughts', async (req, res) => {
   const { sort, page } = req.query
 
-  const pageNumber = +page || 1; 
+  //const pageNumber = +page || 1; 
   const pageSize = 15;
 
   const sortThoughts = (sort) => {
