@@ -22,10 +22,10 @@ const Message = mongoose.model('Message', {
 //if (process.env.RESET_DB) {
 	const seedDatabase = async () => {
     await Message.deleteMany();
-		goldenGlobesData.forEach(item => {
+		mongoUrl.forEach(item => {
       const newMessage = new Message(item);
       newMessage.save();
-		})
+    })
   }
   seedDatabase();
 //}
