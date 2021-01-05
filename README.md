@@ -17,7 +17,7 @@ The blue requirements were:
 3. Then I focused on getting the endpoints written and implementing what was required for each endpoint according to the project. This included:
     - Using the sort and limit methods to make sure that the last 20 thoughts were returned on the get endpoint.
     - That only the message property can be updated when the post request is sent to the backend. 
-    - And that the thought id is targeted and that the hearts property is updated for that thought. This was done in the endpoint by using the mongoose method of updateOne() and $inc to include that the hearts property is incremented by 1.
+    - And that the thought id is targeted using the mongoose method of updateOne() and that the hearts property is incremented by 1 by using the $inc  and +1. 
 4. I used the try and catch form to allow for the handling of the requests if they succeed or not. And implemented in the catch an error to be shown if for example the user tries to send a message that is less than 5 and more than 140 letters long or heart a thought with an invalid id.
 5. Once everything was set up I tested it in postman using the local host, made sure that the data was coming through on my database and then depolyed to heroku. 
 6. Then I changed the endpoints in the Happy thoughts project and made sure that they were working and that I was getting the data that was stored on and being posted to my database.
