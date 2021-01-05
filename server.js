@@ -26,7 +26,7 @@ const Thought = mongoose.model('Thought', {
   },
   createdAt: {
     type: Date, 
-    default: () => new Date()
+    default: () => new Date() //Date.now
   }
 })
 
@@ -40,21 +40,26 @@ app.use(bodyParser.json())
 
 // ROUTES
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Hello Happy thought')
 })
 
 // ENDPOINT GET THOUGHTS
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find()
+  try {
+    //Success
+   const thoughts = await Thought.find()
   .sort({createdAt: 'desc'})
   .limit(20)
-  //.exact()
-  res.json(thoughts)
+  res.status(200).json(thoughts)  
+
+  } catch (err) {
+    res.status(400).json({ message: 'Could not get thoughts', error: err.errors})
+  }
 })
 
 // ENDPOINT POST THOUGHTS
 app.post('/thoughts', async (req, res ) => {
-  // Retrieve the inforation sent by client to out API endpoint
+  // Retrieve the information sent by client to out API endpoint
   const {message, name} = req.body
 
   // Use mongoose model to create the database entry
@@ -72,15 +77,20 @@ app.post('/thoughts', async (req, res ) => {
 // ENDPOINT POST THOUGHTS/:thoughtId/like
 app.post('/thoughts:id/like', async (req, res) => {
   const {thoughtId} = req.params
+  const like = req.body // json data ?
 
   try {
-    await Thought.updateOne(
+    //Success
+    await thoughts.updateOne(
       {_id: thoughtId}, 
-      { $inc: { hearts: 1}}
+      { $inc: { hearts: 1}},
+      await new Like({ like }).save()// ?
+      //{ returnNewDocument: true } // returns the new updated thought
     )
     res.status(201).send()
+
   } catch (err) {
-    res.status(400).json({message: 'Could not find that id'})
+    res.status(404).json({message: 'Could not save your like to the database', error: err.errors})
   }
 })
 
