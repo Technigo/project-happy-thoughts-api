@@ -1,13 +1,29 @@
-# Project Happy Thoughts API
+# Project Happy Thoughts API 
 
-Replace this readme with your own information about your project.
+An API for fetching and posting data with MongoDB to an existing frontend project. 
+The project is like a positiv twitter where the user gets to post short messages and like existing messages.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## Learning Objectives
 
-## The problem
+* How to validate data
+* How to build an API which works with an existing frontend
+* How to build an API which handles a users input via POST
+* How to include error handling and return good validation errors
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+## Endpoints 
+
+## Tech Used
+
+* Node.js
+* Express 
+* MongoDB
+* Mongoose
+* Javascript
+* Postman
+* Heroku
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+[Frontend Repo](https://github.com/Andrea-Osmar/project-happy-thoughts)
+[Frontend](https://give-me-some-love.netlify.app/)
+[Backend](https://andrea-happy-thoughts.herokuapp.com/)

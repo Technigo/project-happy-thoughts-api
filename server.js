@@ -33,6 +33,7 @@ const Thought = mongoose.model('Thought', {
 // SERVER
 const port = process.env.PORT || 8080
 const app = express()
+const listEndpoints = require('express-list-endpoints')
 
 // MIDDLEWARES
 app.use(cors())
@@ -40,7 +41,7 @@ app.use(bodyParser.json())
 
 // ROUTES
 app.get('/', (req, res) => {
-  res.send('Hello Happy thought')
+  res.send(listEndpoints(app))
 })
 
 // ENDPOINT GET THOUGHTS
