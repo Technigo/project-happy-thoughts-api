@@ -70,7 +70,7 @@ app.post('/thoughts', async (req, res) => {
     res.status(200).json(thought);
   } catch (error) {
     // returning a bad error code and a message with some more information to the user as to why the thought wasn't sent.
-    res.status(404).json({message: "Could not save new thought to the database. Please make sure that you've entered a valid thought that is between 5-140 letters long.", errors:error.errors})
+    res.status(400).json({message: "Could not save new thought to the database. Please make sure that you've entered a valid thought that is between 5-140 letters long.", errors:error.errors})
   }
 });
 
