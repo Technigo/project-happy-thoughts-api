@@ -8,7 +8,9 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
 const Message = mongoose.model('Message', {
-  text: String,
+  message: String,
+  name: String,
+  hearts: Boolean,
   createdAt: {
     type: Date,
     default: () => new Date()
@@ -34,10 +36,20 @@ app.get('/', (req, res) => {
 })
 
 app.post('/messages', async (req, res) => {
-  console.log(req.body)
-  const message = new Message({ text: req.body.text })
+  //console.log(req.body)
+  const message = new Message({ message: req.body.message, name: req.body.name, hearts: req.body.hearts })
   await message.save()
   res.json(message)
+})
+
+app.get('/messages', async (req, res) => {
+  //const queryParameters = req.query;
+  const allMessages = await Message.find(req.query);
+  if (allMessages) {
+    res.json(allMessages)
+  } else {
+    res.status(404).json({ error: 'Messages not found'})
+  }
 })
 
 // Start the server
