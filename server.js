@@ -24,51 +24,41 @@ const Thought = mongoose.model('Thought', {
   }
 })
 
-if (process.env.RESET_DB) {
-  const seedDatabase = async () => {
-    await Thought.deleteMany()
-
-    booksData.forEach((item) => {
-      new Thought(item).save()
-    }) 
-  }
-  seedDatabase()
-}
-
 const port = process.env.PORT || 8080
 const app = express()
 
-// Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(bodyParser.json())
 
-// Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world')
-})
-
-app.get('/thoughts', (req, res) => {
-  res.send('hello new')
+app.get('/thoughts', async (req, res) => {
+  const thougths = await Thought.find().sort({createdAt: 'desc' }).limit(20).exec()  
+  res.json(thougths)
 })
 
 app.post('/thoughts', async (req, res) => {
+  const { message } = req.body 
+  const thought = new Thought({ message })
+
   try {
-    const { message } = req.body 
-    const thought = new Thought({ message })
-    await thought.save()
-    res.status(200).json(thought)
-    res.json(thought)
+    const savedThought = await thought.save()
+    res.status(201).json(savedThought)
   } catch (err) {
   res.status(400).json({ message: 'could not post happy thought', errors:err.errors})
-}
+ }
 })
 
-//res.join(savedthought)
+app.post('thoughts/:thoughtId/like', async (req, res) => {
+  const { id } = req.params
+  const findThought = await Thought.findOne({_id: id})
 
-app.post('thoughts/:thoughtId/like', (req, res) => {
+  if (findThought) {
+  await Thought.updateOne({_id: id}, {$inc : {hearts: 1}})
+  res.status(201).json({message: `added like to ${id}`})
+} else {
+  res.status(400).json({message: 'cant find thought'})
+  }
+})
 
-}) 
-// Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
 })
