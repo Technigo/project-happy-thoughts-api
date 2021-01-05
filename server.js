@@ -36,15 +36,22 @@ app.get('/', (req, res) => {
 });
 
 app.post('/thoughts', async (req, res) => {
-  console.log(req.body);
-  const thought = new Thought({ message: req.body.message });
-  await thought.save();
-  res.json(thought);
+  try {
+    const thought = new Thought({ message: req.body.message });
+    await thought.save();
+    res.json(thought);
+  } catch (err) {
+    res.status(400).json({ error: err.error });
+  }
 });
 
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20);
-  res.json(thoughts);
+  try {
+    await Thought.find().sort({ createdAt: 'desc' }).limit(20);
+    res.json(thoughts);
+  } catch (err) {
+    res.status(400).json({ error: err.error });
+  }
 });
 
 app.post('/thoughts/:id/like', async (req, res) => {
