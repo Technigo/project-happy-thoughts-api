@@ -75,7 +75,9 @@ app.get('/thoughts', async (req, res) => {
   const { sort, page } = req.query
 
   //const pageNumber = +page || 1; 
-  const pageSize = 15;
+  const pageNumber = +page || 1; 
+  const pageSize = 20;
+  const skip = pageSize * (pageNumber -1);
 
   const sortThoughts = (sort) => {
     if (sort === "likes") {
@@ -92,6 +94,7 @@ app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find()
     .sort(sortThoughts(sort))
     .limit(pageSize)
+    .skip(skip)
     .exec()
 
     if (thoughts) {
