@@ -26,7 +26,7 @@ const Thought = mongoose.model('Thought', {
   },
   createdAt: {
     type: Date, 
-    default: () => new Date() //Date.now
+    default: () => new Date() //Date.now?
   }
 })
 
@@ -84,17 +84,17 @@ app.post('/thoughts', async (req, res ) => {
 })
 
 // ENDPOINT POST THOUGHTS/:thoughtId/like
-app.post('/thoughts:id/like', async (req, res) => {
+app.post('/thoughts/:id/like', async (req, res) => {
   const {thoughtId} = req.params
-  const like = req.body // json data ?
+  const like = req.body 
 
   try {
     //Success
     await thoughts.updateOne(
       {_id: thoughtId}, 
       { $inc: { hearts: 1}},
-      await new Like({ like }).save()// ?
-      //{ returnNewDocument: true } // returns the new updated thought
+      await new Like({ like }).save()
+    
     )
     res.status(201).send()
   } catch (err) {
@@ -106,9 +106,3 @@ app.post('/thoughts:id/like', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
 })
-/*
-mongodb+srv://andreao:<password>@cluster0.jj8fs.mongodb.net/<dbname>?retryWrites=true&w=majority
-mongodb+srv://andreao:GKMy1DSAveFcXWZO@cluster0.jj8fs.mongodb.net/happyThoughts?retryWrites=true&w=majority
-
-e3cUBWaI7oZcpiOD
-*/
