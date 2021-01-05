@@ -1,13 +1,28 @@
-# Project Happy Thoughts API
+# Happy Thoughts API 💌
+This project's goal was to build an API which includes both GET request endpoints to return data and POST endpoints to create data. For the front end I revisited my previous project _Happy Thoughts_ a twitter like app where you can see other people's happy thoughts, post your own and give a ❤️ to an existing one. 
+You can see the live version here, feel free to leave me some happy thoughts! [_Happy Thoughts_](https://happythoughts-sofia.netlify.app/)
 
-Replace this readme with your own information about your project.
+## Planning & What I learned 🧩
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+- This Express API consists of a **MongoDB stored in Atlas and deployed to Heroku** 
+- My first step in this project was to create the mongoose model for the _Thought_, the model schema consists of three main components: message, hearts and createdAt, with several validation rules embbebed, i.e. _required_. 
+- Used _try_ and _catch_ in all endpoints for error handling. 
 
-## The problem
+## Endpoints 💫
+### / 
+Root: Welcome page 
+### GET /thoughts
+Displays the latest 20 thoughts, sorted by createdAt to show the most recent thoughts first.
+### POST /thoughts
+Endpoint to post and save a new thought to the database. It expects a JSON body with the thought message, like this: { "message": "Happy New Year!" }
+### POST /thoughts/:thoughId/like
+This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its hearts property to add one heart.
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+## Tech ⚡️
+- MongoDB
+- Mongoose
+- Node.js
+- Express
 
-## View it live
-
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+## View it live 🔴
+[Happy Thoughts API 💌](https://happy-thoughts-sofia.herokuapp.com/)

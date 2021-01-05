@@ -37,19 +37,6 @@ app.use(bodyParser.json());
    }
  });
 
-//  if (process.env.RESET_DATABASE) { 
-//   console.log('Resetting Database!');
-
-//   const seedDatabase = async () => { 
-//     await Thought.deleteMany({});
-
-//     thoughtsData.forEach((thoughtData) => { 
-//       new Thought(thoughtData).save();
-//     });
-//   };
-//   seedDatabase();
-// };
-
 // ROUTES
 app.get('/', (req, res) => {
   res.send('Hello and Welcome to the Happy thoughts API, where feeling blue is not allowed! :)');
@@ -72,8 +59,8 @@ app.post('/thoughts', async (req,res) => {
   };
 });
  
-app.post('/thoughts/:id/like', async (req, res) => { 
-  const thoughtId = req.params.id;
+app.post('/thoughts/:thoughtId/like', async (req, res) => { 
+  const thoughtId = req.params.thoughtId;
 
   try { 
     const thoughtLiked = await Thought.updateOne({ _id: thoughtId }, { $inc : { hearts: 1 } });
