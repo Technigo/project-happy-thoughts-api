@@ -19,7 +19,7 @@ const Message = mongoose.model('Message', {
 
 // Start MongoDB: RESET_DB=true npm run dev
 // To populate database: remove if-statement, push, put if-statement back, push again
-//if (process.env.RESET_DB) {
+if (process.env.RESET_DB) {
 	const seedDatabase = async () => {
     await Message.deleteMany();
 		mongoUrl.forEach(item => {
@@ -28,7 +28,7 @@ const Message = mongoose.model('Message', {
     })
   }
   seedDatabase();
-//}
+}
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
