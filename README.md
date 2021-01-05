@@ -13,7 +13,7 @@ For this to work, I created an API in the Backend using **Express and MongoDB** 
 - The setup for this Express API consists of a **MongoDB stored in Atlas and deployed to Heroku** 💥
 - In order to create the endpoints and manipulate the data, I'm working with **mongoose**. I have one main model for 'Thought'. This schema includes various validation rules in order to control that the information saved to the database is clean. Super good learning how to validate the data on this project: I used properties like required, min and max length.
 - I also learned how to implement **Pagination** using mongoose, which I use in my main GET endpoint which shows the 20 most recent Thoughts. This endpoint shows 20 Thoughts at a time (using limit()), starting with the most recent ones (using sort()).
-- On my main POST endpoint to add a new Thought to the database, I managed to implement a new feature in which the user can **sign the tought**. So I'm sending both "message" and "username" properties to the databse when creating a new entry. If the username field is left empty, it will be automatically created as "Anonymous".
+- On my main POST endpoint to add a new Thought to the database, I managed to implement a new feature in which the user can **sign the tought**. So I'm sending both "message" and "username" properties to the database when creating a new entry. If the username field is left empty, it will be automatically created as "Anonymous".
 - All endpoints use a **try / catch** combination as well for error handling. If some input is invalid, a proper error message will show with some extra, handy information.
 
 ## Documentation - CORE ROUTES
