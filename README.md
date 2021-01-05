@@ -1,13 +1,20 @@
-# Project Happy Thoughts API
+# Project Happy Thoughts API 💌
 
-Replace this readme with your own information about your project.
+- In this week's project we used our new skills in Express and Mongodb to build an API which includes POST-request endpoints to create data, and GET-request endpoints to return data. We revisited our "Happy Thoughts" project from a couple of weeks ago, were we built a frontend in React which uses an API to store happy thoughts (in the previous project we built a frontend application with a form to post happy thoughts, list the most recent thoughts, and show a count of "hearts/likes" on each thought. Users could then click a heart to like a thought). 
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+- For this project, the task was to take this application one step further and build the API ourselves. Our own API is supposed to work in the same way, and become a drop-in replacement for the API we used in the previous project.
 
-## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+## The project/How I solved it 👩‍💻
 
-## View it live
+Describe how you approached the problem. How did you plan? If you had more time, what would be next?
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+## Tech
+- React
+- MongoDB
+- Express
+- JavaScript
+
+## View it live ❤️
+
+Link to the deployed project: 
