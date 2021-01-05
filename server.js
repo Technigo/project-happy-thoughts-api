@@ -49,7 +49,7 @@ const documentation = {
   },
 };
 
-app.get('/documentation', (req, res) => {
+app.get('/', (req, res) => {
   res.json("Welcome to the Happy Thoughts API!", documentation);
 });
 
