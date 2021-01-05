@@ -52,7 +52,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const findThought = await Thought.findOne({_id: id})
 
   if (findThought) {
-  await Thought.updateOne({_id: id}, {$inc : {hearts: 1}})
+  await Thought.updateOne({_id: id}, {$inc : {heart: 1}})
   res.status(201).json({message: `added like to ${id}`})
 } else {
   res.status(400).json({message: 'cant find thought'})
