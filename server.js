@@ -26,7 +26,7 @@ const Thought = mongoose.model('Thought', {
   },
   createdAt: {
     type: Date,
-    default: () => new Date(),
+    default: Date.now,
   },
 });
 
@@ -36,24 +36,26 @@ app.get('/', (req, res) => {
 });
 
 app.get('/thoughts', async (req, res) => {
-  const allThoughts = await Thought.find()
-    .sort({ createdAt: 'desc' })
-    .limit(20)
-    .exec();
   try {
-    res.status(200).json(allThoughts);
-  } catch (error) {
-    res.status(400).json({ error: error });
+    const allThoughts = await Thought.find()
+      .sort({ createdAt: 'desc' })
+      .limit(20)
+      .exec();
+    res.json(allThoughts);
+  } catch (err) {
+    res.json({ message: 'Could not find any thoughts!', errors: err.errors });
   }
 });
 
 app.post('/thoughts', async (req, res) => {
   try {
-    const thought = new Thought({ message: req.body.message });
-    await thought.save();
-    res.status(200).json(thought);
-  } catch (error) {
-    res.status(400).json({ error: error });
+    const thought = new Thought({ message: req.body.message }).save();
+    res.json(await thought);
+  } catch (err) {
+    res.json({
+      message: 'Could not publish your thought!',
+      errors: err.errors,
+    });
   }
 });
 
@@ -62,7 +64,7 @@ app.post('/thoughts/:id/like', async (req, res) => {
     await Thought.updateOne({ _id: req.params.id }, { $inc: { hearts: 1 } });
     res.status(201).json({ Success: 'Like was successfully added!' });
   } catch (err) {
-    res.status(400).json({ error: err.error });
+    res.json({ message: 'Could not find the thought', errors: err.errors });
   }
 });
 
