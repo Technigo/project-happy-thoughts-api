@@ -18,7 +18,6 @@ const Thought = mongoose.model('Thought', {
   hearts: {
     type: Number,
     default: () => 0,
-    // max: 0,
   },
   createdAt: {
     type: Date,
@@ -26,7 +25,7 @@ const Thought = mongoose.model('Thought', {
   },
 });
 
-// Seed database with the new thoughts when the database is re-booted. Should also show the old thoughts as well. 
+// Seed database with the new thoughts when the database is re-started. Should also show the old thoughts as well. 
 if(process.env.RESET_DB) {
   const seedDatabase = async () =>  {
     new Thought().save();
@@ -45,6 +44,16 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+const documentation = {
+  "Welcome": "Welcome to Claire's Happy Thoughts API 🌼",
+  "Endpoint 1": {
+    "https://clairebookapi.herokuapp.com/books": "Returns the entire books array",    
+  },  
+  "Endpoint 2": {
+    "https://books-deployment.herokuapp.com/books/enterbookidnumber": " Use this endpoint to return books with a specific id and replace :id with a number.",
+  },
+};
+
 app.get('/', (req, res) => {
   res.json("Welcome to the Happy Thoughts API!");
 });
@@ -58,19 +67,19 @@ app.get('/thoughts', async (req, res) => {
 
 // thoughts post route which will be used to post new thoughts to the database
 app.post('/thoughts', async (req, res) => {
-  // Try catch form, but you can also use promises (then with a catch). This will try to save the new thought and if it doesn't suceed, for instance if it doesn't meet the min and maxlength defined in the model then the error will be shown.
+  // Try catch form, but you can also use promises (then with a catch). This will try to save the new thought and if it doesn't succeed, for instance if it doesn't meet the min and maxlength defined in the model, then the error will be shown.
   try {
-    // create new thought with the data passed via the body of the post request from the client side via the API endpoint and then save that to the database
+    // create new thought with the data passed via the body of the post request from the client side via the API endpoint and then save that to the database. Only the message can be updated and not the whole object as message is the only property specified and saved to the database
     const thought = await new Thought({message: req.body.message}).save();
     // returning a good status code and the json object that we saved to the database
     res.status(200).json(thought);
   } catch (error) {
     // returning a bad error code and a message with some more information to the user as to why the thought wasn't sent.
-    res.status(400).json({message: "Could not save new thought to the database. Please make sure that you've entered a valid thought that is between 5-140 letters long.", errors:error.errors})
+    res.status(404).json({message: "Could not save new thought to the database. Please make sure that you've entered a valid thought that is between 5-140 letters long.", errors:error.errors})
   }
 });
 
-// like put route that targets a specific thought id when queried in the url.Then updateOne mongoose function is used update the hearts property for the thought with the id requested. Used put as I want to update the thought object queried.
+// thoughts put route that targets a specific thought id when queried in the API endpoint. Then updateOne mongoose function is used update the hearts property for the thought with the id requested. Used put as I want to update the thought object queried.
 app.put('/thoughts/:thoughtId/like', async (req, res) => {
   try {
     const { thoughtId } = req.params;
