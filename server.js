@@ -73,7 +73,6 @@ app.get('/', (req, res) => {
 //____________List all thoughts
 app.get('/thoughts', async (req, res) => {
   const { sort } = req.query
-  //most likes, oldest, newest 
 
   const sortThoughts = (sort) => {
     if (sort === "likes") {
