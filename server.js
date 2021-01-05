@@ -12,7 +12,7 @@ const Thought = mongoose.model('Thought', {
     type: String,
     required: true,
     minlength: 5,
-    maxlenght: 140
+    maxlength: 140
   } ,
   heart: {
     type: Number, 
