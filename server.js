@@ -22,7 +22,7 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Happy Thoughts!')
 })
 
 app.get('/thoughts', async (req, res) => {
@@ -32,22 +32,34 @@ app.get('/thoughts', async (req, res) => {
 
 app.post('/thoughts', async (req, res) => {
   try{
-    const newThought = await new Thought(req.body).save()
+    const newThought = await new Thought({ message: req.body.message }).save()
     res.status(200).json(newThought)
   }catch (error){
     console.log(error)
     res.status(400).json({success: false, error: error.errors})
   }
 })
-
+//need to create a delete button in frontend
 app.delete('/thoughts/:id', async (req, res) => {
   try{
-    await Thought.deleteOne({ _id: req.params.id})
+    await Thought.deleteOne({ _id: req.params.id })
     res.status(200).json({ success: true })
   }catch (error) {
     console.log(error)
-    res.status(400).json({ success: false, message: error.message})
+    res.status(400).json({ success: false, message: error.message })
   }
+})
+
+app.put('/thoughts/:id', async (req, res) => {
+  try{
+    const updatedThought = await Thought.updateOne(
+      { _id: req.params.id },
+      { $inc: { hearts: 1 } }
+    )
+    res.status(200).json({ success: true })
+  }catch (error){
+    res.status(400).json({ success: false, message: error.message })
+  } 
 })
 
 // Start the server
