@@ -11,8 +11,8 @@ const Thought = mongoose.model('Thought', {
   text: {
     type: String,
     required: true,
-    minLength: 5,
-    maxLenght: 140 
+    minlength: 5,
+    maxlenght: 140 
   },
   createdAt: {
     type: Date,
@@ -39,6 +39,18 @@ app.get('/', (req, res) => {
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
   res.json(thoughts);
+});
+
+app.post('/thoughts', async (req, res) => {
+  const {text} = req.body;
+  const thought = new Thought({text});
+
+  try {
+    const savedThought = await thought.save();
+    res.status(201).json(savedThought);
+  } catch (err) {
+    res.status(400).json({message: 'Could not post your happy thought', error: err.errors});
+  }
 });
 
 // Start the server
