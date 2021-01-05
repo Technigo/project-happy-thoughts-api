@@ -4,7 +4,7 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 
 // CODE FOR DATABASE
-const mongoUrl = process.env.MONGO_URL || "mongodb+srv://andreao:k0H4wf6tKpL9CxOd@cluster0.jj8fs.mongodb.net/test"
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
@@ -106,3 +106,9 @@ app.post('/thoughts:id/like', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
 })
+/*
+mongodb+srv://andreao:<password>@cluster0.jj8fs.mongodb.net/<dbname>?retryWrites=true&w=majority
+mongodb+srv://andreao:GKMy1DSAveFcXWZO@cluster0.jj8fs.mongodb.net/happyThoughts?retryWrites=true&w=majority
+
+e3cUBWaI7oZcpiOD
+*/
