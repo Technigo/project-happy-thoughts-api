@@ -64,8 +64,9 @@ app.get('/messages', async (req, res) => {
 app.post('/messages/:messageId/like', async (req, res) => {
   const { messageId } = req.params;
   await Message.updateOne({ _id: messageId }, { $inc: { hearts: +1 } });
-  res.json()
-}
+  res.json();
+})
+
 
 
 // Start the server
