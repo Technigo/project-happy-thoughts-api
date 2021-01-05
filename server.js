@@ -54,7 +54,7 @@ app.post('/messages', async (req, res) => {
 
 app.get('/messages', async (req, res) => {
   //const queryParameters = req.query;
-  const allMessages = await Message.find(req.query).sort(['createdAt', 1]).limit(10);
+  const allMessages = await Message.find(req.query).sort({ createdAt: 'desc' }).limit(10);
   if (allMessages) {
     res.status(200).json(allMessages)
   } else {
