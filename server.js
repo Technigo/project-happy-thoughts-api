@@ -4,7 +4,7 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 
 // CODE FOR DATABASE
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
+const mongoUrl = process.env.MONGO_URL || "mongodb+srv://andreao:k0H4wf6tKpL9CxOd@cluster0.jj8fs.mongodb.net/test"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
@@ -39,7 +39,16 @@ const listEndpoints = require('express-list-endpoints')
 app.use(cors())
 app.use(bodyParser.json())
 
-// ROUTES
+// ERROR HANDLING WHEN DATABASE IS DOWN OR OUT OF REACH
+app.use((res, req, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: 'Service unavailable' })
+  }
+})
+
+// ROOT ENDPOINT
 app.get('/', (req, res) => {
   res.send(listEndpoints(app))
 })
@@ -52,7 +61,6 @@ app.get('/thoughts', async (req, res) => {
   .sort({createdAt: 'desc'})
   .limit(20)
   res.status(200).json(thoughts)  
-
   } catch (err) {
     res.status(400).json({ message: 'Could not get thoughts', error: err.errors})
   }
@@ -89,7 +97,6 @@ app.post('/thoughts:id/like', async (req, res) => {
       //{ returnNewDocument: true } // returns the new updated thought
     )
     res.status(201).send()
-
   } catch (err) {
     res.status(404).json({message: 'Could not save your like to the database', error: err.errors})
   }

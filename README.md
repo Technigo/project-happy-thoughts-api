@@ -24,6 +24,6 @@ The project is like a positiv twitter where the user gets to post short messages
 
 ## View it live
 
-[Frontend Repo](https://github.com/Andrea-Osmar/project-happy-thoughts)
-[Frontend](https://give-me-some-love.netlify.app/)
-[Backend](https://andrea-happy-thoughts.herokuapp.com/)
+* [Frontend Repo](https://github.com/Andrea-Osmar/project-happy-thoughts)
+* [Frontend](https://give-me-some-love.netlify.app/)
+* [Backend](https://andrea-happy-thoughts.herokuapp.com/)
