@@ -47,7 +47,7 @@ app.post('/thoughts', async (req, res) => {
  }
 })
 
-app.post('thoughts/:thoughtId/like', async (req, res) => {
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { id } = req.params
   const findThought = await Thought.findOne({_id: id})
 
