@@ -14,6 +14,10 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 140
   },
+  name: {
+    type: String,
+    default: "Anonymous"
+  },
   hearts: {
     type: Number,
     default: 0,
@@ -33,9 +37,25 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Routes start here
+// Middleware to handle server connection errors
+app.use((req, res, next) => {
+  try {
+    if (mongoose.connection.readyState === 1) {
+      next()
+    } else {
+      res.status(503).json({ error: 'Service unavailable' });
+    }
+  } catch (error) {
+    res.status(400).json({ error: 'Error! Could not access the server.' });
+  }
+});
+
+////////////// API ENDPOINTS ////////////// 
+
+// To list all available endpoints on the starting page
+const listEndpoints = require('express-list-endpoints');
 app.get('/', (req, res) => {
-  res.send('This API stores Happy Thoughts only!')
+  res.send(listEndpoints(app));
 });
 
 // Endpoint created to get a list of the 20 latest thoughts
@@ -50,10 +70,10 @@ app.post('/thoughts', async (req, res) => {
   try {
     // Success case
     // Retrieves the information sent by the client to the API endpoint
-    const { message } = req.body;
+    const { message, name } = req.body;
 
     // Use the mongoose model to create the database entry
-    const newThought = await new Thought({ message }).save();
+    const newThought = await new Thought({ message, name }).save();
 
     res.status(200).json(newThought);
   } catch (err) {
