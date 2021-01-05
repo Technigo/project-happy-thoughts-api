@@ -38,11 +38,9 @@ const Thought = mongoose.model('Thought', {
   }
 });
 
-// MAYBE: Add a Reset database function, in case we'd like to restart with a clean slate?
-
 // ENDPOINTS
 app.get('/', (req, res) => {
-  res.send('Hello world, welcome to Happy Thoughts API - Vanessa version <3');
+  res.send('Hello world, welcome to Happy Thoughts API - Vanessa version <3 // See this API live in action here: https://happy-vane-thoughts.netlify.app/');
 })
 
 // GET /thoughts : Endpoint showing the 20 most recent thoughts------------------------------------------------
