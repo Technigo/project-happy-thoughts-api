@@ -54,6 +54,22 @@ app.post('/thoughts', async(req, res) => {
   }
 })
 
+//MANAGING POST FOR LIKES
+app.post('/:IDthought/like', async (req, res) => {
+  const IDthought = req.params
+  const thought = await Thought.findById(IDthought)
+
+  if(thought) {
+    thought.hearts++
+    thought.save()
+    res.status(201).json(thought)
+  } else {
+    res.status(400).json({
+      message: `Sorry! The thought with the ID: ${IDthought} does not exist. Maybe try typing in another ID?`
+    })
+  }
+})
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
