@@ -77,6 +77,11 @@ app.get('/thoughts', async (req, res) => {
   //const pageNumber = +page || 1; 
   const pageNumber = +page || 1; 
   const pageSize = 8 * pageNumber;
+  
+  const totalThoughts = await Thought.find();
+  const numberOfThoughts = totalThoughts.length
+  console.log(numberOfThoughts)
+  
   //const skip = pageSize * (pageNumber -1);
 
   const sortThoughts = (sort) => {
@@ -98,7 +103,7 @@ app.get('/thoughts', async (req, res) => {
     .exec()
 
     if (thoughts) {
-    res.status(200).send(thoughts)
+    res.status(200).send({total: numberOfThoughts, results: thoughts})
   } else {
     res.status(400).send({ error: BAD_REQUEST, error: err.errors })
   }
