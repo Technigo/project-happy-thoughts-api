@@ -25,14 +25,6 @@ const Thought = mongoose.model('Thought', {
   },
 });
 
-// Seed database with the new thoughts when the database is re-started. Should also show the old thoughts as well. 
-if(process.env.RESET_DB) {
-  const seedDatabase = async () =>  {
-    new Thought().save();
-}
-seedDatabase();
-};
-
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
 //
@@ -46,11 +38,14 @@ app.use(bodyParser.json());
 
 const documentation = {
   "Welcome": "Welcome to Claire's Happy Thoughts API 🌼",
-  "Endpoint 1": {
-    "https://clairebookapi.herokuapp.com/books": "Returns the entire books array",    
+  "GET endpoint": {
+    "https://claireshappythoughts.herokuapp.com/thoughts": "Use this endpoint in your application to show up to 20 of the most recent thoughts posted",    
   },  
-  "Endpoint 2": {
-    "https://books-deployment.herokuapp.com/books/enterbookidnumber": " Use this endpoint to return books with a specific id and replace :id with a number.",
+  "POST endpoint": {
+    "https://claireshappythoughts.herokuapp.com/thoughts": "Use this endpoint in your application to allow for the user to post to the api a thought. Only allows for the message to be sent in the body of the post request.",
+  },
+  "POST endpoint": {
+    "https://claireshappythoughts.herokuapp.com/thoughts/:thoughtId/like": " Use this endpoint to allow for users to like thoughts by including the thought id in the url which targets the thought with that specific id and then updates the heart count.",
   },
 };
 
@@ -79,8 +74,8 @@ app.post('/thoughts', async (req, res) => {
   }
 });
 
-// thoughts put route that targets a specific thought id when queried in the API endpoint. Then updateOne mongoose function is used update the hearts property for the thought with the id requested. Used put as I want to update the thought object queried.
-app.put('/thoughts/:thoughtId/like', async (req, res) => {
+// thoughts put route that targets a specific thought id when queried in the API endpoint. Then updateOne mongoose function is used update the hearts property for the thought with the id requested. 
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
   try {
     const { thoughtId } = req.params;
     await Thought.updateOne({ _id: thoughtId}, {$inc: {hearts: +1}});
