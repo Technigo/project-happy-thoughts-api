@@ -72,7 +72,7 @@ app.post('/thoughts', async (req,res) => {
   };
 });
  
-app.post('/thoughts/:id/heart', async (req, res) => { 
+app.post('/thoughts/:thoughtId/like', async (req, res) => { 
   const thoughtId = req.params.id;
 
   try { 
