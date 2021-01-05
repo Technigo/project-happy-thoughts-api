@@ -10,4 +10,9 @@ Describe how you approached to problem, and what tools and techniques you used t
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+The project started out as an only front-end app, which can be found here: https://hannas-happy-thoughts-app.netlify.app/
+
+For this project I modified the front-end and made my own datatbase.
+Link to front-end:
+Link to backend: 
+

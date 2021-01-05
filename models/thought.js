@@ -4,8 +4,8 @@ const Thought = new mongoose.model('Thought', {
   message: {
     type: String,
     required: true,
-    minlength: [5, 'Message is too short'],
-    maxlength: [ 140, 'Message is too long']
+    minlength: [5, 'Message is too short. Minimum length is 5 characters.'],
+    maxlength: [ 140, 'Message is too long. Maximum length is 140 characters.']
   },
   hearts: {
     type: Number,
