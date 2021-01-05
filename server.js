@@ -24,9 +24,7 @@ const Thought = mongoose.model('Thought', {
   }
 });
 
-// Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
+// Defines the port the app will run on. 
 //   PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
@@ -35,9 +33,9 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Start defining your routes here
+// Routes start here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('This API stores Happy Thoughts only!')
 });
 
 // Endpoint created to get a list of the 20 latest thoughts
@@ -48,28 +46,27 @@ app.get('/thoughts', async (req, res) => {
 
 // Endpoint for POSTing thoughts and adding it to the database
 app.post('/thoughts', async (req, res) => {
-  // Retrieves the information sent by the client to our API endpoint
-  const { message } = req.body;
-
-  // Use our mongoose model to create the database entry
-  const newThought = await new Thought({ message }).save();
 
   try {
     // Success case
+    // Retrieves the information sent by the client to the API endpoint
+    const { message } = req.body;
+
+    // Use the mongoose model to create the database entry
+    const newThought = await new Thought({ message }).save();
+
     res.status(200).json(newThought);
   } catch (err) {
     // Bad request
     res.status(400).json({
       message: 'Could not save thought to the Database',
-      error: err.errors
+      errors: err.errors
     });
   }
 });
 
 // Endpoint for POSTing likes to thoughts in the list, recognize thought by ID
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
-  const { thoughtId } = req.params;
-  const like = req.body;
   try {
     // Success case
     await Thought.updateOne({ _id: req.params.thoughtId }, { $inc: { hearts: 1 } });
@@ -78,8 +75,8 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   catch (err) {
     // Bad request
     res.status(400).json({
-      message: 'Could not like this thought',
-      error: err.errors
+      message: 'Could not like this thought since it was not found.',
+      errors: err.errors
     });
   }
 });
