@@ -43,8 +43,17 @@ app.post('/thoughts', async (req, res) => {
 });
 
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find();
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20);
   res.json(thoughts);
+});
+
+app.post('/thoughts/:id/like', async (req, res) => {
+  try {
+    await Thought.updateOne({ _id: req.params.id }, { $inc: { hearts: 1 } });
+    res.status(201).json({ Success: 'Like was successfully added!' });
+  } catch (err) {
+    res.status(400).json({ error: err.error });
+  }
 });
 
 // Start the server
