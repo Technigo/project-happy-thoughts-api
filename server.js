@@ -7,9 +7,6 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-// server ready
-
-
 // post model 
 const Message = mongoose.model('post', {
   message: {
@@ -26,10 +23,10 @@ const Message = mongoose.model('post', {
     type: Number,
     default: 0
   },
-  // name: {
-  //   type: String,
-  //   default: "Anonymous"
-  // }
+  name: {
+    type: String,
+    default: "Anonymous"
+  }
 })
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
@@ -43,11 +40,19 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
+// server ready
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).send({ error: 'service unavailable' })
+  }
+})
+
 // GET endpoints
-// const listEndpoints = require('express-list-endpoints')
+const listEndpoints = require('express-list-endpoints')
 app.get('/', (req, res) => {
-  res.send('Hello world')
-  // res.send(listEndpoints(app))
+  res.send(listEndpoints(app))
 })
 
 // GET Messages routes
@@ -63,15 +68,12 @@ app.get('/thoughts', async (req, res) => {
   }
 })
 
-// post Message route
+// POST Message route
 app.post('/thoughts', async (req, res) => {
   // send a request body in order to pass information into the API
-  // if a lot of values (which I'll have) create const
-
-  // Van shortens this around 13 min into the video
   try {
     // success case
-    const NewMessage = new Message({ message: req.body.message })
+    const NewMessage = new Message({ message: req.body.message, name: req.body.name })
     const savedMessage = await NewMessage.save()
     res.status(200).json(savedMessage)
   } catch (err) {
@@ -80,7 +82,7 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-// Add hearts 
+// POST hearts 
 app.post('/thoughts/:id/like', async (req, res) => {
   try {
     const { id } = req.params
@@ -88,22 +90,6 @@ app.post('/thoughts/:id/like', async (req, res) => {
     res.status(200).send()
   } catch (error) {
     res.status(404).json({ error: 'No thought found' })
-  }
-})
-
-// DELETE in the database by ID
-app.delete('/thoughts/:id', async (req, res) => {
-
-  try {
-    // try to delete the user
-    await Message.deleteOne({ _id: req.params.id })
-    // send a successful response
-    res.status(200).json({ success: true })
-  } catch (error) {
-    // this console.log is ok to save for troubleshooting 
-    console.log(error)
-    // notify the client that attempt to delete was unsuccessful
-    res.status(400).json({ success: false })
   }
 })
 
