@@ -34,17 +34,22 @@ app.use(bodyParser.json())
 // Start defining your routes here
 
 const myEndpoints = require("express-list-endpoints")
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   res.send(myEndpoints(app))
 })
 
+//Handling erorrs by summing them in consts
+const COULD_NOT_SAVE_THOUGHT = "Sorry! Could not save thought to the database";
+const COULD_NOT_FIND_THOUGHT_WITH_ID = "Sorry! Unable to find the thought with the ID: ";
+const COULD_FIND_THOUGHT = "Added one more like";
+
 //GET AND POST THOUGHTS
-app.get('/thoughts', async (req, res) => {
+app.get("/thoughts", async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 1}).limit(20).exec()
   res.json(thoughts)
 })
 
-app.post('/thoughts', async(req, res) => {
+app.post("/thoughts", async(req, res) => {
   const {message, hearts} = req.body
   const thought = new Thought({message: message, hearts: hearts})
 
@@ -52,25 +57,24 @@ app.post('/thoughts', async(req, res) => {
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
   } catch (err) {
-    res.status(400).json({message: 'Could not save thought to the database', error: err.errors})
+    res.status(400).json({message: COULD_NOT_SAVE_THOUGHT, error: err.errors})
   }
 })
 
 //MANAGING POST FOR LIKES
-app.post('/:IDthought/like', async (req, res) => {
-  const {IDthought} = req.params
-  const thought = await Thought.findById(IDthought)
+app.post("/thoughts/:thoughtID/like", async (req, res) => {
+  const { thoughtID } = req.params;
 
-  if(thought) {
-    thought.hearts++
-    thought.save()
-    res.status(201).json(thought)
-  } else {
-    res.status(400).json({
-      message: `Sorry! The thought with the ID: ${IDthought} does not exist. Maybe try typing in another ID?`
-    })
+  try {
+    await Thought.updateOne({ _id: thoughtID }, { $inc: { hearts: 1 } });
+    res.status(201).json({ message: COULD_FIND_THOUGHT, error: err.errors });
+  } catch (err) {
+    res.status(404).json({
+      message: `${COULD_NOT_FIND_THOUGHT_WITH_ID} ${thoughtID}`,
+      error: err.errors,
+    });
   }
-})
+});
 
 // Start the server
 app.listen(port, () => {
