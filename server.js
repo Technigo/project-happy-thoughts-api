@@ -76,7 +76,7 @@ app.get('/thoughts', async (req, res) => {
 
   //const pageNumber = +page || 1; 
   const pageNumber = +page || 1; 
-  const pageSize = 20;
+  const pageSize = 8;
   const skip = pageSize * (pageNumber -1);
 
   const sortThoughts = (sort) => {
