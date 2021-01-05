@@ -35,22 +35,25 @@ app.get('/', (req, res) => {
   res.send('Hello world');
 });
 
+app.get('/thoughts', async (req, res) => {
+  const allThoughts = await Thought.find()
+    .sort({ createdAt: 'desc' })
+    .limit(20)
+    .exec();
+  try {
+    res.status(200).json(allThoughts);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
+});
+
 app.post('/thoughts', async (req, res) => {
   try {
     const thought = new Thought({ message: req.body.message });
     await thought.save();
-    res.json(thought);
-  } catch (err) {
-    res.status(400).json({ error: err.error });
-  }
-});
-
-app.get('/thoughts', async (req, res) => {
-  try {
-    const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20);
-    res.json(thoughts);
-  } catch (err) {
-    res.status(400).json({ error: err.error });
+    res.status(200).json(thought);
+  } catch (error) {
+    res.status(400).json({ error: error });
   }
 });
 
