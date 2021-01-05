@@ -2,9 +2,6 @@
 
 This project is made as a part of Technigo boot camp. This week's project was to build an API which includes both GET request endpoints to return data and POST endpoints to create data. This back-end project is conneceted to the happy thoughts front-end project (https://happyhappythoughts.netlify.app/).
 
-## The project
-
-
 ## Tech
 - JavaScript
 - Express
