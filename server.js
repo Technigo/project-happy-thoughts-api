@@ -58,12 +58,16 @@ app.post("/thoughts", async (req, res) => {
 });
 
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
-  const thought = await Thought.findOneAndUpdate(
-    { _id: req.params.thoughtId },
-    { $inc: { hearts: 1 } },
-    { new: true }
-  );
-  res.json(thought);
+  try {
+    const likedThought = await Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $inc: { hearts: 1 } },
+      { new: true }
+    );
+    res.status(200).json(likedThought);
+  } catch (err) {
+    res.status(400).json({ message: "Invalid thoughtId" });
+  }
 })
 
 // Start the server
