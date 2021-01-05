@@ -34,4 +34,6 @@ I have added error handlers to all endpoints to get a clear error message if the
 
 ## View it live
 
-Link to the deployed API: 
+Link to the deployed API: https://happythoughts-only.herokuapp.com/
+
+Link to see the Frontend live: https://happyminds.netlify.app/
