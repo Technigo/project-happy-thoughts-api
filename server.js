@@ -88,7 +88,7 @@ app.get('/thoughts', async (req, res) => {
 
   const thoughts = await Thought.find()
     .sort(sortThoughts(sort))
-    .limit(20)
+    .limit(40)
     .exec()
 
     if (thoughts) {
