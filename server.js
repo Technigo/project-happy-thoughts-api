@@ -39,13 +39,13 @@ app.use(bodyParser.json());
 const documentation = {
   "Welcome": "Welcome to Claire's Happy Thoughts API 🌼",
   "GET endpoint": {
-    "https://claireshappythoughts.herokuapp.com/thoughts": "Use this endpoint in your application to show up to 20 of the most recent thoughts posted",    
+    "https://claireshappythoughts.herokuapp.com/thoughts": "Use this endpoint in your application to show up to the last 20 thoughts posted",    
   },  
   "POST endpoint 1": {
-    "https://claireshappythoughts.herokuapp.com/thoughts": "Use this endpoint in your application to allow for the user to post to the api a thought. Only allows for the message to be sent in the body of the post request.",
+    "https://claireshappythoughts.herokuapp.com/thoughts": "Use this endpoint in your application to allow for the user to post a thought to the database. Only allows for the message to be sent in the body of the post request.",
   },
   "POST endpoint 2": {
-    "https://claireshappythoughts.herokuapp.com/thoughts/:thoughtId/like": " Use this endpoint to allow for users to like thoughts by including the thought id in the url which targets the thought with that specific id and then updates the heart count.",
+    "https://claireshappythoughts.herokuapp.com/thoughts/:thoughtId/like": " Use this endpoint to allow for users to like thoughts by including the thought id in the url which targets the thought with that specific id and then updates the heart count of that thought in the database.",
   },
 };
 
