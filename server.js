@@ -17,8 +17,7 @@ const Message = mongoose.model('Message', {
   
   hearts: {
     type: Number,
-    type: Boolean,
-    default: 0
+    default: () => 0
   },
 
   createdAt: {
@@ -62,9 +61,12 @@ app.get('/messages', async (req, res) => {
   }
 })
 
-//app.post('/messages/:_id/like', async (req, res) => {
+app.post('/messages/:messageId/like', async (req, res) => {
+  const { messageId } = req.params;
+  await Message.updateOne({ _id: messageId }, { $inc: { hearts: +1 } });
+  res.json()
+}
 
-//}
 
 // Start the server
 app.listen(port, () => {
