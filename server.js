@@ -49,8 +49,8 @@ const documentation = {
   },
 };
 
-app.get('/', (req, res) => {
-  res.json("Welcome to the Happy Thoughts API!");
+app.get('/documentation', (req, res) => {
+  res.json("Welcome to the Happy Thoughts API!", documentation);
 });
 
 // thoughts get route which will show a max of 20 thoughts, sorted by createdAt to show the most recent 20 thoughts first 
