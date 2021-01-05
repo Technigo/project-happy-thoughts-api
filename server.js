@@ -8,29 +8,24 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
 const Message = mongoose.model('Message', {
-  message: String,
-  name: String,
-  hearts: Boolean,
+  message: {
+    type: String,
+    minLength: 5,
+    maxLength: 140,
+    required: true
+  },
+  
+  hearts: {
+    type: Number,
+    type: Boolean,
+    default: 0
+  },
+
   createdAt: {
     type: Date,
     default: () => new Date()
   }
 })
-
-{/*}
-// Start MongoDB: RESET_DB=true npm run dev
-// To populate database: remove if-statement, push, put if-statement back, push again
-if (process.env.RESET_DB) {
-	const seedDatabase = async () => {
-    await Message.deleteMany();
-		mongoUrl.forEach(item => {
-      const newMessage = new Message(item);
-      newMessage.save();
-    })
-  }
-  seedDatabase();
-}
-*/}
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
@@ -59,13 +54,17 @@ app.post('/messages', async (req, res) => {
 
 app.get('/messages', async (req, res) => {
   //const queryParameters = req.query;
-  const allMessages = await Message.find(req.query);
+  const allMessages = await Message.find(req.query).limit(10);
   if (allMessages) {
-    res.json(allMessages)
+    res.status(200).json(allMessages)
   } else {
     res.status(404).json({ error: 'Messages not found'})
   }
 })
+
+//app.post('/messages/:_id/like', async (req, res) => {
+
+//}
 
 // Start the server
 app.listen(port, () => {
