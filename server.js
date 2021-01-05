@@ -14,7 +14,7 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 140
   } ,
-  heart: {
+  hearts: {
     type: Number, 
     default: 0
   } ,
@@ -48,14 +48,13 @@ app.post('/thoughts', async (req, res) => {
 })
 
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
-  const { thoughtId} = req.params.id
-  const findThought = await Thought.findOne({_id: thoughtId})
+  const thoughtId = req.params.ThoughtId
 
-  if (findThought) {
-  await Thought.updateOne({_id: thoughtId}, {$inc : {heart: 1}})
-  res.status(201).json({message: `added like to ${id}`})
-} else {
-  res.status(400).json({message: 'cant find thought'})
+  try {
+    const thoughtLiked = await Thought.updateOne({ _id: thoughtId }, { $inc : { hearts : 1 }})
+    res.json(thoughtLiked)
+  } catch (err) {
+    res.status(400).json({ message: " Thought not found" , error:err.errors})
   }
 })
 
