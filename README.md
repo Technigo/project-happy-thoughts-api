@@ -3,6 +3,8 @@
 
 ## The problem
 
+- I used try and catch in all endpoints for error handling.
+
 ## Endpoints
 
 GET /thoughts
@@ -20,5 +22,6 @@ POST /thoughts/:thoughId/like
 -Express
 
 ## View it live
+https://nice-thoughts-api.herokuapp.com/thoughts
 
 

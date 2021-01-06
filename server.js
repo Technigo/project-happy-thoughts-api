@@ -13,22 +13,26 @@ const Thought = mongoose.model('Thought', {
     required: true,
     minlength: 5,
     maxlength: 140
-  } ,
+  },
   hearts: {
     type: Number, 
     default: 0
-  } ,
+  },
   createdAt: {
     type: Date,
-    default: () => new Date()
+    default: Date.now
   }
 })
 
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 8081
 const app = express()
 
 app.use(cors())
 app.use(bodyParser.json())
+
+app.get('/', (req, res) => {
+  res.send('welcome to the happy thougths api!')
+})
 
 app.get('/thoughts', async (req, res) => {
   const thougths = await Thought.find().sort({createdAt: 'desc' }).limit(20).exec()  
