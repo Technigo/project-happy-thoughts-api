@@ -37,23 +37,24 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-
-
 // Start defining your routes here
 app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
 app.post('/messages', async (req, res) => {
-  //console.log(req.body)
-  const message = new Message({ message: req.body.message, name: req.body.name, hearts: req.body.hearts })
-  await message.save()
-  res.json(message)
-})
+  try {
+    const message = new Message({ message: req.body.message, hearts: req.body.hearts, createdAt: req.body.createdAt })
+    await message.save()
+    res.status(200).json(message)
+  } catch (err) {
+    res.status(404).json({ message: 'Could not return message', errors: err.errors })
+  }
+});
 
 app.get('/messages', async (req, res) => {
   //const queryParameters = req.query;
-  const allMessages = await Message.find(req.query).sort({ createdAt: 'desc' }).limit(10);
+  const allMessages = await Message.find(req.query).sort({ createdAt: 'desc' }).limit(20);
   if (allMessages) {
     res.status(200).json(allMessages)
   } else {
@@ -62,12 +63,14 @@ app.get('/messages', async (req, res) => {
 })
 
 app.post('/messages/:messageId/like', async (req, res) => {
-  const { messageId } = req.params;
-  await Message.updateOne({ _id: messageId }, { $inc: { hearts: +1 } });
-  res.json();
-})
-
-
+  try {
+    const { messageId } = req.params;
+    await Message.updateOne({ _id: messageId }, { $inc: { hearts: +1 } });
+    res.status(200).json();
+  } catch (err) {
+    res.status(404).json({ message: 'Cannot find message', errors: err.errors })
+  }
+});
 
 // Start the server
 app.listen(port, () => {
