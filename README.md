@@ -1,7 +1,8 @@
 # Project Happy Thoughts API
 
-This is a node.js and mongoose project where I've created an API for my previous frontend-project "Happy Thoughts".
-I consists of three endpoints:
+This is a RESTful API that I've created for my previous frontend-project "Happy Thoughts".
+
+It consists of three endpoints:
 
 - One for getting data from the data base
 - One for posting data to the database
@@ -18,6 +19,13 @@ The user input is validated and if invalid, the user gets appropriate errormessa
 The POST /thoughts has a response status of 400 if the input is invalid.
 
 The POST /thoughts/:id/like endpoint return a 404 if the thought is not found.
+
+## Tech 
+
+- Mongoose
+- Node.js
+- Express
+- MongoDB
 
 ## View it live
 
