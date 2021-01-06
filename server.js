@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import listEndpoints from 'express-list-endpoints'
 
 import Thought from './models/thought'
 
@@ -16,43 +17,68 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
+app.use((req, res, next) => {
+  if(mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: 'service unavailable' })
+  }
+})
+
 app.get('/', (req, res) => {
-  res.send('Happy Thoughts!')
+  res.send(listEndpoints(app))
 })
 
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
-  res.json(thoughts)
+  const { page = 1, limit = 20 } = req.query
+
+  try {
+  const thoughts = await Thought.find()
+    .sort({createdAt: 'desc'})
+    .limit(limit * 1)
+    .skip((page - 1) * limit)
+    .exec()
+
+  const count = await Thought.countDocuments()
+    res.status(200).json({
+      thoughts,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page
+    })
+  } catch (error) {
+    res.status(400).json({success: false, message: error.message})
+  }
 })
 
 app.post('/thoughts', async (req, res) => {
-  try{
+  try {
     const newThought = await new Thought({ message: req.body.message }).save()
     res.status(200).json(newThought)
-  }catch (error){
+  } catch (error) {
     console.log(error)
-    res.status(400).json({success: false, error: error.errors})
+    res.status(400).json({success: false, message: error.message})
   }
 })
-//need to create a delete button in frontend
+
+//not used in front-end at the moment.
 app.delete('/thoughts/:id', async (req, res) => {
-  try{
+  try {
     await Thought.deleteOne({ _id: req.params.id })
     res.status(200).json({ success: true })
-  }catch (error) {
+  } catch (error) {
     console.log(error)
     res.status(400).json({ success: false, message: error.message })
   }
 })
 
-app.post('/thoughts/:id/like', async (req, res) => {
-  try{
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  try {
     const updatedThought = await Thought.updateOne(
-      { _id: req.params.id },
+      { _id: req.params.thoughtId },
       { $inc: { hearts: 1 } }
     )
     res.status(200).json({ success: true })
-  }catch (error){
+  } catch (error) {
     res.status(400).json({ success: false, message: error.message })
   } 
 })
