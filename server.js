@@ -7,10 +7,6 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-// Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
 
@@ -48,6 +44,8 @@ app.use((req, res, next) => {
   }
 })
 
+// Endpoints
+
 app.get('/', (req, res) => {
   res.send('This is an API for "Happy Thoughts"')
 })
@@ -58,26 +56,15 @@ app.get('/thoughts', async (req, res) => {
 })
 
 app.post('/thoughts', async (req, res) => {
+  
+  const thought = new Thought({ message: req.body.message  })
 
-  try { 
-    const newThought = await new Thought(req.body).save()
-    res.status(200).json(newThought)
-  } catch (error) { 
-      res.status(400).json({ message: 'Could not save thought to the database', error: err.errors })
+  try {
+    const savedThought = await thought.save()
+    res.status(201).json(savedThought)
+  } catch (err) {
+    res.status(400).json({ message: 'Could not save thought to the database', error: err.errors })
   }
-  // //Retrieve the innformation sent by the client to our API endpoint
-  // const { message } = req.body
-
-  // //Use the mongoose model to create the Database entry
-  // const thought = new Thought({ message })
-
-  // try {
-  //   //Success
-  //   const savedThought = await thought.save()
-  //   res.status(201).json(savedThought)
-  // } catch (err) {
-  //   res.status(400).json({ message: 'Could not save thought to the database', error: err.errors })
-  // }
 })
 
 app.post('/thoughts/:id/like', async (req, res) => {
