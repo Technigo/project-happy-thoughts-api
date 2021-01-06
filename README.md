@@ -1,13 +1,23 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+This is a node.js and mongoose project where I've created an API for my previous frontend-project "Happy Thoughts".
+I consists of three endpoints:
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+- One for getting data from the data base
+- One for posting data to the database
+- One for posting a like which updates a specific object in the database
 
-## The problem
+## Requirements
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+This project has the three endpoints mentioned above. I've also created a mongoose model for the data which is sent to the database.
+
+The GET /thoughts endpoint has a limit of 20 results that are shown in descending order.
+
+The user input is validated and if invalid, the user gets appropriate errormessages.
+
+The POST /thoughts has a response status of 400 if the input is invalid.
+
+The POST /thoughts/:id/like endpoint return a 404 if the thought is not found.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
