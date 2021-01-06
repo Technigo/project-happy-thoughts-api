@@ -50,7 +50,13 @@ app.get('/thoughts', async (req, res) => {
 
 app.post('/thoughts', async (req, res) => {
   try {
-    const newThought = await new Thought(req.body).save();
+//Retrieving the info sent by the client. 
+    const { message } = req.body;
+//By doing await new Thought({ message }).save();instead of saving the entire req.body 
+//like await new Thought(req.body).save() we are only saving the message sent my the client. 
+//Any other info sent by the client will not be saved and it's more secure this way.
+//Now the client can't update the number of likes by sending hearts in the post request.    
+    const newThought = await new Thought({ message }).save();
     res.status(200).json(newThought);
   } catch (error) {
     console.log(error);
@@ -58,14 +64,13 @@ app.post('/thoughts', async (req, res) => {
   }
 });
 
-app.post('thoughts/:id/like', async (req, res) => {
-  const id = req.params.id;
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
   try {
-    const thoughtLiked = await Thought.updateOne({ _id: id}, {  $inc: { hearts: 1 } });
-    res.json(thoughtLiked);
+    const thoughtLiked = await Thought.updateOne({ _id: req.params.thoughtId}, {  $inc: { hearts: 1 } });
+    res.status(200).json(thoughtLiked);
   } catch (error) {
     console.log(error);
-    res.status(400).json({ message: 'Thought was not found', error: err.errors});
+    res.status(400).json({ message: 'Thought was not found', error: error.errors});
   }
 });
 
@@ -73,9 +78,10 @@ app.post('thoughts/:id/like', async (req, res) => {
 // 1.message required ok
 // 2.minLength 5: ok
 // 3.maxLength 140: ok
-// 4.posting number of hearts: not ok
-// 5. display only 20 thoughts sorted on createdAt: ok on Postman but on compass it's sorted ascending order
-
+// 4.posting number of hearts: ok
+// 5.display only 20 thoughts sorted on createdAt: ok on Postman but on compass it's sorted ascending order
+// 6.reassign createdAt: ok
+// 7.reassign number of hearts ok
 
 // Start the server
 app.listen(port, () => {
