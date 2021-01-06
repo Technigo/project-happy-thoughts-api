@@ -18,6 +18,10 @@ const Thought = mongoose.model('Thought', {
     type: Number,
     default: 0,
   },
+  user: {
+    type: String,
+    default: 'Anonymous'
+  },
   createdAt: {
     type: Date,
     default: () => new Date(),
@@ -60,8 +64,8 @@ app.get('/thoughts', async (req, res) => {
 })
 
 app.post('/thoughts', async (req, res) => {
-  const {message, hearts} = req.body
-  const thought = new Thought({message: message, hearts: hearts})
+  const {message, hearts, user} = req.body
+  const thought = new Thought({message: message, hearts: hearts, user: user})
 
   try {
     const savedThought = await thought.save()
