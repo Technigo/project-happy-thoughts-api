@@ -11,13 +11,13 @@ const Thought = mongoose.model('Thought' , {
   message: {
     type: String,
     required: true,
-    minLength: 5
+    minlength: 5
 
   },
-  heart: {
-    type: Number,
+  // heart: {
+  //   type: Number,
 
-  },
+  // },
   createdAt: {
     type: Date,
     default: Date.now
@@ -39,8 +39,26 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Jello world')
 })
+
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
+  res.json(thoughts);
+})
+
+app.post('/thoughts', async (req, res) => {
+  const { message } = req.body;
+  const thought = new Thought({ message });
+  
+  try {
+    const savedThought = await thought.save();
+    res.status(201).json(savedThought);
+  } catch (err) {
+    res.status(400).json({ message:'Could not save the thought to the database', error: err.errors })
+  }
+})
+  
 
 // Start the server
 app.listen(port, () => {
