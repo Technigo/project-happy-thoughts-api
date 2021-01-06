@@ -45,16 +45,12 @@ app.get('/thoughts', async (req, res) => {
 
 // Endpoint to POST a thought to the database
 app.post('/thoughts', async (req, res) => {
-  // retrieve information sent by the client to our API endpoint
-  const { message, hearts } = req.body;
-
-  // Use our mongoose model to create the database entry
-  const thought = new Thought({ message, hearts });
 
   try {
     // Success 
-    const savedThought = await thought.save();
-    res.status(200).json(savedThought);
+    const thought = await new Thought(req.body).save();
+    res.status(200).json(thought);
+
   } catch (err) {
     res.status(400).json({
       message: 'Could not save thought to database',
@@ -65,11 +61,11 @@ app.post('/thoughts', async (req, res) => {
 
 // Endpoint to POST likes to a choosen thought
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
-  const { thoughtId } = req.params;
 
   try {
-    await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } });
+    await Thought.updateOne({ _id: req.params.thoughtId }, { $inc: { hearts: 1 } });
     res.status(200).json();
+
   } catch (err) {
     res.status(400).json({
       message: 'Could not save like, thought not found',
@@ -83,7 +79,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Hello world, welcome to my happy thoughts API // Anna Hellqvist')
 })
 
 // Start the server
