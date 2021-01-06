@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import endpoints from 'express-list-endpoints'
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts'
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -33,7 +34,7 @@ app.use(bodyParser.json())
 
 
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send(endpoints(app))
 })
 
 app.get('/thoughts', async (req, res) => {
