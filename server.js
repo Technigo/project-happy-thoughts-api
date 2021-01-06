@@ -31,7 +31,7 @@ const Thought = new mongoose.model('Thought', {
   },
   createdAt: {
     type: Date,
-    default: Date.now()
+    default: Date.now
   }
 })
 
@@ -66,7 +66,7 @@ app.post('/thoughts/:id/like', async (req, res) => {
     const updateThought = await Thought.updateOne({ _id: req.params.id }, { $inc: { 'hearts': 1 } }, { new: true })
     res.status(201).json(updateThought)
   } catch (err) {
-    res.status(404).json({ message: 'Could not like the thought.', error: err.errors })
+    res.status(404).json({ message: 'Could not like the thought, since it was not found.', error: err.errors })
   }
 })
 
