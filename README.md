@@ -1,19 +1,21 @@
-# Project Happy Thoughts API
+# Project Happy Thoughts API ❤️
 
 In this project I use Express and Mongodb to build an API that includes both GET request endpoints to return data and POST endpoints to create data.
 
 
-## View it live
+## View it live 👀
+https://project-happy-thoughts-anna.herokuapp.com/
+https://inspiring-lalande-9954d9.netlify.app/
 
 
-## Learnings
+## Learnings 🤓
 
 - How to use POST requests to send data to your API
 - How to store data in your database from POST requests
 - How to validate data and ensure your database only contains 'good' data
 
 
-## Making it work
+## Making it work 👍
 
 In my earlier project - Happy Thoughts - I built a frontend in React which uses an API I created to store messages. In this new project, I have built my own API which works in the same way and I used that one to replace the API I used before in the React frontend.
 
