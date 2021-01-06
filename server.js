@@ -65,11 +65,10 @@ app.post('/thoughts', async (req, res) => {
 
 // Endpoint to POST likes to a choosen thought
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
-  const { thoughtsId } = req.params;
-
+  const { thoughtId } = req.params;
 
   try {
-    await Thought.updateOne({ _id: +thoughtsId }, { $inc: { hearts: 1 } });
+    await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } });
     res.status(200).json();
   } catch (err) {
     res.status(400).json({
