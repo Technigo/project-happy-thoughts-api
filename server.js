@@ -55,12 +55,16 @@ const COULD_FIND_THOUGHT = "Added one more like";
 app.get('/thoughts', async (req, res) => {
   const {page} = req.query
 
+  //Pagination
   const pageNo = +page || 1
   const itemPerPage = 20
   const next = itemPerPage * (pageNo - 1)
 
+  const allThoughts = await Thought.find()
+  const pages = Math.ceil(allThoughts.length / itemPerPage)
+
   const thoughts = await Thought.find().sort({createdAt: -1}).limit(itemPerPage).next(next).exec()
-  res.json(thoughts)
+  res.json({thoughts: thoughts, pages:pages})
 })
 
 app.post('/thoughts', async (req, res) => {
