@@ -21,10 +21,10 @@ Endpoint to post and save a new thought to the database.
 POST /thoughts/:thoughId/like
 
 ## TECH 
--MongoDB
--Mongoose
--Node.js
--Express
+- MongoDB
+- Mongoose
+- Node.js
+- Express
 
 ## View it live
 https://nice-thoughts-api.herokuapp.com/thoughts
