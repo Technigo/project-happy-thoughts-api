@@ -10,8 +10,6 @@ The project is like a positiv twitter where the user gets to post short messages
 * How to build an API which handles a users input via POST
 * How to include error handling and return good validation errors
 
-## Endpoints 
-
 ## Tech Used
 
 * Node.js

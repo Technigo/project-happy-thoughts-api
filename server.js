@@ -72,19 +72,17 @@ app.post("/thoughts", async (req, res) => {
   const { message, name } = req.body
 
   // Use mongoose model to create the database entry
-  const thoughts = new Thought({ message, name: name || 'Anonymous' })
+  const thoughts = new Thought({ message, name: name })
 
   try {
     //Success
     const savedThought = await thoughts.save()
     res.status(201).json(savedThought)
   } catch (err) {
-    res
-      .status(400)
-      .json({
-        message: "Could not save thought to the Database",
-        error: err.errors,
-      })
+    res.status(400).json({
+      message: "Could not save thought to the Database",
+      error: err.errors,
+    })
   }
 })
 
@@ -97,17 +95,15 @@ app.post("/thoughts/:id/like", async (req, res) => {
     //Success
     await Thought.updateOne(
       { _id: id },
-      { $inc: { hearts: 1 } },
+      { $inc: { hearts: 1 } }
       // await new Like({ like }).save()
     )
     res.status(201).send()
   } catch (err) {
-    res
-      .status(404)
-      .json({
-        message: "Could not save your like to the database",
-        error: err.errors,
-      })
+    res.status(404).json({
+      message: "Could not save your like to the database",
+      error: err.errors,
+    })
   }
 })
 
