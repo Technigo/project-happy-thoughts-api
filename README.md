@@ -1,13 +1,43 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+In this project I use Express and Mongodb to build an API that includes both GET request endpoints to return data and POST endpoints to create data.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
-
-## The problem
-
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+
+## Learnings
+
+- How to use POST requests to send data to your API
+- How to store data in your database from POST requests
+- How to validate data and ensure your database only contains 'good' data
+
+
+## Making it work
+
+In my earlier project - Happy Thoughts - I built a frontend in React which uses an API I created to store messages. In this new project, I have built my own API which works in the same way and I used that one to replace the API I used before in the React frontend.
+
+In the first project I built a frontend that has a form to write a new 'happy thought', lists recent thoughts/messages, and shows a count of 'hearts' on each thought. Users could then click the heart to like a message.
+
+In order to replace the API I built, I build a 'Message' Mongoose model which has properties for the 'message' string, a 'heart' property for tracking the number of likes, and a 'createdAt' property to store when the message was added.
+
+I then added 3 endpoints:
+
+Each of the Message model's properties has special rules/validations:
+
+- 'message' - the text of the message
+
+    → Required
+
+    → Min length of 5 characters
+
+    → Max length of 140 characters
+
+- 'hearts' - the number of heart clicks this message has received
+
+    → Defaults to'`0'
+
+- 'createdAt' - the time the message was added to the database
+
+    → Defaults to the current time
+
