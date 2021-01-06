@@ -20,11 +20,11 @@ const Thought = mongoose.model('Thought', {
   },
   createdAt: {
     type: Date,
-    default: Date.now,
-  }
+    default: () => new Date(),
+  },
 })
 
-const port = process.env.PORT || 2700
+const port = process.env.PORT || 2500
 const app = express()
 
 // Add middlewares to enable cors and json body parsing
@@ -33,10 +33,14 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 
-const myEndpoints = require("express-list-endpoints")
-app.get("/", (req, res) => {
+const myEndpoints = require('express-list-endpoints')
+app.get('/', (req, res) => {
   res.send(myEndpoints(app))
 })
+
+// app.get('/', (req, res) => {
+//   res.send('Hello world, welcome to Katarinas Happy Thoughts API')
+// })
 
 //Handling erorrs by summing them in consts
 const COULD_NOT_SAVE_THOUGHT = "Sorry! Could not save thought to the database";
@@ -44,12 +48,18 @@ const COULD_NOT_FIND_THOUGHT_WITH_ID = "Sorry! Unable to find the thought with t
 const COULD_FIND_THOUGHT = "Added one more like";
 
 //GET AND POST THOUGHTS
-app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 1}).limit(20).exec()
+app.get('/thoughts', async (req, res) => {
+  const {page} = req.query
+
+  const pageNo = +page || 1
+  const itemPerPage = 20
+  const next = itemPerPage * (pageNo - 1)
+
+  const thoughts = await Thought.find().sort({createdAt: -1}).limit(itemPerPage).next(next).exec()
   res.json(thoughts)
 })
 
-app.post("/thoughts", async(req, res) => {
+app.post('/thoughts', async (req, res) => {
   const {message, hearts} = req.body
   const thought = new Thought({message: message, hearts: hearts})
 
@@ -62,12 +72,12 @@ app.post("/thoughts", async(req, res) => {
 })
 
 //MANAGING POST FOR LIKES
-app.post("/thoughts/:thoughtID/like", async (req, res) => {
+app.post('/:thoughtID/like', async (req, res) => {
   const { thoughtID } = req.params;
 
   try {
     await Thought.updateOne({ _id: thoughtID }, { $inc: { hearts: 1 } });
-    res.status(201).json({ message: COULD_FIND_THOUGHT, error: err.errors });
+    res.status(201).json({ message: COULD_FIND_THOUGHT });
   } catch (err) {
     res.status(404).json({
       message: `${COULD_NOT_FIND_THOUGHT_WITH_ID} ${thoughtID}`,
