@@ -1,13 +1,19 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+### This project is from Technigo's front-end developer boot camp, 2021.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This project is a restfulAPI which includes both GET request endpoints to return data and POST endpoints to create data. It is connected to <a href="https://github.com/idsintehittapa/project-happy-thoughts">the happy thoughts project</a> created earlier
 
-## The problem
+## Tech
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+* Mongoose
+* Async & Await
+* Error handling
+* Validation
+* GET and POST
+* Express
+* Node.js
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Find the database  <a href="https://the-happy-thoughts.herokuapp.com">here</a>
