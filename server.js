@@ -18,9 +18,13 @@ const Thought = mongoose.model("Thought", {
     type: Number,
     default: 0,
   },
-  user: {
+  name: {
     type: String,
     default: "Anonymous"
+  },
+  theme: {
+    type: String,
+    default: "❤️",
   },
   createdAt: {
     type: Date,
