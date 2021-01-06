@@ -63,6 +63,22 @@ app.get('/thoughts', async (req, res) => {
   const allThoughts = await Thought.find()
   const pages = Math.ceil(allThoughts.length / itemPerPage)
 
+  const sortThoughts = (sort) => {
+    if (sort === 'likes') {
+      return {
+        hearts: -1,
+      }
+    } else if (sort === 'oldest') {
+      return {
+        createdAt: 1,
+      }
+    } else {
+      return {
+        createdAt: -1
+      }
+    }
+  }
+
   const thoughts = await Thought.find().sort({createdAt: -1}).limit(itemPerPage).next(next).exec()
   res.json({thoughts: thoughts, pages:pages})
 })
