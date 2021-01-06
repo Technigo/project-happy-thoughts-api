@@ -4,7 +4,9 @@ In this project I use Express and Mongodb to build an API that includes both GET
 
 
 ## View it live 👀
+
 https://project-happy-thoughts-anna.herokuapp.com/
+
 https://inspiring-lalande-9954d9.netlify.app/
 
 
