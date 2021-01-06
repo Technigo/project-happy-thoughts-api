@@ -50,17 +50,43 @@ const Thought = mongoose.model('Thought', {
 })
 
 // Start defining your routes here
+const listEndpoints = require('express-list-endpoints');
 app.get('/', (req, res) => {
-  res.send('Hello world')
-})
-
-// The endpoints we need to use 
+  res.send(listEndpoints(app));
+});
 
   //GET /thoughts = returning an endpoint of maximum 20 thoughts sorted by createdAt to show the most recent thoughts first
-// app.get('/thoughts', async (req, res) => {
-// }
-  //POST /thoughts
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec();
+  res.json(thoughts);
+});
 
+  //POST /thoughts
+app.post('/thoughts', async (req, res) => {
+    // Try catch form 
+  try {
+    // Success
+    const { message, name } = req.body;
+    const newThought = await new Thought({ message, name }).save();
+    
+    res.status(200).json(newThought);
+    // Bad request = error 
+  } catch (err) {
+    res.status(400).json({ message: 'Could not save happy thought!', errors:err.errors});
+  }
+});
+
+  // POST /thoughts/:thoughtId/like
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  try {
+    // Success
+    await Thought.updateOne({ _id: req.params.thoughtId }, { $inc: { hearts: 1 } });
+    res.status(200).json();
+    // Bad request = error 
+  } catch (err) {
+    res.status(400).json({ message: 'Could not like this thought', errors:err.errors});
+  }
+})
 
 // Start the server
 app.listen(port, () => {
