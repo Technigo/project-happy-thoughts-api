@@ -35,7 +35,19 @@ const Thought = new mongoose.model('Thought', {
   }
 })
 
-// Start defining your routes here
+//Middleware to handle connections errors
+app.use((req, res, next) => {
+  try {
+    if (mongoose.connection.readyState === 1) {
+      next()
+    } else {
+      res.status(503).json({ error: 'Service unavailable' });
+    }
+  } catch (error) {
+    res.status(400).json({ error: 'Error! Could not access the server.' });
+  }
+})
+
 app.get('/', (req, res) => {
   res.send('This is an API for "Happy Thoughts"')
 })
@@ -46,19 +58,26 @@ app.get('/thoughts', async (req, res) => {
 })
 
 app.post('/thoughts', async (req, res) => {
-  //Retrieve the innformation sent by the client to our API endpoint
-  const { message } = req.body
 
-  //Use the mongoose model to create the Database entry
-  const thought = new Thought({ message })
-
-  try {
-    //Success
-    const savedThought = await thought.save()
-    res.status(201).json(savedThought)
-  } catch (err) {
-    res.status(400).json({ message: 'Could not save thought to the datbase', error: err.errors })
+  try { 
+    const newThought = await new Thought(req.body).save()
+    res.status(200).json(newThought)
+  } catch (error) { 
+      res.status(400).json({ message: 'Could not save thought to the database', error: err.errors })
   }
+  // //Retrieve the innformation sent by the client to our API endpoint
+  // const { message } = req.body
+
+  // //Use the mongoose model to create the Database entry
+  // const thought = new Thought({ message })
+
+  // try {
+  //   //Success
+  //   const savedThought = await thought.save()
+  //   res.status(201).json(savedThought)
+  // } catch (err) {
+  //   res.status(400).json({ message: 'Could not save thought to the database', error: err.errors })
+  // }
 })
 
 app.post('/thoughts/:id/like', async (req, res) => {
