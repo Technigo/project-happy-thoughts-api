@@ -7,6 +7,25 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
+const Thought = mongoose.model('Thought' , {
+  message: {
+    type: String,
+    required: true,
+    minLength: 5
+
+  },
+  heart: {
+    type: Number,
+
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+
+  }
+
+});
+
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
 //
