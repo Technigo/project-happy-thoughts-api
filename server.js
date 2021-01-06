@@ -1,13 +1,13 @@
-import express from 'express'
-import bodyParser from 'body-parser'
-import cors from 'cors'
-import mongoose from 'mongoose'
+import express from "express"
+import bodyParser from "body-parser"
+import cors from "cors"
+import mongoose from "mongoose"
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-const Thought = mongoose.model('Thought', {
+const Thought = mongoose.model("Thought", {
   message: {
     type: String,
     required: true,
@@ -20,7 +20,7 @@ const Thought = mongoose.model('Thought', {
   },
   user: {
     type: String,
-    default: 'Anonymous'
+    default: "Anonymous"
   },
   createdAt: {
     type: Date,
@@ -37,66 +37,74 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 
-const myEndpoints = require('express-list-endpoints')
-app.get('/', (req, res) => {
+const myEndpoints = require("express-list-endpoints")
+app.get("/", (req, res) => {
   res.send(myEndpoints(app))
 })
-
-// app.get('/', (req, res) => {
-//   res.send('Hello world, welcome to Katarinas Happy Thoughts API')
-// })
 
 //Handling erorrs by summing them in consts
 const COULD_NOT_SAVE_THOUGHT = "Sorry! Could not save thought to the database";
 const COULD_NOT_FIND_THOUGHT_WITH_ID = "Sorry! Unable to find the thought with the ID: ";
 const COULD_FIND_THOUGHT = "Added one more like";
 
-//GET AND POST THOUGHTS
-app.get('/thoughts', async (req, res) => {
-  const {page, sort} = req.query
+//GET THOUGHTS
+app.get("/thoughts", async (req, res) => {
+  const { page, sort } = req.query;
 
-  //Pagination
-  const pageNo = +page || 1
-  const itemPerPage = 20
-  const next = itemPerPage * (pageNo - 1)
+  //Pagination to display 20 thoughts per page and go onto skip page once the count is fullfilled
+  const pageNo = +page || 1;
+  const thoughtsPerPage = 20;
+  const skip = thoughtsPerPage * (pageNo - 1);
 
-  const allThoughts = await Thought.find()
-  const pages = Math.ceil(allThoughts.length / itemPerPage)
+  const allThoughts = await Thought.find();
+  const pages = Math.ceil(allThoughts.length / thoughtsPerPage);
 
-  const sortThoughts = (sort) => {
-    if (sort === 'likes') {
+  //Sort thoughts by the ones created most recently / returns the amount of thoughts and pages
+  const sortAllThoughts = (sort) => {
+    if (sort === "likes") {
       return {
         hearts: -1,
-      }
-    } else if (sort === 'oldest') {
+      };
+    } else if (sort === "oldest") {
       return {
         createdAt: 1,
-      }
+      };
     } else {
       return {
-        createdAt: -1
-      }
+        createdAt: -1,
+      };
     }
-  }
+  };
 
-  const thoughts = await Thought.find().sort(sortThoughts(sort)).limit(itemPerPage).next(next).exec()
-  res.json({pages:pages, thoughts: thoughts})
-})
+  const thoughts = await Thought.find()
+    .sort(sortAllThoughts(sort))
+    .limit(thoughtsPerPage)
+    .skip(skip)
+    .exec();
 
-app.post('/thoughts', async (req, res) => {
-  const {message, hearts, user} = req.body
-  const thought = new Thought({message: message, hearts: hearts, user: user})
+  res.json({ pages: pages, thoughts: thoughts });
+});
+
+//POST THOUGHTS
+app.post("/thoughts", async (req, res) => {
+  const { message, name, theme } = req.body;
+  const thought = new Thought({
+    message: message,
+    name: name,
+    theme: theme,
+  });
 
   try {
-    const savedThought = await thought.save()
-    res.status(201).json(savedThought)
+    const savedThought = await thought.save();
+    res.status(201).json(savedThought);
   } catch (err) {
-    res.status(400).json({message: COULD_NOT_SAVE_THOUGHT, error: err.errors})
+    res
+      .status(400)
+      .json({ message: COULD_NOT_SAVE_THOUGHT, error: err.errors });
   }
-})
+});
 
-//MANAGING POST FOR LIKES
-app.post('/:thoughtID/like', async (req, res) => {
+app.post("/:thoughtID/like", async (req, res) => {
   const { thoughtID } = req.params;
 
   try {
