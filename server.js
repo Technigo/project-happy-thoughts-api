@@ -42,16 +42,18 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
+// Save new message to database
 app.post('/messages', async (req, res) => {
   try {
-    const message = new Message({ message: req.body.message, hearts: req.body.hearts, createdAt: req.body.createdAt })
+    const message = new Message({ message: req.body.message })
     await message.save()
     res.status(200).json(message)
   } catch (err) {
-    res.status(404).json({ message: 'Could not return message', errors: err.errors })
+    res.status(400).json({ message: 'Could not save message to database', errors: err.errors })
   }
 });
 
+// Return all messages to client
 app.get('/messages', async (req, res) => {
   //const queryParameters = req.query;
   const allMessages = await Message.find(req.query).sort({ createdAt: 'desc' }).limit(20);
@@ -62,13 +64,14 @@ app.get('/messages', async (req, res) => {
   }
 })
 
+// Save likes to database, returns to client
 app.post('/messages/:messageId/like', async (req, res) => {
   try {
     const { messageId } = req.params;
     await Message.updateOne({ _id: messageId }, { $inc: { hearts: +1 } });
     res.status(200).json();
   } catch (err) {
-    res.status(404).json({ message: 'Cannot find message', errors: err.errors })
+    res.status(400).json({ message: 'Cannot save to database', errors: err.errors })
   }
 });
 
