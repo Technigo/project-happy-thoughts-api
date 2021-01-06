@@ -29,3 +29,4 @@ The POST /thoughts/:id/like endpoint return a 404 if the thought is not found.
 
 ## View it live
 
+<a href='https://happy-thoughts-api-emelie.herokuapp.com/'>Happy Thoughts API</a>
