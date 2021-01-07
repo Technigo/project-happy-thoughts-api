@@ -66,13 +66,29 @@ app.get('/thoughts', async (req, res) => {
 
 // POST /thoughts : Endpoint to add a new Thought to the database
 app.post('/thoughts', async (req, res) => {
+   // Retrieve message and username sent by the client in the POST request body
   const {message} = req.body
+    // use mongoose model to create a new Thought using the message we got from the client
   const thought = new Thoughts({message})
   try {
+     // Success case: Add a new instance of Thought to the database by calling save() on it
     const newThought = await thought.save()
     res.status(200).json(newThought)
-  }catch(err) {
+  }
+  catch(err) {
     res.status(400).json({ message:"Error when trying to save thought", error: err.errors })
+  }
+})
+
+// POST /thoughts/:thoughtId/like : Endpoint to add a like to a specific thought
+app.post('thoughts/:thoughtId/like', async (req, res) =>{
+  const thoughtId = req.params.thoughtId;
+  try{
+    const addLike = await Thoughts.updateOne({ _id: thoughtId}, { $inc: { hearts: 1 } })
+    res.json(addLike)
+  }
+  catch(err){
+    res.status(400).json({message: "Error when adding a like", error: err.errors })
   }
 })
 
