@@ -70,7 +70,14 @@ app.get('/', (req, res) => {
 // - sort: a string
 //    usage: /eruptions?sort=hearts
 app.get('/thoughts', async (req, res) => {
-  const { sort } = req.query;
+  const { sort, page } = req.query;
+
+  // Pagination for infinite scroll
+  const pageNumber = +page || 1;
+  const pageSize = 10 * pageNumber;
+
+  // Get all thoughts
+  const allThoughts = await Thought.find();
 
   // Sort thoughts on query, newest by default
   const sortThoughts = sort => {
@@ -83,32 +90,35 @@ app.get('/thoughts', async (req, res) => {
     }
   };
 
+  // Get all thoughts, sort and limit
   const thoughts = await Thought.find()
     .sort(sortThoughts(sort))
-    .limit(20)
+    .limit(pageSize)
     .exec();
 
   if (thoughts) {
-    res.status(200).send(thoughts);
+    res.status(200).send({ total: allThoughts.length, results: thoughts });
   } else {
     res.status(400).send({ error: BAD_REQUEST, error: err.errors });
   }
 });
 
 // POST /thoughts endpoint
+// Post a thought
 app.post('/thoughts', async (req, res) => {
   const { message, name } = req.body;
   try {
-    //success
+    // Success
     const thought = await new Thought({ message, name }).save();
     res.status(201).send(thought);
   } catch (err) {
-    //bad request
+    // Bad request
     res.status(400).send({ message: POST_FAILED, errors: err.errors });
   }
 });
 
-// POST thoughts/:id/like endpoint
+// POST /thoughts/:id/like endpoint
+// Post a like
 app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params;
   try {
@@ -119,7 +129,7 @@ app.post('/thoughts/:id/like', async (req, res) => {
   }
 });
 
-//____________Start the server
+// Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
