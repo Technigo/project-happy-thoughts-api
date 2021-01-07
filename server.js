@@ -39,6 +39,10 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 40
   },
+  name: {
+    type: String,
+    default: "Anonymous"
+  },
   hearts: {
     type: Number, 
     default: 0
