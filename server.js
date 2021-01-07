@@ -64,16 +64,12 @@ app.get('/', (req, res) => {
 app.get('/thoughts', async (req, res) => {
   const { sort, page } = req.query
 
-  //const pageNumber = +page || 1; 
   const pageNumber = +page || 1; 
   const pageSize = 8 * pageNumber;
   
   const totalThoughts = await Thought.find();
   const numberOfThoughts = totalThoughts.length
-  console.log(numberOfThoughts)
   
-  //const skip = pageSize * (pageNumber -1);
-
   const sortThoughts = (sort) => {
     if (sort === "likes") {
       return { hearts: -1 }  
@@ -89,7 +85,6 @@ app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find()
     .sort(sortThoughts(sort))
     .limit(pageSize)
-    //.skip(skip)
     .exec()
 
     if (thoughts) {
@@ -103,11 +98,9 @@ app.get('/thoughts', async (req, res) => {
 app.post('/thoughts', async (req, res) => {
   const { name, message } = req.body
   try {
-    //success
     const thought = await new Thought({ message: message, name: name}).save()
     res.status(201).send(thought)
   } catch (err) {
-    //bad request
     res.status(400).send({ message: POST_THOUGHT_FAILED, errors: err.errors })
   }
 })

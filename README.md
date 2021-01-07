@@ -28,4 +28,5 @@ https://happy-thoughts.herokuapp.com/
 ## Frontend
 
 https://happy-thoughts-therese-linden.netlify.app/
+
 https://github.com/thereselinden/project-happy-thoughts
