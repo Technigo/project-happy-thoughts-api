@@ -7,6 +7,7 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
+//___________________Model
 const Thought = mongoose.model('Thought', {
   message: {
     type: String,
@@ -28,33 +29,22 @@ const Thought = mongoose.model('Thought', {
   }
 })
 
-/*
-ATT GÖRA
-- infinate scroll instad of limit 20. (black) 
-//https://www.npmjs.com/package/react-infinite-scroller
-*/
-
-
-// Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
+//___________________Defines port app till run on
 const port = process.env.PORT || 8080
 const app = express()
 
-//____________Add middlewares to enable cors and json body parsing
+//___________________Middleweares to enable cors and json body parsing
 app.use(cors())
 app.use(bodyParser.json())
+const listEndpoints = require('express-list-endpoints')
 
-//_____________Different error messages
+//___________________Error messages
 const SERVICE_UNAVAILABLE = "service unavailable"
 const BAD_REQUEST = "Bad request"
 const POST_THOUGHT_FAILED = "Could not save thought"
 const ID_NOT_FOUND = "Thought ID was not found"
 
-const listEndpoints = require('express-list-endpoints')
-
-//_____________Error message in case server is down
+//___________________Error messages if server is not connected
 app.use((req, res, next) => {
   if(mongoose.connection.readyState === 1) {
     next();
@@ -65,12 +55,12 @@ app.use((req, res, next) => {
   };
 });
 
-//____________Defining routes
+//___________________Defining routes
 app.get('/', (req, res) => {
   res.send(listEndpoints(app))
 })
 
-//____________List all thoughts
+//___________________GET all thoughts
 app.get('/thoughts', async (req, res) => {
   const { sort, page } = req.query
 
@@ -109,7 +99,7 @@ app.get('/thoughts', async (req, res) => {
   }
 })
 
-//____________Post a thought
+//___________________POST thought
 app.post('/thoughts', async (req, res) => {
   const { name, message } = req.body
   try {
@@ -122,7 +112,7 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-//____________Like a thought
+//___________________POST a thought-like
 app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params
   try {
@@ -133,7 +123,7 @@ app.post('/thoughts/:id/like', async (req, res) => {
   }
 })
 
-//____________Start the server
+//___________________Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
 })

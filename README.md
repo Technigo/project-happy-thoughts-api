@@ -10,6 +10,7 @@ Recreate backend from an earlier Technigo Bootcamp project
 - How to build a full API which includes handling of user input
 - How to include error handling to return good validation errors
 - How to build an API which works well with an existing frontend
+- Pagination
 
 ## Tech
 
