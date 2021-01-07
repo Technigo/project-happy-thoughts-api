@@ -54,7 +54,7 @@ app.post('/thoughts', async (req, res) => {
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
   } catch (err) {
-    res.status(400).json({ message: 'Could not save thought to Database', error: err.errors })
+    res.status(400).json({ message: 'Could not save thought', error: err.errors })
   }
 })
 
