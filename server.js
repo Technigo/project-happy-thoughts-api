@@ -11,13 +11,14 @@ const Thought = mongoose.model('Thought' , {
   message: {
     type: String,
     required: true,
-    minlength: 5
+    minlength: 5,
+    maxlength: 140
+  },
+  hearts: {
+    type: Number,
+    default: 0
 
   },
-  // heart: {
-  //   type: Number,
-
-  // },
   createdAt: {
     type: Date,
     default: Date.now
@@ -39,19 +40,31 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Jello world')
+  res.send('Hello happy thoughts')
 })
 
+
+// 1
+// This endpoint should return a maximum of 20 thoughts, sorted by createdAt to show the most recent thoughts first. 
+// GET request
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
   res.json(thoughts);
 })
 
+
+// 2
+// This endpoint expects a JSON body with the thought `message`, like this: `{ "message": "Express is great!" }`. If the input is valid (more on that below), the thought should be saved, and the response should include the saved thought object, including its `_id`. 
+// POST request
 app.post('/thoughts', async (req, res) => {
+  // Retrieve the information sent by the client to our API endpoint
   const { message } = req.body;
+
+  //Use our mongoose model to creare the database entry
   const thought = new Thought({ message });
   
   try {
+    //Success
     const savedThought = await thought.save();
     res.status(201).json(savedThought);
   } catch (err) {
@@ -59,6 +72,8 @@ app.post('/thoughts', async (req, res) => {
   }
 })
   
+
+
 
 // Start the server
 app.listen(port, () => {
