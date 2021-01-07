@@ -74,11 +74,12 @@ app.get('/thoughts', async (req, res) => {
 
   // Pagination for infinite scroll
   const pageNumber = +page || 1;
-  const pageSize = 1 * pageNumber;
+  const pageSize = 5 * pageNumber;
 
   // Get all thoughts
-  const allThoughts = await Thought.find();
-  console.log(allThoughts.length);
+  // const allThoughts = await Thought.find();
+  // const numberOfThoughts = allThoughts.length;
+  // console.log(allThoughts.length);
 
   // Sort thoughts on query, newest by default
   const sortThoughts = sort => {
@@ -98,11 +99,10 @@ app.get('/thoughts', async (req, res) => {
     .exec();
 
   if (thoughts) {
-    res.status(200).send({ total: allThougths.length, results: thoughts });
+    res.status(200).send({ total: thoughts.length, results: thoughts });
   } else {
     res.status(400).send({ error: BAD_REQUEST, error: err.errors });
   }
-  console.log(thoughts);
 });
 
 // POST /thoughts endpoint
