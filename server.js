@@ -12,14 +12,14 @@ mongoose.Promise = Promise
 //
 //   PORT=9000 npm start
 
-const Thoughts = mongoose.model('Thoughts', {
+const Thought = mongoose.model('Thought', {
   message: {
     type: String,
     required: true,
     minlength: 5,
     maxlength: 140
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -29,7 +29,7 @@ const Thoughts = mongoose.model('Thoughts', {
   }
 })
 
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 8081
 const app = express()
 
 // Add middlewares to enable cors and json body parsing
@@ -38,22 +38,22 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('This is the Happy Thoughts API by Caroline Birgersson')
 })
 
-app.get('/thoughts', async (req, res) => {
+app.get('/thoughts', async (req, res) => { //finds the added thoughts
   try {
-    const thoughts = await Thoughts.find().sort({createdAt: 'desc'}).limit(20).exec()
+    const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
     res.status(201).json(thoughts)
   } catch (err) {
     res.status(400).json({message: 'could not load the database' })
   }
 })
 
-app.post('/thoughts', async (req, res) => {
+app.post('/thoughts', async (req, res) => { //creates a thought
   try {
-    const {message} = req.body
-    const thought = new Thoughts({message})
+    const {message, hearts} = req.body 
+    const thought = new Thought({message: message, hearts: hearts}) // this structure makes the user not able to manipulate the input
 
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
@@ -61,6 +61,17 @@ app.post('/thoughts', async (req, res) => {
     res.status(400).json({message: "could not save thought to the database", error: err.errors})
   }
 })
+
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const {thoughtId} = req.params
+  try {
+    await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } });
+    res.status(200).json(thoughtId)
+  } catch (err) {
+      res.status(404).json({message: "could not add heart by the id", 
+      error: err.errors})
+  }
+});
 
 // Start the server
 app.listen(port, () => {
