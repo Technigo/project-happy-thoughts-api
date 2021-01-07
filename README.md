@@ -9,4 +9,4 @@ Working with Postman, MongoDB, Mongoose, aside from creating routes and deployin
 ## View it live
 
 My live project backend: https://katarinas-happy-api.herokuapp.com/
-Frontend: https://happy-thoughts-kat.netlify.app/
+Frontend: https://github.com/Katsiez/project-happy-thoughts and https://happy-thoughts-kat.netlify.app/
