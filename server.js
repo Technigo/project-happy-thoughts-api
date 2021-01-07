@@ -51,11 +51,25 @@ app.post('/thoughts', async (req, res) => {
 
   try{
     //Success
-    const savedTask = await thoughts.save()
-    res.status(201).json(savedTask)
+    const savedThought = await thoughts.save()
+    res.status(201).json(savedThought)
+
   } catch (err) {
-    res.status(400).json({message: 'Could not save to the Database', error: err.errors})
+    res.status(400).json({message: 'Could not save thought', error: err.errors})
     }
+})
+
+app.post('/thoughts/:id/like', async (req, res) => {
+  const {id} = req.params
+
+  try {
+    // Success
+    await Thought.updateOne({ _id: id }, { $inc: { hearts: 1 } });
+    res.status(201).send();
+
+  } catch (err) {
+    res.status(400).json({ message: `Could not save like`, error: err.errors});
+  }
 })
 
 // Start the server
