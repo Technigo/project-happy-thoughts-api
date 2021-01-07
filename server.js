@@ -14,7 +14,7 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlenght: 140 
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0,
   },
@@ -46,24 +46,26 @@ app.get('/thoughts', async (req, res) => {
 });
 
 app.post('/thoughts', async (req, res) => {
-  const {text, heart} = req.body;
-  const thought = new Thought({message: message, heart: heart});
+  const {message, hearts} = req.body;
+  const thought = new Thought({message: message, hearts: hearts});
 
   try {
     const savedThought = await thought.save();
     res.status(201).json(savedThought);
   } catch (err) {
-    res.status(400).json({message: 'Could not post your happy thought', error: err.errors});
+    res.status(400).json({ message: 'Could not post your happy thought', 
+    error: err.errors
+  });
   }
 });
 
 /// Likes (heart)
 
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
-  const { heartId } = req.params;
+  const { thoughtId } = req.params;
 
   try {
-    await Thought.updateOne({ _id: thoughtId }, { $inc: { heart: 1} });
+    await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1} });
     res.status(201).json({ message: 'Could not find thought', 
     error: err.errors
   });
