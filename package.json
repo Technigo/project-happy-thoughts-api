@@ -9,18 +9,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@babel/helper-compilation-targets": "^7.12.5",
+    "@babel/core": "^7.8.3",
+    "@babel/node": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mongoose": "^5.8.9",
+    "mongoose": "^5.8.10",
     "nodemon": "^2.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.10",
-    "@babel/node": "^7.12.10",
-    "@babel/preset-env": "^7.12.11",
-    "babel-install": "2.1.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-import": "^0.13.0"
