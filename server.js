@@ -66,7 +66,6 @@ app.post('/thoughts/:id/like', async (req, res) => {
   } else {
     res.status(400).json({message: "can not find thought"})
   }
-
 })
 
 // Start the server
