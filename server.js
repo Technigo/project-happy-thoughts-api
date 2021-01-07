@@ -24,10 +24,7 @@ const Thought = mongoose.model('Thought', {
   }
 })
 
-// Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
+// Defines the port the app will run on.
 const port = process.env.PORT || 8080
 const app = express()
 
@@ -35,7 +32,7 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-// Start defining your routes here
+// ROUTES
 app.get('/', (req, res) => {
   res.send('Hello, this is Lindas Happy Thoughts API. Go to https://github.com/lindahz/project-happy-thoughts-api for documentation.')
 })
@@ -46,7 +43,7 @@ app.get('/thoughts', async (req, res) => {
   res.json(thoughts)
 })
 
-// POST endpoint to send messages
+// POST endpoint to send thoughts
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body
   const thought = new Thought({ message })
@@ -58,7 +55,7 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-// POST endpoint to send hearts - using POST instead of PUT because...?
+// POST endpoint to send hearts
 app.post('/thoughts/:id/like', async (req, res) => {
   try {
     const { id } = req.params
