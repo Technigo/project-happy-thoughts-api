@@ -19,13 +19,17 @@ app.use(cors())
 app.use(bodyParser.json())
 
 
-// Build a model with properties message, heart and createdAt
+// Mongoose model with properties message, heart and createdAt
 const Thought = mongoose.model('Thought', {
   message: {
     type: String,
     required: true,
     minlength: 5,
     maxlength: 140
+  },
+  name: {
+    type: String,
+    default: 'Anonymous'
   },
   hearts: {
     type: Number,
@@ -35,6 +39,10 @@ const Thought = mongoose.model('Thought', {
     type: Date,
     default: Date.now
   }
+})
+
+app.get('/', (req, res) => {
+  res.send('Hello world, welcome to my happy thoughts API // Anna Hellqvist')
 })
 
 // Endpoint to GET and list the 20 latest thoughts
@@ -73,13 +81,6 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     })
   }
 
-})
-
-
-
-// Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world, welcome to my happy thoughts API // Anna Hellqvist')
 })
 
 // Start the server
