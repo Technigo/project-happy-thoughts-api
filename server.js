@@ -30,7 +30,7 @@ const Thought = mongoose.model('Thought', {
     type: Date,
     default: Date.now,
   },
-  autor: {
+  author: {
     type: String,
     default: 'Anonymous',
   },
