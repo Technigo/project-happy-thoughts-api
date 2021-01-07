@@ -78,7 +78,7 @@ app.get('/thoughts', async (req, res) => {
 
   // Get all thoughts
   const allThoughts = await Thought.find();
-  const numberOfThoughts = allThoughts.length;
+  //const numberOfThoughts = allThoughts.length;
   console.log(allThoughts.length);
 
   // Sort thoughts on query, newest by default
@@ -99,7 +99,7 @@ app.get('/thoughts', async (req, res) => {
     .exec();
 
   if (thoughts) {
-    res.status(200).send({ total: numberOfThoughts, results: thoughts });
+    res.status(200).send({ total: allThoughts.length, results: thoughts });
   } else {
     res.status(400).send({ error: BAD_REQUEST, error: err.errors });
   }
