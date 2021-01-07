@@ -18,7 +18,7 @@ const Thought = mongoose.model('Thought', {
     type: Date,
     default: Date.now
   },
-  heart: {
+  like: {
     type: Number,
     default: 0
   }
@@ -36,31 +36,32 @@ app.use(cors())
 app.use(bodyParser.json())
 
 // Start defining your routes here
-app.get('/', async (req, res) => {
+app.get('/', (req, res) => {
+  res.send('Happythoughts API')
+})
+
+
+app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
   res.json(thoughts)
 })
 
-app.post('/', async (req, res) => {
-  const thought = new Thought({ message: message })
-  const { message } = req.body
-
+app.post('/thoughts', async (req, res) => {
+  const newThought = new Thought({ message: req.body.message })
   try {
-    const savedThought = await thought.save()
+    const savedThought = await newThought.save()
     res.status(201).json(savedThought)
   } catch (err) {
-    res.status(400).json({ message: 'Error, could not store thought in database', error: err.errors })
+    res.status(400).json({ message: 'Error, unable to save thought', error: err.errors })
   }
 })
 
-app.post('/:id/like', async (req, res) => {
+app.post('/thoughts/:id/like', async (req, res) => {
   try {
-    const savedLike = await Thought.findOneAndUpdate(
-      { _id: req.params.id }, { $inc: { heart: 1 } }
-    )
-    res.json(savedLike)
+    const updatedThought = await Thought.updateOne({ _id: req.params.id }, { $inc: { 'hearts': 1 } }, { new: true })
+    res.status(201).json(updatedThought)
   } catch (err) {
-    res.status(400).json({  message: 'Error, could not like this thought', error: err.errors })
+    res.status(404).json({ message: 'Error, unable to post', error: err.errors })
   }
 })
 
