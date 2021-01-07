@@ -37,7 +37,7 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('This is a Happy thoughts API.')
 })
 
 app.get('/thoughts', async (req, res) => {
@@ -46,14 +46,17 @@ app.get('/thoughts', async (req, res) => {
 })
 
 app.post('/thoughts', async (req, res) => {
+  //Retrieve the information sent by the client to our API endpoint
   const {message} = req.body
+
+  //Use our mpngoose model to create the database entry
   const thoughts = new Thought({message})
 
-  try{
-    //Success
+  try {
+    //Success - the thought is saved to the databse
     const savedThought = await thoughts.save()
     res.status(201).json(savedThought)
-
+    //Bad request
   } catch (err) {
     res.status(400).json({message: 'Could not save thought', error: err.errors})
     }
@@ -63,10 +66,10 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const {thoughtId} = req.params
 
   try {
-    // Success
+    // Success - the thought will be updated with a heart like
     const thoughtLiked = await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } });
     res.status(201).json(thoughtLiked);
-
+    //Bad request
   } catch (err) {
     res.status(400).json({ message: `Could not save like`, error: err.errors});
   }
