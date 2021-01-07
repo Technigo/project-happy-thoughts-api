@@ -8,7 +8,7 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
 // post model 
-const Message = mongoose.model('post', {
+const Message = mongoose.model('message', {
   message: {
     type: String,
     minlength: 5,
