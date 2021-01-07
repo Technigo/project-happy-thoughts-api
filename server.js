@@ -30,6 +30,10 @@ const Thought = mongoose.model('Thought', {
     type: Date,
     default: Date.now,
   },
+  autor: {
+    type: String,
+    default: 'Anonymous',
+  },
 });
 
 // Routes ------------------------------------
@@ -53,7 +57,10 @@ app.get('/thoughts', async (req, res) => {
 
 app.post('/thoughts', async (req, res) => {
   try {
-    const thought = new Thought({ message: req.body.message }).save();
+    const thought = new Thought({
+      message: req.body.message,
+      author: req.body.author,
+    }).save();
     res.json(await thought);
   } catch (err) {
     res.status(400).json({
