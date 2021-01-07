@@ -45,7 +45,9 @@ app.get('/thoughts', async (req, res) => {
       .exec();
     res.json(allThoughts);
   } catch (err) {
-    res.json({ message: 'Could not find any thoughts!', errors: err.errors });
+    res
+      .status(404)
+      .json({ message: 'Could not find any thoughts!', errors: err.errors });
   }
 });
 
@@ -54,7 +56,7 @@ app.post('/thoughts', async (req, res) => {
     const thought = new Thought({ message: req.body.message }).save();
     res.json(await thought);
   } catch (err) {
-    res.json({
+    res.status(400).json({
       message: 'Could not publish your thought!',
       errors: err.errors,
     });
@@ -67,7 +69,9 @@ app.post('/thoughts/:id/like', async (req, res) => {
     await Thought.updateOne({ _id: req.params.id }, { $inc: { hearts: 1 } });
     res.status(201).json({ Success: 'Like was successfully added!' });
   } catch (err) {
-    res.json({ message: 'Could not find the thought', errors: err.errors });
+    res
+      .status(404)
+      .json({ message: 'Could not find the thought', errors: err.errors });
   }
 });
 
