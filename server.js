@@ -17,21 +17,10 @@ const Thought = mongoose.model('Thought', {
   createdAt: {
     type: Date,
     default: Date.now
-  }
-})
-
-const Heart = mongoose.model('Heart', {
+  },
   hearts: {
     type: Number,
     default: 0
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  message: {
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Thought'
   }
 })
 
@@ -48,7 +37,7 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Hello, this is Lindas Happy Thoughts API. Go to https://github.com/lindahz/project-happy-thoughts-api for documentation.')
 })
 
 // GET endpoint to show messages and hearts
@@ -65,14 +54,20 @@ app.post('/thoughts', async (req, res) => {
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
   } catch (err) {
-    res.status(400).json({message: 'Could not save thought to Database', error: err.errors})
+    res.status(400).json({ message: 'Could not save thought to Database', error: err.errors })
   }
 })
 
-// POST endpoint to send hearts - using POST instead of PUT because... 
-// app.post('/thoughts/:thoughtId/like', async (req, res) => {
-
-// })
+// POST endpoint to send hearts - using POST instead of PUT because...?
+app.post('/thoughts/:id/like', async (req, res) => {
+  try {
+    const { id } = req.params
+    const updatedLike = await Thought.updateOne({ _id: id }, { $inc: { 'hearts': 1 } })
+    res.status(201).json(updatedLike)
+  } catch (err) {
+    res.status(404).json({ message: 'Could not like thought', error: err.errors })
+  }
+})
 
 // Start the server
 app.listen(port, () => {
