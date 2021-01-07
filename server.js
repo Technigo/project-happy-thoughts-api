@@ -67,8 +67,9 @@ app.get('/', (req, res) => {
 // RETURNS: A collection of all thoughts from MongoDB as an array
 //
 // PARAMETERS:
+// - page: a number
 // - sort: a string
-//    usage: /eruptions?sort=hearts
+//    usage: /thoughts?page=1&sort=hearts
 app.get('/thoughts', async (req, res) => {
   const { sort, page } = req.query;
 
