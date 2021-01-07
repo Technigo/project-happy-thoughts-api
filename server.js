@@ -1,7 +1,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
-import mongoose from 'mongoose'
+import mongoose, { Model } from 'mongoose'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -14,6 +14,13 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 140
   },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+})
+
+const Heart = mongoose.model('Heart', {
   hearts: {
     type: Number,
     default: 0
@@ -21,6 +28,10 @@ const Thought = mongoose.model('Thought', {
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  message: {
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Thought'
   }
 })
 
@@ -58,7 +69,7 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-// POST endpoint to send hearts
+// POST endpoint to send hearts - using POST instead of PUT because... 
 // app.post('/thoughts/:thoughtId/like', async (req, res) => {
 
 // })
