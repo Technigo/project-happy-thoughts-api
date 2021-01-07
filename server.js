@@ -60,8 +60,26 @@ app.get('/', (req, res) => {
 
 // Endpoint created to get a list of the 20 latest thoughts
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec();
-  res.json(thoughts);
+
+  // Field for client to sort on parameter
+  const sortField = req.query.sortField;
+  // Field for client to choose sorting order, 'asc' or 'desc'
+  const sortOrder = req.query.sortOrder;
+  // Creates the initial database query
+  let databaseQuery = Thought.find();
+
+  // To search with sortField and sortOrder with queries: 
+  // (GET '/thoughts?sortField=${sortField}&sortOrder=${sortOrder}')
+  if (sortField) {
+    databaseQuery = databaseQuery.sort({ [sortField]: sortOrder === 'asc' ? 1 : -1 })
+  } else {
+    databaseQuery = databaseQuery.sort({ createdAt: 'desc' }).limit(20);
+  }
+
+  // const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec();
+  // The await function comes here instead after sorting / filtering with queries
+  const thoughts = await databaseQuery.exec();
+  res.status(200).json(thoughts);
 });
 
 // Endpoint for POSTing thoughts and adding it to the database
