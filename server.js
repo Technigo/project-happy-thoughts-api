@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 const ERR_COULD_NOT_SAVE_TO_DB = "Could not save thought to the database";
 const ERR_SERVICE_UNAVAILABLE = "Service unavailable";
 const ERR_NO_ENDPOINTS_FOUND = "No endpoints found. Try again later";
+const ERR_COULD_NOT_SAVE_LIKE = "Could not save like for id:";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -58,8 +59,31 @@ app.get("/", (req, res) => {
 });
 
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20);
-  res.json(thoughts);
+  // const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20);
+  // res.json(thoughts);
+
+  const sortField = req.query.sortField; // These x2 query parameters allow the client to sort data from
+  const sortOrder = req.query.sortOrder || "desc";
+  const limit = req.query.limit || 20;
+
+  console.log(`GET /thoughts?sortField=${sortField}&sortOrder=${sortOrder}`);
+
+  let databaseQuery = Thought.find(); // Creates the initial query
+
+  if (sortField) {
+    // If we have extra information we can modify the query before we execute it
+    databaseQuery = databaseQuery.sort({
+      [sortField]: sortOrder === "desc" ? -1 : 1,
+    });
+  }
+
+  if (limit) {
+    databaseQuery = databaseQuery.limit(+limit); // Limits the results - 20 default
+  }
+
+  // Database query modifications before you actually excecute the database query
+  const results = await databaseQuery;
+  res.status(200).json(results);
 });
 
 app.post("/thoughts", async (req, res) => {
@@ -74,6 +98,22 @@ app.post("/thoughts", async (req, res) => {
       message: ERR_COULD_NOT_SAVE_TO_DB,
       error: err.errors,
     });
+  }
+});
+
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+
+  try {
+    await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } });
+    res.status(201).send();
+  } catch (err) {
+    res
+      .status(400)
+      .json({
+        message: `${ERR_COULD_NOT_SAVE_LIKE} ${thoughtId}`,
+        error: err.errors,
+      });
   }
 });
 
