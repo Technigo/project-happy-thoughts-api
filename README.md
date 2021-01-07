@@ -11,6 +11,7 @@ Describe how you approached to problem, and what tools and techniques you used t
 ## Tech 🛠
 
 - Node.js
+- Express
 - MongoDB
 - Mongoose
 
