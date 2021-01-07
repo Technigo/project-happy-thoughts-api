@@ -30,13 +30,11 @@ const Thought = mongoose.model("Thought", {
   },
   heart: {
     type: Number,
-    //TODO: default not working yet - can assign nr of my choice to it!
     default: 0
   },
   createdAt: {
     type: Date,
     default: Date.now
-    //Should not be assignable when creating a new thought
   }
 })
 
@@ -53,7 +51,7 @@ app.get("/thoughts", async (req, res) => {
 //endpoint for posting thoughts
 app.post("/thoughts", async (req, res) => {
   //retrieve the info sent by the client to our API endpoint
-  const { message } = req.body
+  const message = req.body.message
 
   //use mongoose model to create the DB entry
   const thought = new Thought({ message })
@@ -72,21 +70,16 @@ app.post("/thoughts", async (req, res) => {
 //endpoint for posting likes/hearts
 app.post("/thoughts/:thoughtId/heart", async (req, res) => {
   const thoughtId = req.params.thoughtId
-  // const heart = req.body
 
-  //increment the nr of hearts for the thought with specific id
-  await Thought.updateOne({ _id: thoughtId }, { $inc: { heart: 1 } })
+  try {
+    //increment the nr of hearts for the thought with specific id
+    const savedLike = await Thought.updateOne({ _id: thoughtId }, { $inc: { heart: 1 } })
+    // const savedLike = await like.save()
+    res.status(201).json(savedLike)
 
-  res.status(201).json()
-
-
-  // try {
-  //   const savedLike = await like.save()
-  //   res.status(201).json(savedLike)
-
-  // } catch (err) {
-  //   res.status(400).json({ message: "Couldn't save the like.", error: err.errors })
-  // }
+  } catch (err) {
+    res.status(400).json({ message: "Couldn't save the like.", error: err.errors })
+  }
 
 })
 
