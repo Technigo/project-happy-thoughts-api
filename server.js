@@ -71,7 +71,7 @@ app.get('/', async (req, res) => {
 //Post a new thought
 
 app.post('/', async (req, res) => {
-	const { message } = res.body;
+	const { message } = req.body;
 	const newThought = await new Thought({ message });
 	try {
 		const savedThought = await newThought.save();
