@@ -74,7 +74,7 @@ app.get('/thoughts', async (req, res) => {
 
   // Pagination for infinite scroll
   const pageNumber = +page || 1;
-  const pageSize = 2 * pageNumber;
+  const pageSize = 5 * pageNumber;
 
   // Get all thoughts
   const allThoughts = await Thought.find();
