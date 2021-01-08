@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 const Thought = new mongoose.model('Thought', {
   message: {
     type: String,
-    required: true,
+    required: [true, 'Message is required'],
     minlength: 5,
     maxlength: 140
   },

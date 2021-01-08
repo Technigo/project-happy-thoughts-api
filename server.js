@@ -58,7 +58,7 @@ app.post('/thoughts', async (req, res) => {
     res.status(200).json(newThought)
   } catch (error) {
     console.log(error)
-    res.status(400).json({success: false, message: error.message})
+    res.status(400).json({success: false, error: error})
   }
 })
 
@@ -69,7 +69,7 @@ app.delete('/thoughts/:id', async (req, res) => {
     res.status(200).json({ success: true })
   } catch (error) {
     console.log(error)
-    res.status(400).json({ success: false, message: error.message })
+    res.status(400).json({ success: false, error: error })
   }
 })
 
@@ -81,7 +81,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     )
     res.status(200).json({ success: true })
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message })
+    res.status(400).json({ success: false, error: error })
   } 
 })
 
