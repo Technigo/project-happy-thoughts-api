@@ -3,6 +3,9 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
+//predifining errors
+const ERR_CANNOT_SAVE_TO_DATABASE = 'Could not save thought to the Database';
+
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
@@ -21,6 +24,11 @@ const Thought = mongoose.model('Thought', {
     //default: () => new Date()
     default: Date.now
   },
+  category: {
+    type: String,
+    required:true
+  },
+
   hearts: {
     //this number will be 0 by default even if the client sends another quantity
     type: Number,
@@ -45,6 +53,13 @@ app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt:'desc'}).limit(20).exec();
   res.json(thoughts);
 });
+//endpoint to find thought by category
+app.get('/thoughts/food', async (req,res) =>{
+  console.log("GET /thoughts/food");
+  const { category } = req.params;
+  const foodThoughts = await Thought.find({category: category}) 
+  res.status(200).json(foodThoughts);
+});
 
 //posting an object to the database, if posted incorrectly the client receives errors
 app.post('/thoughts', async (req, res) => {
@@ -64,12 +79,34 @@ app.post('/thoughts', async (req, res) => {
     //retrive the information sent by the client to our API endpoint
     const { message } = req.body
     //use mongoose model to create database entry and save it
+    //we sent only message because we need to have only message from the client 
     const thought = new Thought({ message });
     const savedThought = await thought.save();
     res.status(200).json(savedThought) 
   } catch(err) {
     //bad request sending the status to the server and the message
-    res.status(400).json({message:'Could not save thought to the Database', errors:err.errors});
+    res.status(400).json({message: ERR_CANNOT_SAVE_TO_DATABASE, errors:err.errors});
+  }
+});
+
+app.post('/thoughts/:id/like', async(req,res)=>{
+  const { id } = req.params;
+  //const { like } = req.body;
+  await Thought.updateOne( {_id: id}, { $inc: {hearts: 1} });
+  res.status(200).json({success: true});
+})
+
+///delete endpoint/
+app.delete('/thoughts/:id', async(req,res)=>{
+  try{
+    //try to delete and send a successful response
+    const{ id } = req.params;
+    await Thought.deleteOne({ _id: id });
+    res.status(200).json({ success: true });
+  } catch(error) {
+    console.log(error)
+    //inform the client about the deletion failure
+    res.status(400).json({ success:false });
   }
 });
 
