@@ -32,6 +32,14 @@ const Thought = mongoose.model("Thought", {
   }
 });
 
+const Category = mongoose.model("Category", {
+  _id: String
+});
+
+const Author = mongoose.model("Author", {
+  _id: String
+});
+
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
 //
@@ -76,7 +84,35 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
   } catch (err) {
     res.status(400).json({ message: "Invalid thoughtId" });
   }
-})
+});
+
+app.get("/categories", async (req, res) => {
+  try {
+    await Thought.aggregate([
+      { $group: { _id: "$category" } },
+      { $sort: { _id: 1 } },
+      { $out: "categories" }
+    ]);
+    const categories = await Category.find().exec();
+    res.status(200).json(categories);
+  } catch (err) {
+    res.status(400).json({ err });
+  };
+});
+
+app.get("/authors", async (req, res) => {
+  try {
+    await Thought.aggregate([
+      { $group: { _id: "$author" } },
+      { $sort: { _id: 1 } },
+      { $out: "authors" }
+    ]);
+    const authors = await Author.find().exec();
+    res.status(200).json(authors);
+  } catch (err) {
+    res.status(400).json({ err });
+  };
+});
 
 // Start the server
 app.listen(port, () => {
