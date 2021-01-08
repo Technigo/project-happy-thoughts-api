@@ -60,7 +60,6 @@ app.get('/', (req, res) => {
 
 // Endpoint created to get a list of the 20 latest thoughts
 app.get('/thoughts', async (req, res) => {
-
   // Field for client to sort on parameter
   const sortField = req.query.sortField;
   // Field for client to choose sorting order, 'asc' or 'desc'
@@ -77,6 +76,7 @@ app.get('/thoughts', async (req, res) => {
   }
 
   // const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec();
+
   // The await function comes here instead after sorting / filtering with queries
   const thoughts = await databaseQuery.exec();
   res.status(200).json(thoughts);
