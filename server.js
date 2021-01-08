@@ -73,7 +73,7 @@ app.get("/thoughts", async (req, res) => {
   const sortOrder = req.query.sortOrder || "desc";
   const limit = req.query.limit || 20;
 
-  console.log(`GET /thoughts?sortField=${sortField}&sortOrder=${sortOrder}`);
+  // console.log(`GET /thoughts?sortField=${sortField}&sortOrder=${sortOrder}`);
 
   let databaseQuery = Thought.find(); // Creates the initial query
 
