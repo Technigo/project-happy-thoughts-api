@@ -21,6 +21,14 @@ const Thought = mongoose.model("Thought", {
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  category: {
+    type: String,
+    default: null
+  },
+  author: {
+    type: String,
+    default: null
   }
 });
 
@@ -46,9 +54,9 @@ app.get("/thoughts", async (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
-  const { message } = req.body;
+  const { message, author, category } = req.body;
 
-  new Thought({ message }).save()
+  new Thought({ message, author, category }).save()
     .then((thought) => {
       res.status(200).json(thought);
     })

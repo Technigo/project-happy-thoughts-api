@@ -1,0 +1,54 @@
+[
+  {
+    "category": "Testing",
+    "author": "Sandrine",
+    "_id": "5ff829643f0208529801d4b1",
+    "message": "Testing from the client side ",
+    "createdAt": "2021-01-08T09:44:04.239Z",
+    "__v": 0
+  },
+  {
+    "hearts": 0,
+    "category": null,
+    "author": "Sandrine",
+    "_id": "5ff822793f0208529801d4b0",
+    "message": "Better with null?",
+    "createdAt": "2021-01-08T09:14:33.051Z",
+    "__v": 0
+  },
+  {
+    "hearts": 0,
+    "author": "Sandrine",
+    "_id": "5ff8224745cca34354e0b1d1",
+    "message": "This time with author and no category",
+    "createdAt": "2021-01-08T09:13:43.114Z",
+    "__v": 0
+  },
+  {
+    "hearts": 0,
+    "category": "Code",
+    "author": "Sandrine",
+    "_id": "5ff821c045cca34354e0b1d0",
+    "message": "This time with author and category",
+    "createdAt": "2021-01-08T09:11:28.218Z",
+    "__v": 0
+  },
+  {
+    "hearts": 0,
+    "category": null,
+    "author": null,
+    "_id": "5ff81913af79d26034e30602",
+    "message": "Posting a thought using the updated Mongoose model",
+    "createdAt": "2021-01-08T08:34:27.944Z",
+    "__v": 0
+  },
+  {
+    "hearts": 12,
+    "category": null,
+    "author": null,
+    "_id": "5ff2132db435d25c40e54f04",
+    "message": "Testing validation rules is fun",
+    "createdAt": "2021-01-03T18:55:41.893Z",
+    "__v": 0
+  }
+]
