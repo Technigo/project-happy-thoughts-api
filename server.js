@@ -30,9 +30,9 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-  /*const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
-  res.json(thoughts) */
-  const { page = 1, limit = 20 } = req.query
+  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
+  res.json(thoughts)
+  /* const { page = 1, limit = 20 } = req.query
 
   try {
     const thoughts = await Thought.find()
@@ -50,7 +50,7 @@ app.get('/thoughts', async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({success: false, message: error.message})
-  }
+  } */
 })
 
 app.post('/thoughts', async (req, res) => {
