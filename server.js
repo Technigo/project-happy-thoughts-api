@@ -51,7 +51,7 @@ const Thought = new mongoose.model('Thought', {
 
 // Start defining your routes here
 
-app.get('/', async (req, res) => {
+app.get('/thoughts', async (req, res) => {
 	try {
 		const thoughts = await Thought.find()
 			.sort({ createdAt: 'desc' })
@@ -70,7 +70,7 @@ app.get('/', async (req, res) => {
 
 //Post a new thought
 
-app.post('/', async (req, res) => {
+app.post('/thoughts', async (req, res) => {
 	const { message } = req.body;
 	const newThought = await new Thought({ message });
 	try {
@@ -86,6 +86,23 @@ app.post('/', async (req, res) => {
 });
 
 //Like a post
+
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+	try {
+		await Thought.updateOne(
+			{ _id: req.params.thoughtId },
+			{ $inc: { hearts: 1 } }
+		);
+		res.status(200).json();
+	} catch (err) {
+		res
+			.status(400)
+			.json({
+				message: 'Could not find and like this post',
+				errors: err.errors,
+			});
+	}
+});
 
 // Start the server
 app.listen(port, () => {
