@@ -30,18 +30,19 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
-  res.json(thoughts)
-  /*const { page = 1, limit = 20 } = req.query
+  /*const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
+  res.json(thoughts) */
+  const { page = 1, limit = 20 } = req.query
 
   try {
-  const thoughts = await Thought.find()
-    .sort({createdAt: 'desc'})
-    .limit(limit * 1)
-    .skip((page - 1) * limit)
-    .exec()
+    const thoughts = await Thought.find()
+      .sort({createdAt: 'desc'})
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec()
 
-  const count = await Thought.countDocuments()
+    const count = await Thought.countDocuments()
+
     res.status(200).json({
       thoughts,
       totalPages: Math.ceil(count / limit),
@@ -49,7 +50,7 @@ app.get('/thoughts', async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({success: false, message: error.message})
-  }*/
+  }
 })
 
 app.post('/thoughts', async (req, res) => {
@@ -73,6 +74,8 @@ app.delete('/thoughts/:id', async (req, res) => {
   }
 })
 
+//first object finds the object in the database, second what object should be changed
+//should this be a patch instead?
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   try {
     const updatedThought = await Thought.updateOne(
