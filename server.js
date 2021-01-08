@@ -20,22 +20,15 @@ const Thought = mongoose.model('Thought', {
   },
   createdAt: {
     type: Date,
-    //provides the date at the moment when the request is sent and can't be modifed by user
-    //default: () => new Date()
     default: Date.now
   },
-  category: {
-    type: String,
-    required:true
-  },
-
+ 
   hearts: {
     //this number will be 0 by default even if the client sends another quantity
     type: Number,
     default: 0
   }  
 }) 
-// new Thought({message: "hey hey", hearts:8}).save();
 
 const port = process.env.PORT || 8080
 const app = express()
@@ -44,7 +37,7 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-// Start defining your routes here
+// Start defining routes here
 app.get('/', (req, res) => {
   res.send('Hello world')
 })
@@ -53,32 +46,14 @@ app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt:'desc'}).limit(20).exec();
   res.json(thoughts);
 });
-//endpoint to find thought by category
-app.get('/thoughts/food', async (req,res) =>{
-  console.log("GET /thoughts/food");
-  const { category } = req.params;
-  const foodThoughts = await Thought.find({category: category}) 
-  res.status(200).json(foodThoughts);
-});
 
 //posting an object to the database, if posted incorrectly the client receives errors
 app.post('/thoughts', async (req, res) => {
-  //Promises for learning purpose
-  // new Thought(req.body).save()
-  // .then((thought) =>{
-  //   res.status(200).json(thought)
-  // })
-  // .catch((err) => {
-  //   res.status(400).json({message:'Could not save thought', errors:err.errors});
-  // })
-
   //Try catch
   try {
     //Success case
-
     //retrive the information sent by the client to our API endpoint
     const { message } = req.body
-    //use mongoose model to create database entry and save it
     //we sent only message because we need to have only message from the client 
     const thought = new Thought({ message });
     const savedThought = await thought.save();
