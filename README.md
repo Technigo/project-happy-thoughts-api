@@ -24,5 +24,5 @@ Finally I also added an author to the model, with a default value of 'Anonymous'
 
 ## View it live
 
-The frondend is live here: https://happy-thoughts-by-karin.netlify.app
-Backend url: https://happy-thoughts-by-karin.herokuapp.com/
+- The frondend is live here: https://happy-thoughts-by-karin.netlify.app
+- Backend url: https://happy-thoughts-by-karin.herokuapp.com/
