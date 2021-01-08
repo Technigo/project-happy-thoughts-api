@@ -1,13 +1,12 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This project is about working with GET and POST calls towards API and MongoDB.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+To create this API I had to work with NodeJs, express, Mongoose and MongoDb. I learned how to create API endpoints, how to create models and how to fetch and create data to MongoDB using Mongoose. Also I used MongoDb Compass. When I got stucked with ideas or soultions I used Google and StackOverflow. While setting the live project I learned to work with mongo cloud and Heroku.
+
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://happy-thoughts-sandra.herokuapp.com/
