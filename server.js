@@ -12,12 +12,17 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-const Thought = mongoose.model("Thought", {
+const Thought = new mongoose.model("Thought", {
   message: {
     type: String,
-    required: true,
+    required: [true, "Message is required"],
     minlength: 5,
     maxlength: 140,
+  },
+  username: {
+    type: String,
+    maxlength: 100,
+    default: "Anonymous",
   },
   hearts: {
     type: Number,
@@ -29,15 +34,17 @@ const Thought = mongoose.model("Thought", {
   },
 });
 
-// Defines the port the app will run on. Defaults to 8080, but can be
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
+// if (process.env.RESET_DATABASE) {
+//   const seedDatabase = async () => {
+//     await Thought.deleteMany();
+//   };
+//   seedDatabase();
+// } // Added this block of code in case database requires updating during maintenance
+
 const port = process.env.PORT || 8080;
 const app = express();
 const listEndpoints = require("express-list-endpoints");
 
-// Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -87,8 +94,9 @@ app.get("/thoughts", async (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
-  const { message } = req.body;
-  const thought = new Thought({ message });
+  const message = req.body.message;
+  const username = req.body.username;
+  const thought = new Thought({ message, username });
 
   try {
     const savedThought = await thought.save();
@@ -102,18 +110,16 @@ app.post("/thoughts", async (req, res) => {
 });
 
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
-  const { thoughtId } = req.params;
+  const thoughtId = req.params.thoughtId;
 
   try {
     await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } });
-    res.status(201).send();
+    res.status(201).json({ success: true, thoughtId });
   } catch (err) {
-    res
-      .status(400)
-      .json({
-        message: `${ERR_COULD_NOT_SAVE_LIKE} ${thoughtId}`,
-        error: err.errors,
-      });
+    res.status(400).json({
+      message: `${ERR_COULD_NOT_SAVE_LIKE} ${thoughtId}`,
+      error: err.errors,
+    });
   }
 });
 
