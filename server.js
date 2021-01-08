@@ -45,7 +45,7 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Welcome to Happy Thoughts API  :)  // See this API live here: ');
+  res.send('Welcome to Happy Thoughts API  :)  // See this API live here: https://thehappythoughts.netlify.app/');
 
 })
 //GET /thoughts : Endpoint that returns maximum of 20 thoughts, sorted by createdAt to show the most recent thoughts first.
