@@ -20,7 +20,7 @@ const Thought = mongoose.model('Thought', {
     type: String,
     required: [true, 'Please enter a message'],
     minlength: [5, 'Oops, message too short! Must be longer than 5 letters.'],
-    maxlength: [140, 'Oops! Message too long. Maximum length is 140 figures.'],
+    maxlength: [140, 'Oops, message too long! Maximum length is 140 letters.'],
   },
   hearts: {
     type: Number,
@@ -38,7 +38,10 @@ const Thought = mongoose.model('Thought', {
 
 // Routes ------------------------------------
 app.get('/', (req, res) => {
-  res.send('Hello world');
+  res.json({
+    message:
+      'Hello all thoughts! View all thoughts at https://happy-thoughts-by-karin.herokuapp.com/thoughts',
+  });
 });
 
 app.get('/thoughts', async (req, res) => {
