@@ -18,9 +18,9 @@ app.use(bodyParser.json());
 const Thought = mongoose.model('Thought', {
   message: {
     type: String,
-    required: true,
-    minlength: 5,
-    maxlength: 140,
+    required: [true, 'Please enter a message'],
+    minlength: [5, 'Oops, message too short! Must be longer than 5 letters.'],
+    maxlength: [140, 'Oops! Message too long. Maximum length is 140 figures.'],
   },
   hearts: {
     type: Number,
@@ -67,7 +67,6 @@ app.post('/thoughts', async (req, res) => {
       message: 'Could not publish your thought!',
       errors: err.errors,
     });
-    console.log(err.errors);
   }
 });
 
