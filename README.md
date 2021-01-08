@@ -10,7 +10,13 @@ In this week's project it was time to use my new skills with Express and MongoDB
 
 ## The process and structure
 
-I decided to keep it simple and stay at **BLUE LEVEL** 🔵
+I decided to keep it simple and stay at **BLUE LEVEL** 🔵 with one feature from black level.
+
+Added filtering and sorting options in  backend and frontend:
+
+* Newest
+* Oldest (default)
+* Most likes
 
 Avaialble endpoints:
 
@@ -32,7 +38,7 @@ Avaialble endpoints:
 ## View it live
 
 ### Backend
-[TO BE REPLACED WITH NEW API URL](https://book-api-mongodb-by-ylva.herokuapp.com/)
+[Happy Thoughts API by Ylva](https://happy-thoughts-by-ylva.herokuapp.com/)
 
 ### Frontend
 [Happy Thoughts at Netlify](https://awesome-mcclintock-31dad3.netlify.app/)
