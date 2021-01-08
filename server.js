@@ -37,7 +37,7 @@ app.use(bodyParser.json());
 
 // Routes
 app.get('/', (req, res) => {
-  res.send('Hello world');
+  res.send('Welcome to Happy Thoughts API! Here you will only see happy thoughts. You can also post your happy thoughts');
 });
 
 //GET requests
