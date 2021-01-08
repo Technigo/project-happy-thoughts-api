@@ -30,4 +30,4 @@ In the current design, the PUT endpoint for the likes allows the user to directl
 
 ## View it live
 
-You can access the API here: 
+You can access the API here: https://happyhenrike.herokuapp.com/
