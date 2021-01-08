@@ -18,19 +18,6 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Middleware to handle server connection errors
-app.use((req, res, next) => {
-	try {
-		if (mongoose.connection.readyState === 1) {
-			next();
-		} else {
-			res.status(503).json({ error: 'Service unavailable' });
-		}
-	} catch (error) {
-		res.status(400).json({ error: 'Error! Could not access the server.' });
-	}
-});
-
 //Mongoose model
 const Thought = new mongoose.model('Thought', {
 	message: {
