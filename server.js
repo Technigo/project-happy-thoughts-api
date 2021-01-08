@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import endpoint from "express-list-endpoints"
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -18,15 +19,21 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-//populate database function - why is it needed?
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: 'Service unavailable' })
+  }
+})
 
 //model
-const Thought = mongoose.model("Thought", {
+const Thought = new mongoose.model("Thought", {
   message: {
     type: String,
-    required: true,
-    minlength: 5,
-    maxlength: 140
+    required: [true, "Enter your thought"],
+    minlength: [5, "The text is too short. Must be min 5 characters."],
+    maxlength: [140, "The text is too long. Can be max 140 characters."],
   },
   heart: {
     type: Number,
@@ -41,11 +48,19 @@ const Thought = mongoose.model("Thought", {
 // Start defining your routes here
 app.get('/', (req, res) => {
   res.send('Hello, welcome to happy thoughts API')
+  res.send(endpoints(app))
 })
 
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20).exec()
-  res.json(thoughts)
+  try {
+    const thoughts = await Thought.find()
+      .sort({ createdAt: "desc" })
+      .limit(20)
+      .exec()
+    res.status(200).json(thoughts)
+  } catch (err) {
+    res.status(400).json({ error: err })
+  }
 })
 
 //endpoint for posting thoughts
@@ -62,8 +77,7 @@ app.post("/thoughts", async (req, res) => {
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
   } catch (err) {
-    res.status(400).json({ message: "Couldn't save thought to the database.", error: err.errors })
-
+    res.status(400).json({ message: "Bad request. Couldn't save thought to the database.", error: err.errors })
   }
 })
 
@@ -74,15 +88,13 @@ app.post("/thoughts/:thoughtId/heart", async (req, res) => {
   try {
     //increment the nr of hearts for the thought with specific id
     const savedLike = await Thought.updateOne({ _id: thoughtId }, { $inc: { heart: 1 } })
-    // const savedLike = await like.save()
+
     res.status(201).json(savedLike)
 
   } catch (err) {
     res.status(400).json({ message: "Couldn't save the like.", error: err.errors })
   }
-
 })
-
 
 
 // Start the server
