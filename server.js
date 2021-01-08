@@ -21,7 +21,16 @@ const Thought = mongoose.model('Thought', {
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  username: {
+    type: String,
+    maxlength: 50
+  },
+  tags: {
+    type: Array,
+    of: String
   }
+
 })
 
 // Defines the port the app will run on. Defaults to 8080, but can be
@@ -41,21 +50,33 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20)
-  if (thoughts.length > 0)
-  {res.json(thoughts)}
-  else {res.json({message: "No thoughts found"})}
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20)
+  if (thoughts.length > 0){ 
+    res.json(thoughts)
+  } else {
+    res.json({ message: "No thoughts found" })
+  }
+
+})
+
+app.get('/thoughts/:tags', async (req, res) => {
+  const thoughts = await Thought.find({ tags: req.params.tags }).sort({ createdAt: 'desc' }).limit(20)
+  if (thoughts.length > 0) {
+    res.json(thoughts)
+  } else {
+    res.status(404).json({ message: "No thoughts with this tag found" })
+  }
 
 })
 
 app.post('/thoughts', async (req, res) => {
   try { 
-    const {message} = req.body
-    const thought = await new Thought({message}).save()
+    const { message, username, tags } = req.body
+    const thought = await new Thought({ message, username, tags }).save()
     res.json(thought)
     
   } catch (error) {
-    res.status(400).json({message:"Invalid input" , errors: error.errors})
+    res.status(400).json({ message:"Invalid input" , errors: error.errors })
   }
 
 })
