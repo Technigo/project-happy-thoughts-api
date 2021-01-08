@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
 
 //GET requests
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc'}).limit(20);
+  const thoughts = await Thought.find().sort({ createdAt: 'desc'}).limit(20).exec;
   res.json(thoughts);
 });
 
@@ -59,7 +59,6 @@ app.post('/thoughts', async (req, res) => {
     const newThought = await new Thought({ message }).save();
     res.status(200).json(newThought);
   } catch (error) {
-    console.log(error);
     res.status(400).json({ success: false, error });
   }
 });
@@ -69,19 +68,9 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     const thoughtLiked = await Thought.updateOne({ _id: req.params.thoughtId}, {  $inc: { hearts: 1 } });
     res.status(200).json(thoughtLiked);
   } catch (error) {
-    console.log(error);
     res.status(400).json({ message: 'Thought was not found', error: error.errors});
   }
 });
-
-//Test the validations
-// 1.message required ok
-// 2.minLength 5: ok
-// 3.maxLength 140: ok
-// 4.posting number of hearts: ok
-// 5.display only 20 thoughts sorted on createdAt: ok on Postman but on compass it's sorted ascending order
-// 6.reassign createdAt: ok
-// 7.reassign number of hearts ok
 
 // Start the server
 app.listen(port, () => {
