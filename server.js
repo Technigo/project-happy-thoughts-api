@@ -81,7 +81,7 @@ app.post('/thoughts', async (req, res) => {
 })
 
 // POST /thoughts/:thoughtId/like : Endpoint to add a like to a specific thought
-app.post('thoughts/:thoughtId/like', async (req, res) =>{
+app.post('/thoughts/:thoughtId/like', async (req, res) =>{
   const thoughtId = req.params.thoughtId;
   try{
     const addLike = await Thoughts.updateOne({ _id: thoughtId}, { $inc: { hearts: 1 } })
