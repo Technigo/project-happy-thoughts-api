@@ -49,15 +49,15 @@ const listEndpoints = require("express-list-endpoints");
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use((req, res, next) => {
-  if (mongoose.connection.readyState === 1) {
-    next();
-  } else {
-    res.status(503).json({ error: ERR_SERVICE_UNAVAILABLE });
-  }
-});
+// app.use((req, res, next) => {
+//   if (mongoose.connection.readyState === 1) {
+//     next();
+//   } else {
+//     res.status(503).json({ error: ERR_SERVICE_UNAVAILABLE });
+//   }
+// });
 
-//Returns a list of available endpoints
+// Returns a list of available endpoints
 app.get("/", (req, res) => {
   if (res) {
     res.status(200).send(listEndpoints(app));
