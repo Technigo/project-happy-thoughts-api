@@ -50,6 +50,9 @@ const Thought = new mongoose.model('Thought', {
 });
 
 // Start defining your routes here
+app.get('/', (req, res) => {
+	res.send('Welcome to Happy happy place');
+});
 
 app.get('/thoughts', async (req, res) => {
 	try {
@@ -95,12 +98,10 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
 		);
 		res.status(200).json();
 	} catch (err) {
-		res
-			.status(400)
-			.json({
-				message: 'Could not find and like this post',
-				errors: err.errors,
-			});
+		res.status(400).json({
+			message: 'Could not find and like this post',
+			errors: err.errors,
+		});
 	}
 });
 
