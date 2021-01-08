@@ -10,7 +10,7 @@ mongoose.Promise = Promise;
 const Thought = new mongoose.model("Thought", {
   message: {
     type: String,
-    required: [true, "Message is required"],
+    required: true,
     minlength: 5,
     maxlength: 140,
   },
@@ -35,13 +35,6 @@ const ERR_NO_ENDPOINTS_FOUND = "No endpoints found";
 const ERR_NO_RESULTS_FOUND = "No results found";
 const ERR_COULD_NOT_SAVE_LIKE = "Could not save like for id:";
 
-// if (process.env.RESET_DATABASE) {
-//   const seedDatabase = async () => {
-//     await Thought.deleteMany();
-//   };
-//   seedDatabase();
-// } // Added this block of code in case database requires updating during maintenance
-
 const port = process.env.PORT || 8080;
 const app = express();
 const listEndpoints = require("express-list-endpoints");
@@ -53,7 +46,7 @@ app.use(bodyParser.json());
 //   if (mongoose.connection.readyState === 1) {
 //     next();
 //   } else {
-//     res.status(503).json({ error: ERR_SERVICE_UNAVAILABLE });
+//     res.status(503).send({ error: ERR_SERVICE_UNAVAILABLE });
 //   }
 // });
 
