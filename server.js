@@ -40,8 +40,11 @@ app.get('/', (req, res) => {
   res.send('Happy Thoughts API')
 })
 
-app.get('thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'Date'}).limit(20).exec()
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await Thought.find()
+    .sort({createdAt: 'desc'})
+    .limit(20)
+    .exec()
   res.json(thoughts)
 })
 
@@ -49,11 +52,31 @@ app.post('/thoughts', async (req,res) => {
   const newThought = new Thought({message: req.body.message})
   try {
     const savedThought = await newThought.save()
-    res.status(201).json(savedThought)
+    res.status(200).json(savedThought)
   } catch (err) {
-    res.status(404).json({message : 'Could not save message', error: err.errors})
+    res.status(400).json({
+      message : 'Bad Request - Could not save message', 
+      error: err.errors
+      })
   }
 })
+
+app.post('/thoughts/:id/like', async (req, res) => {
+  try {
+    const updateThought = await Thought.updateOne(
+      { _id: req.params.id }, 
+      {$inc: {'hearts': 1}},
+      {new: true}
+    )
+    res.status(200).json(updatedThought)
+  } catch (err) {
+    res.status(404).json({ 
+      message: 'Bad Request - Could not post like', 
+      error: err.errors
+      })
+  }
+})
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
