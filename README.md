@@ -10,4 +10,4 @@ Describe how you approached to problem, and what tools and techniques you used t
 
 ## View it live
 
-View it live here: https://happy-thoughts-marjaana.herokuapp.com/
+View the API here: https://happy-thoughts-marjaana.herokuapp.com/ and the frontend here: https://thehappythoughts.netlify.app/
