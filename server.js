@@ -3,11 +3,6 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const ERR_COULD_NOT_SAVE_TO_DB = "Could not save thought to the database";
-const ERR_SERVICE_UNAVAILABLE = "Service unavailable";
-const ERR_NO_ENDPOINTS_FOUND = "No endpoints found. Try again later";
-const ERR_COULD_NOT_SAVE_LIKE = "Could not save like for id:";
-
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
@@ -34,6 +29,12 @@ const Thought = new mongoose.model("Thought", {
   },
 });
 
+const ERR_COULD_NOT_SAVE_TO_DB = "Could not save thought to the database";
+const ERR_SERVICE_UNAVAILABLE = "Service unavailable";
+const ERR_NO_ENDPOINTS_FOUND = "No endpoints found";
+const ERR_NO_RESULTS_FOUND = "No results found";
+const ERR_COULD_NOT_SAVE_LIKE = "Could not save like for id:";
+
 // if (process.env.RESET_DATABASE) {
 //   const seedDatabase = async () => {
 //     await Thought.deleteMany();
@@ -48,15 +49,15 @@ const listEndpoints = require("express-list-endpoints");
 app.use(cors());
 app.use(bodyParser.json());
 
-// app.use((req, res, next) => {
-//   if (mongoose.connection.readyState === 1) {
-//     next();
-//   } else {
-//     res.status(503).json({ error: ERR_SERVICE_UNAVAILABLE });
-//   }
-// });
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next();
+  } else {
+    res.status(503).json({ error: ERR_SERVICE_UNAVAILABLE });
+  }
+});
 
-// Returns a list of available endpoints
+//Returns a list of available endpoints
 app.get("/", (req, res) => {
   if (res) {
     res.status(200).send(listEndpoints(app));
@@ -66,31 +67,34 @@ app.get("/", (req, res) => {
 });
 
 app.get("/thoughts", async (req, res) => {
-  // const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20);
-  // res.json(thoughts);
+  const { sort, page } = req.query;
 
-  const sortField = req.query.sortField; // These x2 query parameters allow the client to sort data from
-  const sortOrder = req.query.sortOrder || "desc";
-  const limit = req.query.limit || 20;
+  const pageNumber = +page || 1;
+  const pageSize = 20;
 
-  // console.log(`GET /thoughts?sortField=${sortField}&sortOrder=${sortOrder}`);
+  const skip = pageSize * (pageNumber - 1);
 
-  let databaseQuery = Thought.find(); // Creates the initial query
+  //Sets default sorting to newest first
+  const sortThoughts = sort => {
+    if (sort === "hearts") {
+      return { hearts: -1 };
+    } else if (sort === "oldest") {
+      return { createdAt: 1 };
+    } else {
+      return { createdAt: -1 };
+    }
+  };
 
-  if (sortField) {
-    // If we have extra information we can modify the query before we execute it
-    databaseQuery = databaseQuery.sort({
-      [sortField]: sortOrder === "desc" ? -1 : 1,
-    });
+  const thoughts = await Thought.find()
+    .sort(sortThoughts(sort))
+    .limit(pageSize)
+    .exec();
+
+  if (thoughts) {
+    res.status(200).json(thoughts);
+  } else {
+    res.status(400).send({ message: ERR_NO_RESULTS_FOUND, error: err.errors });
   }
-
-  if (limit) {
-    databaseQuery = databaseQuery.limit(+limit); // Limits the results - 20 default
-  }
-
-  // Database query modifications before you actually excecute the database query
-  const results = await databaseQuery;
-  res.status(200).json(results);
 });
 
 app.post("/thoughts", async (req, res) => {
