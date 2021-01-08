@@ -84,7 +84,6 @@ app.get('/thoughts', async (req, res) => {
 
 // Endpoint for POSTing thoughts and adding it to the database
 app.post('/thoughts', async (req, res) => {
-
   try {
     // Success case
     // Retrieves the information sent by the client to the API endpoint

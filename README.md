@@ -16,6 +16,8 @@ Then I created the `POST` request for posting new Happy Thoughts with a message.
 
 I have added error handlers to all endpoints to get a clear error message if the request is not following the validation rules. 
 
+In the end I tried to add filtering and sorting options to the `GET` endpoint. With queries it is now possible for the client to choose field to sort on and sorting order. 
+
 ## Learning Objectives
 
 - How to build a full API which includes handling of user input
@@ -36,4 +38,5 @@ I have added error handlers to all endpoints to get a clear error message if the
 
 Link to the deployed API: https://happythoughts-only.herokuapp.com/
 
+Link to Frontend repo: https://github.com/Gabbi-89/project-happy-thoughts
 Link to see the Frontend live: https://happyminds.netlify.app/
