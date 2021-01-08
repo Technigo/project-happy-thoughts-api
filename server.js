@@ -37,7 +37,7 @@ const Thought = mongoose.model('Thought', {
     type: String,
     required: true, 
     minlength: 5,
-    maxlength: 40
+    maxlength: 140
   },
   name: {
     type: String,
