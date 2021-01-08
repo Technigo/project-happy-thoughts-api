@@ -32,6 +32,8 @@ app.get('/', (req, res) => {
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
   res.json(thoughts)
+
+  //below is code for pagination. Commented out since I couldn't connect it to front-end.
   /* const { page = 1, limit = 20 } = req.query
 
   try {
@@ -74,8 +76,7 @@ app.delete('/thoughts/:id', async (req, res) => {
   }
 })
 
-//first object finds the object in the database, second what object should be changed
-//should this be a patch instead?
+//updateOne- first object matches the object in the database, second what object should be changed
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   try {
     const updatedThought = await Thought.updateOne(
