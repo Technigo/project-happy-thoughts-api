@@ -5,6 +5,7 @@ import mongoose from 'mongoose'
 
 //predifining errors
 const ERR_CANNOT_SAVE_TO_DATABASE = 'Could not save thought to the Database';
+const ERR_CANNOT_FIND_THOUGHT_BY_ID = 'Could not find thought by id provided';
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -65,11 +66,14 @@ app.post('/thoughts', async (req, res) => {
 });
 
 app.post('/thoughts/:id/like', async(req,res)=>{
-  const { id } = req.params;
-  //const { like } = req.body;
-  await Thought.updateOne( {_id: id}, { $inc: {hearts: 1} });
-  res.status(200).json({success: true});
-})
+  try{
+    const { id } = req.params;
+    await Thought.updateOne( {_id: id}, { $inc: {hearts: 1} });
+    res.status(200).json({success: true});
+  } catch(err) {
+    res.status(400).json({message: ERR_CANNOT_FIND_THOUGHT_BY_ID, errors:err.errors});
+  }
+});
 
 ///delete endpoint/
 app.delete('/thoughts/:id', async(req,res)=>{
