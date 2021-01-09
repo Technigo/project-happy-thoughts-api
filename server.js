@@ -48,7 +48,7 @@ app.get('/', (req, res) => {
 // Endpoint to GET and list the 20 latest thoughts
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec();
-  res.json(thoughts) //sends thoughts back in the form of json
+  res.json(thoughts)
 })
 
 // Endpoint to POST a thought to the database
