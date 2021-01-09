@@ -69,7 +69,7 @@ app.post("/thoughts", async (req, res) => {
   const message = req.body.message
 
   //use mongoose model to create the DB entry
-  const thought = new Thought({ message })
+  const thought = await new Thought({ message })
 
   //save the entry
   try {
