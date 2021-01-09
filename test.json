@@ -1,0 +1,36 @@
+{
+  "_id": {
+      "$oid": "5ff880d123165d2548692def"
+  },
+  "username": "Anonymous",
+  "hearts": 1,
+  "message": "Thought no 1",
+  "createdAt": {
+      "$date": "2021-01-08T15:57:05.124Z"
+  },
+  "__v": 0
+}
+{
+  "_id": {
+      "$oid": "5ff880dd23165d2548692df0"
+  },
+  "username": "Anonymous",
+  "hearts": 1,
+  "message": "Thought no 2",
+  "createdAt": {
+      "$date": "2021-01-08T15:57:17.348Z"
+  },
+  "__v": 0
+}
+{
+  "_id": {
+      "$oid": "5ff8811b23165d2548692df1"
+  },
+  "username": "Michael",
+  "hearts": 8,
+  "message": "I love inside jokes. I hope to be a part of one someday",
+  "createdAt": {
+      "$date": "2021-01-08T15:58:19.643Z"
+  },
+  "__v": 0
+}

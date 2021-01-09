@@ -42,13 +42,13 @@ const listEndpoints = require("express-list-endpoints");
 app.use(cors());
 app.use(bodyParser.json());
 
-// app.use((req, res, next) => {
-//   if (mongoose.connection.readyState === 1) {
-//     next();
-//   } else {
-//     res.status(503).send({ error: ERR_SERVICE_UNAVAILABLE });
-//   }
-// });
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next();
+  } else {
+    res.status(503).send({ error: ERR_SERVICE_UNAVAILABLE });
+  }
+});
 
 // Returns a list of available endpoints
 app.get("/", (req, res) => {
@@ -60,12 +60,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/thoughts", async (req, res) => {
-  const { sort, page } = req.query;
-
-  const pageNumber = +page || 1;
+  const sort = req.query.sort;
   const pageSize = 20;
-
-  const skip = pageSize * (pageNumber - 1);
 
   //Sets default sorting to newest first
   const sortThoughts = sort => {
