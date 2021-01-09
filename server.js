@@ -24,11 +24,11 @@ const Thought = mongoose.model("Thought", {
   },
   category: {
     type: String,
-    default: null
+    default: ""
   },
   author: {
     type: String,
-    default: null
+    default: ""
   }
 });
 
