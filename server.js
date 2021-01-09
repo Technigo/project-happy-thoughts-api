@@ -10,7 +10,7 @@ mongoose.Promise = Promise
 const Thought = mongoose.model('Thought', {
   message: {
     type: String,
-    required: [true, 'Message required]'],
+    required: [true, 'Message required'],
     minLength: [5, 'Message too short, minimum 5 characters'],
     maxLength: [140, 'Message too long, maximum 140 characters']
   },
