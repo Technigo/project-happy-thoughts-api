@@ -4,8 +4,10 @@ This week's project was to create the API to use for the Happy Thoughts microblo
 
 ## View it live
 
-[### Happy Thoughts 💌](https://happy-little-thoughts.netlify.app/)
+### [Happy Thoughts 💌](https://happy-little-thoughts.netlify.app/)
+
 Heroku link: https://happy-thoughts-axel.herokuapp.com/
+
 List thoughts: https://happy-thoughts-axel.herokuapp.com/thoughts
 
 ## The problem
