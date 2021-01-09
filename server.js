@@ -3,7 +3,7 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/post-codealong"
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
@@ -11,6 +11,8 @@ mongoose.Promise = Promise
 // "message": "Testing January 2021",
 // "hearts": 2,
 // "createdAt": "2021-01-09T12:59:27.662Z",
+
+// Model for the "Thought" item/thing.
 const Thought = mongoose.model('Thought', {
   message: {
     type: String,
@@ -55,7 +57,7 @@ app.post('/thoughts', async (req, res) => {
     // Success code – what happens if all goes well. Take the "message" part of the request and save it. 
     // "Likes" will be set to 0 as per the mongoose model definition, and "createdAt" will be created automagically.
     const thought = await new Thought({ message: req.body.message }).save()
-    res.status(200).json(thought);
+    res.status(200).json(thought)
 
   } catch (error) {
     // If it doesn't go well, do this. Use error variable to post useful message to user.
@@ -65,14 +67,14 @@ app.post('/thoughts', async (req, res) => {
 
 // 3: POST like – when a user likes a post.
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
-  const { thoughtId } = req.params;
+  const { thoughtId } = req.params
 
   try {
     await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
     res.status(201).json({ message: "Thought liked successfully." })
   } catch (error) {
     res.status(404).json({
-      message: "Couldn't find the ID for the thought.",
+      message: "Couldn't find the ID for the thought to like.",
       error: error.errors
     })
   }
