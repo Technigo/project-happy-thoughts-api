@@ -3,7 +3,7 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughtsNM"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
@@ -13,6 +13,12 @@ const Thought = mongoose.model('Thought', {
     required: true,
     minlength: 5,
     maxlength:  140
+  },
+  name: {
+    type: String,
+    maxlength: 30,
+    default: 'Anonymous'
+
   },
   hearts: {
     type: Number,
@@ -25,9 +31,6 @@ const Thought = mongoose.model('Thought', {
 });
 
 
-//! Create thoughtsData
-
-//? reset database
 if (process.env.RESET_DATABASE) {
   console.log('Resetting database!');
 const seedDatabase = async () => {
@@ -37,33 +40,38 @@ const seedDatabase = async () => {
   seedDatabase();
 }
 
-// Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
 
-// Add middlewares to enable cors and json body parsing
+const listEndpoints = require('express-list-endpoints')
+
 app.use(cors())
 app.use(bodyParser.json())
 
-// Start defining your routes here
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: 'Service Unavailable' })
+  }
+})
+
+
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send(listEndpoints(app))
 })
 
 app.get('/thoughts', async (req, res) => {
-  //? get thoughts data sort by createdAt, descending order
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
-  res.json(thoughts);
+  const thoughts = await Thought.find()
+      .sort({createdAt: 'desc'})
+      .limit(20)
+      .exec();
+      res.json(thoughts);
 });
 
 app.post('/thoughts', async (req, res) => {
-//? retrieve info sent by client t0 API endpoint, excl hearts
-  const { message } = req.body;
-//? use mongoose model to create database entry
-  const thought = new Thought({ message });
+  const { message, name } = req.body;
+  const thought = new Thought({ message, name });
 
   try {
     const savedThought = await thought.save();
@@ -78,15 +86,13 @@ app.put('/thoughts/:thoughtId/like', async (req,res) => {
   const { thoughtId } = req.params
   
   try {
-  const updatedHearts = await Thought.findOneAndUpdate({ _id: thoughtId }, {$inc: { heart: 1 }})
+  const updatedHearts = await Thought.findOneAndUpdate({ _id: thoughtId }, {$inc: { hearts: 1 }})
     res.status(200).json(updatedHearts)
   } catch (err) {
-    res.status(400).json({ message: 'Could not find ThoughtId, update not possible', errors: err.errors});
+    res.status(404).json({ message: 'Could not find ThoughtId, update not possible', errors: err.errors});
   };
-
 });
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
 })
