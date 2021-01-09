@@ -51,6 +51,7 @@ app.get('/', (req, res) => {
 })
 
 app.get("/thoughts", async (req, res) => {
+
   try {
     const thoughts = await Thought.find()
       .sort({ createdAt: "desc" })
@@ -64,17 +65,18 @@ app.get("/thoughts", async (req, res) => {
 
 //endpoint for posting thoughts
 app.post("/thoughts", async (req, res) => {
-  //retrieve the info sent by the client to our API endpoint
-  const message = req.body.message
 
-  //use mongoose model to create the DB entry
-  const thought = new Thought({ message })
-
-  //save the entry
   try {
-    //success
+    //retrieve the info sent by the client to our API endpoint
+    const message = req.body.message
+
+    //use mongoose model to create the DB entry
+    const thought = new Thought({ message })
+
+    //save the entry
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
+
   } catch (err) {
     res.status(400).json({ message: "Bad request. Couldn't save thought to the database.", errors: err.errors })
   }
@@ -82,9 +84,10 @@ app.post("/thoughts", async (req, res) => {
 
 //endpoint for posting likes/hearts
 app.post("/thoughts/:thoughtId/heart", async (req, res) => {
-  const thoughtId = req.params.thoughtId
 
   try {
+    const thoughtId = req.params.thoughtId
+
     //increment the nr of hearts for the thought with specific id
     const savedLike = await Thought.updateOne({ _id: thoughtId }, { $inc: { heart: 1 } })
 
