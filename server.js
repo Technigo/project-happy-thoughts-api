@@ -46,7 +46,7 @@ app.use((req, res, next) => {
   if (mongoose.connection.readyState === 1) {
     next();
   } else {
-    res.status(503).send({ error: ERR_SERVICE_UNAVAILABLE });
+    res.status(503).json({ error: ERR_SERVICE_UNAVAILABLE });
   }
 });
 
@@ -82,7 +82,7 @@ app.get("/thoughts", async (req, res) => {
   if (thoughts) {
     res.status(200).json(thoughts);
   } else {
-    res.status(400).send({ message: ERR_NO_RESULTS_FOUND, error: err.errors });
+    res.status(400).json({ message: ERR_NO_RESULTS_FOUND, error: err.errors });
   }
 });
 
