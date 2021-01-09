@@ -63,9 +63,9 @@ app.post('/thoughts', async (req,res) => {
 
 app.post('/thoughts/:id/like', async (req, res) => {
   try {
-    const updateThought = await Thought.updateOne(
-      { _id: req.params.id }, 
-      {$inc: {'hearts': 1}},
+    const updatedThought = await Thought.updateOne(
+      {_id: req.params.id}, 
+      {$inc: {hearts: 1}},
       {new: true}
     )
     res.status(200).json(updatedThought)
@@ -73,7 +73,7 @@ app.post('/thoughts/:id/like', async (req, res) => {
     res.status(404).json({ 
       message: 'Bad Request - Could not post like', 
       error: err.errors
-      })
+    })
   }
 })
 
