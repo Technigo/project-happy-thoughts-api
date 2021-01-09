@@ -19,13 +19,13 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-app.use((req, res, next) => {
-  if (mongoose.connection.readyState === 1) {
-    next()
-  } else {
-    res.status(503).json({ error: 'Service unavailable' })
-  }
-})
+// app.use((req, res, next) => {
+//   if (mongoose.connection.readyState === 1) {
+//     next()
+//   } else {
+//     res.status(503).json({ error: 'Service unavailable' })
+//   }
+// })
 
 //model
 const Thought = new mongoose.model("Thought", {
