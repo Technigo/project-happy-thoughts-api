@@ -22,6 +22,8 @@ Built my own backend to use on a pre-existing Happy thoughts :heart: project fro
 - JavaScript
 - mongoose
 - Postman
+- MongoDB
+- Mongo Atlas
 
 ## :eyes: View it live
 - Backend: https://rbk-project-happy-thoughts-api.herokuapp.com/ 
