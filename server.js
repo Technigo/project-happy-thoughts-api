@@ -35,7 +35,7 @@ const Thought = mongoose.model("Thought", {
     minlength: [5, "The text is too short. Must be min 5 characters."],
     maxlength: [140, "The text is too long. Can be max 140 characters."],
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -89,7 +89,7 @@ app.post("/thoughts/:thoughtId/heart", async (req, res) => {
     const thoughtId = req.params.thoughtId
 
     //increment the nr of hearts for the thought with specific id
-    const savedLike = await Thought.updateOne({ _id: thoughtId }, { $inc: { heart: 1 } })
+    const savedLike = await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
 
     res.status(201).json(savedLike)
 
