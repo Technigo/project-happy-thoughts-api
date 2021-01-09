@@ -59,7 +59,7 @@ app.get("/thoughts", async (req, res) => {
       .exec()
     res.status(200).json(thoughts)
   } catch (err) {
-    res.status(400).json({ error: err })
+    res.status(400).json({ message: "Could not get the thoughts", errors: err.errors })
   }
 })
 
@@ -69,7 +69,7 @@ app.post("/thoughts", async (req, res) => {
   const message = req.body.message
 
   //use mongoose model to create the DB entry
-  const thought = await new Thought({ message })
+  const thought = new Thought({ message })
 
   //save the entry
   try {
@@ -77,7 +77,7 @@ app.post("/thoughts", async (req, res) => {
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
   } catch (err) {
-    res.status(400).json({ message: "Bad request. Couldn't save thought to the database.", error: err.errors })
+    res.status(400).json({ message: "Bad request. Couldn't save thought to the database.", errors: err.errors })
   }
 })
 
@@ -92,7 +92,7 @@ app.post("/thoughts/:thoughtId/heart", async (req, res) => {
     res.status(201).json(savedLike)
 
   } catch (err) {
-    res.status(400).json({ message: "Couldn't save the like.", error: err.errors })
+    res.status(400).json({ message: "Couldn't save the like.", errors: err.errors })
   }
 })
 
