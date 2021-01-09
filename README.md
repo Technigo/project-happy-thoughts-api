@@ -36,7 +36,7 @@ User can enter their name when posting a thought. This is added to the mongoose 
 ## What I learned
 - How to build an API that handles GET and POST requests from the user and saves data to the database.
 - How to sort data using query-param based on user interaction on the front end.
-- How to handle errors and return appripriate error-messages.
+- How to handle errors and return appropriate error-messages.
 - How to handle validation of user input both on the frontend and the backend API.
 
 ## View it live

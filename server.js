@@ -29,7 +29,6 @@ app.use((req, res, next) => {
 })
 
 // RESET DATABASE
-//Note to self: in Heroku make sure to set config vars: RESET_DATABASE = true
 if (process.env.RESET_DATABASE) {
   const seedDatabase = async () => {
     await Thought.deleteMany()
