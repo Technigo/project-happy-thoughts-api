@@ -41,26 +41,53 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
-  res.json(thoughts)
+  try {
+    res.status(200).json(await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec())
+  } catch (error) {
+    res.status(400).json({ message: 'Could not get thoughts', error })
+  }
 })
 
 app.post('/thoughts', async (req, res) => {
-  const newThought = new Thought({ message: req.body.message })
   try {
-    const savedThought = await newThought.save()
-    res.status(201).json(savedThought)
-  } catch (err) {
-    res.status(400).json({ message: 'Could not save message', error: err.errors })
+    res.status(201).json(await new Thought({ message: req.body.message }).save())
+  } catch (error) {
+    res.status(400).json({ message: 'Could not save thought', error: error.errors.message.message })
+  }
+})
+
+// delete not yet used in frontend
+app.delete('/thoughts/:id', async (req, res) => {
+  try {
+    res.status(200).json(await Thought.deleteOne({ _id: req.params.id }))
+  } catch (error) {
+    res.status(400).json({ message: 'Could not delete thought', id: error.value })
+  }
+})
+
+// put - replace complete object, not yet used in frontend
+app.put('/thoughts/:id', async (req, res) => {
+  try {
+    res.status(200).json(await Thought.replaceOne({ _id: req.params.id }, { message: req.body.message, createdAt: Date.now, hearts: 0 }))
+  } catch (error) {
+    res.status(400).json({ message: 'Could not replace thought', id: error.value })
+  }
+})
+
+// patch - update parts of object, not yet used in frontend
+app.patch('/thoughts/:id', async (req, res) => {
+  try {
+    res.status(200).json(await Thought.updateOne({ _id: req.params.id }, { message: req.body.message }))
+  } catch (error) {
+    res.status(400).json({ message: 'Could not update thought', id: error.value })
   }
 })
 
 app.post('/thoughts/:id/like', async (req, res) => {
   try {
-    const updatedThought = await Thought.updateOne({ _id: req.params.id }, { $inc: { 'hearts': 1 } }, { new: true })
-    res.status(201).json(updatedThought)
-  } catch (err) {
-    res.status(404).json({ message: 'Could not post like', error: err.errors })
+    res.status(201).json(await Thought.updateOne({ _id: req.params.id }, { $inc: { 'hearts': 1 } }, { new: true }))
+  } catch (error) {
+    res.status(404).json({ message: 'Could not post like', id: error.value })
   }
 })
 
