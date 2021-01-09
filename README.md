@@ -24,5 +24,5 @@ Built my own backend to use on a pre-existing Happy thoughts :heart: project fro
 - Postman
 
 ## :eyes: View it live
-Backend: https://rbk-project-happy-thoughts-api.herokuapp.com/ 
-Frontend: https://rebeka-happy-thoughts.netlify.app/ 
+- Backend: https://rbk-project-happy-thoughts-api.herokuapp.com/ 
+- Frontend: https://rebeka-happy-thoughts.netlify.app/ 
