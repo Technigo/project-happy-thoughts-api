@@ -4,18 +4,12 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 import Thought from './models/thought'
 
-// The name of the database when using Mongo DB Compass:
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/hanna-happyThoughts" 
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-// Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
-
 const endpoints = require('express-list-endpoints')
 
 const POST_LIKE_ERROR = 'Error: could not add like on message with id:'
@@ -51,13 +45,15 @@ app.get('/', (req, res) => {
 // - oldest first / asc: /thoughts/?sort=oldest
 // - newest first / desc (default): /thoughts/?sort=newest
 app.get('/thoughts', async (req, res) => {
-  const { sort } = req.query
+  const sort = req.query.sort
 
-  const sortedThoughts = (sort) => {
+  const sortedThoughts = sort => {
     if (sort === 'liked') {
       return { hearts: 'desc' }
     } else if (sort === 'oldest') {
       return { createdAt: 'asc' }
+    } else if (sort === 'default') {
+      return { createdAt: 'desc' }
     } else {
       return { createdAt: 'desc' }
     }
@@ -71,9 +67,10 @@ app.get('/thoughts', async (req, res) => {
 
 //POST: ADD A THOUGHT
 app.post('/thoughts', async (req, res) => {
-  const { message } = req.body
+  const { message, name } = req.body
+
   try {
-    const newThought = await new Thought({ message }).save()
+    const newThought = await new Thought({ message, name }).save()
     res.status(201).json(newThought)
   } catch (err) {
     console.log(err)
@@ -86,11 +83,10 @@ app.post('/thoughts', async (req, res) => {
 //POST: LIKE A THOUGHT 
 app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params
-  //increment operator $inc to increase hearts (see mongoose docs).
+
   try {
     await Thought.updateOne({ _id: id }, { $inc: { hearts: 1 } })
     res.status(201).json(`Thought with id: ${id} got one more like`)
-    //or: res.status(200).send(); ???
   } catch (err) {
     res.status(404).json({
       message: `${POST_LIKE_ERROR} ${id}`,
@@ -98,9 +94,6 @@ app.post('/thoughts/:id/like', async (req, res) => {
     })
   }
 });
-
-//DELETE A THOUGHT??? --> if I modify my front-end I could implement that there also. 
-//Or maybe not because then anyone could delete all messages and that is not desirable.
 
 // START SERVER
 app.listen(port, () => {

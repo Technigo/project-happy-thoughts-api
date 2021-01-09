@@ -7,6 +7,11 @@ const Thought = new mongoose.model('Thought', {
     minlength: [5, 'Message is too short. Minimum length is 5 characters.'],
     maxlength: [ 140, 'Message is too long. Maximum length is 140 characters.']
   },
+  name: {
+    type: String,
+    maxlength: 30,
+    default: "Anonymous"
+  },
   hearts: {
     type: Number,
     default: 0
@@ -16,5 +21,4 @@ const Thought = new mongoose.model('Thought', {
     default: Date.now 
   }
 })
-
 export default Thought
