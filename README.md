@@ -7,8 +7,9 @@ I created an API in the Backend using Express and MongoDB which includes both GE
 ## The problem
 
 The API is created using **Express** and consists of a **MongoDB** stored in Atlas. The API has been deployed to Heroku.
-I implemented a new feature which wasn't available in the original API. I decided to add a "username" field to the POST request and implemented it in the Frontend.
-All endpoints return an error message which contains information about the error.
+I implemented a new feature which wasn't available in the original API. I decided to add a "username" field to the POST request and implemented it in the Frontend. All endpoints return an error message which contains information about the error.
+
+If I had mroe time I would like to implement pagination on Backend and Frontend to enable the user to click through the pages of thoughts.
 
 ## Endpoints
 
