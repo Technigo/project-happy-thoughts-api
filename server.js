@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
+
 import Thought from './models/thought'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/hanna-happyThoughts" 
@@ -18,6 +19,14 @@ const GET_ENDPOINTS_ERROR = 'Error: No endpoints found'
 // MIDDLEWARES (to enable cors and json body parsing)
 app.use(cors())
 app.use(bodyParser.json())
+
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: 'Service unavailable' })
+  }
+})
 
 // RESET DATABASE
 //Note to self: in Heroku make sure to set config vars: RESET_DATABASE = true
