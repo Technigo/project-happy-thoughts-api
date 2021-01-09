@@ -14,21 +14,21 @@ const Thought = mongoose.model('Thought', {
     minLength: [5, 'Message too short, minimum 5 characters'],
     maxLength: [140, 'Message too long, maximum 140 characters']
   },
-  hearts: {
-    type:Number,
-    default: 0
-  },
   createdAt: {
     type:Date,
     default: () => Date.now()
-  }  
+  },
+  hearts: {
+    type:Number,
+    default: 0
+  }
 })
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
 //
 //   PORT=9000 npm start
-const port = process.env.PORT || 9000
+const port = process.env.PORT || 8081
 const app = express()
 
 // Add middlewares to enable cors and json body parsing
