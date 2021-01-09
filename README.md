@@ -1,13 +1,12 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+API and Mongo Database done with Node.js and express, for Happy Thoughts, a site to post and read happy messages. The database lets you post message, a username and tags, and lets you like existing messages.  
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## The process
 
-## The problem
-
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I did the basic functionality first, to post and read messages to MongoDB and checked with Postman that everything worked as intended. Then added a few extra feautures, like adding a name and some tags to the message. 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+View the frontend here: https://sharing-happy-thoughts.netlify.app/
+View the backend from heruko here: https://sharing-happy-thoughts.herokuapp.com/
