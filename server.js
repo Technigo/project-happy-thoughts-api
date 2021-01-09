@@ -42,7 +42,7 @@ app.post("/", async (req, res) => {
   }
 });
 
-app.post("/:Id/like", async (req, res) => {
+app.post("/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
 
   // find thought with by id and increment likes by 1
