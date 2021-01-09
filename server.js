@@ -89,7 +89,9 @@ app.post("/thoughts/:thoughtId/heart", async (req, res) => {
     const thoughtId = req.params.thoughtId
 
     //increment the nr of hearts for the thought with specific id
-    const savedLike = await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
+    const savedLike = await Thought
+      .updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
+      .save()
 
     res.status(201).json(savedLike)
 
