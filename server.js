@@ -14,6 +14,7 @@ mongoose.Promise = Promise
 //   PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
+const listEndpoints = require('express-list-endpoints')
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
@@ -47,7 +48,13 @@ const Thought = mongoose.model("Thought", {
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello, welcome to happy thoughts API. Endpoints: /thoughts (methods: GET, POST), /thoughts/:thoughtId/heart (method: POST)')
+  // res.send('Hello, welcome to happy thoughts API. Endpoints: /thoughts (methods: GET, POST), /thoughts/:thoughtId/heart (method: POST)')
+  if (res) {
+    res.status(200).send(listEndpoints(app))
+  } else {
+    res.status(404).send("No endpoints found.")
+  }
+
 })
 
 app.get("/thoughts", async (req, res) => {
