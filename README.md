@@ -21,4 +21,7 @@ https://jonnas-happy-thoughts.herokuapp.com/
 ## Frontend
 
 https://happy-smiley-thoughts.netlify.app/
+
 https://github.com/jonnaru/project-happy-thoughts
+
+![mockup](mockup.jpg)
