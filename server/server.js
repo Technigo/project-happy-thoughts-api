@@ -101,10 +101,10 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
-app.post("/thoughts/:thoughtID/likes", async(req, res) => {
+app.post("/thoughts/:id/likes", async(req, res) => {
   //   //Doesn't require JSON body. Given a valid thought id in the URL, the API should find that thougt and update its hearts proprerty to add one heart
   try {
-    await Thought.updateOne({ _id: req.params.thoughtID }, { $inc: { hearts: 1 } });
+    await Thought.updateOne({ _id: req.params.id }, { $inc: { hearts: 1 } });
     console.log(`${likes}`)
     res.status(201).json();
   } catch (error) {
