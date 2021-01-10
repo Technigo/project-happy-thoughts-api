@@ -3,7 +3,6 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import { now } from "mongoose";
 
 dotenv.config();
 
@@ -24,11 +23,12 @@ app.use((req, res, next) => {
   if (mongoose.connection.readyState === 1) {
     next();
   } else {
-    res.status(500).json({ error: "Service unavailable" + mongoose.connection.readyState });
+    res
+      .status(500)
+      .json({ error: "Service unavailable" });
   }
 });
 
-// Object model
 const Thought = new mongoose.model("Thought", {
   message: {
     type: String,
@@ -42,11 +42,12 @@ const Thought = new mongoose.model("Thought", {
       },
       {
         validator: (thoughtValue) => {
-          return thoughtValue.length <= 141;
+          return thoughtValue.length < 140;
         },
-        message: "Thought must be shorter than 140 characters, please try again",
-      }
-    ]
+        message:
+          "Thought must be shorter than 140 characters, please try again",
+      },
+    ],
   },
   hearts: {
     type: Number,
@@ -55,24 +56,21 @@ const Thought = new mongoose.model("Thought", {
   createdAt: {
     type: Date,
     default: Date.now,
-  }, 
+  },
 });
 
-// Clearing and populating database
 if (process.env.RESET_DATABASE) {
   const resetDatabase = async () => {
     await Thought.deleteMany();
   };
   resetDatabase();
 }
-
-// Start defining your routes here
+const listEndpoints = require('express-list-endpoints');
 app.get("/", (req, res) => {
-  res.send("Hello world");
+  res.send(listEndpoints(app));
 });
 
-app.get("/thoughts", async(req, res) => {
-  //   //return maximum 20 thoughts, sorted by createdAt to show the most recent thoughts first
+app.get("/thoughts", async (req, res) => {
   try {
     console.log(`GET /thoughts`);
     const thoughtsList = await Thought.find()
@@ -83,37 +81,35 @@ app.get("/thoughts", async(req, res) => {
   } catch (error) {
     res
       .status(404)
-      .json({ message: `Couldn't find any thoughts`, errors: error.errors });
+      .json({ message: `Couldn't find any thoughts`, error });
   }
 });
 
 app.post("/thoughts", async (req, res) => {
   try {
-    const { message } = req.body
-    const newThought = await new Thought({message: req.body.message}).save();
+    const { message } = req.body;
+    const newThought = await new Thought({ message: req.body.message }).save();
     console.log(`POST /thoughts/thought`);
     res.status(200).json(newThought);
-
-    //expects a JSON body with the thought message { "message": "Express is great!"} If valid, save and include saved thought object
   } catch (error) {
     console.log(error);
-    res.status(400).json({ message: "Could not save the thought to the database", error });
+    res
+      .status(400)
+      .json({ message: "Could not save the thought to the database", error });
   }
 });
 
-app.post("/thoughts/:id/likes", async(req, res) => {
-  //   //Doesn't require JSON body. Given a valid thought id in the URL, the API should find that thougt and update its hearts proprerty to add one heart
+app.post("/thoughts/:id/likes", async (req, res) => {
   try {
     await Thought.updateOne({ _id: req.params.id }, { $inc: { hearts: 1 } });
-    console.log(`${likes}`)
     res.status(201).json();
   } catch (error) {
-    res.status(400).json({ message: "Thought was not found in the database", error });
+    res
+      .status(400)
+      .json({ message: "Thought was not found in the database", error });
   }
 });
 
-
-// Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
