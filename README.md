@@ -1,13 +1,19 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+Project was to re-create the API that was previously provided for the frontend part of the happy thoughts project.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Unfortunately I had very little time to work on this project, hence I only managed to do the basic level requirements.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+This project continued of the learning path for backend, this time introducing POST as part of the endpoints, for being able to put things in the database instead of just reading as in the previous backend projects.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Deployed on Heroku: https://project-happythoughts-api-olof.herokuapp.com
+
+Endpoints:
+
+/thoughts (GET) 
+/thoughts (POST) 
+/thoughts/:thoughtid/like (POST)

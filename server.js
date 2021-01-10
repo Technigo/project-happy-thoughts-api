@@ -39,7 +39,7 @@ app.use(bodyParser.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello world");
+  res.send("Olofs Project Happy thoughts API. Endpoints /thoughts (GET), /thoughts (POST), /thoughts/:thoughtid/like (POST)");
 });
 
 app.get("/thoughts", async (req, res) => {
