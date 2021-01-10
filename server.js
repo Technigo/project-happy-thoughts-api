@@ -25,15 +25,18 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-  console.log(Thought)
-  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20)
+  const tag = req.query.tag
+  const query = tag ? { tags: tag } : {}
+  const thoughts = await Thought.find(query).sort({ createdAt: 'desc' }).limit(20)
   res.send(thoughts)
 })
 
 app.post('/thoughts', async (req, res) => {
   const message = req.body.message
+  const tags = req.body.tags
+  const createdBy = req.body.createdBy
   try {
-    const newThought = await Thought.create({ message })
+    const newThought = await Thought.create({ message, tags, createdBy })
     res.send(newThought)
   } catch (err) {
     res.status(400).send(err.message)

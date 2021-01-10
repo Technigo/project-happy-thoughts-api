@@ -5,6 +5,8 @@ export const Thought = mongoose.model(
   new mongoose.Schema({
     message: { type: String, required: true, minLength: 5, maxLength: 140 },
     hearts: { type: Number, default: 0 },
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+    tags: { type: [String], default: [] },
+    createdBy: { type: String, default: 'Anonymous' }
   })
 );
