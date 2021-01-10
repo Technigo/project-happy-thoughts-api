@@ -21,7 +21,7 @@ const Thought = mongoose.model('Thought', {
   hearts: {
     type: Number,
     default: 0
-  } 
+  }
 })
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
@@ -40,31 +40,36 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
+// Get thoughts
 app.get('/thoughts', async (req, res) => {
   const getThoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
   res.json(getThoughts)
 })
 
+// Post a new thought
 app.post('/thoughts', async (req, res) => {
- const { message } = req.body
- const thought = new Thought({ message })
- 
- try {
-  const savedThought = await thought.save()
-  res.status(201).json(savedThought)
- } catch (err) {
-  res.status(400).json({message: 'Could not save message to the Database', error: err.errors })
- }
+  const { message } = req.body
+  const thought = new Thought({ message })
+  
+  try {
+    const savedThought = await thought.save()
+    res.status(201).json(savedThought)
+  } catch (err) {    
+      console.log(err)
+      res.status(400).json({ message: 'Could not save message to the Database', error: err.errors })
+    }
 })
 
+// Post like on withthoughtId
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
-  const thoughtId = req.params.thoughtId
-  const onLike = await Thought.update(
-    {_id: thoughtId}, 
-    {
-      $inc: {hearts: 1}})
-  res.json(Thought)
- })
+  try {
+    await Thought.updateOne({ _id: req.params.thoughtId}, {$inc: {hearts: 1}})
+    res.status(200).json({ success: true })
+  } catch (err) {
+      console.log(err)
+      res.status(400).json({ success: false , error: err.errors })
+    }
+})
 
 // Start the server
 app.listen(port, () => {
