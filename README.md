@@ -9,7 +9,7 @@
 
 Describe how you approached the problem. How did you plan? If you had more time, what would be next?
 
-## Tech
+## Tech ⚡️
 - React
 - MongoDB
 - Express

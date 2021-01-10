@@ -18,10 +18,37 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-// Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Welcome to my Happy Thoughts API 💌')
+// Mongoose model for Thought with properties message, hearts & createdAt
+const Thought = mongoose.model('Thought', {
+  message: {
+    type: String,
+    required: true,
+    minLength: 5,
+    maxLength: 140
+  },
+  hearts: {
+    type: Number,
+    default: 0
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 })
+
+// Routes 
+app.get('/', (req, res) => {
+  res.send('Hello! Welcome to my Happy Thoughts API 💌')
+})
+
+// Endpoint to GET the 20 most recent thoughts, ordered by createdAt in descending order
+
+
+// Endpoint to POST a new thought to the database
+
+
+// Endpoint to POST likes on a certain thought, validated by id
+
 
 // Start the server
 app.listen(port, () => {
