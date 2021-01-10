@@ -1,63 +1,13 @@
 Project Happy Thoughts API
 https://www.notion.so/Project-Happy-Thoughts-API-3dc1710667304987894f954dad265fc9
 
-> This week's project is to use your new skills with Express and Mongodb to build an API which includes both GET request endpoints to return data and POST endpoints to create data.
-
-If you followed the 'Happy Thoughts' React assignment, you should remember this one - we're going to build our own version of Twitter, but focusing on positivity and friendliness rather than, well, Twitter. 😉
-
-In the Happy Thoughts project, you built a frontend in React which uses an API we created to store thoughts. For this project, we want you to build your own API which works in the same way and should become a drop-in replacement for the API you used in the React frontend.
-
-We built a frontend that has a form to write a new 'happy thought', lists recent thoughts, and shows a count of 'hearts' on each thought. Users could then click the heart to like a thought. It looked like this:
-
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/27452a15-b8ed-4959-bf9d-5e72de670cb4/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/27452a15-b8ed-4959-bf9d-5e72de670cb4/Untitled.png)
-
-In order to replace the API we built, you're going to need to build a `Thought` Mongoose model which has properties for the `message` string, a `heart` property for tracking the number of likes, and a `createdAt` property to store when the thought was added.
 
 Then, you'll need to add 3 endpoints:
-
-### `GET /thoughts`
-This endpoint should return a maximum of 20 thoughts, sorted by `createdAt` to show the most recent thoughts first.
-
 ### `POST /thoughts`
 This endpoint expects a JSON body with the thought `message`, like this: `{ "message": "Express is great!" }`. If the input is valid (more on that below), the thought should be saved, and the response should include the saved thought object, including its `_id`.
 
 ### `POST thoughts/:thoughtId/like`
 This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its `hearts` property to add one heart.
 
-### The thought model
-We mentioned the `Thought` model and its properties a bit earlier. Each of these properties has some special rules or validations which you must implement to make a good API for the frontend:
-
-- `message` - the text of the thought
-    → Required
-    → Min length of 5 characters
-    → Max length of 140 characters
-
-- `hearts` - the number of heart clicks this thought has received
-    → Defaults to `0`
-    → Should not be assignable when creating a new thought. For example, if I send a POST request to `/` to create a new thought with this JSON body; `{ "message": "Hello", "hearts": 9000 }`, then the `hearts` property should be ignored, and the object we store in mongo should have 0 hearts.
-
-- `createdAt` - the time the Thought was added to the database
-    → Defaults to the current time
-    → Should not be assignable when creating a new thought
-
 ### Using your API
-
 Once you've created your API, you should deploy it, and update your frontend project to use your own API instead of the old Technigo one. The idea is that if you build this API correctly, **the only thing you should need to change in the frontend code is the URL to the API,** to change it from the Technigo one to the one you deploy.
-
-
-## How to get started 💪🏼
-4. Install dependencies: `npm install`
-5. Start the development server: `npm run dev`
-
-
-**General Requirements**
-
-- Contribute by helping others with this project on Stack Overflow.
-- If selected; demo your solution for your team.
-- Code follows Technigo’s code guidelines:
-
-[Copy of Guidelines for how to write good code](https://www.notion.so/Copy-of-Guidelines-for-how-to-write-good-code-6d30e19e0c8743fcb6ed8d9298f58f29)
-
-- Your API should be deployed to Heroku or similar hosting service.
-- Your database should be deployed using mongo cloud or similar.
-

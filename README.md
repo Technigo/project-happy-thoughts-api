@@ -15,13 +15,13 @@ Learning objectives:
 
 ## Completed Requirements
 🔵  Blue Level
-<!-- - The API should be deployed to Heroku or similar hosting service. -->
-<!-- - The database should be deployed using mongo cloud or similar. -->
-<!-- - The API should implement the routes exactly as documented in the brief (A .PDF of the brief can be found in the production folder). -->
-<!-- - The `GET /thoughts` endpoint should only return 20 results, ordered by `createdAt` in descending order. -->
-<!-- - The API should validate user input and return appropriate errors if the input is invalid. -->
-<!-- - In the `POST /thoughts` endpoint to create a new thought, if the input was invalid and the API is returning errors, it should set the response status to `400` (bad request). -->
-<!-- - The endpoint to add hearts to a thought should return an appropriate error if the thought was not found. -->
+- The API should be deployed to Heroku or similar hosting service.
+- The database should be deployed using mongo cloud or similar.
+- The API should implement the routes exactly as documented in the brief (A .PDF of the brief can be found in the production folder).
+- The `GET /thoughts` endpoint should only return 20 results, ordered by `createdAt` in descending order.
+- The API should validate user input and return appropriate errors if the input is invalid.
+- In the `POST /thoughts` endpoint to create a new thought, if the input was invalid and the API is returning errors, it should set the response status to `400` (bad request).
+- The endpoint to add hearts to a thought should return an appropriate error if the thought was not found.
 
 <!-- 🔴  Red Level (Intermediary Goals) -->
 <!-- ***Remember**:* For any new feature you add to the backend, be mindful of how that will require the frontend to change, and vice-versa.   -->

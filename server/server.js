@@ -14,15 +14,13 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 140
   }, 
-  heart: {
+  hearts: {
     type: Number,
     default: 0
-    // → Should not be assignable when creating a new thought. For example, if I send a POST request to `/` to create a new thought with this JSON body; `{ "message": "Hello", "hearts": 9000 }`, then the `hearts` property should be ignored, and the object we store in mongo should have 0 hearts.
   },
   createdAt: {
     type: Date,
     default: Date.now
-    // → Should not be assignable when creating a new thought
   }
 })
 
@@ -33,17 +31,13 @@ app.use(cors())
 app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('A little home for my personal Happy Thoughts API')
 })
 
-// ### `GET /thoughts`
-// This endpoint should return a maximum of 20 thoughts, sorted by `createdAt` to show the most recent thoughts first.
 app.get('/thoughts', async (req, res) => {
-  const allThoughts = await Thoughts.find().sort({createdAt: 'desc'}).limit(20).exec()
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
   res.json(thoughts)
 })
-
-
 
 // ### `POST /thoughts`
 // This endpoint expects a JSON body with the thought `message`, like this: `{ "message": "Express is great!" }`. If the input is valid (more on that below), the thought should be saved, and the response should include the saved thought object, including its `_id`.
@@ -51,7 +45,6 @@ app.post('/thoughts', async (req, res) => {
   try {
     const newThought = await new Thought(req.body).save()
     res.status(200).json(newThought)
-  
   } catch (err) {
     res.status(400).json({message:'Could not save thought', errors: err.errors})
   }
