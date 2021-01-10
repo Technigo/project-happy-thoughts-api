@@ -14,5 +14,6 @@ I started by creating a mongoose model for Thougt. It consists of message, heart
 ## View it live
 
 Link to deployed API: https://sara-happy-thoughts.herokuapp.com/thoughts
+
 Link to frontend repository: https://github.com/stjernberg/project-happy-thoughts
 Link to frontend site: https://happy-messages.netlify.app/
