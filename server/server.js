@@ -38,35 +38,30 @@ const Thought = new mongoose.model("Thought", {
         validator: (thoughtValue) => {
           return thoughtValue.length >= 5;
         },
-        message: "Thought has to be longer than 5 characters, please try again.",
+        message: "Thought must be longer than 5 characters, please try again.",
       },
       {
         validator: (thoughtValue) => {
           return thoughtValue.length <= 141;
         },
-        message: "Thought has to be shorter than 140 characters, please try again",
+        message: "Thought must be shorter than 140 characters, please try again",
       }
     ]
   },
-  likes: {
+  hearts: {
     type: Number,
     default: 0,
-  }, //default: 0. Not assignable when creating a new thought.
+  },
   createdAt: {
     type: Date,
     default: Date.now,
-  }, //time the thought was added to the database - defaults current time, not assignable when creating thought
+  }, 
 });
 
 // Clearing and populating database
 if (process.env.RESET_DATABASE) {
   const resetDatabase = async () => {
     await Thought.deleteMany();
-
-    //   await thoughtsData.forEach(thought => {
-    //     const newThought = new Thought(item);
-    //     newThought.save();
-    //   });
   };
   resetDatabase();
 }
@@ -106,13 +101,17 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
-app.post("/thoughts/:thoughtID/like", async (req, res) => {
+app.post("/thoughts/:thoughtID/likes", async(req, res) => {
   //   //Doesn't require JSON body. Given a valid thought id in the URL, the API should find that thougt and update its hearts proprerty to add one heart
-  const { thoughtID } = req.params;
-  console.log(`PUT /${thoughtID}/like`);
-  await Thought.updateOne({ _id: thoughtID }, { $inc: { likes: 1 } });
-  res.status(201).json();
+  try {
+    await Thought.updateOne({ _id: req.params.thoughtID }, { $inc: { hearts: 1 } });
+    console.log(`${likes}`)
+    res.status(201).json();
+  } catch (error) {
+    res.status(400).json({ message: "Thought was not found in the database", error });
+  }
 });
+
 
 // Start the server
 app.listen(port, () => {
