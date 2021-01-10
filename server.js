@@ -11,8 +11,8 @@ const Thought = mongoose.model('Thought', {
   message: {
     type: String,
     required: true,
-    minlength: 5,
-    maxlength:  140
+    minlength: [5, "Message must be at least 5 characters"],
+    maxlength:  [140, "Message must be at most 140 characters"],
   },
   name: {
     type: String,
@@ -62,11 +62,15 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
+  try {
   const thoughts = await Thought.find()
       .sort({createdAt: 'desc'})
       .limit(20)
       .exec();
-      res.json(thoughts);
+      res.status(200).json(thoughts);
+  } catch (err) {
+    res.status(404).json({ message: 'Page not found', error: err.errors })
+  }
 });
 
 app.post('/thoughts', async (req, res) => {
@@ -77,7 +81,7 @@ app.post('/thoughts', async (req, res) => {
     const savedThought = await thought.save();
     res.status(200).json(savedThought);
   } catch (err) {
-    res.status(400).json({ message: 'Could not save the happy thought to the database', error: err.errors});
+    res.status(400).json({ message: 'Bad request. Could not save the happy thought to the database', error: err.errors });
   }
 });
 
@@ -86,8 +90,8 @@ app.put('/thoughts/:thoughtId/like', async (req,res) => {
   const { thoughtId } = req.params
   
   try {
-  const updatedHearts = await Thought.findOneAndUpdate({ _id: thoughtId }, {$inc: { hearts: 1 }})
-    res.status(200).json(updatedHearts)
+  const onMessageLiked = await Thought.findOneAndUpdate({ _id: thoughtId }, {$inc: { hearts: 1 }})
+    res.status(200).json(onMessageLiked)
   } catch (err) {
     res.status(404).json({ message: 'Could not find ThoughtId, update not possible', errors: err.errors});
   };
