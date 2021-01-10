@@ -1,6 +1,6 @@
 # Project Happy Thoughts API
 
-In this project I have built my own API using Node.js. I have connected it to an earlier frontend project which fetches messages that the user can type.
+In this project I have built my own API using Node.js and mongoose. I created a model with mongoose that stores the message, hearts for likes, when it was created and username. I have connected it to an earlier frontend project which fetches messages that the user can type.
 
 ## Tech
 
