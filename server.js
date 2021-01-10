@@ -54,22 +54,25 @@ app.get("/thoughts", async (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
-  // const {message} = req.body
   try {
-    const thought = new Thought({ message: req.body.message });
-    await thought.save();
-    res.status(200).json(thought);
+    const { message } = req.body;
+    const thought = await new Thought({ message }).save();
+
+    res.json(thought);
   } catch (error) {
-    res
-      .status(400)
-      .json({ message: "Could not save thought", errors: error.errors });
+    res.status(400).json({
+      success: false,
+      message: "Could not save thought",
+      errors: error.errors,
+    });
   }
 });
 
-app.post("/thoughts:/thoughtId/like", async (req, res) => {
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
   try {
     const { thoughtId } = req.params;
     await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } });
+    res.json();
   } catch (error) {
     res
       .status(400)
