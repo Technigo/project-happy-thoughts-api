@@ -1,8 +1,7 @@
 # Express API Project
 
 This project is made by me on my 19th week of Technigo Boot Camp. 
-It was my first experience with Full Stack Development. Connecting my own Backend development to an existing Frontend project 
-The assignment was to create an API using Express and return an array of data and a single item. 
+It was my first experience with Full Stack Development. Connecting my own Backend development to an existing Frontend project  
 
 ## Documentation
 
@@ -22,3 +21,4 @@ But eventually I was able to get it up and running
 
 Front End : https://cuz-i-am-happy.netlify.app/
 Back End / Deployment : https://happy-thoughts-dummy-api.herokuapp.com/thoughts
+ 

@@ -11,12 +11,12 @@ const Thought = mongoose.model('Thought', {
   message: {
     type: String,
     required: [true, 'Message Required'],
-    minLength: [5, 'Message too short, minimum 5 characters'],
-    maxLength: [140, 'Message too long, maximum 140 characters']
+    minlength: [5, 'Message too short, minimum 5 characters'],
+    maxlength: [140, 'Message too long, maximum 140 characters']
   },
   createdAt: {
     type:Date,
-    default: () => Date.now()
+    default: Date.now()
   },
   hearts: {
     type:Number,
