@@ -48,10 +48,36 @@ app.get('/thoughts', async (req, res) => {
 })
 
 // Endpoint to POST a new thought to the database
-
+app.post('/thoughts', async (req, res) => {
+  try {
+    // Success
+    const newThought = await new Thought(req.body).save()
+    res.status(200).json(newThought)
+    
+  // Bad request/error
+  } catch (err) {
+    res.status(400).json({ 
+      message: 'Error! Could not save happy thought.',
+      errors: err.errors
+    })
+  }
+})
 
 // Endpoint to POST likes on a certain thought, validated by id
-
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  try {
+    // Success
+    await Thought.updateOne({ _id: req.params.thoughtId }, { $inc: { hearts: 1 } })
+    res.status(200).json()
+    
+    // Bad request/error
+  } catch (err) {
+    res.status(400).json({ 
+      message: 'Error! Unable to like this thought: thought not found.', 
+      errors: err.errors
+    })
+  }
+})
 
 // Start the server
 app.listen(port, () => {
