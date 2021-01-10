@@ -21,4 +21,5 @@
 
 ## View it live ❤️
 
-Link to the deployed project: 
+API: https://emmas-happy-thoughts-api.herokuapp.com/
+App: https://happy-thoughts-project.netlify.app/
