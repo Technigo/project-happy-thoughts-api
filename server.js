@@ -28,7 +28,6 @@ const Thought = mongoose.model("Thought", {
     maxlength: 140,
     // unique: true,
   },
-
   hearts: {
     type: Number,
     default: 0,
@@ -36,6 +35,10 @@ const Thought = mongoose.model("Thought", {
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+  username: {
+    type: String,
+    default: "Anonymous",
   },
 });
 
@@ -55,8 +58,11 @@ app.get("/thoughts", async (req, res) => {
 
 app.post("/thoughts", async (req, res) => {
   try {
-    const { message } = req.body;
-    const thought = await new Thought({ message }).save();
+    const { message, username } = req.body;
+    const thought = await new Thought({
+      message,
+      username: username || "Anonymous",
+    }).save();
 
     res.json(thought);
   } catch (error) {
@@ -71,7 +77,7 @@ app.post("/thoughts", async (req, res) => {
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   try {
     const { thoughtId } = req.params;
-    await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } });
+    await Thought.findOneAndUpdate({ _id: thoughtId }, { $inc: { hearts: 1 } });
     res.json();
   } catch (error) {
     res

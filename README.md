@@ -1,13 +1,15 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+In this project I have built my own API using Node.js. I have connected it to an earlier frontend project which fetches messages that the user can type.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## Tech
 
-## The problem
-
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+- Node.js
+- MongoDB
+- Javascript
+- Postman
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Backend: https://project-happy-thoughts-api-jh.herokuapp.com/
+Frontend: https://pensive-ritchie-543d02.netlify.app/ 
