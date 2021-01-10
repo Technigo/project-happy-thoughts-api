@@ -21,5 +21,5 @@
 
 ## View it live ❤️
 
-API: https://emmas-happy-thoughts-api.herokuapp.com/
-App: https://happy-thoughts-project.netlify.app/
+- API: https://emmas-happy-thoughts-api.herokuapp.com/
+- App: https://happy-thoughts-project.netlify.app/
