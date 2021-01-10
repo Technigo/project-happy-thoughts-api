@@ -46,6 +46,7 @@ const Author = mongoose.model("Author", {
 //   PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
+const listEndpoints = require("express-list-endpoints");
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
@@ -53,7 +54,7 @@ app.use(bodyParser.json());
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Welcome to the Happy Thoughts by M API!');
+  res.send({ title: 'Happy Thoughts by M API', endpoints: listEndpoints(app) });
 });
 
 app.get("/thoughts", async (req, res) => {
