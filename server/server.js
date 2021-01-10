@@ -42,7 +42,7 @@ const Thought = new mongoose.model("Thought", {
       },
       {
         validator: (thoughtValue) => {
-          return thoughtValue.length <= 141:
+          return thoughtValue.length <= 141;
         },
         message: "Thought has to be shorter than 140 characters, please try again",
       }
