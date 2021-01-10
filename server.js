@@ -3,6 +3,10 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
+// Error messages
+const ERR_CANNOT_SAVE_TO_DATABASE = 'Sorry, could not save thought to database';
+const ERR_CANNOT_FIND_THOUGHT = 'Sorry, could not find thought by id';
+
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
@@ -37,8 +41,21 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello hello hello world')
+  res.send('Happy thoughts API!')
 })
+
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
+  res.json(thoughts)
+})
+
+// POST/thoughts
+app.post('/thoughts', async (req, res) => {
+  const { message } = req.body
+  
+})
+
+// POST/thoughts/:thoughtId/like
 
 // Start the server
 app.listen(port, () => {
