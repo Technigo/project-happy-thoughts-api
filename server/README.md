@@ -1,13 +1,26 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+The project was about using my new skills with Express and MongoDB to build an API which includes both Get request endpoints to return data and POST endpoints to create data
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I started off with the endpoint displaying a list of 20 happy thoughts. After that I created the POST request. I made sure it worked to post to the API before connecting the API to my frontend. 
+When everything was set up and working I built the endpoint for posting likes. 
+
+## Learning objectives
+
+- Build a full API which includes handling of user input
+- Including error handling to return good validation errors
+- Build an API that works well with an existing frontend
+
+## Tech
+
+- Node.js
+- Express
+- MongoDB
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+* Frontend: https://happiest-happy-thoughts.netlify.app/ 
+* API: https://happiest-happy-thoughts.herokuapp.com/
