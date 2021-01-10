@@ -79,8 +79,6 @@ app.get('/thoughts', async (req, res) => {
 
   // Get all thoughts
   const allThoughts = await Thought.find();
-  //const numberOfThoughts = allThoughts.length;
-  console.log(allThoughts.length);
 
   // Sort thoughts on query, newest by default
   const sortThoughts = sort => {

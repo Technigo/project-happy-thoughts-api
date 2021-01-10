@@ -1,13 +1,29 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+Create an API for a previous frontend project, the Happy Thoughts project.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## Learning Objectives
 
-## The problem
+- POST requests to send data to the API
+- Store data from POST requests in the database
+- Validate data to ensure only good data is stored in the database
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+## Tech
+
+- Heroku
+- Express
+- Mongo DB
+- Postman
+- Mongoose
+- JavaScript
+- React
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://saras-happy-thoughts.herokuapp.com
+
+## Frontend
+
+https://github.com/sarahejhej/project-happy-thoughts
+
+https://determined-panini-dccc7a.netlify.app/
