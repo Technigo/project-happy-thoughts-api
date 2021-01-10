@@ -1,13 +1,9 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+This project's main goal is to learn POST requests, using endpoints created by me such as allowing to POST data to my API and then save the data to my Mongo Database.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
-
-## The problem
-
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+For this I used and updated the "Happy Thoughts" Frontend created in an earlier project (Happy thoughts - Week 11).
 
 ## View it live
 
-View the API here: https://happy-thoughts-marjaana.herokuapp.com/ and the frontend here: https://thehappythoughts.netlify.app/
+Find  the API here: https://happy-thoughts-marjaana.herokuapp.com/ and the frontend here: https://thehappythoughts.netlify.app/ and the frotend repository: https://github.com/MayaBlixt/project-happy-thoughts
