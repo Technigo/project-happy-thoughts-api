@@ -21,7 +21,7 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Welcome to mu Happy Thoughts API!')
 })
 
 app.get('/thoughts', async (req, res) => {
