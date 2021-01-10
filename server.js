@@ -90,7 +90,7 @@ app.post("/thoughts", async (req, res) => {
 })
 
 //endpoint for posting likes/hearts
-app.post("/thoughts/:thoughtId/heart", async (req, res) => {
+app.post("/thoughts/:thoughtId/hearts", async (req, res) => {
 
   try {
     const thoughtId = req.params.thoughtId
