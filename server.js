@@ -18,7 +18,7 @@ const Thought = new mongoose.model('Thought', {
     type: String,
     required: [true, "A message is required"],
     minlength: [5, "Minmum nr of characters are 5"],
-    maxlength: [140, "Maximum nr of characters are 140"],
+    maxlength: [140, "Maximum nr of characters are 140"]
   },
   hearts: {
     type: Number,
@@ -68,7 +68,7 @@ app.post('/thoughts', async (req, res) => {
 
 app.post('/thoughts/:id/like', async (req, res) => {
   try {
-    const updateThought = await Thought.updateOne({ _id: req.params.id }, { $inc: { 'hearts': 1 } }, { new: true })
+    const updateThought = await Thought.updateOne({ _id: req.params.id }, { $inc: { 'hearts': 1 } } )
     res.status(201).json(updateThought)
   } catch (err) {
     res.status(404).json({ message: 'Could not like the thought, since it was not found.', error: err.errors })
