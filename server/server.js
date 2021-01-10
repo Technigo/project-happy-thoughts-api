@@ -34,13 +34,13 @@ app.get('/', (req, res) => {
   res.send('A little home for my personal Happy Thoughts API')
 })
 
+// Get the most recent 20 thoughts
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
   res.json(thoughts)
 })
 
-// ### `POST /thoughts`
-// This endpoint expects a JSON body with the thought `message`, like this: `{ "message": "Express is great!" }`. If the input is valid (more on that below), the thought should be saved, and the response should include the saved thought object, including its `_id`.
+// Post a new thought
 app.post('/thoughts', async (req, res) => {
   try {
     const newThought = await new Thought(req.body).save()
@@ -50,13 +50,16 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-
-// ### `POST thoughts/:thoughtId/like`
-// This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its `hearts` property to add one heart.
-
-
-
-
+// Add a heart to a thought
+app.put('/thoughts/:id/like', async (req,res) => {
+  try {
+    const thought = await Thought.findById(req.params.id)
+    await Thought.updateOne({_id: thought._id}, {hearts: thought.hearts + 1})
+    res.status(200).json(thought)
+  } catch (err) {
+    res.status(400).json({message: 'Could not find thought to like', errors: err.errors})
+  }
+})
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
