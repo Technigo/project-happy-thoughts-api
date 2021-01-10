@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
 
+//const mongoUrl = "mongodb+srv://dbUser:dbUserOlofTechnigo@cluster0.x2ofn.mongodb.net/projectHappy?retryWrites=true&w=majority"
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
@@ -42,7 +43,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find();
+  const thoughts = await Thought.find().limit(20).sort("-createdAt");
   res.json(thoughts);
 });
 
@@ -51,19 +52,25 @@ app.post("/thoughts", async (req, res) => {
     const thought = await new Thought({ message: req.body.message }).save();
     res.status(200).json(thought);
   } catch (err) {
-    res.status(400).json({message: 'Could not save thought', errors: err.errors})
+    res
+      .status(400)
+      .json({ message: "Could not save thought", errors: err.errors });
   }
 });
 
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
-  console.log(req.params)
+  console.log(req.params);
   const { thoughtId } = req.params;
-  console.log(thoughtId)
-  await Thought.updateOne({ _id: thoughtId}, {$inc : {'hearts': 1}})
-  res.status(201).json()
+  console.log(thoughtId);
+  try {
+    await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } });
+    res.status(201).json();
+  } catch (err) {
+    res
+      .status(400)
+      .json({ message: "Could not like a thought that doesn't exist", errors: err.errors });
+  }
 });
-
-
 
 // Start the server
 app.listen(port, () => {
