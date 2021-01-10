@@ -5,9 +5,13 @@
 - For this project, the task was to take this application one step further and build the API ourselves. Our own API is supposed to work in the same way, and become a drop-in replacement for the API we used in the previous project.
 
 
-## The project/How I solved it 👩‍💻
+## The problem/How I solved it 👩‍💻
 
-Describe how you approached the problem. How did you plan? If you had more time, what would be next?
+- I started out with creating a mongoose model called Thought with the properties message, hearts and createdAt. The message is a string with a given min- and maxlenght and is required, the hearts is a number that defaults to 0, and the createdAt property will return the current date and time when the thought is created. 
+
+- The application has 3 endpoints: one endpoint to GET the 20 most recent thoughts (ordered by createdAt in descending order), another endpoint to POST a new thought to the database, and one endpoint to POST likes on a certain thought, validated by the thought id. 
+
+- Validation/errors: 
 
 ## Tech ⚡️
 - React
