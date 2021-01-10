@@ -1,13 +1,24 @@
-# Project Happy Thoughts API
+# Project Happy Thoughts API|&ensp;[View Live &#10132;](https://happy-smiley-thoughts.netlify.app/)
 
-Replace this readme with your own information about your project.
+Backend to the Happy Thoughts App using Node and Express. Messages and likes stored with mongoDB and mongoose.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## Core Tech
 
-## The problem
-
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- RESTful API
 
 ## View it live
 
 Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+
+## Backend link
+
+https://jonnas-happy-thoughts.herokuapp.com/
+
+## Frontend
+
+https://happy-smiley-thoughts.netlify.app/
+https://github.com/jonnaru/project-happy-thoughts
