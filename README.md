@@ -17,7 +17,7 @@ Learning objectives:
 🔵  Blue Level
 - The API should be deployed to Heroku or similar hosting service.
 - The database should be deployed using mongo cloud or similar.
-- The API should implement the routes exactly as documented in the brief (A .PDF of the brief can be found in the production folder).
+- The API should implement the routes exactly as documented in the brief (A copy of the brief can be found in the production folder as a .pdf).
 - The `GET /thoughts` endpoint should only return 20 results, ordered by `createdAt` in descending order.
 - The API should validate user input and return appropriate errors if the input is invalid.
 - In the `POST /thoughts` endpoint to create a new thought, if the input was invalid and the API is returning errors, it should set the response status to `400` (bad request).
