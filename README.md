@@ -35,4 +35,5 @@ Learning objectives:
 <!-- - Feel free to add other features that pop into your mind to exercise creating and fulfilling a virtual "contract" between the frontend and backend. This is a very valuable exercise in understanding both parts. -->
 
 
-<!-- ## View it live -->
+## View it live
+https://happy-thoughts-api-pwangy.herokuapp.com/
