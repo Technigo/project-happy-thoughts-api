@@ -66,6 +66,7 @@ app.post("/thoughts", async (req, res) => {
     const savedThought = await thought.save();
     res.status(201).json(savedThought);
   } catch (err) {
+    console.log(err)
     res
       .status(400)
       .json({
@@ -78,7 +79,7 @@ app.post("/thoughts", async (req, res) => {
 // This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its `hearts` property to add one heart.
 // POST request
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
-  const thoughtId = req.params.id;
+  const thoughtId = req.params.thoughtId;
   try {
     const thoughtLiked = await Thought.updateOne(
       { _id: thoughtId },
