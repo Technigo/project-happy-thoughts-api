@@ -24,13 +24,8 @@ const Thought = mongoose.model('Thought', {
   }
 })
 
-
-
-
-// Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
+// Defines the port the app will run on. Default is set to 8080
+// PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
 
@@ -39,9 +34,57 @@ app.use(cors())
 app.use(bodyParser.json())
 
 
-// Routes
+// ROUTES
 
-// To return the latest 20 thoughts
+app.get('/', (request, response) => {
+  response.send('Welcome to my Happy Thoughts API 💌')
+})
+
+// GET the latest 20 thoughts
+app.get('/thoughts', async (request, response) => {
+  try {
+    const thoughts = await Thought.find()
+    .sort({ createdAt: 'desc' })
+    .limit(20)
+    .exec()
+    response.status(201).json(thoughts)
+  } 
+  catch (err) {
+    response.status(400).json({message: 'Sorry, could not load thoughts' })
+  }
+})
+
+// POST a new thought 
+app.post('/thoughts', async (request, response) => {
+  try {
+    const newThought = await new Thought(request.body).save()
+    response.status(200).json(newThought)
+  } 
+    catch (err) {
+    response.status(400).json({ message: 'Sorry, could not save thought to the database', errors: err.errors
+    })
+  }
+})
+
+// POST a like to a specific thought
+app.post('/thoughts/:thoughtId/like', async (request, response) => {
+  try {
+    await Thought.updateOne({ _id: request.params.thoughtId }, { $inc: { hearts: 1 } })
+    response.status(200).json()
+  } 
+    catch (err) {
+    response.status(400).json({ message: 'Sorry, could not add a like to this thought', errors: err.errors
+    })
+  }
+})
+
+/* app.get('/', (req, res) => {
+  res.send('Welcome to my Happy Thoughts API 💌')
+})
+
+
+
+// GET the latest 20 thoughts
 app.get('/thoughts', async (request, response) => { 
   try {
     const thoughts = await Thought.find()
@@ -49,46 +92,36 @@ app.get('/thoughts', async (request, response) => {
     .limit(20)
     .exec()
     response.status(201).json(thoughts)
-  } catch (err) {
+  } 
+  catch (err) {
     response.status(400).json({message: 'Sorry, could not load thoughts' })
   }
 })
 
-// To create a new thought
+// POST a new thought
 app.post('/thoughts', async (request, response) => { 
     try {
       const thought = new Thought({message: request.body.message})
-    await thought.save()  
-    response.status(201).json(thought)
+      await thought.save()  
+      response.status(201).json(thought)
     }
     catch (err) {
       response.status(400).json({message: "Sorry, could not save thought to the database", error: err.errors})
     }
   })
-  /*  try {
-    const {message, hearts} = request.body 
-    const thought = new Thoughts({message: message, hearts: hearts})
 
-    const newThought = await thought.save()
-    response.status(201).json(newThought)
-  } catch (err) {
-    response.status(400).json({message: "Sorry, could not save thought to the database", error: err.errors})
-  } */
-
-
-
-// To add a like to a specific thought
+// Add a like to a specific thought
 app.post('/thoughts/:thoughtId/like', async (request, response) => {
   const {thoughtId} = request.params
   try {
     await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } });
     response.status(200).json(thoughtId)
-  } catch (err) {
-      response.status(404).json({message: "Sorry, could not add a like to this thought", 
-      error: err.errors})
+  } 
+  catch (err) {
+      response.status(404).json({message: "Sorry, could not add a like to this thought", error: err.errors})
   }
 });
-
+ */
 
 // Start the server
 app.listen(port, () => {
