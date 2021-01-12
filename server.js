@@ -11,7 +11,7 @@ const Message = new mongoose.model("Message", {
   text: {
     type: String,
     required: true,
-    minlength: 6,
+    minlength: 5,
     maxlength: 140,
   },
   likes: {
@@ -76,7 +76,7 @@ app.post("/:messageId/like", async (req, res) => {
   const { messageId } = req.params;
 
   try {
-    await Message.updateOne({ _id: req.params.messageId }, { $inc: { hearts: 1 } });
+    await Message.updateOne({ _id: req.params.messageId }, { $inc: { likes: 1 } });
     res.status(200).json()
   } catch (err) {    
       res.status(400).json({
