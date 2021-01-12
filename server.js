@@ -24,9 +24,9 @@ const Thought = mongoose.model('Thought', {
   }
 })
 
-// Defines the port the app will run on. Default is set to 8080
+// Defines the port the app will run on.
 // PORT=9000 npm start
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 8040
 const app = express()
 
 // Add middlewares to enable cors and json body parsing
@@ -77,51 +77,6 @@ app.post('/thoughts/:thoughtId/like', async (request, response) => {
     })
   }
 })
-
-/* app.get('/', (req, res) => {
-  res.send('Welcome to my Happy Thoughts API 💌')
-})
-
-
-
-// GET the latest 20 thoughts
-app.get('/thoughts', async (request, response) => { 
-  try {
-    const thoughts = await Thought.find()
-    .sort({createdAt: 'desc'})
-    .limit(20)
-    .exec()
-    response.status(201).json(thoughts)
-  } 
-  catch (err) {
-    response.status(400).json({message: 'Sorry, could not load thoughts' })
-  }
-})
-
-// POST a new thought
-app.post('/thoughts', async (request, response) => { 
-    try {
-      const thought = new Thought({message: request.body.message})
-      await thought.save()  
-      response.status(201).json(thought)
-    }
-    catch (err) {
-      response.status(400).json({message: "Sorry, could not save thought to the database", error: err.errors})
-    }
-  })
-
-// Add a like to a specific thought
-app.post('/thoughts/:thoughtId/like', async (request, response) => {
-  const {thoughtId} = request.params
-  try {
-    await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } });
-    response.status(200).json(thoughtId)
-  } 
-  catch (err) {
-      response.status(404).json({message: "Sorry, could not add a like to this thought", error: err.errors})
-  }
-});
- */
 
 // Start the server
 app.listen(port, () => {
