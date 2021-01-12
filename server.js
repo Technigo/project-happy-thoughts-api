@@ -26,7 +26,7 @@ const Thought = mongoose.model("Thought", {
   },
   createdAt: {
     type: Date,
-    default: () => new Date(), //Date.now?
+    default: () => new Date(), 
   },
 })
 
@@ -89,14 +89,14 @@ app.post("/thoughts", async (req, res) => {
 // ENDPOINT POST THOUGHTS/:thoughtId/like
 app.post("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params
-  //const like = req.body
+  
 
   try {
     //Success
     await Thought.updateOne(
       { _id: id },
       { $inc: { hearts: 1 } }
-      // await new Like({ like }).save()
+      
     )
     res.status(201).send()
   } catch (err) {
