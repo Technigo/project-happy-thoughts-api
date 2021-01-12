@@ -26,7 +26,7 @@ const Thought = mongoose.model('Thought', {
 
 // Defines the port the app will run on.
 // PORT=9000 npm start
-const port = process.env.PORT || 8040
+const port = process.env.PORT || 8080
 const app = express()
 
 // Add middlewares to enable cors and json body parsing
