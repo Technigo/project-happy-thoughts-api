@@ -1,8 +1,6 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+A updated version of our project from week 11 - built the backend and the database.
 
 ## The problem
 
