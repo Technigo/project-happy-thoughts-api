@@ -3,7 +3,7 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
+const mongoUrl = process.env.MONGO_URL || "git"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
@@ -11,19 +11,19 @@ mongoose.Promise = Promise
 const Thought = mongoose.model('Thought', {
   message: {
     type: String,
-    required: true,
+    required: [true, "Hey, you need to write a message!"],
     minLength: 5,
-    maxLength: 140
+    maxLength: 140,
   },
 
   hearts: {
     type: Number,
-    default: 0
+    default: 0,
   },
 
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   }
 })
 
@@ -53,12 +53,9 @@ app.get('/thoughts', async (req, res) => {
 
 //POST request
 app.post('/thoughts', async (req, res) => {
-  const { message } = req.body
-  const thought = new Thought({ message })
-
   //The try statement allows you to define a block of code to be tested for errors while it is being executed.
   try {
-    const postThought = await thought.save()
+    const postThought = await new Thought(req.body).save()
     res.status(200).json(postThought)
   }
   catch (error) {
@@ -70,6 +67,10 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
+app.patch('thoughts/:id', async (req, res) => {
+  await Thought.updateOne({ _id: req.params.id }, req.body)
+  res.status(200)
+})
 
 // Start the server
 app.listen(port, () => {
