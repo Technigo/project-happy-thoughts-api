@@ -11,8 +11,8 @@ const Thought = mongoose.model('Thought', {
     text: {
       type: String,
       required: true,
-      minLength: 5,
-      maxLength: 140,
+      minlength: 5,
+      maxlength: 140,
     },
     heart: {
       type: Number,
@@ -35,7 +35,7 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Hello Claudia')
 })
 
 // endpoint returning 20 thoughts in descending order from created date.
@@ -43,6 +43,20 @@ app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
   res.json(thoughts);
 });
+
+app.post('/thoughts', async (req, res) => {
+  //Retrive the information sent by the client to our API endpoint 
+  const {text, complete} = req.body;
+
+  // Use our mongoose model to create the database entry.
+  const thought = new Thought({text, complete});
+
+  try{
+
+  }catch (err){
+
+  }
+})
 
 // Start the server
 app.listen(port, () => {
