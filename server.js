@@ -35,24 +35,20 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-  res.send('Happy thoughts API!')
-})
-
 // Retrieve the first 20 messages, sorted in descending order
-// app.get("/", async (req, res) => {
-//   const messages = await Message.find()
-//     .sort({ createdAt: "desc" })
-//     .limit(20)
-//     .exec();
-//   try {
-//     res.json(messages);
-//   } catch {
-//     res.status(400).json({
-//       message: "No happy thoughts were found 😢"
-//     });
-//   }
-// });
+app.get("/", async (req, res) => {
+  const messages = await Message.find()
+    .sort({ createdAt: "desc" })
+    .limit(20)
+    .exec();
+  try {
+    res.json(messages);
+  } catch {
+    res.status(400).json({
+      message: "No happy thoughts were found 😢"
+    });
+  }
+});
 
 // Post a new happy thought
 app.post("/", async (req, res) => {
