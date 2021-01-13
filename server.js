@@ -88,9 +88,8 @@ app.post('/thoughts', async (req, res) => {
 //? put instead of post because updating existing hearts data, increments by one
 app.put('/thoughts/:thoughtId/like', async (req,res) => {
   const { thoughtId } = req.params
-  
   try {
-  const onMessageLiked = await Thought.findOneAndUpdate({ _id: thoughtId }, {$inc: { hearts: 1 }})
+  const onMessageLiked = await Thought.findByIdAndUpdate(thoughtId, {$inc: { hearts: 1 }})
     res.status(200).json(onMessageLiked)
   } catch (err) {
     res.status(404).json({ message: 'Could not find ThoughtId, update not possible', errors: err.errors});

@@ -5,7 +5,7 @@ Create an API which includes both GET and POST requests, connect to frontend.
 ## The problem
 
 Partial connection between client and server done, able to post thoughts.
-Limitations: not able to like a thought.Work in progress
+Limitation fixed. Passed \_id in url function, changed method to PUT also in frontend and findByIdAndUpdate in backend.
 
 ## View it live
 
