@@ -24,10 +24,6 @@ const Thought = mongoose.model('Thought', {
   } 
 });
 
-// Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
 
@@ -42,7 +38,7 @@ app.get('/', (req, res) => {
 
 //GET requests
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc'}).limit(20).exec;
+  const thoughts = await Thought.find().sort({ createdAt: 'desc'}).limit(20).exec();
   res.json(thoughts);
 });
 
@@ -52,10 +48,12 @@ app.post('/thoughts', async (req, res) => {
   try {
 //Retrieving the info sent by the client. 
     const { message } = req.body;
+
 //By doing await new Thought({ message }).save();instead of saving the entire req.body 
 //like await new Thought(req.body).save() we are only saving the message sent my the client. 
 //Any other info sent by the client will not be saved and it's more secure this way.
 //Now the client can't update the number of likes by sending hearts in the post request.    
+    
     const newThought = await new Thought({ message }).save();
     res.status(200).json(newThought);
   } catch (error) {
