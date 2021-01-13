@@ -8,7 +8,7 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
 const Message = new mongoose.model("Message", {
-  text: {
+  message: {
     type: String,
     required: true,
     minlength: 5,
@@ -53,10 +53,10 @@ app.get("/", async (req, res) => {
 // Post a new happy thought
 app.post("/", async (req, res) => {
   // Retrieve the information sent by the client to our API endpoint
-  const { text } = req.body;
+  const { message } = req.body;
 
   // Use our moongose model to create the database entry
-  const message = new Message({ text });
+  const message = new Message({ message });
 
   try {
     // Success
