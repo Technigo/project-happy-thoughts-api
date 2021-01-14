@@ -44,15 +44,21 @@ app.get('/', (req, res) => {
 
 // GET REQUESTS 
 app.get('/thoughts', async (req, res) => { 
-  const thoughts = await Thought.find().sort({ createdAt: 'desc'}).limit(20);
+  const thoughts = await Thought.find().sort({ createdAt: 'desc'}).limit(20).exec();
   res.json(thoughts);
 });
 
 // POST REQUESTS
+
+//By doing await new Thought({ message }).save()instead of saving the entire body it's
+// only saving the message sent my the client. 
+//Any other info sent by the client will not be saved and it's more secure this way.
+//Now the number of likes can't be sent in the post request.   
+
 app.post('/thoughts', async (req,res) => { 
   try { 
     const { message } = req.body;
-    const newThought = await new Thought({ message }.save());
+    const newThought = await new Thought({ message }).save();
     res.status(200).json(newThought);
   } catch (error) { 
     console.log(error);
