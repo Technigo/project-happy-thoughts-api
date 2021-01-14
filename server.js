@@ -67,20 +67,34 @@ app.post('/thoughts', async (req, res) => {
     res.status(400).json({message: 'Could not save new thought', error: err.errors})
   }
 })
-
-app.post('/thoughts/:thoughtId/like', async (req, res) => {
+//I put this code in comment to get more input about the reason it does not work
+// app.post('/thoughts/:thoughtId/like', async (req, res) => {
+//   try {
+//     const { thoughtId } = req.params
+//     const newLike = await Thought.updateOne({ _id: thoughtId}, { $inc: { hearts: 1 } })
+//     if (newLike) {
+//       res.status(201).json(newLike)
+//     } else {
+//       res.status(404).json({ error: `thought message with id ${thoughtId} can not be found` })
+//     }
+//   } catch (err) {
+//     res.status(400).json({ error: `Id ${thoughtId} is invalid` })
+//   }
+// })
+// POST /thoughts/:thoughtId/like - Like a thought
+app.post('/thoughts/:id/like', async (req, res) => {
+  const { id } = req.params;
   try {
-    const { thoughtId } = req.params
-    const newLike = await Thought.updateOne({ _id: thoughtId}, { $inc: { hearts: 1 } })
-    if (newLike) {
-      res.status(201).json(newLike)
-    } else {
-      res.status(404).json({ error: `thought message with id ${thoughtId} can not be found` })
-    }
+    // Success
+    await Thought.updateOne({ _id: id }, { $inc: { hearts: 1 } });
+    res.status(201).send();
   } catch (err) {
-    res.status(400).json({ error: `Id ${thoughtId} is invalid` })
+    res.status(400).json({
+      message: `Could not save like`,
+      error: err.errors
+    });
   }
-})
+}); 
 
 // Start the server
 app.listen(port, () => {
