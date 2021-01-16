@@ -8,7 +8,7 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
 const Message = new mongoose.model("Message", {
-  message: {
+  text: {
     type: String,
     required: true,
     minlength: 5,
@@ -28,7 +28,7 @@ const Message = new mongoose.model("Message", {
 // overridden when starting the server. For example:
 //
 //   PORT=9000 npm start
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8082;
 const app = express();
 
 // Add middlewares to enable cors and json body parsing
@@ -53,14 +53,14 @@ app.get("/", async (req, res) => {
 // Post a new happy thought
 app.post("/", async (req, res) => {
   // Retrieve the information sent by the client to our API endpoint
-  const { message } = req.body;
+  const { text } = req.body;
 
   // Use our moongose model to create the database entry
-  const message = new Message({ message });
+  const newMessage = new Message({ text });
 
   try {
     // Success
-    const savedMessage = await message.save();
+    const savedMessage = await newMessage.save();
     res.status(201).json(savedMessage)
   } catch (err) {
     // No success
