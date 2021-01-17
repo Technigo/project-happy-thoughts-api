@@ -45,28 +45,28 @@ app.get("/", async (req, res) => {
     res.json(messages);
   } catch {
     res.status(400).json({
-      message: "No happy thoughts were found 😢"
+      message: "No happy thoughts were found 😢",
     });
   }
 });
 
 // Post a new happy thought
 app.post("/", async (req, res) => {
-  // Retrieve the information sent by the client to our API endpoint
-  const { text } = req.body;
-
-  // Use our moongose model to create the database entry
-  const newMessage = new Message({ text });
-
   try {
+    // Retrieve the information sent by the client to our API endpoint
+    const { text } = req.body;
+
+    // Use our moongose model to create the database entry
+    const newMessage = new Message({ text });
+
     // Success
     const savedMessage = await newMessage.save();
-    res.status(201).json(savedMessage)
+    res.status(201).json(savedMessage);
   } catch (err) {
     // No success
     res.status(400).json({
       message: "Couldn't save your happy thought, please hold on to it.",
-      error: err.errors
+      error: err.errors,
     });
   }
 });
@@ -76,13 +76,16 @@ app.post("/:messageId/like", async (req, res) => {
   const { messageId } = req.params;
 
   try {
-    await Message.updateOne({ _id: req.params.messageId }, { $inc: { likes: 1 } });
-    res.status(200).json()
-  } catch (err) {    
-      res.status(400).json({
-        message: "My apologies, could not update.",
-        error: err.errors
-      });    
+    await Message.updateOne(
+      { _id: req.params.messageId },
+      { $inc: { likes: 1 } }
+    );
+    res.status(200).json();
+  } catch (err) {
+    res.status(400).json({
+      message: "My apologies, could not update.",
+      error: err.errors,
+    });
   }
 });
 
