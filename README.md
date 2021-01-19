@@ -20,4 +20,5 @@ I started with creating a thought model and added the properties and then the va
 ## View it live
 
 https://happy-thoughts-api-project.herokuapp.com/
+https://happythoughtsjessica.netlify.app/
 
