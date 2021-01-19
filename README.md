@@ -10,3 +10,6 @@ To create this API I had to work with NodeJs, express, Mongoose and MongoDb. I l
 ## View it live
 
 https://happy-thoughts-sandra.herokuapp.com/
+
+Fronted link:
+https://happy-thoughts-sandra-shumanteva.netlify.app/
