@@ -9,3 +9,7 @@ It is very interesting to see the connection between front end, backend and data
 ## View it live
 
 https://whatmakesyouhappy.herokuapp.com/thoughts
+
+https://epic-galileo-60cb2d.netlify.app/
+
+
