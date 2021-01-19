@@ -12,3 +12,7 @@ https://whatmakesyouhappy.herokuapp.com/thoughts
 
 https://epic-galileo-60cb2d.netlify.app/
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 01cdff4e30f0cca689aaab0f23405d72d0bf4b3f
