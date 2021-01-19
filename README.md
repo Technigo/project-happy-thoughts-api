@@ -11,6 +11,7 @@ This project continued of the learning path for backend, this time introducing P
 ## View it live
 
 Deployed on Heroku: https://project-happythoughts-api-olof.herokuapp.com
+Frontend: https://olof-happythoughts.netlify.app/
 
 Endpoints:
 
