@@ -15,7 +15,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get("/", async (req, res) => {
+app.get("/thoughts", async (req, res) => {
   const thoughts = await Thought.find()
     .sort({ createdAt: "desc" })
     .limit(20)
@@ -23,7 +23,7 @@ app.get("/", async (req, res) => {
   res.json(thoughts);
 });
 
-app.post("/", async (req, res) => {
+app.post("/thoughts", async (req, res) => {
   // Retreve the information sent by the client to our API endpoint
   const { message } = req.body;
 
