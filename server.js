@@ -86,7 +86,7 @@ app.post('/thoughts', async (req, res) => {
 });
 
 //? put instead of post because updating existing hearts data, increments by one
-app.put('/thoughts/:thoughtId/like', async (req,res) => {
+app.post('/thoughts/:thoughtId/like', async (req,res) => {
   const { thoughtId } = req.params
   try {
   const onMessageLiked = await Thought.findByIdAndUpdate(thoughtId, {$inc: { hearts: 1 }})
