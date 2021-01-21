@@ -15,3 +15,4 @@ Tech used
 ## View it live
 
 https://happy-happy-thoughts.herokuapp.com/thoughts
+Netlify site using API: https://happy-feels.netlify.app
