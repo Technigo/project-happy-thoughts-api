@@ -36,4 +36,6 @@ Learning objectives:
 
 
 ## View it live
-https://happy-thoughts-api-pwangy.herokuapp.com/
+backend: https://happy-thoughts-api-pwangy.herokuapp.com/
+
+frontend: https://pwangy-happy-v2.netlify.app/
