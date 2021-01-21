@@ -12,3 +12,4 @@ MongoDB
 ## View it live
 
 https://happi-thoughts.netlify.app/
+https://happithoughts.herokuapp.com/
