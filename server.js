@@ -49,16 +49,18 @@ app.get('/', (req, res) => {
   res.send('This is an API for "Happy Thoughts"')
 })
 
+// Endpoint to get the list the 20 latest thoughts
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
   res.json(thoughts)
 })
 
+// Endpoint to post a thought to the database
 app.post('/thoughts', async (req, res) => {
   
-  const thought = new Thought({ message: req.body.message  })
-
+  
   try {
+    const thought = new Thought({ message: req.body.message  })
     const savedThought = await thought.save()
     res.status(200).json(savedThought)
   } catch (err) {
