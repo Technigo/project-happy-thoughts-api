@@ -54,8 +54,8 @@ app.post('/thoughts', async (req, res) => {
 app.put('/thoughts/:id/like', async (req,res) => {
   try {
     const thought = await Thought.findById(req.params.id)
-    await Thought.updateOne({_id: thought._id}, {hearts: thought.hearts + 1})
-    res.status(200).json(thought)
+    const updatedThought = await Thought.updateOne({_id: thought._id}, {hearts: thought.hearts + 1})
+    res.status(200).json(updatedThought)
   } catch (err) {
     res.status(400).json({message: 'Could not find thought to like', errors: err.errors})
   }
