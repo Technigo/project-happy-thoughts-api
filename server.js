@@ -97,11 +97,13 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
     const thoughtId = req.params.thoughtId
 
     //increment the nr of hearts for the thought with specific id
-    const savedLike = await Thought
-      .updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
-      .save()
+    // const savedLike = await Thought
+    //   .updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
+    // .save()
+    await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
 
-    res.status(201).json(savedLike)
+    // res.status(201).json(savedLike)
+    res.status(201).json({ success: true })
 
   } catch (err) {
     res.status(400).json({ message: "Couldn't save the like.", errors: err.errors })
