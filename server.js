@@ -3,10 +3,6 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
-// Error messages
-const ERR_CANNOT_SAVE_TO_DATABASE = 'Sorry, could not save thought to database';
-const ERR_CANNOT_FIND_THOUGHT = 'Sorry, could not find thought by id';
-
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
@@ -52,10 +48,25 @@ app.get('/thoughts', async (req, res) => {
 // POST/thoughts
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body
-  
+  const thought = new Thought({ message })
+  try {
+    const savedThought = await thought.save()
+    res.status(201).json(savedThought)
+  } catch (err) {
+    res.status(400).json({ message: 'Sorry, could not save thought to the database', error: err.errors })
+  }
 })
 
 // POST/thoughts/:thoughtId/like
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  try {
+    const { thoughtId } = reg.param
+    const updatedLike = await Thought.updateOne({ _id: thoughtId }, { $inc: { 'hearts': 1 } })
+    res.status(201).json(updatedLike)
+  } catch (err) {
+    res.status(400).json({ message: 'Sorry, could not find thought', error: err.errors })
+  }
+})
 
 // Start the server
 app.listen(port, () => {
