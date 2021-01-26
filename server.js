@@ -20,6 +20,7 @@ const listEndpoints = require('express-list-endpoints')
 app.use(cors())
 app.use(bodyParser.json())
 
+//middleware f() -> checks if we have a connection with the server (1 = connected)
 app.use((req, res, next) => {
   if (mongoose.connection.readyState === 1) {
     next()
@@ -48,7 +49,7 @@ const Thought = mongoose.model("Thought", {
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  // res.send('Hello, welcome to happy thoughts API. Endpoints: /thoughts (methods: GET, POST), /thoughts/:thoughtId/heart (method: POST)')
+
   if (res) {
     res.status(200).send(listEndpoints(app))
   } else {
@@ -90,7 +91,7 @@ app.post("/thoughts", async (req, res) => {
 })
 
 //endpoint for posting likes/hearts
-app.post("/thoughts/:thoughtId/hearts", async (req, res) => {
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
 
   try {
     const thoughtId = req.params.thoughtId
