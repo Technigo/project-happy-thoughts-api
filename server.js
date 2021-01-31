@@ -35,16 +35,16 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello Claudia')
+  res.send('Hello Teachers')
 })
 
-// 1. GET endpoint returning 20 thoughts in descending order from created date.
+// GET endpoint returning 20 thoughts in descending order from created date.
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
   res.json(thoughts)
 })
 
-// 2. POST to database 
+//  POST to database 
 app.post('/thoughts', async (req, res) => {
   //Retrive the information sent by the client to our API endpoint 
   try {
@@ -57,7 +57,7 @@ app.post('/thoughts', async (req, res) => {
 
 
 
-// 3. POST hearts (for likes)
+// POST hearts (for likes)
 app.post('/thoughts/:thoughtId/heart', async (req, res) => {
   const { thoughtId } = req.params
   try {
