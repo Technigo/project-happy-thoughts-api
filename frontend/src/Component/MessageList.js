@@ -9,24 +9,22 @@ import '../Style/Container.css'
 const MessageList = ({ thoughts, onLikeClick }) => {
   return (
     <div>
-      {thoughts.map((thought) => {
-        return (
-          <div className="message-box container" key={thought.createdAt}>
-            <p className="message">
-              {thought.message}
-            </p>
-            <div className="message-second-row">
-              <LikeButton
-                onLikeClick={onLikeClick}
-                thought={thought}
-              />
-              <span className="second-row-elements">
-                {moment(thought.createdAt).fromNow()}
-              </span>
-            </div>
+      {thoughts.map((thought) => (
+        <div className="message-box container" key={thought.createdAt}>
+          <p className="message">
+            {thought.message}
+          </p>
+          <div className="message-second-row">
+            <LikeButton
+              onLikeClick={onLikeClick}
+              thought={thought}
+            />
+            <span className="second-row-elements">
+              {moment(thought.createdAt).fromNow()}
+            </span>
           </div>
-         );
-      })};
+        </div>
+      ))};
     </div>
    );
 };
