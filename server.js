@@ -14,11 +14,6 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 140
   },
-  name: {
-    type: String,
-    maxlength: 50,
-    default: "Anonymus"
-  },
   heart: {
     type: Number,
     default: 0
@@ -35,12 +30,12 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-app.get('/', async (req, res) => {
+app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
   res.json(thoughts)
 })
 
-app.post('/', async (req, res) => {
+app.post('/thoughts', async (req, res) => {
   const { message } = req.body
   const thought = new Thought({
     message: message
@@ -54,7 +49,7 @@ app.post('/', async (req, res) => {
   }
 })
 
-app.post('/:id/like', async (req, res) => {
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
   try {
     const savedLike = await Thought.findOneAndUpdate(
       { _id: req.params.id }, { $inc: { heart: 1 } }
