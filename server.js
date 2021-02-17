@@ -22,10 +22,6 @@ const Thought = mongoose.model("Thought", {
     type: String,
     default: "Anonymous"
   },
-  theme: {
-    type: String,
-    default: "❤️",
-  },
   createdAt: {
     type: Date,
     default: () => new Date(),
@@ -47,7 +43,7 @@ app.get("/", (req, res) => {
 })
 
 //Handling erorrs by summing them in consts
-const COULD_NOT_SAVE_THOUGHT = "Sorry! Could not save thought to the database";
+const COULD_NOT_SAVE_THOUGHT = 4
 const COULD_NOT_FIND_THOUGHT_WITH_ID = "Sorry! Unable to find the thought with the ID: ";
 const COULD_FIND_THOUGHT = "Added one more like";
 
