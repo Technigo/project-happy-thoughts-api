@@ -36,7 +36,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Retrieve the first 20 messages, sorted in descending order
-app.get("/", async (req, res) => {
+app.get("/thoughts", async (req, res) => {
   const messages = await Message.find()
     .sort({ createdAt: "desc" })
     .limit(20)
@@ -51,7 +51,7 @@ app.get("/", async (req, res) => {
 });
 
 // Post a new happy thought
-app.post("/", async (req, res) => {
+app.post("/thoughts", async (req, res) => {
   try {
     // Retrieve the information sent by the client to our API endpoint
     const { text } = req.body;
@@ -72,12 +72,12 @@ app.post("/", async (req, res) => {
 });
 
 // Update like button
-app.post("/:messageId/like", async (req, res) => {
-  const { messageId } = req.params;
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
 
   try {
     await Message.updateOne(
-      { _id: req.params.messageId },
+      { _id: req.params.thoughtId },
       { $inc: { likes: 1 } }
     );
     res.status(200).json();
