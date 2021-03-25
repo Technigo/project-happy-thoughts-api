@@ -22,6 +22,7 @@
     }
   },
   "rules": {
+    "quotes": "off",
     "arrow-body-style": "off",
     "class-methods-use-this": "off",
     "brace-style": [
@@ -54,6 +55,7 @@
     "no-debugger": "error",
     "no-else-return": "off",
     "no-irregular-whitespace": "error",
+    "no-trailing-spaces": "off",
     "no-multiple-empty-lines": [
       "error",
       {
