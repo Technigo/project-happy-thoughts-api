@@ -16,15 +16,15 @@ const app = express()
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
-app.use(bodyParser.json())
+app.use(express.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Hello from the other side 🎶')
 })
 
 // Start the server
 app.listen(port, () => {
   // eslint-disable-next-line
-  console.log(`Server running on http://localhost:${port}`)
+  console.log(`WOOOP 🚀 Server running on http://localhost:${port}`)
 })
