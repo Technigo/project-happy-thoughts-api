@@ -45,11 +45,13 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-  const tasks = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
+  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
+  res.json(thoughts)
   })
 
 app.post('/thoughts', async (req, res) => {
-  const thought = new Thought({ text, complete })
+  const { message } = req.body
+  const thought = new Thought({ message })
     
   try {
   const newThought = await thought.save()
