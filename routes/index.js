@@ -1,19 +1,14 @@
 import { Router } from 'express';
 
-// import * as sightings from '../controllers/sightingController';
-// import * as lists from '../controllers/listController';
+import * as thoughts from '../controllers/thoughtsController';
 
 const router = new Router();
 
 router.get('/', (req, res) => {
   res.send('HELLO')
 })
-
-// router.get('/sightings', sightings.getAll);
-// router.get('/sightings/:id', sightings.getOne);
-
-// router.get('/lists/preInternet', lists.getList('preInternet'));
-// router.get('/lists/postInternet', lists.getList('postInternet'));
-// router.get('/lists/shapes', lists.getList('shapes'));
+router.get('/thoughts', thoughts.getAll)
+router.post('/thoughts', thoughts.createOne)
+router.post('/thoughts/:id/like', thoughts.updateOne)
 
 export default router;

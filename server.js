@@ -5,11 +5,16 @@ import dotenv from 'dotenv';
 
 import router from './routes';
 import errorHandler from './controllers/errorController';
+import AppError from './utils/appError';
 
 dotenv.config();
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts';
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(mongoUrl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false
+});
 mongoose.Promise = Promise;
 
 const port = process.env.PORT || 8080;
@@ -21,6 +26,13 @@ app.use(express.json());
 
 // Add router module and error handler
 app.use('/', router);
+
+// handle undefined Routes
+app.use('*', (req, res, next) => {
+  const err = new AppError(404, 'error', 'The route you provided is undefined');
+  next(err, req, res, next);
+});
+
 app.use(errorHandler);
 
 // Start the server
