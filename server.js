@@ -1,18 +1,18 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 mongoose.Promise = Promise
 
-// Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
 
+// created Schema for thoughts, with some validation
 const thoughtSchema = new mongoose.Schema({
   message: {
     type: String, 
@@ -42,14 +42,16 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
+// GET endpoint to retrieve all thoughts from the database 
 app.get('/thoughts', async (req, res) => {
   const newThought = await Thought.find().sort({ createdAt: 'desc' }).limit(20)
   res.json({ length: newThought.length, data: newThought })
 })
 
+// POST endpoint that allows us to add thoughts to the database 
 app.post('/thoughts', async (req, res) => {
   try {
-    const newThought = await new Thought(req.body).save()
+    const newThought = await new Thought({ message: req.body.message }).save()
     res.json(newThought)
   } catch (error) {
       res.status(400).json(error)
