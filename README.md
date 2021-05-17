@@ -1,4 +1,4 @@
-# Project Happy Thoughts API
+# Project Happy Thoughts API 💌
 
 Replace this readme with your own information about your project.
 
