@@ -18,6 +18,8 @@ const schema = new mongoose.Schema({
   message: {
     type: String,
     required: true,
+    minlength: 5,
+    maxlength: 10,
   },
   heart: {
     type: Number,
@@ -37,6 +39,12 @@ app.use(bodyParser.json());
 // Start defining your routes here
 app.get("/", (req, res) => {
   res.send("Hello world");
+});
+
+app.get("/thoughts", (req, res) => {
+  // This get request should return a maximun of 20 thoughts sorted by createdAt
+  // to show the most recent thoughts first
+  mongoose.find();
 });
 
 app.post("/thoughts", async (req, res) => {
