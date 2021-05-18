@@ -1,7 +1,10 @@
 import express from 'express'
-import bodyParser from 'body-parser'
+import dotenv from 'dotenv'
 import cors from 'cors'
+import listEndpoints from 'express-list-endpoints'
 import mongoose from 'mongoose'
+
+dotenv.config();
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -41,12 +44,63 @@ const Thought = mongoose.model('Thought', thoughtSchema)
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
-app.use(bodyParser.json())
+app.use(express.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send(listEndpoints(App))
 })
+
+
+ 
+ app.get('/thoughts', async (req, res) => {
+  const { page = 1, limit = 20 } = req.query;
+   
+  try {
+  
+    const thoughts = await Thought.find().sort({createdAt:-1}).limit().skip((page - 1) * limit).exec();
+  const count = await Thought.countDocuments();
+ res.json({
+  thoughts,
+  totalMessages: count,
+  totalPages: Math.ceil(count / limit),
+  currentPage: page
+})
+} catch (err) {
+    
+   res.status(400).json({error: 'Something went wrong' })
+}
+})
+
+
+
+//app.get('/thoughts', async (req, res) => {
+
+//const { page = 1, limit = 20 } = req.query;
+
+  //try {
+    
+   // const thoughts = await Thought.find()
+     // .limit(limit * 1)
+     // .skip((page - 1) * limit)
+    //  .sort({ createdAt: -1 })
+    //  .exec();
+
+    
+  //  const count = await Thought.countDocuments();
+
+    
+ //   res.json({
+  //    thoughts,
+  //    totalPages: Math.ceil(count / limit),
+  //    currentPage: page
+   // });
+ // } catch (err) {
+  //  console.error(err.message);
+ // };
+//});
+
+
 
 app.post('/thoughts', async (req, res) => {
   try {
