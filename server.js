@@ -10,9 +10,20 @@ const port = process.env.PORT || 8080
 const app = express()
 
 const thoughtSchema = new mongoose.Schema({
- message: String,
- hearts: Number,
- createdAt: Date
+ message: {
+   type: String,
+   required: true,
+   minlength: 5,
+   maxlength: 140
+ },
+ hearts: {
+   type: Number,
+   default: 0,
+ },
+ createdAt: {
+   type: Date,
+   default: Date.now
+ }
 })
 
 const Thought = mongoose.model('Thought', thoughtSchema)
@@ -26,12 +37,13 @@ app.get('/', (req, res) => {
 })
 
 app.post('/thoughts', async (req, res) => {
-  const newThought = await new Thought({
-    message: req.body.message,
-    hearts: 0,
-    createdAt: Date.now()
-  }).save()
-  res.json(newThought)
+  
+  try {
+    const newThought = await new Thought(req.body).save()
+    res.json(newThought)
+  } catch (error) {
+    res.status(400).json(error)
+  }
 })
 
 
