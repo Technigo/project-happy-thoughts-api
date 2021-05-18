@@ -35,7 +35,7 @@ const thoughtSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 140
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -90,7 +90,7 @@ app.post('/thoughts', async (req, res) => {
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
   try {
-    const likes = await Thought.updateOne({ _id: thoughtId }, { $inc: { heart: 1 } })
+    const likes = await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
     if (likes) {
       res.status(200).json(likes)
     } else {
