@@ -16,6 +16,11 @@ const thoughtSchema = new Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  category: {
+    type: String,
+    enum: ['Happy', 'Food', 'Home', 'Project'],
+    default: 'Happy'
   }
 });
 

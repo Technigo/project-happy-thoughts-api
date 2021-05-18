@@ -4,9 +4,6 @@ import * as thoughts from '../controllers/thoughtsController';
 
 const router = new Router();
 
-router.get('/', (req, res) => {
-  res.send('HELLO')
-})
 router.get('/thoughts', thoughts.getAll)
 router.post('/thoughts', thoughts.createOne)
 router.post('/thoughts/:id/like', thoughts.updateOne)
