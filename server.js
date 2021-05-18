@@ -21,14 +21,18 @@ const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     required: [true, "The message field is mandatory"],
-    unique: true,
     validate: {
       validator: (value) => {
         return /^[^0-9]+$/.test(value)
       },
       message: "Numbers are not allowed"
     },
-    minlength: 5      
+    minlength: 5,
+    maxlength: 140,      
+  },
+  name: {
+    type: String,
+    default: 'Anonymous'
   },
   hearts: {
     type: Number,
@@ -74,43 +78,26 @@ app.get('/', (req, res) => {
 
 
 
-//app.get('/thoughts', async (req, res) => {
-
-//const { page = 1, limit = 20 } = req.query;
-
-  //try {
-    
-   // const thoughts = await Thought.find()
-     // .limit(limit * 1)
-     // .skip((page - 1) * limit)
-    //  .sort({ createdAt: -1 })
-    //  .exec();
-
-    
-  //  const count = await Thought.countDocuments();
-
-    
- //   res.json({
-  //    thoughts,
-  //    totalPages: Math.ceil(count / limit),
-  //    currentPage: page
-   // });
- // } catch (err) {
-  //  console.error(err.message);
- // };
-//});
-
-
-
 app.post('/thoughts', async (req, res) => {
+  const { message, name } = req.body
   try {
-  const newThought = await new Thought(req.body).save()
+  const newThought = await new Thought({ message, name: name || 'Anonymous'}).save()
   res.json(newThought)
 } catch (error) {
   if (error.code === 11000) {
     res.status(400).json({ error: 'Duplicated value', fields: error.keyValue })
   } res.status(400).json(error)
 }
+})
+
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  try {
+    const { thoughtID } = req.params
+    await Thought.updateOne({ _id: thoughtID }, { $inc: { heart: 1 } })
+    res.status(200).json()
+  } catch (error) {
+    res.status(400).json({ message: 'Can not find this thought by id', error: error.error })
+  }
 })
 
 
