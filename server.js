@@ -1,7 +1,10 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import dotenv from 'dotenv'
 import listEndpoints from 'express-list-endpoints'
+
+dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -74,13 +77,27 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
+// app.post('/thoughts/:thoughtId/like', async (req, res) => {
+//   try {
+//     const { thoughtId } = req.params
+//     await Thought.updateOne({ _id: thoughtId }, { $inc: { heart: 1 } })
+//     res.status(200).json()
+//   } catch (err) {
+//     res.status(400).json({ message: 'Thought not found', error: err.errors })
+//   }
+// })
+
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
   try {
-    const { thoughtId } = req.params
-    await Thought.updateOne({ _id: thoughtId }, { $inc: { heart: 1 } })
-    res.status(200).json()
+    const likes = await Thought.updateOne({ _id: thoughtId }, { $inc: { heart: 1 } })
+    if (likes) {
+      res.status(200).json(likes)
+    } else {
+      res.status(404).json({ error: 'Not found' })
+    }
   } catch (err) {
-    res.status(400).json({ message: 'Thought not found', error: err.errors })
+    res.status(400).json({ message: 'Invalid request', error: err.errors })
   }
 })
 
