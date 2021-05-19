@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import mongoose, { get } from 'mongoose'
+import mongoose from 'mongoose'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
@@ -13,19 +13,8 @@ const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     reguired: [true, 'Message required'],
-    // unique: true,
     minlength: 5,
     maxlength: 140,
-    // lowerCase: true,
-    // enum: [' Ylva is best', 'Ylvas is super']
-    //regualar  expression, Regex: match:. Don't accept numbers /^[^0-9]+$/. Only accept numbers /^[0-9]+$/.
-    // match:/^[^0-9]+$/
-    // validate:{
-    //   validator: (value) => {
-    //     return /^[^0-9]+$/.test(value);
-    //   },
-    //   message: 'Number are not allowed'
-    // },
   },
   hearts:{
     type: Number,
@@ -61,7 +50,6 @@ app.get('/thoughts', async (req, res)=> {
 
     res.status(404).json(error);
   }
-
 })
 
 //This endpoint expects a JSON body with the thought `message`, like this: `{ "message": "Express is great!" }`. If the input is valid (more on that below), the thought should be saved, and the response should include the saved thought object, including its `_id`.
@@ -89,6 +77,5 @@ app.post('/thoughts/:thoughtId/like', async (req, res)=> {
 });
 
 app.listen(port, () => {
-
   console.log(`Server running on http://localhost:${port}`)
 })
