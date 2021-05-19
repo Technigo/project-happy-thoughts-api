@@ -63,8 +63,36 @@ app.post('/thoughts', async (req, res) => {
     }
     res.status(400).json(error);
   }
-})
+});
 
+app.delete('/thoughts/:id', async (req, res) => {
+  const { id } = req.params;
+  try{
+  const deletedThought = await Thought.findOneAndDelete({ _id: id });
+  if(deletedThought){
+    req.json(deletedThought)
+  } else {
+    res.status(404).json({ message: 'iNot fundt' });
+  }
+    } catch (error) {
+    res.status(400).json({ message: 'invalid request', error });
+  }
+});
+
+app.patch('/thoughts/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate(id, req.body);
+    if(updatedThought){
+      res.json(updatedThought)
+    } else {
+      res.status(404).json({ message: 'Not fundt' });
+    }
+  } catch {
+    res.status(400).json({ message: 'invalid request', error });
+  }
+})
 //This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its `hearts` property to add one heart.
 app.post('/thoughts/:thoughtId/like', async (req, res)=> {
   const { thoughtId } = req.params;
