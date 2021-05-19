@@ -30,7 +30,7 @@ const thoughtSchema = new mongoose.Schema({
   user: {
     type: String
   },
-  tags: {
+  tag: {
     type: String
   }
 });
@@ -91,7 +91,7 @@ app.get('/thoughts/:thoughtId', async (req, res) => {
 
 app.post('/thoughts', async (req, res) => {
   try {
-    const newThought = await new Thought({ message: req.body.message, user: req.body.user, tags: req.body.tags }).save();
+    const newThought = await new Thought({ message: req.body.message, user: req.body.user, tag: req.body.tag }).save();
     res.status(201).json(newThought);
   } catch (err) {
     if (err.code === 11000) {
