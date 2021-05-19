@@ -51,7 +51,7 @@ app.get('/', (req, res) => {
   try {
     res.send(listEndpoints(app));
   } catch (err) {
-    res.status(404).send({ err: 'Page not found' });
+    res.status(404).json({ err: 'Page not found' });
   }
 });
 
@@ -61,10 +61,10 @@ app.get('/thoughts', async (req, res) => {
     if (thoughts) {
       res.json(thoughts);
     } else {
-      res.status(404).send({ err: 'Could not find any thoughts in the database.' });
+      res.status(404).json({ err: 'Could not find any thoughts in the database.' });
     }
   } catch (err) {
-    res.status(404).send({ err: 'Page not found' });
+    res.status(404).json({ err: 'Page not found' });
   }
 });
 
@@ -76,7 +76,7 @@ app.get('/thoughts/:thoughtId', async (req, res) => {
     if (thought) {
       res.json(thought);
     } else {
-      res.status(404).send({ err: 'Could not find the thought in the database.' });
+      res.status(404).json({ err: 'Could not find the thought in the database.' });
     }
   } catch (err) {
     res.status(400).json({ err: 'Page not found' });
