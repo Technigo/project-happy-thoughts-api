@@ -34,11 +34,13 @@ app.get('/', (req, res) => {
   res.send('Hello hello world')
 })
 
+// Route that displays all messages, sorted by newest first, limited to 20 msgs
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Message.find().sort({ createdAt: 'desc' }).limit(20).exec()
   res.json(thoughts)
 })
 
+// Route to post a new message
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body
 
@@ -50,9 +52,44 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-app.post('/thoughts/:id/heart', (req, res) => {
-  const { heart } = req
+// Route to like a message, i.e. increase heart count by 1
+app.post('/thoughts/:id/hearts', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const updatedThought = await Message.findByIdAndUpdate(id, { $inc: { hearts: 1 } })
+    if (updatedThought) {
+      res.json(updatedThought)
+    } else {
+      res.status(404).json({ data: 'Mgs not found' })
+    }
+  } catch (error) {
+    res.status(400).json({ data: 'Invalid request' })
+  }
 })
+
+// Route to delete a message
+app.delete('/thoughts/:id', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const deletedThought = await Message.findOneAndDelete({ _id: id })
+    if (deletedThought) {
+      res.json(deletedThought)
+    } else {
+      res.status(404).json({ data: 'Msg not found' })
+    }
+  } catch (error) {
+    res.status(400).json({ data: 'Invalid request', error })
+  }
+})
+
+// app.patch('/thoughts/:id', async (req, res) => {
+//   const { id } = req.params
+//   try {
+//     const updatedThought = await Message.findByIdAndUpdate(id, {hearts: 1})
+//   }
+// })
 
 app.listen(port, () => {
   // eslint-disable-next-line
