@@ -14,6 +14,12 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+app.use((req, res, next) => {
+  return mongoose.connection.readyState === 1 
+    ? next() 
+    : res.status(503).send({ Error: "No Connection to server" })
+}); 
+
 app.use('/', happyThoughts);
 
 app.listen(port, () => {

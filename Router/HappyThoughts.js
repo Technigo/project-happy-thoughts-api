@@ -23,8 +23,8 @@ const messageSchema = mongoose.Schema(
 )
 const Thought = mongoose.model("Thought", messageSchema)
 
-const catchError = (res, err) => {
-  return res.status(400).json({ message: "Something went wrong", errors: err.errors })
+const catchError = (res, err, msg) => {
+  return res.status(400).json({ message: msg, errors: err.errors })
 }
 
 router.post('/thoughts', async (req, res) => {
@@ -33,7 +33,7 @@ router.post('/thoughts', async (req, res) => {
     const thought = await new Thought({ message }).save()
     res.json(thought)
   } catch (err) {
-    catchError(res, err)
+    catchError(res, err, "Something went wrong")
   }
 })
 
@@ -42,7 +42,7 @@ router.get('/thoughts', async (req, res) => {
     const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
     return thoughts.length === 0 ? res.json({ message: "There are no thoughts" }) : res.json(thoughts)
   } catch (err) {
-    catchError(res, err)
+    catchError(res, err, "Something went wrong")
   }
 })
 
@@ -52,7 +52,7 @@ router.post('/thoughts/:thoughtId/like', async (req, res) => {
     const updatedLikes = await Thought.findById(thoughtId).updateOne({ $inc: { likes: 1 } })
     res.json(updatedLikes)
   } catch (err) {
-    catchError(res, err)
+    catchError(res, err, "The id does not exist")
   }
 })
 
@@ -61,7 +61,7 @@ router.delete('/thoughts', async (req, res) => {
     const deleted = await Thought.deleteMany()
     res.json(deleted)
   } catch (err) {
-    catchError(res, err)
+    catchError(res, err, "failed deleting")
   }
 })
 
