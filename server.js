@@ -73,12 +73,12 @@ app.get('/thoughts', async (req, res) => {
     .skip(pageResults(page))
     .exec()
 
-  //
-  // const thoughts = await Thought.find();
+  // Get all thoughts to use for page count
+  const countThoughts = await Thought.countDocuments();
 
   try {
     return allThoughts.length > 0
-      ? res.json(allThoughts)
+      ? res.json({ allThoughts, pagesTotal: Math.ceil(countThoughts / 20) })
       : res.json({ result: 'No thoughts!' });
   } catch (error) {
     res.status(400).json({ error: 'Something went wrong', details: error });
