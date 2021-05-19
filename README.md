@@ -19,24 +19,26 @@ Link to my deployed API: https://project-happy-thoughts-isabm5.herokuapp.com/
 ## Documentation
 
 ### ENDPOINTS
-- ```GET /```
 
 Displays all endpoints for this API using npm package express-list-endpoints.
+- ```GET /```
+
 
 ### THOUGHTS
+
+Endpoint for several thoughts.
 - ```GET /thoughts```
 - ```POST /thoughts```
 
-Endpoint for several thoughts.
 
 ### SINGLE THOUGHT
+
+Endpoint for a single thought.
 - ```GET /thoughts/:thoughtId```
 - ```DELETE /thoughts/:thoughtId```
 - ```PATCH /thoughts/:thoughtId```
 - ```PUT /thoughts/:thoughtId```
 
-Endpoint for a single thought.
+Endpoint for a single thought to POST a like on a specific thought.
 
 - ```POST /thoughts/:thoughtId/like```
-
-Endpoint for a single thought to POST a like on a specific thought.
