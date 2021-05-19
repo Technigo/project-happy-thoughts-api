@@ -75,7 +75,8 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   try {
     const like = await Thought.updateOne(
       { _id: thoughtId },
-      { $inc: { hearts: 1 } }
+      { $inc: { hearts: 1 } },
+      { new: true }
     )
     if (like) {
     res.status(200).json(like)
