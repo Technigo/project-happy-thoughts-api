@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
 })
 
 // GET endpoint to retrieve all thoughts from the database. 
-// Sorted by date from newest to oldest. Limit 20 thoughts per page.
+// Sorted by date from newest to oldest. Returning a maximum of 20 thoughts.
 app.get('/thoughts', async (req, res) => {
   const newThought = await Thought.find().sort({ createdAt: 'desc' }).limit(20)
   res.json({ length: newThought.length, data: newThought })
@@ -88,70 +88,70 @@ app.post('/thoughts/:id/likes', async (req, res) => {
 })
 
 // Delete endpoint to be able to delete thought
-app.delete('/thoughts/:id', async (req, res) => {
-  const { id } = req.params 
+// app.delete('/thoughts/:id', async (req, res) => {
+//   const { id } = req.params 
 
-  try {
-    const deletedThought = await Thought.findByIdAndDelete(id)
-    if (deletedThought) {
-      res.json(deletedThought)
-    } else {
-      res.status(404).json({ message: 'Not found' })
-    }
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid request', error })
-  }
-})
+//   try {
+//     const deletedThought = await Thought.findByIdAndDelete(id)
+//     if (deletedThought) {
+//       res.json(deletedThought)
+//     } else {
+//       res.status(404).json({ message: 'Not found' })
+//     }
+//   } catch (error) {
+//     res.status(400).json({ message: 'Invalid request', error })
+//   }
+// })
 
 // Patch endpoint to be able to update thought
-app.patch('/thoughts/:id', async (req, res) => {
-  const { id } = req.params 
+// app.patch('/thoughts/:id', async (req, res) => {
+//   const { id } = req.params 
 
-  try {
-    const updatedThought = await Thought.findByIdAndUpdate(
-      id, 
-      { 
-        message: req.body.message 
-      }, 
-      { 
-        new: true 
-      }
-    )
-    if (updatedThought) {
-      res.json(updatedThought)
-    } else {
-      res.status(404).json({ message: 'Not found' })
-    }
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid request', error })
-  }
-})
+//   try {
+//     const updatedThought = await Thought.findByIdAndUpdate(
+//       id, 
+//       { 
+//         message: req.body.message 
+//       }, 
+//       { 
+//         new: true 
+//       }
+//     )
+//     if (updatedThought) {
+//       res.json(updatedThought)
+//     } else {
+//       res.status(404).json({ message: 'Not found' })
+//     }
+//   } catch (error) {
+//     res.status(400).json({ message: 'Invalid request', error })
+//   }
+// })
 
 // Put endpoint to replace thought 
-app.put('/thoughts/:id', async (req, res) => {
-  const { id } = req.params 
+// app.put('/thoughts/:id', async (req, res) => {
+//   const { id } = req.params 
 
-  try {
-    const updatedThought = await Thought.findOneAndReplace(
-      { 
-        _id: id 
-      }, 
-      { 
-        message: req.body.message 
-      }, 
-      { 
-        new: true 
-      }
-    )
-    if (updatedThought) {
-      res.json(updatedThought)
-    } else {
-      res.status(404).json({ message: 'Not found' })
-    }
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid request', error })
-  }
-})
+//   try {
+//     const updatedThought = await Thought.findOneAndReplace(
+//       { 
+//         _id: id 
+//       }, 
+//       { 
+//         message: req.body.message 
+//       }, 
+//       { 
+//         new: true 
+//       }
+//     )
+//     if (updatedThought) {
+//       res.json(updatedThought)
+//     } else {
+//       res.status(404).json({ message: 'Not found' })
+//     }
+//   } catch (error) {
+//     res.status(400).json({ message: 'Invalid request', error })
+//   }
+// })
 
 // Start the server
 app.listen(port, () => {
