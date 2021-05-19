@@ -61,7 +61,8 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-app.post('/thoughts/:id/likes'), async (req, res) => {
+app.post('/thoughts/:id/likes', async (req, res) => {
+  console.log('puta')
   const { id } = req.params
 
   try {
@@ -74,9 +75,9 @@ app.post('/thoughts/:id/likes'), async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: 'Invalid request', error })
   } 
-}
+})
 
-app.delete('/thoughts/:id'), async (req, res) => {  
+app.delete('/thoughts/:id', async (req, res) => {  
   const { id } = req.params;
   try {
     const deletedThought = await Thought.findOneAndDelete({ _id: id })
@@ -88,7 +89,7 @@ app.delete('/thoughts/:id'), async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: 'Invalid request', error })
   }
-}
+})
 
 app.listen(port, () => {
   console.log(`WOOOP 🚀 Server running on http://localhost:${port}`)
