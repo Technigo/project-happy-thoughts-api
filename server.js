@@ -48,8 +48,10 @@ app.use(cors())
 app.use(express.json())
 
 // Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world')
+app.get('/thoughts', (req, res) => {
+  Thought.find().then((thoughts) => {
+    res.json(thoughts)
+  })
 })
 
 app.post('/thoughts', async (req, res) => {
