@@ -96,6 +96,46 @@ app.post('/thoughts', async (req, res) => {
   }
 });
 
+// // Post request for likes
+app.post('/thoughts/:id/like', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate(
+      id,
+      { $inc: { hearts: 1 } },
+      { new: true } 
+    );
+    if (updatedThought) {
+      res.json(updatedThought);
+    } else {
+      res.status(404).json({ message: 'Not found!' });
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Could not find that thought', details: error });
+  }
+});
+
+// Update thought with patch
+app.patch('/thoughts/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true }
+    );
+    if (updatedThought) {
+      res.json(updatedThought);
+    } else {
+      res.status(404).json({ message: 'Not found!' });
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error });
+  }
+});
+
 // Delete thought
 app.delete('/thoughts/:id', async (req, res) => {
   const { id } = req.params;
@@ -109,46 +149,6 @@ app.delete('/thoughts/:id', async (req, res) => {
     }
   } catch (error) {
     res.status(400).json({ message: 'Invalid request', error });
-  }
-});
-
-// Update thought with patch
-app.patch('/thoughts/:id', async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const updatedThought = await Thought.findByIdAndUpdate(
-      id, 
-      req.body,
-      { new: true }
-    );
-    if (updatedThought) {
-      res.json(updatedThought);
-    } else {
-      res.status(404).json({ message: 'Not found!' });
-    }
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid request', error });
-  }
-})
-
-// // Post request for likes
-app.post('thoughts/:id/like', async (req, res) => {
-  const { id } = req.params;
-  const likeThought = await Thought.findByIdAndUpdate(
-    id, 
-    { $inc: { hearts: 1 } },
-    { new: true } 
-  );
-
-  try {
-    if (likeThought) {
-      res.json(likeThought);
-    } else {
-      res.status(404).json({ message: 'Not found!' });
-    }
-  } catch (error) {
-    res.status(400).json({ message: 'Could not find that thought', details: error });
   }
 });
 
