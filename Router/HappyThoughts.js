@@ -49,19 +49,29 @@ router.get('/thoughts', async (req, res) => {
 router.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
   try {
-    const updatedLikes = await Thought.findById(thoughtId).updateOne({ $inc: { hearts: 1 } })
+    const updatedLikes = await Thought.findByIdAndUpdate(thoughtId, { $inc: { hearts: 1 } })
     res.json(updatedLikes)
   } catch (err) {
     catchError(res, err, "The id does not exist")
   }
 })
 
-router.delete('/thoughts', async (req, res) => {
+router.delete('/thoughts/delete', async (req, res) => {
   try {
     const deleted = await Thought.deleteMany()
     res.json(deleted)
   } catch (err) {
-    catchError(res, err, "failed deleting")
+    catchError(res, err, "Failed deleting")
+  }
+})
+
+router.delete('/thoughts/:thoughtId/delete', async (req, res) => {
+  const { thoughtId } = req.params;
+  try {
+    const deleteOne = await Thought.findByIdAndDelete(thoughtId)
+    res.json(deleteOne)
+  } catch (err) {
+    catchError(res, err, "Failed deleting - invalid Id")
   }
 })
 
