@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
+import listEndpoints from 'express-list-endpoints'
 
 dotenv.config()
 
@@ -15,9 +16,9 @@ const app = express()
 const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
-    required: [true],
-    minlength: 5,
-    maxlength: 140
+    required: [true, 'Message required'],
+    minlength: [5, 'Min. length 5 characters'],
+    maxlength: [140, 'Max. length 140 characters']
   },
   hearts: {
     type: Number,
@@ -34,10 +35,22 @@ const Thought = mongoose.model('Thought', thoughtSchema)
 app.use(cors())
 app.use(express.json())
 
-app.get('/', (req, res) => {
-  res.send('Hello world')
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({
+      error: 'API unavailable'
+    })
+  }
 })
 
+// shows list of endpoints
+app.get('/', (req, res) => {
+  res.send(listEndpoints(app))
+})
+
+// get the 20 latest thoughts, sorted from newest
 app.get('/thoughts', async (req, res) => {
   try {
     const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20).exec()
@@ -47,6 +60,7 @@ app.get('/thoughts', async (req, res) => {
   }
 })
 
+// post new thought
 app.post('/thoughts', async (req, res) => {
   try {
     const newThought = await new Thought(req.body).save()
@@ -59,14 +73,15 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-app.post('/thoughts/:id/likes', async (req, res) => {
+// increase likes
+app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params
 
   try {
-    const updatedThought = await Thought
+    const likeThought = await Thought
       .findOneAndUpdate({ _id: id }, { $inc: { hearts: 1 } }, { new: true })
-    if (updatedThought) {
-      res.json(updatedThought)
+    if (likeThought) {
+      res.status(200).json(likeThought)
     } else {
       res.status(404).json({ message: 'Not found' })
     }
@@ -75,6 +90,7 @@ app.post('/thoughts/:id/likes', async (req, res) => {
   }
 })
 
+// delete thought
 app.delete('/thoughts/:id', async (req, res) => {
   const { id } = req.params
   
@@ -90,6 +106,7 @@ app.delete('/thoughts/:id', async (req, res) => {
   }
 })
 
+// edit thought
 app.patch('/thoughts/:id', async (req, res) => {
   const { id } = req.params
 
