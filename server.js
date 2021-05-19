@@ -4,7 +4,8 @@ import mongoose from 'mongoose'
 import listEndpoints from 'express-list-endpoints'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+// eslint-disable-next-line max-len
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
 mongoose.Promise = Promise
 
 const thoughtSchema = new mongoose.Schema({
@@ -18,7 +19,11 @@ const thoughtSchema = new mongoose.Schema({
   hearts: {
     type: Number,
     default: 0
-  }, 
+  },
+  username: {
+    type: String, 
+    default: 'Anonymous' // if it is empty, how to do it? 
+  },
   createdAt: {
     type: Date, 
     default: Date.now
@@ -38,14 +43,37 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
-  res.json({ length: thoughts.length, data: thoughts })
+  let { page, size } = req.query
+  
+  if (!page) {
+    page = 1
+  }
+  if (!size) {
+    size = 20
+  }
+  
+  try {
+    const thoughts = await Thought
+      .find()
+      .limit(Number(size))
+      .skip((page - 1) * size)
+      .sort({ createdAt: 'desc' })
+      .exec()
+
+    res.json({  
+      page, 
+      size, 
+      data: thoughts 
+    })
+  } catch (error) {
+    res.status(400).json(error)
+  }
 })
 
 app.post('/thoughts', async (req, res) => {
   try {
-    const thought = await new Thought(req.body).save()
-    res.status(200).json(thought)
+    const newThought = await new Thought(req.body).save()
+    res.status(200).json(newThought)
   } catch (error) {
     res.status(400).json(error)
   }
@@ -53,17 +81,29 @@ app.post('/thoughts', async (req, res) => {
 
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params 
-  
+
   try {
-    const thoughtLike = await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
-    if (thoughtLike) {
-      res.json({ data: thoughtLike })
+    const updatedThought = await Thought.findOneAndUpdate(
+      {
+        _id: thoughtId
+      }, 
+      { 
+        $inc: { 
+          hearts: 1 
+        } 
+      }, 
+      {
+        new: true
+      }
+    )
+    if (updatedThought) {
+      res.json({ data: updatedThought })
     } else {
-      res.status(404).json({ error: 'Not found!' })
+      res.status(404).json({ message: 'Not found!' })
     }
   } catch (error) {
-    res.status(400).json({ error: 'Invalid request', details: error })
-  }
+    res.status(400).json({ message: 'Invalid request', error })
+  } 
 })
 
 app.listen(port, () => {
