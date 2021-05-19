@@ -73,8 +73,7 @@ app.post('/thoughts/:id/likes'), async (req, res) => {
     }
   } catch (error) {
     res.status(400).json({ message: 'Invalid request', error })
-  }
-  
+  } 
 }
 
 app.delete('/thoughts/:id'), async (req, res) => {  
@@ -84,16 +83,14 @@ app.delete('/thoughts/:id'), async (req, res) => {
     if (deletedThought) {
       res.json(deletedThought)
     } else {
-      res.status(404({ message: 'Not found!'}))
+      res.status(404).json({ message: 'Not found!'})
     }
   } catch (error) {
     res.status(400).json({ message: 'Invalid request', error })
   }
 }
 
-// Start the server
 app.listen(port, () => {
-  // eslint-disable-next-line
   console.log(`WOOOP 🚀 Server running on http://localhost:${port}`)
 })
 
