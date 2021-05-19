@@ -45,7 +45,9 @@ app.use(bodyParser.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello world");
+  res.send(
+    "You can view the 20 latest thoughts with a get request on /thoughts. You can like a post on /thoughts/_id/like. You can post a new thought with a post request on /thoughts with the body { message: `New post`}"
+  );
 });
 
 app.get("/thoughts", async (req, res) => {
