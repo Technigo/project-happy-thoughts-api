@@ -24,6 +24,11 @@ const thoughtSchema = new Schema({
       message: '{VALUE} is not a supported category'
     },
     default: 'Happy'
+  },
+  name: {
+    type: String,
+    default: 'Anonymous',
+    set: (value) => (value === '' ? 'Anonymous' : value)
   }
 });
 

@@ -4,8 +4,8 @@ import APIRequest from '../utils/apiRequest';
 
 export const createOne = async (req, res, next) => {
   try {
-    const { message, category } = req.body;
-    const doc = await Thought.create({ message, category });
+    const { message, category, name } = req.body;
+    const doc = await Thought.create({ message, category, name });
 
     res.status(201).json(doc);
   } catch (error) {

@@ -11,6 +11,9 @@ export default (err, req, res, next) => {
     if (err.errors.category) {
       messages.push(err.errors.category.message);
     }
+    if (err.errors.name) {
+      messages.push(err.errors.name.message);
+    }
   }
 
   if (process.env.NODE_ENV === 'development') {
