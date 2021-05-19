@@ -15,7 +15,7 @@ const messageSchema = mongoose.Schema(
       type: Date,
       default: () => new Date()
     },
-    likes: {
+    hearts: {
       type: Number,
       default: 0
     }
@@ -49,7 +49,7 @@ router.get('/thoughts', async (req, res) => {
 router.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
   try {
-    const updatedLikes = await Thought.findById(thoughtId).updateOne({ $inc: { likes: 1 } })
+    const updatedLikes = await Thought.findById(thoughtId).updateOne({ $inc: { hearts: 1 } })
     res.json(updatedLikes)
   } catch (err) {
     catchError(res, err, "The id does not exist")
