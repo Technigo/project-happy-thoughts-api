@@ -2,11 +2,12 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
+import listEndpoints from 'express-list-endpoints'
 
 dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
 mongoose.Promise = Promise
 
 const port = process.env.PORT || 9000
@@ -16,8 +17,8 @@ const thoughtSchema = new mongoose.Schema({
  message: {
    type: String,
    required: [true, 'Message is required'],
-   minlenght: 5,
-   maxlength: 140
+   minlength: [5, 'Minimum length is 5 characters'],
+   maxlength: [140, 'Maximum length is 140 characters']
  },
  hearts: {
   type: Number,
@@ -45,18 +46,13 @@ app.use((req, res, next) => {
 })
 
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send(listEndpoints(app))
 })
 
 //endpoint to get a list of thoughts
 app.get('/thoughts', async (req, res) => {
-  try {
     const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
     res.json(thoughts)
-  } catch (error) {
-    res.status(400).json({ message: 'Could not find list', error: error.errors })
-  }
-  
 })
 
 //endpoint to post a thought
@@ -65,13 +61,16 @@ app.post('/thoughts', async (req, res) => {
     const newThought = await new Thought(req.body).save()
     res.status(200).json(newThought)
   } catch (error) {
-    res.status(400).json({ message: 'Could not save to database', error: error.errors })
+    res.status(400).json({
+      message: 'Could not save to database', error
+    })
   }
 })
 
 //endpoint to increase nr of likes/hearts
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
+
   try {
     const like = await Thought.findOneAndUpdate(
       { _id: thoughtId },
@@ -81,16 +80,17 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     if (like) {
     res.status(200).json(like)
     } else {
-      res.status(404).json({ message: 'Not found' })
+      res.status(404).json({
+        message: 'Message not found'
+      })
     }
   } catch (error) {
     res.status(400).json({
-      error: 'Invalid request', errors: error.errors
+      message: 'Invalid request', error
     })
   }
 })
 
-// Start the server
 app.listen(port, () => {
   // eslint-disable-next-line
   console.log(`Server running on http://localhost:${port}`)
