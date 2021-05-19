@@ -35,6 +35,8 @@ Endpoint for several thoughts.
 - ```PATCH /thoughts/:thoughtId```
 - ```PUT /thoughts/:thoughtId```
 
+Endpoint for a single thought.
+
 - ```POST /thoughts/:thoughtId/like```
 
-Endpoints for a single thought.
+Endpoint for a single thought to POST a like on a specific thought.
