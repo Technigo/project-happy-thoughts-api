@@ -50,8 +50,13 @@ app.get('/', (req, res) => {
 
 //endpoint to get a list of thoughts
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
-  res.json(thoughts)
+  try {
+    const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+    res.json(thoughts)
+  } catch (error) {
+    res.status(400).json({ message: 'Could not find list', error: error.errors })
+  }
+  
 })
 
 //endpoint to post a thought
@@ -72,7 +77,11 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
       { _id: thoughtId },
       { $inc: { hearts: 1 } }
     )
+    if (like) {
     res.status(200).json(like)
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
   } catch (error) {
     res.status(400).json({
       error: 'Invalid request', errors: error.errors
