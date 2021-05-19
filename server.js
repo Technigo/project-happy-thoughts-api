@@ -3,6 +3,7 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import listEndpoints from 'express-list-endpoints';
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts';
 mongoose.connect(mongoUrl, { 
@@ -45,7 +46,7 @@ app.use(express.json());
 
 // Routes
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.json(listEndpoints(app))
 });
 
 app.get('/thoughts', async (req, res) => {
@@ -72,7 +73,7 @@ app.get('/thoughts', async (req, res) => {
     .sort(sortThoughts(sort))
     .limit(20)
     .skip(pageResults(page))
-    .exec()
+    .exec();
 
   // Get all thoughts to use for page count
   const countThoughts = await Thought.countDocuments();
