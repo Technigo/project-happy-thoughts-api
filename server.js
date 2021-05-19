@@ -57,6 +57,23 @@ app.get('/', (req, res) => {
   })
 })
 
+// GET This endpoint should return a maximum of 20 thoughts, sorted by createdAt to show the most recent thoughts first.
+//.skip(100)? if you use pages (pagination) .limit(20) skip in this case would skip the first 100 documents and limit the results to 20.
+// using built in Mongoose methods - otherwise we would need to use .Aggregate([])
+app.get('/thoughts', async (req, res) => {
+  try {
+    const allThoughts = await Thought.find()
+      .sort({ createdAt: 'descending' }) // or createdAt: 1 äldsta först // -1 senaste först.
+      .limit(20)
+      .exec()
+    res.json({ length: allThoughts.length, data: allThoughts })
+  } catch(err) {
+    res
+      .status(400)
+      .json({ errors: err.errors }) // add a message here when I have seen what could go wrong and which error message pops up.
+  }
+})
+
 // POST request specify: POST, header, body
 // Two arguments, request and response
 // 2 lines of code version 2 --->   await newThougth.save() // only the saving process is an asynch process! + delete await from const newThought
@@ -72,23 +89,65 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-// GET This endpoint should return a maximum of 20 thoughts, sorted by createdAt to show the most recent thoughts first.
-//.skip(100)? .limit(20) 
-app.get('/thoughts', async (req, res) => {
+
+// POST thoughts/:thoughtId/like -->  
+app.post('thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
+
   try {
-    const allThoughts = await Thought.find()
-      .sort({ createdAt: 'descending' })
-      .limit(20)
-      .exec()
-    res.json({ length: allThoughts.length, data: allThoughts })
-  } catch(err) {
-    res
-      .status(400)
-      .json({ errors: err.errors }) // add a message here when I have seen what could go wrong and which error message pops up.
+    const updatedThought = await Thought.findByIdAndUpdate(
+      thoughtId, 
+      { $inc: {  // inc ? 
+          hearts: 1 
+        }
+      },
+      {
+        new: true
+      },
+    ) 
+    if (updatedThought) {
+      res.json(updatedThought)
+    } else {
+      res.status(404).json({ message: 'Not found'})
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error })
   }
 })
 
-// POST thoughts/:thoughtId/like -->  
+// DELETE
+app.delete('thoughts/:id', async (req, res) => {
+  const { id } = req.params
+
+  try {                           // specify the model = Thought
+    //const deletedThought = await Thought.deleteOne({ _id: id}) // _id will be equal to our path param id
+    // deleteOne --> findOneAndDelete ({ _id: id }) --> findByIdAndDelete(id)
+    const deletedThought = await Thought.findByIdAndDelete(id) //remove _id ? when code works **** 
+    if (deletedThought) {
+      res.json(deletedThought)
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    } 
+  } catch(error) { 
+    res.status(400).json({ message: 'Invalid request', error }) // feature of ES6 key and value are the same (before error: error)
+  }
+})
+
+// PUT ----> do this --> CHANGE to PUT + change in FRONTEND as well. POST is very generic!
+app.put('thoughts/:id', async (req, res) => {
+  const {id} = req.params
+
+  try {                                                   // 3 arguments: 1. id 2. object of the field/s we want to update 3. { new : true } 
+    const updatedThought = await Thought.findOneAndReplace({ _id: id }, req.body, { new: true }) //specify what do we want to update
+    if (updatedThought) {
+      res.json(updatedThought)
+    } else {
+      res.status(404).json({ message: 'Not found'})
+    }
+  } catch(error) {
+    res.status(400).json({ message: 'Invalid request', error })
+  }
+})
 
 // Start the server
 app.listen(port, () => {
