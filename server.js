@@ -53,24 +53,10 @@ app.get('/', (req, res) => {
 
 
  
- app.get('/thoughts', async (req, res) => {
-  const { page = 1, limit = 20 } = req.query;
-   
-  try {
-  
-    const thoughts = await Thought.find().sort({createdAt:-1}).limit().skip((page - 1) * limit).exec();
-  const count = await Thought.countDocuments();
- res.json({
-  thoughts,
-  totalMessages: count,
-  totalPages: Math.ceil(count / limit),
-  currentPage: page
-})
-} catch (err) {
-    
-   res.status(400).json({error: 'Something went wrong' })
-}
-})
+app.get('/thoughts', async (req, res) => {
+  const allThoughts = await Thought.find().sort({ createdAt: -1 });
+  res.json(allThoughts);
+});
 
 
 
