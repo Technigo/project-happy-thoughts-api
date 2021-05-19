@@ -22,13 +22,13 @@ const thoughtSchema = new mongoose.Schema({
     required: [true, "message is required"],
     unique: true,
     trim: true, 
-    validate: {
-      validator: (value) => {
-        return /^[^0-9]+$/.test(value);
-      }
-    },
     minlength: 5, 
     maxlength: 140
+    // validate: {
+    //   validator: (value) => {
+    //     return /^[^0-9]+$/.test(value);
+    //   }
+    // },
   },
   hearts: {
     type: Number, 
@@ -68,57 +68,75 @@ app.post('/thoughts', async (req, res) => {
     const newThought = await new Thought({ message }).save()
     res.json(newThought)
   } catch (error) {
-    if (error.code === 11000) {
-      res.status(400).json({ error: "dublicated value", fields: error.keyValue })
-    }
-    res.status(400).json(error)
+    res.status(400).json({ sucess: false, error })
+    // if (error.code === 11000) {
+    //   res.status(400).json({ error: "duplicated value", fields: error.keyValue })
+    // }
+    // res.status(400).json(error)
   }
 })
 
 // increasing amount of hearts (likes)
-app.post('/thoughts/:thoughtId/like', async (req, res) => {
-  const { thoughtId } = req.params.thoughtId
+app.post('/thoughts/:id/likes', async (req, res) => {
+  const { id } = req.params;
 
-  try { 
-    const thoughtLiked = await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } });
-    res.json(thoughtLiked);
-  } catch (err) {
-    res.status(400).json({ message: "Thought not found", error: err.errors });
+  try {
+    const updatedThought = await Thought.findOneAndUpdate(
+      {
+        _id: id
+      },
+      { 
+        $inc: {
+          hearts: 1
+        }
+      },
+      {
+        new: true
+      }
+    );
+    if (updatedThought) {
+      res.json(updatedThought);
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error });
   }
 });
 
 // delete end point
-app.delete('/thoughts/:id', async (req, res) => {
-  const { id } = req.params
+// app.delete('/thoughts/:id', async (req, res) => {
+//   const { id } = req.params
 
-  // find and delete 
-  try {
-    const deletedThought = await Thought.findOneAndDelete({ _id: id })
-    if (deletedThought) {
-      res.json(deletedThought)
-    } else {
-      res.status(404).json({ message: "not found" })
-    }
-  } catch {
-    res.status(400).json({ message: "invalid request", error: "error" })
-  }
-})
+//   // find and delete 
+//   try {
+//     const deletedThought = await Thought.findOneAndDelete({ _id: id })
+//     if (deletedThought) {
+//       res.json(deletedThought)
+//     } else {
+//       res.status(404).json({ message: "not found" })
+//     }
+//   } catch {
+//     res.status(400).json({ message: "invalid request", error: "error" })
+//   }
+// })
 
 // update entity "Patch", to replace, "Put" we can us findByIdAndReplace, and whole object ubdate
-app.patch('thoughts/:id', async (req, res) => {
-  const { id } = req.params
+// app.patch('thoughts/:id', async (req, res) => {
+//   const { id } = req.params
 
-  try {
-    const updatedThought = await Thought.findByIdAndUpdate(id, { name: 'req.body.name' }, { new: true })
-    if (updatedThought) {
-      res.json(updatedThought)
-    } else {
-      res.status(404).json({ message: "not found" })
-    }
-  } catch {
-    res.status(400).json({ message: "invalid request", error: "error" })
-  }
-})
+//   try {
+// const updatedThought = await Thought.findByIdAndUpdate
+// (id, { name: 'req.body.name' }, { new: true })
+//     if (updatedThought) {
+//       res.json(updatedThought)
+//     } else {
+//       res.status(404).json({ message: "not found" })
+//     }
+//   } catch {
+//     res.status(400).json({ message: "invalid request", error: "error" })
+//   }
+// })
 
 // Start the server
 app.listen(port, () => {
