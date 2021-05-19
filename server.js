@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
+
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
@@ -45,8 +46,18 @@ app.get('/', (req, res) => {
 })
 
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: "desc"}).limit(20).exec()
-  res.json(thoughts)
+  // find().sort({createdAt: "desc"}).limit(amount ? amount : 10).exec()
+  const page = Math.max(0, req.query.page)
+  const perPage = 1
+  const amountOfThoughts = await Thought.estimatedDocumentCount()
+
+  const thoughts = await Thought.find()
+    .limit(perPage)
+    .skip(perPage * page)
+    .sort({
+        createdAt: "desc"
+    })
+  res.json({thoughts, amountOfThoughts})
 })
 
 app.post("/thoughts", async (req, res) => {
