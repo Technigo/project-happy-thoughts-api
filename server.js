@@ -7,7 +7,7 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-const Thought = mongoose.model('Thought', {
+const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     minlength: 5,
@@ -24,6 +24,8 @@ const Thought = mongoose.model('Thought', {
   }
 })
 
+const Thought = mongoose.model('Thought', thoughtSchema)
+
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
 //
@@ -37,7 +39,7 @@ const app = express()
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
-app.use(bodyParser.json())
+app.use(express.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
@@ -59,18 +61,35 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-// app.post('/thoughts', async (req, res) => {
-//   try {
-//     const { message } = reg.body
-//     const thought = new Thought({ message })
-//     await thought.save()
-//     res.json(thought)
-//
-//     res.status(200).json(thought)
-//   } catch (err) {
-//     res.status(400).json({ message: 'Could not save', errors:err.errors })
-//   }
-// })
+app.post('/thoughts/:id/likes'), async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const updatedThought = await Thought.findOneAndUpdate( { _id: id }, { $inc: { hearts: 1 }}, { new: true }  )
+    if (updatedThought) {
+      res.json(updatedThought)
+    } else {
+      res.status(404({ message: 'Not found!'}))
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error })
+  }
+  
+}
+
+app.delete('/thoughts/:id'), async (req, res) => {  
+  const { id } = req.params;
+  try {
+    const deletedThought = await Thought.findOneAndDelete({ _id: id })
+    if (deletedThought) {
+      res.json(deletedThought)
+    } else {
+      res.status(404({ message: 'Not found!'}))
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error })
+  }
+}
 
 // Start the server
 app.listen(port, () => {
