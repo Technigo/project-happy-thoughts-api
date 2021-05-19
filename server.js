@@ -54,7 +54,7 @@ app.get('/', (req, res) => {
 
  
 app.get('/thoughts', async (req, res) => {
-  const allThoughts = await Thought.find().sort({ createdAt: -1 });
+  const allThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20).exec();
   res.json(allThoughts);
 });
 
@@ -71,13 +71,13 @@ app.post('/thoughts', async (req, res) => {
 }
 })
 
-app.post('/thoughts/:id/likes', async (req, res) => {
-  const { id } = req.params;
+app.post('/thoughts/:thoughtId/likes', async (req, res) => {
+  const { thoughtId } = req.params;
 
   try {
     const updatedThought = await Thought.findOneAndUpdate(
       {
-        _id: id
+        _id: thoughtId
       },
       { 
         $inc: {
@@ -90,6 +90,21 @@ app.post('/thoughts/:id/likes', async (req, res) => {
     );
     if (updatedThought) {
       res.json(updatedThought);
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error });
+  }
+});
+
+app.delete('/thoughts/:thoughtId', async (req, res) => {
+  const { thoughtId } = req.params;
+
+  try {
+    const deletedThought = await Thought.findOneAndDelete({ _id: thoughtId });
+    if (deletedThought) {
+      res.json(deletedThought);
     } else {
       res.status(404).json({ message: 'Not found' })
     }
