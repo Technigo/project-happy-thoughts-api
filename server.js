@@ -3,6 +3,7 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import { json } from 'body-parser'
+import dotenv from 'dotenv'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 // eslint-disable-next-line max-len
@@ -39,6 +40,13 @@ const thoughtSchema = new mongoose.Schema({
 })
 
 const Thought = mongoose.model('Thought', thoughtSchema)
+
+if(process.env.RESET_DB) {
+  const seedDatabase = async () => {
+    await Thought.deleteMany({})    
+  }
+  seedDatabase()
+}
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
