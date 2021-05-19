@@ -70,7 +70,8 @@ app.post("/thoughts/:id/like", async (req, res) => {
     const updatedThought = await new Thought ({
       message: likedThought.message, 
       createdAt: likedThought.createdAt, 
-      hearts: likedThought.hearts+1
+      hearts: likedThought.hearts+1,
+      userName: likedThought.userName
     }).save()
     await Thought.findByIdAndDelete(id)
     res.json({updatedThought})
