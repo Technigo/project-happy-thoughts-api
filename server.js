@@ -36,8 +36,12 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20).exec()
-  res.json(thoughts)
+  try {
+    const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20).exec()
+    res.json(thoughts)
+  } catch (error) {
+    res.status(400).json({ message: 'Something went wrong', error })
+  }
 })
 
 app.post('/thoughts', async (req, res) => {
