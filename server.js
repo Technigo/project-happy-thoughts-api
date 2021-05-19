@@ -30,7 +30,7 @@ const schema = new mongoose.Schema({
     default: Date.now,
   },
 });
-const thoughts = mongoose.model("Thoughts", schema);
+const Thoughts = mongoose.model("Thoughts", schema);
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
@@ -41,15 +41,26 @@ app.get("/", (req, res) => {
   res.send("Hello world");
 });
 
-app.get("/thoughts", (req, res) => {
+app.get("/thoughts", async (req, res) => {
   // This get request should return a maximun of 20 thoughts sorted by createdAt
   // to show the most recent thoughts first
-  mongoose.find();
+  try {
+    const thoughts = await Thoughts.find()
+      .sort({ createdAt: "desc" })
+      .limit(20)
+      .exec();
+    res.json(thoughts);
+  } catch (error) {
+    res.status(400).json({
+      message: "Could not fetch the list of thoughts.",
+      error: error.errors,
+    });
+  }
 });
 
 app.post("/thoughts", async (req, res) => {
   try {
-    const newThought = await new thoughts(req.body).save();
+    const newThought = await new Thoughts(req.body).save();
     res.status(200).json({ message: "Your post was submitted" });
   } catch (error) {
     res.status(400).json({ error: "Failed to send post." });
