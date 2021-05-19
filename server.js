@@ -67,6 +67,17 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
+app.post("/thoughts/:id/like", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const likes = await Thoughts.updateOne({ _id: id }, { $inc: { heart: 1 } });
+    res.json(likes);
+  } catch (err) {
+    res.status(400).json({ message: "Invalid request", error: err.errors });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   // eslint-disable-next-line
