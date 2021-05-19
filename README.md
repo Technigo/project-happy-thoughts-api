@@ -27,7 +27,14 @@ Displays all endpoints for this API using npm package express-list-endpoints.
 - ```GET /thoughts```
 - ```POST /thoughts```
 
+Endpoint for several thoughts.
+
 ### SINGLE THOUGHT
 - ```GET /thoughts/:thoughtId```
+- ```DELETE /thoughts/:thoughtId```
+- ```PATCH /thoughts/:thoughtId```
+- ```PUT /thoughts/:thoughtId```
 
-Endpoint for a single thought.
+- ```POST /thoughts/:thoughtId/like```
+
+Endpoints for a single thought.

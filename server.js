@@ -19,7 +19,7 @@ const thoughtSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 140
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -51,22 +51,41 @@ app.get('/', (req, res) => {
   try {
     res.send(listEndpoints(app));
   } catch (err) {
-    res.status(404).send({ err: "Page not found" });
+    res.status(404).send({ err: 'Page not found' });
   }
 });
 
 app.get('/thoughts', async (req, res) => {
   try {
     const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec(); // Think about implementing .skip method for pagination on the frontend
-    res.json(thoughts);
+    if (thoughts) {
+      res.json(thoughts);
+    } else {
+      res.status(404).send({ err: 'Could not find any thoughts in the database.' });
+    }
   } catch (err) {
-    res.status(404).send({ err: "Page not found" });
+    res.status(404).send({ err: 'Page not found' });
+  }
+});
+
+app.get('/thoughts/:thoughtId', async (req, res) => {
+  const { thoughtId } = req.params;
+
+  try {
+    const thought = await Thought.findById(thoughtId);
+    if (thought) {
+      res.json(thought);
+    } else {
+      res.status(404).send({ err: 'Could not find the thought in the database.' });
+    }
+  } catch (err) {
+    res.status(400).json({ err: 'Page not found' });
   }
 });
 
 app.post('/thoughts', async (req, res) => {
   try {
-    const newThought = await new Thought(req.body).save();
+    const newThought = await new Thought({ message: req.body.message }).save();
     res.status(201).json(newThought);
   } catch (err) {
     if (err.code === 11000) {
@@ -80,7 +99,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params;
 
   try {
-    const updatedHeart = await Thought.findByIdAndUpdate(thoughtId, { $inc: { heart: 1 } }, { new: true });
+    const updatedHeart = await Thought.findByIdAndUpdate(thoughtId, { $inc: { hearts: 1 } }, { new: true });
     if (updatedHeart) {
       res.json(updatedHeart);
     } else {
@@ -91,11 +110,11 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   }
 });
 
-app.delete('/thoughts/:id', async (req, res) => {
-  const { id } = req.params;
+app.delete('/thoughts/:thoughtId', async (req, res) => {
+  const { thoughtId } = req.params;
 
   try {
-    const deletedThought = await Thought.findByIdAndDelete(id);
+    const deletedThought = await Thought.findByIdAndDelete(thoughtId);
     if (deletedThought) {
       res.json(deletedThought);
     } else {
@@ -107,11 +126,11 @@ app.delete('/thoughts/:id', async (req, res) => {
   }
 });
 
-app.patch('/thoughts/:id', async (req, res) => {
-  const { id } = req.params;
+app.patch('/thoughts/:thoughtId', async (req, res) => {
+  const { thoughtId } = req.params;
 
   try {
-    const updatedMessage = await Thought.findByIdAndUpdate(id, req.body, { new: true });
+    const updatedMessage = await Thought.findByIdAndUpdate(thoughtId, req.body, { new: true });
     if (updatedMessage) {
       res.json(updatedMessage);
     } else {
@@ -122,11 +141,11 @@ app.patch('/thoughts/:id', async (req, res) => {
   }
 });
 
-app.put('/thoughts/:id', async (req, res) => {
-  const { id } = req.params;
+app.put('/thoughts/:thoughtId', async (req, res) => {
+  const { thoughtId } = req.params;
 
   try {
-    const updatedMessage = await Thought.findOneAndReplace({ _id: id }, req.body, { new: true });
+    const updatedMessage = await Thought.findOneAndReplace({ _id: thoughtId }, req.body, { new: true });
     if (updatedMessage) {
       res.json(updatedMessage);
     } else {
