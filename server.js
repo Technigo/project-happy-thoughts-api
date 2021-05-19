@@ -66,9 +66,10 @@ app.post('/thoughts', async (req, res) => {
 
 //endpoint to increase nr of likes/hearts
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
   try {
     const like = await Thought.updateOne(
-      { _id: req.params.thoughtId },
+      { _id: thoughtId },
       { $inc: { hearts: 1 } }
     )
     res.status(200).json(like)
