@@ -19,7 +19,7 @@ const thoughtSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 140
   },
-  hearts: {
+  heart: {
     type: Number,
     default: 0
   },
@@ -42,7 +42,7 @@ app.use((req, res, next) => {
   if (mongoose.connection.readyState === 1) {
     next();
   } else {
-    res.status(503).json({ error: 'Service unavailable' });
+    res.status(503).json({ err: 'Service unavailable' });
   }
 });
 
@@ -51,14 +51,14 @@ app.get('/', (req, res) => {
   try {
     res.send(listEndpoints(app));
   } catch (err) {
-    res.status(404).send({ error: "Page not found" });
+    res.status(404).send({ err: "Page not found" });
   }
 });
 
 app.get('/thoughts', async (req, res) => {
   try {
-    const thought = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec();
-    res.json(thought);
+    const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec(); // Think about implementing .skip method for pagination on the frontend
+    res.json(thoughts);
   } catch (err) {
     res.status(404).send({ err: "Page not found" });
   }
@@ -70,9 +70,9 @@ app.post('/thoughts', async (req, res) => {
     res.status(201).json(newThought);
   } catch (err) {
     if (err.code === 11000) {
-      res.status(400).json({ error: 'Duplicated value', fields: err.keyValue })
+      res.status(400).json({ message: 'Duplicated value', fields: err.keyValue })
     }
-    res.status(400).json({ message: 'Could not save your thought to the database.', error: err.errors });
+    res.status(400).json({ message: 'Could not save the thought to the database.', err });
   }
 });
 
@@ -80,12 +80,60 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params;
 
   try {
-    const updateHeart = await Thought.findById(thoughtId);
-    if (updateHeart) {
-      // Add a heart and update the heart counter
-    } 
+    const updatedHeart = await Thought.findByIdAndUpdate(thoughtId, { $inc: { heart: 1 } }, { new: true });
+    if (updatedHeart) {
+      res.json(updatedHeart);
+    } else {
+      res.status(404).json({ message: 'Could not find the thought in the database.' });
+    }
   } catch (err) {
-    res.status(400).json({ message: 'Could not find the thought in the database.', error: err.errors });
+    res.status(400).json({ message: 'Could not add a like to the thought in the database.', err });
+  }
+});
+
+app.delete('/thoughts/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedThought = await Thought.findByIdAndDelete(id);
+    if (deletedThought) {
+      res.json(deletedThought);
+    } else {
+      res.status(404).json({ message: 'Could not find the thought in the database.' });
+    }
+    res.json(deletedThought);
+  } catch (err) {
+    res.status(400).json({ message: 'Could not delete the thought in the database.', err });
+  }
+});
+
+app.patch('/thoughts/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedMessage = await Thought.findByIdAndUpdate(id, req.body, { new: true });
+    if (updatedMessage) {
+      res.json(updatedMessage);
+    } else {
+      res.status(404).json({ message: 'Could not find the thought in the database.' });
+    }
+  } catch (err) {
+    res.status(400).json({ message: 'Could not update the thought in the database.', err });
+  }
+});
+
+app.put('/thoughts/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedMessage = await Thought.findOneAndReplace({ _id: id }, req.body, { new: true });
+    if (updatedMessage) {
+      res.json(updatedMessage);
+    } else {
+      res.status(404).json({ message: 'Could not find the thought in the database.' });
+    }
+  } catch (err) {
+    res.status(400).json({ message: 'Could not update the thought in the database.', err });
   }
 });
 
