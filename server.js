@@ -50,10 +50,11 @@ app.get('/', (req, res) => {
 
 app.get('/thoughts', async (req, res) => {
   const { page, sort } = req.query;
+  const pageSize = 20;
 
   // Show 20 results per page
   const pageResults = (page) => {
-    return ((page - 1) * 20)
+    return ((page - 1) * pageSize)
   };
 
   // Sort thoughts on either most liked, newest or oldest
@@ -78,7 +79,7 @@ app.get('/thoughts', async (req, res) => {
 
   try {
     return allThoughts.length > 0
-      ? res.json({ allThoughts, pagesTotal: Math.ceil(countThoughts / 20) })
+      ? res.json({ allThoughts, pagesTotal: Math.ceil(countThoughts / pageSize) })
       : res.json({ result: 'No thoughts!' });
   } catch (error) {
     res.status(400).json({ error: 'Something went wrong', details: error });
