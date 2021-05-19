@@ -19,7 +19,10 @@ const thoughtSchema = new Schema({
   },
   category: {
     type: String,
-    enum: ['Happy', 'Food', 'Home', 'Project'],
+    enum: {
+      values: ['Happy', 'Food', 'Home', 'Project'],
+      message: '{VALUE} is not a supported category'
+    },
     default: 'Happy'
   }
 });

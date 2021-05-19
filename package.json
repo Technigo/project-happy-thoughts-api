@@ -4,8 +4,9 @@
   "description": "Starter project to get up and running with express quickly",
   "scripts": {
     "start": "babel-node server.js",
-    "dev": "nodemon server.js --exec babel-node",
+    "dev": "set NODE_ENV=development&&nodemon server.js --exec babel-node",
     "devReset": "set RESET_DB=true&&nodemon server.js --exec babel-node",
+    "testENV": "set NODE_ENV=testing&&babel-node server.js",
     "lint": "eslint . --fix"
   },
   "author": "",
