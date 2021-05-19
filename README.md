@@ -1,8 +1,8 @@
+Project built during Technigo Bootcamp
+
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+The project was to make a backend for our previous project Happy Thoughts with endpoints to GET all thoughts, POST a new thought and like/add heart to a post.
 
 ## The problem
 

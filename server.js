@@ -1,5 +1,4 @@
 import express from 'express'
-/* import bodyParser from 'body-parser' */
 import cors from 'cors'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
@@ -40,7 +39,7 @@ app.use((req, res, next) => {
     next()
   } else {
     res.status(503).json({
-      error: `Service unavailable`
+      error: 'Service unavailable'
     })
   }
 })
@@ -75,7 +74,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     res.status(200).json()
   } catch (error) {
     res.status(400).json({
-      error: 'Error', errors: error.errors
+      error: 'Invalid request', errors: error.errors
     })
   }
 })
