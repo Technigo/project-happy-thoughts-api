@@ -45,6 +45,11 @@ app.get("/", (req, res) => {
   res.send("Hello world");
 });
 
+app.get("/thoughts", async (req, res) => {
+  const allThougths = await Thought.find().sort({ createdAt: -1 }).limit(10);
+  res.json(allThougths);
+});
+
 app.post("/thoughts", async (req, res) => {
   try {
     const newThought = await new Thought(req.body).save();
@@ -56,6 +61,81 @@ app.post("/thoughts", async (req, res) => {
         .json({ error: "Duplicated value", fields: error.keyValue });
     }
     res.status(400).json(error);
+  }
+});
+
+app.post("/thoughts/:id/likes", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate(
+      id,
+      {
+        $inc: { hearts: 1 },
+      },
+      { new: true }
+    );
+    if (updatedThought) {
+      res.json(updatedThought);
+    } else {
+      res.status(404).json({ message: "Not found" });
+    }
+  } catch (error) {
+    res.status(400).json({ message: "Invalid request", error });
+  }
+});
+
+app.delete("/thoughts/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    //v1 - only delete
+    // const deletedThoughts = await Thought.deleteOne({ _id: id });
+    // res.json(deletedThoughts);
+
+    //v2 - find and delete
+    const deletedThoughts = await Thought.findOneAndDelete({ _id: id });
+    if (deletedThoughts) {
+      res.json(deletedThoughts);
+    } else {
+      res.status(404).json({ message: "Not found" });
+    }
+  } catch (error) {
+    res.status(400).json({ message: "Invalid request", error });
+  }
+});
+
+app.patch("/thoughts/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    if (updatedThought) {
+      res.json(updatedThought);
+    } else {
+      res.status(404).json({ message: "Not found" });
+    }
+  } catch (error) {
+    res.status(400).json({ message: "Invalid request", error });
+  }
+});
+
+app.put("/thoughts/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedThought = await Thought.findOneAndReplace(id, eq.body, {
+      new: true,
+    });
+    if (updatedThought) {
+      res.json(updatedThought);
+    } else {
+      res.status(404).json({ message: "Not found" });
+    }
+  } catch (error) {
+    res.status(400).json({ message: "Invalid request", error });
   }
 });
 
