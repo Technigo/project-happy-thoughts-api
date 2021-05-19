@@ -74,11 +74,11 @@ app.get('/thoughts', async (req, res) => {
     .exec()
 
   //
-  const thoughts = await Thought.find();
+  // const thoughts = await Thought.find();
 
   try {
     return allThoughts.length > 0
-      ? res.json({ allThoughts, thoughtLength: Math.ceil(thoughts.length / 20) })
+      ? res.json(allThoughts)
       : res.json({ result: 'No thoughts!' });
   } catch (error) {
     res.status(400).json({ error: 'Something went wrong', details: error });
