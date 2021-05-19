@@ -9,10 +9,13 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
+const port = process.env.PORT || 9000
+const app = express()
+
 const thoughtSchema = new mongoose.Schema({
  message: {
    type: String,
-   required: true,
+   required: [true, 'Message is required'],
    minlenght: 5,
    maxlength: 140
  },
@@ -27,9 +30,6 @@ const thoughtSchema = new mongoose.Schema({
 })
 
 const Thought = mongoose.model('Thought', thoughtSchema)
-
-const port = process.env.PORT || 9000
-const app = express()
 
 app.use(cors())
 app.use(express.json())
