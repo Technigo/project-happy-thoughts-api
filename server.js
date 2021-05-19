@@ -47,7 +47,7 @@ app.get('/', (req, res) => {
 // Sorted by date from newest to oldest. Returning a maximum of 20 thoughts.
 app.get('/thoughts', async (req, res) => {
   const newThought = await Thought.find().sort({ createdAt: 'desc' }).limit(20)
-  res.json({ length: newThought.length, data: newThought })
+  res.json(newThought)
 })
 
 // POST endpoint that allows us to add thoughts to the database
