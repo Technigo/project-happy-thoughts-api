@@ -67,11 +67,11 @@ app.post('/thoughts', async (req, res) => {
 //endpoint to increase nr of likes/hearts
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   try {
-    await Thought.updateOne(
+    const like = await Thought.updateOne(
       { _id: req.params.thoughtId },
       { $inc: { hearts: 1 } }
     )
-    res.status(200).json()
+    res.status(200).json(like)
   } catch (error) {
     res.status(400).json({
       error: 'Invalid request', errors: error.errors
