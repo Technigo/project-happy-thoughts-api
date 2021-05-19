@@ -19,7 +19,7 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 10,
+    maxlength: 100,
   },
   heart: {
     type: Number,
