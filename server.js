@@ -67,17 +67,18 @@ app.get('/thoughts', async (req, res) => {
     }
   };
 
-  // const sortThoughts = sort === 'newest' ? { createdAt: 1 } : { createdAt: -1 };
-
-  const allThoughts = await Thought.find()
+  const thoughts = await Thought.find()
     .sort(sortThoughts(sort))
     .limit(20)
     .skip(pageResults(page))
     .exec()
 
+  // To get all thoughts with no limit to calculate number of pages needed
+  const allThoughts = await Thought.find()
+
   try {
-    return allThoughts.length > 0
-      ? res.json(allThoughts)
+    return thoughts.length > 0
+      ? res.json({ thoughts, length: Math.ceil(allThoughts.length / 20) })
       : res.json({ result: 'No thoughts!' });
   } catch (error) {
     res.status(400).json({ error: 'Something went wrong', details: error });
