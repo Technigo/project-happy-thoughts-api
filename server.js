@@ -2,6 +2,9 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts'
 mongoose.connect(mongoUrl, {
@@ -17,14 +20,14 @@ const app = express()
 const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
-    required: [true, "Message is required"],
+    required: [true, 'Message is required'],
     unique: true,
     trim: true,
     validate: {
       validator: (value) => {
         return /^[^0-9]+$/.test(value)
       },
-      message: "Numbers are now allowed"
+      message: 'Numbers are now allowed',
     },
     minlength: 5,
     maxlength: 140
@@ -55,9 +58,26 @@ app.post('/thoughts', async (req, res) => {
     res.json(newThought)
   } catch (error) {
     if (error.code === 11000) {
-      res.status(400).json({ error: 'Duplicated value', fields: error.keyValue })
+      res
+        .status(400)
+        .json({ error: 'Duplicated value', fields: error.keyValue })
     }
     res.status(400).json(error)
+  }
+})
+
+app.delete('/thoughts/:id', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const deletedThought = await Thought.findOneAndDelete({ _id: id })
+    if (deletedThought) {
+      res.json(deletedThought)
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error })
   }
 })
 
