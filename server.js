@@ -3,7 +3,14 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
+const userDB = process.env.userDB;
+const passDB = process.env.passDB;
+
+// This is the local host DB url
+// mongodb://localhost/happyThoughts
+const mongoUrl =
+  process.env.MONGO_URL ||
+  `mongodb+srv://${userDB}:${passDB}@cluster0.sg0yi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
