@@ -30,10 +30,6 @@ const thoughtSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 140,      
   },
-  name: {
-    type: String,
-    default: 'Anonymous'
-  },
   hearts: {
     type: Number,
     default: 0
@@ -79,9 +75,8 @@ app.get('/', (req, res) => {
 
 
 app.post('/thoughts', async (req, res) => {
-  const { message, name } = req.body
   try {
-  const newThought = await new Thought({ message, name: name || 'Anonymous'}).save()
+  const newThought = await new Thought(req.body).save()
   res.json(newThought)
 } catch (error) {
   if (error.code === 11000) {
@@ -90,15 +85,32 @@ app.post('/thoughts', async (req, res) => {
 }
 })
 
-app.post('/thoughts/:thoughtId/like', async (req, res) => {
+app.post('/thoughts/:id/likes', async (req, res) => {
+  const { id } = req.params;
+
   try {
-    const { thoughtID } = req.params
-    await Thought.updateOne({ _id: thoughtID }, { $inc: { heart: 1 } })
-    res.status(200).json()
+    const updatedThought = await Thought.findOneAndUpdate(
+      {
+        _id: id
+      },
+      { 
+        $inc: {
+          hearts: 1
+        }
+      },
+      {
+        new: true
+      }
+    );
+    if (updatedThought) {
+      res.json(updatedThought);
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
   } catch (error) {
-    res.status(400).json({ message: 'Can not find this thought by id', error: error.error })
+    res.status(400).json({ message: 'Invalid request', error });
   }
-})
+});
 
 
 
