@@ -61,7 +61,7 @@ app.post('/thoughts', async (req, res) => {
 })
 
 // Post endpoint to increase numbers of likes
-app.post('/thoughts/:id/likes', async (req, res) => {
+app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params 
 
   try {
