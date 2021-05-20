@@ -65,7 +65,7 @@ app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params 
 
   try {
-    const updatedThought = await (await Thought.findOneAndUpdate(
+    const updatedThought = await Thought.findOneAndUpdate(
       { 
         _id: id 
       }, 
@@ -77,7 +77,8 @@ app.post('/thoughts/:id/like', async (req, res) => {
       { 
         new: true 
       }
-    )).save()
+    ) 
+    // .save()?
     if (updatedThought) {
       res.json(updatedThought)
     } else {
@@ -89,20 +90,20 @@ app.post('/thoughts/:id/like', async (req, res) => {
 })
 
 // Delete endpoint to be able to delete thought
-// app.delete('/thoughts/:id', async (req, res) => {
-//   const { id } = req.params 
+app.delete('/thoughts/:id', async (req, res) => {
+  const { id } = req.params 
 
-//   try {
-//     const deletedThought = await Thought.findByIdAndDelete(id)
-//     if (deletedThought) {
-//       res.json(deletedThought)
-//     } else {
-//       res.status(404).json({ message: 'Not found' })
-//     }
-//   } catch (error) {
-//     res.status(400).json({ message: 'Invalid request', error })
-//   }
-// })
+  try {
+    const deletedThought = await Thought.findByIdAndDelete(id)
+    if (deletedThought) {
+      res.json(deletedThought)
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error })
+  }
+})
 
 // Patch endpoint to be able to update thought
 // app.patch('/thoughts/:id', async (req, res) => {
