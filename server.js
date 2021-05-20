@@ -39,6 +39,10 @@ const Thought = mongoose.model("Thoughts", {
     type: String,
     ref: User,
     required: true
+  },
+  hashtag:{
+    type: Array,
+    default: []
   }
 });
 
@@ -80,11 +84,23 @@ app.get("/users", async (req, res)=>{
 
 // Post a new Thought
 app.post("/thoughts", async (req, res) => {
+
+  const hashtag = []
+  const stringToArray= req.body.message.trim().split(" ")
+
+  stringToArray.forEach((word)=>{
+    const isHashtag = word.startsWith('#')
+
+    if (isHashtag) {
+      hashtag.push(word)
+    }
+  })
+
   try {
     const findUser = await User.find({username: req.body.username})
-
+    
     if(findUser.length){
-      const newThought = await new Thought({message: req.body.message, username: req.body.username}).save();
+      const newThought = await new Thought({message: req.body.message, username: req.body.username, hashtag: hashtag}).save();
       res.json(newThought);
     }else{
       res.json({message:"user no found"})
@@ -100,16 +116,14 @@ app.post("/thoughts/:thoughtId/like", async (req, res)=>{
  
   try{
     const thoughtsId = await Thought.findById(id)
-    await Thought.findOneAndUpdate(id,{hearts:thoughtsId.hearts+1})
-    console.log(thoughtsId.hearts+1)
+    await Thought.findByIdAndUpdate(id,{hearts:thoughtsId.hearts+1})
     const addLikeUpdated = await Thought.findById(id)
-    console.log(addLikeUpdated)
     res.json(addLikeUpdated);
     
   } catch(error){
     res.status(400).json(error);
   }
-} )
+})
 
 // Start the server
 app.listen(port, () => {
