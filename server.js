@@ -15,8 +15,6 @@ mongoose.Promise = Promise
 // overridden when starting the server. For example:
 //
 //   PORT=9000 npm start
-const port = process.env.PORT || 8080
-const app = express()
 
 const thoughtSchema = new mongoose.Schema({
   //three fields for each schema
@@ -48,6 +46,9 @@ const thoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model('Thought', thoughtSchema)
 
+const port = process.env.PORT || 8080
+const app = express()
+
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(express.json())
@@ -61,7 +62,7 @@ app.get('/', (req, res) => {
 
 app.get('/thoughts', async (req, res) => {
   try {
-    const allThoughts = await Thought.find().sort({ createdAt: 1 }).skip(2).limit(2)
+    //const allThoughts = await Thought.find().sort({ createdAt: 1 }).skip(2).limit(2)
     res.json(allThoughts)
   } catch {
 
@@ -85,20 +86,20 @@ app.post('/thoughts', async (req, res) => {
  }
 })
 
-app.post('/thoughts/:id/likes', async (req, res) => {
-  const { id } = req.params
+// app.post('/thoughts/:id/likes', async (req, res) => {
+//   const { id } = req.params
 
-  try {
-    const updatedThought = await Thought.findByIdAndUpdate( { _id: id }, { $inc: { hearts: 1 }, { new: true }}) //$inc is special query selector to update
-    if (updatedThought) {
-      res.json(updatedThought)
-    } else {
-      res.status(404).json({ message: 'Not found' })
-    }
-  } catch (error) {
-      res.status(400).json({ message: 'invalid request', error })
-  }
-})
+//   try {
+//     const updatedThought = await Thought.findByIdAndUpdate( { _id: id }, { $inc: { hearts: 1 }, { new: true }}) //$inc is special query selector to update
+//     if (updatedThought) {
+//       res.json(updatedThought)
+//     } else {
+//       res.status(404).json({ message: 'Not found' })
+//     }
+//   } catch (error) {
+//       res.status(400).json({ message: 'invalid request', error })
+//   }
+// })
 
 app.delete('/thoughts/:id', async(req, res) => {
   const { id } = req.params
