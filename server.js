@@ -47,7 +47,6 @@ const Thought = mongoose.model('Thought', thoughtSchema)
 app.use(cors())
 app.use(express.json())
 
-// Start defining your routes here
 app.get('/thoughts', (req, res) => {
   Thought.find().then((thoughts) => {
     res.json(thoughts)
