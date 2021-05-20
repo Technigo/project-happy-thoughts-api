@@ -50,8 +50,7 @@ app.get('/', (req, res) => {
   })
 })
 
-// GET This endpoint should return a maximum of 20 thoughts, sorted by createdAt to show the most recent thoughts first.
-// using built in Mongoose methods - otherwise we would need to use .Aggregate([])
+// GET Endpoint to return 20 thoughts, sorted by createdAt to show the most recent thoughts first.
 app.get('/thoughts', async (req, res) => {
   try {
     const allThoughts = await Thought.find()
@@ -86,7 +85,7 @@ app.post('/thoughts', async (req, res) => {
 // POST - update like/heart property on on thought object
 app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params
- // go to the storage and update the amount of hearts IN the storage
+
   try {
     const updatedThought = await Thought.findByIdAndUpdate(
       id, 
@@ -120,12 +119,11 @@ app.delete('/thoughts/:id', async (req, res) => {
       res.status(404).json({ message: 'Not found' })
     } 
   } catch (error) { 
-    res.status(400).json({ message: 'Invalid request', error }) // feature of ES6 key and value are the same (before error: error)
-  }
+    res.status(400).json({ message: 'Invalid request', error })
 })
 
 // PUT ----> do this --> CHANGE to PUT + change in FRONTEND as well. POST is very generic!
-// update the object 
+// PUT - update the object 
 app.put('/thoughts/:id', async (req, res) => {
   const {id} = req.params
 
