@@ -1,13 +1,14 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This project was part of Technigo Bootcamp. This weeks assignment was to create an API for a previous front end project, which was basically a friendly twitter application. The task was to recreate the API so that you only needed to change the URL in the front end and it should still work!
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I found this week a lot easier than last week, mainly because I had some time to understand what I was doing and also the lectures was very helpful and the problems I had last week with deploying the data base was not at all a problem this week :)
+
+I created all the endpoints used in the front end, but also included some more to delete a post and modify a message in the backend.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Find my API here: https://happy-thoughts-siri.herokuapp.com/
+See the frontend now connection to this API here: https://awesome-murdock-ef4ca9.netlify.app/
