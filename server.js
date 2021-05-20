@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import dotenv from 'dotenv'
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
@@ -19,12 +20,7 @@ const thoughtSchema = new mongoose.Schema({
     required: true,
     minlength: 5,
     trim: true,
-    validate: {
-      validator: (value) => {
-        return new RegExp('/^[^0-9]+$/').test(value)
-      },
-      message: "Numbers are not allowed"
-    }
+    message: "Numbers are not allowed"
   },
   hearts: {
     type: Number,
