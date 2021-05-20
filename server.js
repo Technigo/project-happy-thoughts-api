@@ -85,7 +85,7 @@ app.post('/thoughts/:id/like', async (req, res) => {
       res.status(404).json({ message: 'Not found' })
     }
   } catch (error) {
-    res.status(400).json(error)
+    res.status(400).json({ message: 'Invalid request', error })
   }
 })
 
