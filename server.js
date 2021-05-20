@@ -1,9 +1,9 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
-import dotenv from 'dotenv'
+//import dotenv from 'dotenv'
 
-dotenv.config()
+//dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 // copy this url and paste in mongo compass as connection string. The end of the url is the name of our database "happyThoughts" in this case
@@ -63,7 +63,7 @@ app.get('/', (req, res) => {
 // Thoughts array, limited to 20, sorted by createdAt: newest first
 app.get('/thoughts', async (req, res) => {
   try {
-    const allThoughts = await Thought.find().sort({ createdAt: 1 }).limit(20) //.skip(2)
+    const allThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20)
     res.json(allThoughts)
   } catch {
 
