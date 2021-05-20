@@ -59,7 +59,7 @@ app.get('/thoughts', async (req, res) => {
     const allThoughts = await Thought.find()
       .sort({ createdAt: 'descending' })
       .limit(20)
-    res.status(200).json({ length: allThoughts.length, data: allThoughts })
+    res.status(200).json(allThoughts)
   } catch (error) {
     res
       .status(400)
@@ -75,7 +75,7 @@ app.post('/thoughts', async (req, res) => {
       message: req.body.message,
       author: req.body.author
     }).save()
-    res.status(200).json({ data: newThought })  
+    res.status(200).json(newThought)  
   } catch (error) {
     if (error.code === 11000) {
     res.status(400).json({ message: 'Duplicated value', fields: error.keyValue }) //coming from the unique error object (error) in Postman
@@ -100,7 +100,7 @@ app.post('/thoughts/:id/like', async (req, res) => {
       },
     ) 
     if (updatedThought) {
-      res.status(200).json({ data: updatedThought })
+      res.status(200).json(updatedThought)
     } else {
       res.status(404).json({ message: 'Not found'})
     }
@@ -116,7 +116,7 @@ app.delete('/thoughts/:id', async (req, res) => {
   try {                           // specify the model = Thought
     const deletedThought = await Thought.findByIdAndDelete(id) 
     if (deletedThought) {
-      res.status(200).json({ data: deletedThought })
+      res.status(200).json(deletedThought)
     } else {
       res.status(404).json({ message: 'Not found' })
     } 
@@ -133,7 +133,7 @@ app.put('/thoughts/:id', async (req, res) => {
   try {                                                   // 3 arguments: 1. id 2. object of the field/s we want to update 3. { new : true } 
     const updatedThought = await Thought.findOneAndReplace({ _id: id }, req.body, { new: true }) //specify what do we want to update = backend send back the new updated object
     if (updatedThought) {
-      res.status(200).json({ data: updatedThought })
+      res.status(200).json(updatedThought)
     } else {
       res.status(404).json({ message: 'Not found'})
     }
