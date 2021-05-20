@@ -51,7 +51,7 @@ app.post('/thoughts', async (req, res) => {
     const addThought = await new Thought(req.body).save()
     res.json(addThought)
   } catch (error) {
-    res.status(400).json({ message: 'Could not save', fields: error.keyValue })
+    res.status(400).json({ message: 'Could not save message', fields: error.keyValue })
   }
 })
 
@@ -60,7 +60,7 @@ app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params
 
   try {
-    const updatedThought = await Thought.findOneAndUpdate({ _id: id }, { $inc: { hearts: 1 } }, { new: true })
+    const updatedThought = await Thought.findByIdAndUpdate(id, { $inc: { hearts: 1 } }, { new: true })
     if (updatedThought) {
       res.json(updatedThought)
     } else {
@@ -71,52 +71,6 @@ app.post('/thoughts/:id/like', async (req, res) => {
   }
 })
 
-/*
-app.delete('/thoughts/:id', async (req, res) => {
-  const { id } = req.params
-
-  try {
-    const deletedThought = await Thought.findOneAndDelete({_id: id })
-    if (deletedThought) {
-      res.json(deletedThought)
-    } else {
-      res.status(404).json({ message: 'Not found'})
-    }
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid request', error })
-     }
-  })
-
-  app.patch('/thoughts/:id', async (req, res) => {
-    const { id } = req.params
-
-    try {
-      const updatedThought = await Thought.findByIdAndUpdate(id, req.body, { new: true })
-      if (updatedThought) {
-        res.json(updatedThought)
-      } else {
-        res.status(404).json({ message: 'Not found'})
-      }
-    } catch (error) {
-      res.status(400).json({ message: 'Invalid request', error })
-    }
-  })
-
-  app.put('/thoughts/:id', async (req, res) => {
-    const { id } = req.params
-
-    try {
-      const updatedThought = await Thought.findByOneAndReplace({ _id: id }, req.body, { new: true })
-      if (updatedThought) {
-        res.json(updatedThought)
-      } else {
-        res.status(404).json({ message: 'Not found'})
-      }
-    } catch (error) {
-      res.status(400).json({ message: 'Invalid request', error })
-    }
-  })
-*/
 
 // Start the server
 app.listen(port, () => {
