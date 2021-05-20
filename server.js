@@ -17,8 +17,7 @@ mongoose.connect(mongoUrl, {
   useFindAndModify: false
 });
 mongoose.Promise = Promise;
-
-if (process.env.NODE_ENV === 'development' && process.env.RESET_DB) {
+if (process.env.RESET_DB) {
   devSeed();
 }
 
