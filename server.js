@@ -11,7 +11,7 @@ const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts'
 mongoose.connect(mongoUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useCreateIndex: true
+  useCreateIndex: true,
 })
 mongoose.Promise = Promise
 
@@ -31,16 +31,16 @@ const thoughtSchema = new mongoose.Schema({
       message: 'Numbers are now allowed',
     },
     minlength: 5,
-    maxlength: 140
+    maxlength: 140,
   },
   hearts: {
     type: Number,
-    default: 0
+    default: 0,
   },
   createdAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 })
 
 const Thought = mongoose.model('Thought', thoughtSchema)
@@ -72,17 +72,18 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-app.post('/thoughts/:thoughtId/like', async (req, res) => {
+app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params
 
   try {
-    const updatedThought = await Thought.findByIdAndUpdate(
-      id, 
+    const updatedThought = await Thought.findByOneAndUpdate(
       { 
-        $inc: 
-        { 
-          hearts: 1 
-        } 
+        _id: id 
+      },
+      {
+        $inc: {
+          hearts: 1
+        }
       },
       {
         new: true
