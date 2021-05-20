@@ -4,6 +4,7 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 import { json } from 'body-parser'
 import dotenv from 'dotenv'
+import listEndpoints from 'express-list-endpoints'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 // eslint-disable-next-line max-len
@@ -16,18 +17,9 @@ const app = express()
 const thoughtSchema = new mongoose.Schema({
   message: {
     type: String, 
-    required: [true, "Oh you silly, msg is required"],
-    unique: true,
-    // enum: ['Technigo is cool','Technigo is awesome','Technigo was the time of my life']
-    // match: /^[^0-9]+$/, 
-    validate: {      
-      validator: (value) => {
-        return /^[^0-9]+$/.test(value)
-      },
-      message: "Numbers are not allowed"
-    },
+    required: true,    
     minlength: 5,
-    maxlength: 10
+    maxlength: 140
   },   
   hearts: {
     type: Number,
@@ -41,20 +33,19 @@ const thoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model('Thought', thoughtSchema)
 
-if(process.env.RESET_DB) {
-  const seedDatabase = async () => {
-    await Thought.deleteMany({})    
-  }
-  seedDatabase()
-}
+// if(process.env.RESET_DB) {
+//   const seedDatabase = async () => {
+//     await Thought.deleteMany({})    
+//   }
+//   seedDatabase()
+// }
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(express.json())
 
-// Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send(listEndpoints(app))
 })
 
 app.get('/thoughts', async (req, res) => {  
@@ -76,38 +67,27 @@ app.post('/thoughts', async (req, res) => {
 
 app.delete('/thoughts/:id', async (req, res) => {
   const { id } = req.params
-
-  try {
-    // v1 - only delete
+  try {    
     const deletedThought = await Thought.deleteOne({ _id: id })
-    res.json(deletedThought)
-
-    // v2 - find n delete
-  //   const deletedThought = await Thought.findOneAndDelete({ _id: id })
-  //   if (deletedThought) {
-  //     res.json(deletedThought)
-  //   } else {
-  //     res.status(404).json({ message: "Thought not found" })
-  //   }
+    res.json(deletedThought) 
   } catch (error) {
     res.status(400).json({ message: "Invalid request", error })
   }
 })
 
-app.patch('/thoughts/:id', async (req, res) => {
-  const { id } = req.params
-
-  try {
-    const updatedThought = await Thought.findByIdAndUpdate(id, { message: req.body.message, hearts: +1 })
-    if (updatedThought) {
-      res.json(updatedThought)
-    } else {
-      res.status(404).json({ message: 'Not found' })
-    }    
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid request', error })
-  }
-})
+// app.patch('/thoughts/:id', async (req, res) => {
+//   const { id } = req.params
+//   try {
+//     const updatedThought = await Thought.findByIdAndUpdate(id, { message: req.body.message, hearts: +1 })
+//     if (updatedThought) {
+//       res.json(updatedThought)
+//     } else {
+//       res.status(404).json({ message: 'Not found' })
+//     }    
+//   } catch (error) {
+//     res.status(400).json({ message: 'Invalid request', error })
+//   }
+// })
 
 app.post('/thoughts/:id/likes', async (req, res) => {
   const { id } = req.params
@@ -120,7 +100,6 @@ app.post('/thoughts/:id/likes', async (req, res) => {
   }
 })
 
-// Start the server
 app.listen(port, () => {
   // eslint-disable-next-line
   console.log(`Server running on http://localhost:${port}`)
