@@ -8,7 +8,7 @@ dotenv.config()
 const port = process.env.PORT || 8080
 const app = express()
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
+const mongoUrl = process.env.MONGO_URL || "mongodb+srv://dbUser:YHHTzaC2ptBpGWLv@cluster0.kerro.mongodb.net/happyThoughts?retryWrites=true&w=majority"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 mongoose.Promise = Promise
 
