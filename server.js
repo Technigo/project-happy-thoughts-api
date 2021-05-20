@@ -2,7 +2,6 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
-
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
@@ -30,7 +29,8 @@ const thoughtSchema = new mongoose.Schema ({
   },
   userName: {
     type: String,
-    default: "Anonymous"
+    default: "Anonymous",
+    match: /\S/
   }
 })
 
@@ -46,16 +46,15 @@ app.get('/', (req, res) => {
 })
 
 app.get("/thoughts", async (req, res) => {
-  // find().sort({createdAt: "desc"}).limit(amount ? amount : 10).exec()
   const page = Math.max(0, req.query.page)
-  const perPage = 1
+  const perPage = 5
   const amountOfThoughts = await Thought.estimatedDocumentCount()
 
   const thoughts = await Thought.find()
     .limit(perPage)
     .skip(perPage * page)
     .sort({
-        createdAt: "desc"
+      createdAt: "desc"
     })
   res.json({thoughts, amountOfThoughts})
 })
@@ -75,17 +74,26 @@ app.post("/thoughts", async (req, res) => {
 })
 
 app.post("/thoughts/:id/like", async (req, res) => {
+  const { id } = req.params
   try {
-    const { id } = req.params
-    const likedThought = await Thought.findById(id)
-    const updatedThought = await new Thought ({
-      message: likedThought.message, 
-      createdAt: likedThought.createdAt, 
-      hearts: likedThought.hearts+1,
-      userName: likedThought.userName
-    }).save()
-    await Thought.findByIdAndDelete(id)
-    res.json({updatedThought})
+    const updatedThought = await Thought.findOneAndUpdate(
+      {
+        _id: id
+      },
+      {
+        $inc: {
+          hearts: 1
+        }
+      },
+      {
+        new: true
+      }
+    )
+    if (updatedThought) {
+      res.json(updatedThought);
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
   } catch (error) {
   res.status(404).json({error: "Thought not found"})
 }
