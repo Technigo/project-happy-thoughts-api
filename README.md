@@ -14,7 +14,7 @@ I chose to use the npm package express-list-endpoints to list the endpoints in t
 ## View it live
 
 Link to my deployed API: https://project-happy-thoughts-isabm5.herokuapp.com/ 
-
+Link to my deployed frontend application: https://heuristic-bassi-e1a3f1.netlify.app/ 
 
 ## Documentation
 
