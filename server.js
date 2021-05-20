@@ -46,16 +46,17 @@ app.get('/', (req, res) => {
   }
 })
 
+
 app.get('/thoughts', async (req, res) => {
   try {
     const recentThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20)
     if(recentThoughts) {
-      res.json(allRecentThoughts)
+      res.json(recentThoughts)
     } else {
       res.status(404).json({ error: 'Could not find any thoughts' })
     }  
   } catch (error) {
-    res.status(404).json({ error: 'Not found' })
+    res.status(400).json({ error: 'No thoughts was found' })
   }
 })
 
@@ -70,9 +71,20 @@ app.post('/thoughts', async (req, res) => {
 })
 
 
+app.post('thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
 
-
-
+  try {
+    const updatedLike = await Thought.findByIdAndUpdate(thoughtId, {$inc: { hearts: 1 } }, { new: true } )
+    if(updatedLike) {
+      res.json(updatedLike)
+    } else {
+      res.status(404).json({ error: 'No thought with matching id' })
+    }
+  } catch (error) {
+    res.status(400).json({ error: 'Could not find thoughts' })
+  }
+})
 
 // Start the server
 app.listen(port, () => {
