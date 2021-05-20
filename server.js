@@ -21,7 +21,7 @@ const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     required: [true, "Message is required"], //overrides default error message. 
-    unique: true,
+  //  unique: true,
   //   // enum: ['Hello', 'Sweet', 'Goodbye']  //always is array. Can only send these values
   //   match: /^[^0-9]+$/, //not accepting numbers in message
   //   validate: {
@@ -32,7 +32,7 @@ const thoughtSchema = new mongoose.Schema({
   //     message: "Numbers are not allowed"
   //   },
     minlength: 5,
-    maxlength: 60,
+    maxlength: 140,
   },
   hearts: {
     type: Number,
@@ -55,66 +55,57 @@ app.use(express.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Happy Thoughts API')
 })
 
 //create post request (can have get request with same name but not problem for mongoose/express when its different methods)
 
+// Thoughts array, limited to 20, sorted by createdAt: newest first
 app.get('/thoughts', async (req, res) => {
   try {
-    //const allThoughts = await Thought.find().sort({ createdAt: 1 }).skip(2).limit(2)
+    const allThoughts = await Thought.find().sort({ createdAt: 1 }).limit(20) //.skip(2)
     res.json(allThoughts)
   } catch {
 
   }
 })
 
-//sort endpoints by method. posts för sig etc
+//Post happy thought
 app.post('/thoughts', async (req, res) => {
-
- try {
-    // const { message } = req.body 
-  // console.log(message)
-  const newThought = await new Thought(req.body).save()
-  res.json(newThought)
-  //try in postman. hearts and createdAt is hard coded. Specifiy in schema instead
- } catch (error) {
-   if (error.code === 11000){
-     res.status(400).json({ error: "Duplicated value", fields: error.keyValue})
-   }
+  try {
+    const newThought = await new Thought(req.body).save()
+    res.json(newThought)
+  } catch (error) {
     res.status(400).json(error)
- }
+  }
 })
 
-// app.post('/thoughts/:id/likes', async (req, res) => {
-//   const { id } = req.params
+app.post('/thoughts/:id/likes', async (req, res) => {
+  const { id } = req.params
 
-//   try {
-//     const updatedThought = await Thought.findByIdAndUpdate( { _id: id }, { $inc: { hearts: 1 }, { new: true }}) //$inc is special query selector to update
-//     if (updatedThought) {
-//       res.json(updatedThought)
-//     } else {
-//       res.status(404).json({ message: 'Not found' })
-//     }
-//   } catch (error) {
-//       res.status(400).json({ message: 'invalid request', error })
-//   }
-// })
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate( { _id: id }, { $inc: { hearts: 1 }})
+    if (updatedThought) {
+      res.json(updatedThought)
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
+  } catch (error) {
+      res.status(400).json({ message: 'invalid request', error })
+  }
+})
 
 app.delete('/thoughts/:id', async(req, res) => {
   const { id } = req.params
 
   try {
-    // const deletedThought = await Thought.deleteOne({ _id: id })
-    // res.json(deletedThought)
-    //v2
     const deletedThought = await Thought.findOneAndDelete({ _id: id })
     if(deletedThought) {
       res.json(deletedThought)
     } else {
       res.status(404).json({ message: 'Not found' })
     }
-  } catch (error) { //will trigger if id is of incorrect format
+  } catch (error) {
     res.status(400).json({ message: 'invalid request', error })
   }
 })
@@ -123,7 +114,7 @@ app.patch('/thoughts/:id', async(req, res) => {
   const { id } = req.params
 
   try {
-    const updatedThought = await Thought.findByIdAndUpdate(id, { message: req.body.message }, { new: true } ) //new:true gives us the updated object in response
+    const updatedThought = await Thought.findByIdAndUpdate(id, { message: req.body.message }, { new: true } )
     
     if (updatedThought) {
       res.json(updatedThought) 
@@ -146,7 +137,7 @@ app.put('/thoughts/:id', async(req, res) => {
     } else {
       res.status(404).json({ message: 'Not found' })
     }
-  } catch (error) { //will trigger if id is of incorrect format
+  } catch (error) {
     res.status(400).json({ message: 'invalid request', error })
   }
 })
@@ -156,6 +147,3 @@ app.listen(port, () => {
   // eslint-disable-next-line
   console.log(`Server running on http://localhost:${port}`)
 })
-
-
-// npm install @babel/helper-compilation-targets
