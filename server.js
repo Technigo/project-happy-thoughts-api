@@ -86,8 +86,9 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   try {
     await Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
-      { $inc: { hearts: 1 } }
+      { $inc: { hearts: 1 } },
       // The $inc operator increments a field by a specified value
+      { new: true }
     )
   } catch (error) {
     res.status(400).json({
