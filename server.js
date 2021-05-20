@@ -17,7 +17,7 @@ const app = express()
 const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
-    required: true,
+    required: [true, 'Write something, not less than 5 characters'],
     unique: true,
     minlength: 5, 
     maxlength: 140,
@@ -63,15 +63,24 @@ app.post('/thoughts', async (req, res) => {
   res.status(400).json({ message: 'Could not send message', error})
   }
 })
-// app.post('/thoughts/:id/likes', async (req, res) => {
-//   const { id } = req.params
+app.post('/thoughts/:id/likes', async (req, res) => {
+  const { id } = req.params
 
-//   try{
-//     const updatedThought = await Thought.findByIdAndUpdate(id, { $inc: { hearts: 1 } })
-//   } catch (error) {
-   
-//   }
-// })
+  try {
+    const updatedThought = await Thought.findOneAndUpdate(
+      { _id: id},
+      { $inc: { hearts: 5 }},
+      { new: true}
+    )
+    if (updatedThought) {
+      res.json(updatedThought)
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error })
+  }
+})
 //DELETE route
 app.delete('thoughts/:id', async (req, res) => {
   const { id } = req.params
@@ -102,7 +111,6 @@ app.patch('/thoughts/:id', async (req, res) => {
   }
 
 })
-
 
 
 // Start the server
