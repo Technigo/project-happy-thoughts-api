@@ -1,13 +1,17 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This is a "Happy Thoughts" project wchi is created in the framework of Technigo bootcamp. 
+The user can submitt messages to API, can view messages from other users, marked them as liked.
+App has some validation techniques, implemented at the front-end and back-end, likewise checking if a message is too long and giving to the user info if messsage is too short.
+Technologies used: HTML, CSS, Javascript, React.js, React Hooks, Node.js, API express.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Main problem was connection to cloud MongoDB
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+The application can be viewed live on Netlify server:
+https://upbeat-goldberg-10694f.netlify.app/
+
+
