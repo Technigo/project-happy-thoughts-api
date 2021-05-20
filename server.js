@@ -49,16 +49,18 @@ app.get('/', (req, res) => {
   res.json(listEndpoints(app))
 });
 
+// GET all thoughts
 app.get('/thoughts', async (req, res) => {
   const { page, sort } = req.query;
   const pageSize = 20;
 
-  // Show 20 results per page
+  // Skip 20 results per page
   const pageResults = (page) => {
     return ((page - 1) * pageSize)
   };
 
-  // Sort thoughts on either most liked, newest or oldest
+  // Sort thoughts on either most liked, newest or oldest.
+  // Default set to newest
   const sortThoughts = (sort) => {
     if (sort === "hearts") {
       return { hearts: -1 };
@@ -83,11 +85,11 @@ app.get('/thoughts', async (req, res) => {
       ? res.json({ allThoughts, pagesTotal: Math.ceil(countThoughts / pageSize) })
       : res.json({ result: 'No thoughts!' });
   } catch (error) {
-    res.status(400).json({ error: 'Something went wrong', details: error });
+    res.status(400).json({ message: 'Something went wrong', error });
   }
 });
 
-// Post request for messages
+// POST request for sending thought
 app.post('/thoughts', async (req, res) => {
   const { message, name } = req.body;
 
@@ -99,7 +101,7 @@ app.post('/thoughts', async (req, res) => {
   }
 });
 
-// // Post request for likes
+// POST request for likes
 app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params;
 
@@ -115,11 +117,11 @@ app.post('/thoughts/:id/like', async (req, res) => {
       res.status(404).json({ message: 'Not found!' });
     }
   } catch (error) {
-    res.status(400).json({ message: 'Could not find that thought', details: error });
+    res.status(400).json({ message: 'Invalid request', error });
   }
 });
 
-// Update thought with patch
+// PATCH for updating thought
 app.patch('/thoughts/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -139,7 +141,7 @@ app.patch('/thoughts/:id', async (req, res) => {
   }
 });
 
-// Delete thought
+// DELETE thought
 app.delete('/thoughts/:id', async (req, res) => {
   const { id } = req.params;
   
