@@ -3,13 +3,13 @@ import cors from "cors";
 import mongoose from "mongoose";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
-console.log(mongoUrl);
 mongoose.connect(mongoUrl, { 
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true
 });
 mongoose.Promise = Promise;
+mongoose.set('debug', true)
 
 const thoughtSchema = new mongoose.Schema({
   message: {
