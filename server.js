@@ -18,14 +18,14 @@ const thoughtSchema = new mongoose.Schema({
     maxlength: 140,
     required: true,
   },
-  // hearts: {
-  //   type: Number,
-  //   default: 0,
-  // },
-  // createdAt: {
-  //   type: Date,
-  //   default: Date.now,
-  // },
+  hearts: {
+    type: Number,
+    default: 0,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const Thought = mongoose.model("Thought", thoughtSchema);
