@@ -2,6 +2,7 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import listEndpoints from 'express-list-endpoints'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -47,6 +48,10 @@ const Thought = mongoose.model('Thought', thoughtSchema)
 app.use(cors())
 app.use(express.json())
 
+app.get('/', (req, res) => {
+  res.send(listEndpoints(app))
+})
+
 app.get('/thoughts', (req, res) => {
   Thought.find().then((thoughts) => {
     res.json(thoughts)
@@ -64,6 +69,32 @@ app.post('/thoughts', async (req, res) => {
         .json({ error: 'Duplicated value', fields: error.keyValue })
     }
     res.status(400).json(error)
+  }
+})
+
+app.post('thoughts/:thoughtId/like', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate(
+      id, 
+      { 
+        $inc: 
+        { 
+          hearts: 1 
+        } 
+      },
+      {
+        new: true
+      }
+    )
+    if (updatedThought) {
+      res.json(updatedThought)
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error })
   }
 })
 
