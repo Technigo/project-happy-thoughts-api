@@ -71,7 +71,7 @@ If I were to continue on this project / start over I would:
 ***
 
 ## Try it live
-Link to published API: https://ufo-sightsmongo.herokuapp.com/
+Link to published API: https://happy-thinking.herokuapp.com
 
 Link to API docs: https://documenter.getpostman.com/view/8159541/TzRa7PkV
 
