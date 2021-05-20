@@ -46,7 +46,7 @@ app.get('/', (req, res) => {
   res.send(listEndpoints(app)),
   res.json({
     message:
-      'Hello all thoughts! View all thoughts at https://caro-happy-thoughts.netlify.app/', // add Netlify link to json NOT working, WHY? 
+      'Hello all thoughts! View all thoughts at https://caro-happy-thoughts.netlify.app/' // add Netlify link to json NOT working, WHY? 
   })
 })
 
@@ -54,14 +54,13 @@ app.get('/', (req, res) => {
 app.get('/thoughts', async (req, res) => {
   try {
     const allThoughts = await Thought.find()
-      .sort({ createdAt: 'descending' }) // or createdAt: 1 äldsta först // -1 senaste först.
+      .sort({ createdAt: 'descending' })
       .limit(20)
-      .exec()
     res.status(200).json({ length: allThoughts.length, data: allThoughts })
-  } catch(err) {
+  } catch (error) {
     res
       .status(400)
-      .json({ errors: err.errors }) // add a message here when I have seen what could go wrong and which error message pops up.
+      .json(error)
   }
 })
 
@@ -114,16 +113,17 @@ app.delete('/thoughts/:id', async (req, res) => {
   try {                           // specify the model = Thought
     const deletedThought = await Thought.findByIdAndDelete(id) 
     if (deletedThought) {
-      res.status(200).json({data: deletedThought})
+      res.status(200).json({ data: deletedThought })
     } else {
       res.status(404).json({ message: 'Not found' })
     } 
   } catch (error) { 
     res.status(400).json({ message: 'Invalid request', error })
+  }
 })
 
 // PUT ----> do this --> CHANGE to PUT + change in FRONTEND as well. POST is very generic!
-// PUT - update the object 
+// PUT - update thought object by id 
 app.put('/thoughts/:id', async (req, res) => {
   const {id} = req.params
 
