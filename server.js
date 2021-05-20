@@ -1,6 +1,9 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 // copy this url and paste in mongo compass as connection string. The end of the url is the name of our database "happyThoughts" in this case
@@ -55,6 +58,17 @@ app.get('/', (req, res) => {
 })
 
 //create post request (can have get request with same name but not problem for mongoose/express when its different methods)
+
+app.get('/thoughts', async (req, res) => {
+  try {
+    const allThoughts = await Thought.find().sort({ createdAt: 1 }).skip(2).limit(2)
+    res.json(allThoughts)
+  } catch {
+
+  }
+})
+
+//sort endpoints by method. posts för sig etc
 app.post('/thoughts', async (req, res) => {
 
  try {
@@ -69,6 +83,71 @@ app.post('/thoughts', async (req, res) => {
    }
     res.status(400).json(error)
  }
+})
+
+app.post('/thoughts/:id/likes', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate( { _id: id }, { $inc: { hearts: 1 }, { new: true }}) //$inc is special query selector to update
+    if (updatedThought) {
+      res.json(updatedThought)
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
+  } catch (error) {
+      res.status(400).json({ message: 'invalid request', error })
+  }
+})
+
+app.delete('/thoughts/:id', async(req, res) => {
+  const { id } = req.params
+
+  try {
+    // const deletedThought = await Thought.deleteOne({ _id: id })
+    // res.json(deletedThought)
+    //v2
+    const deletedThought = await Thought.findOneAndDelete({ _id: id })
+    if(deletedThought) {
+      res.json(deletedThought)
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
+  } catch (error) { //will trigger if id is of incorrect format
+    res.status(400).json({ message: 'invalid request', error })
+  }
+})
+
+app.patch('/thoughts/:id', async(req, res) => {
+  const { id } = req.params
+
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate(id, { message: req.body.message }, { new: true } ) //new:true gives us the updated object in response
+    
+    if (updatedThought) {
+      res.json(updatedThought) 
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
+  } catch (error) { //will trigger if id is of incorrect format
+    res.status(400).json({ message: 'invalid request', error })
+  }
+})
+
+app.put('/thoughts/:id', async(req, res) => {
+  const { id } = req.params
+
+  try {
+    const updatedThought = await Thought.findOneAndReplace({ _id: id }, req.body, { new: true } ) //new:true gives us the updated object in response
+    
+    if (updatedThought) {
+      res.json(updatedThought) 
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
+  } catch (error) { //will trigger if id is of incorrect format
+    res.status(400).json({ message: 'invalid request', error })
+  }
 })
 
 // Start the server
