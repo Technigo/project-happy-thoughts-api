@@ -5,7 +5,8 @@ import mongoose from "mongoose";
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { 
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useCreateIndex: true
 });
 mongoose.Promise = Promise;
 
@@ -64,8 +65,7 @@ app.get("/thoughts", async (req, res) => {
 app.post("/thoughts", async (req, res) => {
   try {
     const { message } = req.body;
-    console.log(message);
-    const thought = await new Thought({ message: 'mierda' }).save();
+    const thought = await new Thought({ message }).save();
     res.status(200).json(thought);
   } catch (err) {
     res.status(400).json({ message: "Could not save", errors: err });
