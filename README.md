@@ -20,7 +20,7 @@ Navigate to the project folder and run the following command
 $ npm install
 ```
 
-**To test the database on a public environment**
+**To test the local database on a public environment (i.e. get public error messages)**
 
 ```
 $ npm run testENV
@@ -55,13 +55,19 @@ $ npm run dev
 
 ## 💭 Reflections 💭
 ***
-I enjoyed this project a lot! It was fun switching between FrontEnd and BackEnd. Eventually I came up with a system of work that streamlined everything. So overall this project was smooth and simple.
+I enjoyed this project a lot! It was fun switching between FrontEnd and BackEnd. Eventually I came up with a system of work that streamlined everything. I decided to have two VSCode sessions open (one for each environment) and then I first made changes to the API, then switched to the FrontEnd to implement some features that dispaly the new API changes. So overall this project was smooth and simple.
 
 <br>
 
 Issues that came up:
-- I did struggle just a bit with getting my dev environment setup like I wanted. MongoDB Compass was struggling a bit to relay the correct error messages I needed to solve my issues. But thankfully Google is a dear friend 😻 
-
+- I did struggle just a bit with getting my dev environment setup like I wanted. MongoDB Compass was struggling a bit to relay the correct error messages I needed to solve my issues. But thankfully Google is a dear friend 😻. I found out that since I setup using dotenv and made a dynamic switch of MONGO_URL depending on NODE_ENV, I had forgotten to setup switching NODE_ENV on npm scripts.
+  
+  So therefore I fixed it by chaning the npm scripts:
+  ```json
+  "dev": "set NODE_ENV=development&&nodemon server.js --exec babel-node"
+  ```
+  
+  So whenever running the dev script I will always use the development environment. I honestly thought that running the dev script would automatically set it to `NODE_ENV=development`, but apperently not... 🤔
 
 If I were to continue on this project / start over I would:
 - Add sorting and pagination options
@@ -71,7 +77,7 @@ If I were to continue on this project / start over I would:
 ***
 
 ## Try it live
-Link to published API: https://ufo-sightsmongo.herokuapp.com/
+Link to published API: https://happy-thinking.herokuapp.com
 
 Link to API docs: https://documenter.getpostman.com/view/8159541/TzRa7PkV
 
