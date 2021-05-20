@@ -4,6 +4,8 @@ import mongoose from 'mongoose'
 import listEndpoints from 'express-list-endpoints'
 import dotenv from 'dotenv'
 
+dotenv.config()
+
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 mongoose.Promise = Promise
