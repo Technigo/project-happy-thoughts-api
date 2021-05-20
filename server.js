@@ -80,12 +80,12 @@ app.get('/thoughts', async (req, res) => {
 })
 
 // End point to POST a request to increase hearts from ID
-app.post('/thoughts/:thoughtId/like', async (req, res) => {
-  const { thoughtID } = req.params
+app.post('/thoughts/:id/like', async (req, res) => {
+  const { id } = req.params
 
   try {
     const updatedThought = await Thought
-      .findByIdAndUpdate(thoughtID, { $inc: { hearts: 1 } }, { new: true })
+      .findByIdAndUpdate(id, { $inc: { hearts: 1 } }, { new: true })
     res.json(updatedThought)
   } catch (error) {
     res.status(404).json({ message: 'Invalid request', error })
