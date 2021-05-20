@@ -25,8 +25,6 @@ const thoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model("Thought", thoughtSchema);
 
-console.log(mongoose.connection.readyState);
-
 // Defines the port the app will run on. Defaults to 8080, but can be
 // overridden when starting the server. For example:
 //
@@ -34,13 +32,18 @@ console.log(mongoose.connection.readyState);
 const port = process.env.PORT || 8081;
 const app = express();
 
-// const thoughtSchema = new mongoose.Schema({
-
-// })
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+
+//  Plug into middleware.
+app.get("/api/uptime", (req, res) => {
+  res.status(200).json({ 
+    state: 'up', 
+    dbState: mongoose.STATES[mongoose.connection.readyState] 
+  })
+});
 
 // Start defining your routes here
 app.get("/", (req, res) => {
