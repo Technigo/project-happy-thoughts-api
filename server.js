@@ -22,7 +22,7 @@ const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     required: [true, "Please enter a message."],
-    unique: true,  // from a technical perspective unique: true is not a validator the same as required: true. https://mongoosejs.com/docs/validation.html#the-unique-option-is-not-a-validator
+    //unique: true,  // from a technical perspective unique: true is not a validator the same as required: true. https://mongoosejs.com/docs/validation.html#the-unique-option-is-not-a-validator
     trim: true,
     minlength: [5, 'Oops your message needs to be longer than 5 characters'],
     maxlength: [140, 'Oops, message is too long! Max length is 140 characters']
