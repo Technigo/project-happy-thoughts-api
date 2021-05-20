@@ -1,6 +1,9 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -13,6 +16,7 @@ const thoughtSchema = new mongoose.Schema({
  message: {
    type: String,
    required: true,
+   trim: true,
    minlength: 5,
    maxlength: 140
  },
@@ -36,8 +40,8 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
+
 app.post('/thoughts', async (req, res) => {
-  
   try {
     const newThought = await new Thought(req.body).save()
     res.json(newThought)
@@ -45,6 +49,18 @@ app.post('/thoughts', async (req, res) => {
     res.status(400).json(error)
   }
 })
+
+app.get('/thoughts', async (req, res) => {
+
+  try {
+    const allReasentThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20)
+    res.json(allReasentThoughts)
+  } catch (error) {
+
+  }
+})
+
+
 
 
 // Start the server
