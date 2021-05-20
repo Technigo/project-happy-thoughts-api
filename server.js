@@ -9,7 +9,7 @@ mongoose.connect(mongoUrl, {
   useCreateIndex: true
 });
 mongoose.Promise = Promise;
-mongoose.set('debug', true)
+mongoose.set('debug', { shell: true })
 
 const thoughtSchema = new mongoose.Schema({
   message: {
