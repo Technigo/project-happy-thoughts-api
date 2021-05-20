@@ -78,7 +78,6 @@ app.post('/thoughts/:id/like', async (req, res) => {
         new: true 
       }
     ) 
-    // .save()?
     if (updatedThought) {
       res.json(updatedThought)
     } else {
