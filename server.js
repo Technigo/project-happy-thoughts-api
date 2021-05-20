@@ -105,28 +105,28 @@ app.delete('/thoughts/:id', async (req, res) => {
 })
 
 // Patch endpoint to be able to update thought
-// app.patch('/thoughts/:id', async (req, res) => {
-//   const { id } = req.params 
+app.patch('/thoughts/:id', async (req, res) => {
+  const { id } = req.params 
 
-//   try {
-//     const updatedThought = await Thought.findByIdAndUpdate(
-//       id, 
-//       { 
-//         message: req.body.message 
-//       }, 
-//       { 
-//         new: true 
-//       }
-//     )
-//     if (updatedThought) {
-//       res.json(updatedThought)
-//     } else {
-//       res.status(404).json({ message: 'Not found' })
-//     }
-//   } catch (error) {
-//     res.status(400).json({ message: 'Invalid request', error })
-//   }
-// })
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate(
+      id, 
+      { 
+        message: req.body.message 
+      }, 
+      { 
+        new: true 
+      }
+    )
+    if (updatedThought) {
+      res.json(updatedThought)
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error })
+  }
+})
 
 // Put endpoint to replace thought 
 // app.put('/thoughts/:id', async (req, res) => {
