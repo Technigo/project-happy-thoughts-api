@@ -6,17 +6,20 @@ import dotenv from 'dotenv';
 import router from './routes';
 import errorHandler from './controllers/errorController';
 import AppError from './utils/appError';
-import devSeed from './dev/seed'
+import devSeed from './dev/seed';
 
 dotenv.config();
 
-const mongoUrl = process.env.NODE_ENV === 'production' ? process.env.MONGO_URL : 'mongodb://localhost/happyThoughts';
+const mongoUrl = process.env.NODE_ENV === 'production'
+  ? process.env.MONGO_URL
+  : 'mongodb://localhost/happyThoughts';
 mongoose.connect(mongoUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false
 });
 mongoose.Promise = Promise;
+
 if (process.env.RESET_DB) {
   devSeed();
 }

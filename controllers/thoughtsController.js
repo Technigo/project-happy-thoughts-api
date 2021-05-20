@@ -35,9 +35,15 @@ export const updateOne = async (req, res, next) => {
       { $inc: { hearts: 1 } },
       { new: true }
     );
-    
+
     if (!doc) {
-      return next(new AppError(404, "Not Found", "The ID you provided did not exist. Please try again"))
+      return next(
+        new AppError(
+          404,
+          'Not Found',
+          'The ID you provided did not exist. Please try again'
+        )
+      );
     }
     res.status(200).json(doc);
   } catch (error) {
