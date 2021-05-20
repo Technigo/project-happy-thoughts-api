@@ -1,13 +1,13 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+The challenge was to create an API for a previously built twitter type messaging site.  
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Users are able to post a message and like old messages with a like button. The API is linked to MongoDB. 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+API: https://happy-thoughts-api-sn.herokuapp.com/
+
+The live site built with React: https://happy-thoughts-sn.netlify.app/
