@@ -87,13 +87,6 @@ app.delete('/thoughts/:id', async (req, res) => {
   }
 })
 
-// app.patch('/thoughts/:id', async (req, res) => {
-//   const { id } = req.params
-//   try {
-//     const updatedThought = await Message.findByIdAndUpdate(id, {hearts: 1})
-//   }
-// })
-
 app.listen(port, () => {
   // eslint-disable-next-line
   console.log(`Server running on http://localhost:${port}`)

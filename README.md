@@ -12,3 +12,4 @@ Describe how you approached to problem, and what tools and techniques you used t
 
 Deployed API: https://happythoughts-api-mongodb.herokuapp.com/
 
+Deployed frontend: https://react-happy-thoughts.netlify.app/
