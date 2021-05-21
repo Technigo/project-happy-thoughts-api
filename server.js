@@ -16,13 +16,10 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-// Schema takes one argument - an object :) 
-// camelCase for Schema
 const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     required: [true, "Please enter a message."],
-    //unique: true,  // from a technical perspective unique: true is not a validator the same as required: true. https://mongoosejs.com/docs/validation.html#the-unique-option-is-not-a-validator
     trim: true,
     minlength: [5, 'Oops your message needs to be longer than 5 characters'],
     maxlength: [140, 'Oops, message is too long! Max length is 140 characters']
@@ -41,16 +38,10 @@ const thoughtSchema = new mongoose.Schema({
   }
 })
 
-// PascalCase for model
-// Two arguments ---> 1. name of collection 2. schema
 const Thought = mongoose.model('Thought', thoughtSchema)
 
 app.get('/', (req, res) => {
-  res.send(listEndpoints(app)),
-  res.json({
-    message:
-      'Hello all thoughts! View all thoughts at https://caro-happy-thoughts.netlify.app/' // add Netlify link to json NOT working, WHY? 
-  })
+  res.send(listEndpoints(app))
 })
 
 // GET Endpoint to return 20 thoughts, sorted by createdAt to show the most recent thoughts first.
@@ -66,9 +57,7 @@ app.get('/thoughts', async (req, res) => {
       .json(error)
   }
 })
-
-// POST new thought, --> request specify: POST, header, body
-// In the POST /thoughts endpoint to create a new thought, if the input was invalid and the API is returning errors, it should set the response status to 400 (bad request).
+// POST a new thought
 app.post('/thoughts', async (req, res) => {
   try {
     const newThought = await new Thought({
@@ -78,7 +67,7 @@ app.post('/thoughts', async (req, res) => {
     res.status(200).json(newThought)  
   } catch (error) {
     if (error.code === 11000) {
-    res.status(400).json({ message: 'Duplicated value', fields: error.keyValue }) //coming from the unique error object (error) in Postman
+    res.status(400).json({ message: 'Duplicated value', fields: error.keyValue })
     }
     res.status(400).json(error)
   }
@@ -113,7 +102,7 @@ app.post('/thoughts/:id/like', async (req, res) => {
 app.delete('/thoughts/:id', async (req, res) => {
   const { id } = req.params
 
-  try {                           // specify the model = Thought
+  try {                          
     const deletedThought = await Thought.findByIdAndDelete(id) 
     if (deletedThought) {
       res.status(200).json(deletedThought)
@@ -130,8 +119,8 @@ app.delete('/thoughts/:id', async (req, res) => {
 app.put('/thoughts/:id', async (req, res) => {
   const {id} = req.params
 
-  try {                                                   // 3 arguments: 1. id 2. object of the field/s we want to update 3. { new : true } 
-    const updatedThought = await Thought.findOneAndReplace({ _id: id }, req.body, { new: true }) //specify what do we want to update = backend send back the new updated object
+  try {                                                  
+    const updatedThought = await Thought.findOneAndReplace({ _id: id }, req.body, { new: true })
     if (updatedThought) {
       res.status(200).json(updatedThought)
     } else {
