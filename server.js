@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import listEndpoints from 'express-list-endpoints'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -41,7 +42,7 @@ const Thought = mongoose.model('Thought', thoughtSchema);
 
 
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send(listEndpoints(app))
 })
 
 app.get('/thoughts', async (req, res) => {
