@@ -91,11 +91,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
       // The $inc operator increments a field by a specified value
       { new: true }
     )
-    if (like) {
-      res.status(200).json(like)
-    } else {
-      res.status(404).json({ message: 'Could not found' })
-    }
+    res.json(like)
   } catch (error) {
     res.status(400).json({
       success: false,
