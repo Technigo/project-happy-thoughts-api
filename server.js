@@ -114,7 +114,6 @@ app.delete('/thoughts/:id', async (req, res) => {
   }
 })
 
-// PUT ----> do this --> CHANGE to PUT + change in FRONTEND as well. POST is very generic!
 // PUT - update thought object by id 
 app.put('/thoughts/:id', async (req, res) => {
   const {id} = req.params
