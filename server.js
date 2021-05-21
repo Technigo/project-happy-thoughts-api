@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
 //Endpoint thats shows list with maximum of 20 thougths
 app.get('/thoughts', async (req, res) => {
     const thoughts = await Thought.find()
-    .sort({ createdAt: '1' })
+    .sort({ createdAt: '-1' })
     .limit(20)
     res.json(thoughts)
 })
