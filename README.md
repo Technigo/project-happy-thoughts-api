@@ -1,5 +1,5 @@
 # Project Happy Thoughts API
-In this weeks project
+In this weeks project we were suppposed to create our own API for our Front end project Happy Thoughts we made during week
 
 
 ## The problem
