@@ -40,7 +40,7 @@ app.use((req, res, next) => {
     next()
   } else {
     res.status(503).json({
-      error: 'Service unavailable'
+      message: 'Service unavailable'
     })
   }
 })
@@ -49,20 +49,21 @@ app.get('/', (req, res) => {
   res.send(listEndpoints(app))
 })
 
-//endpoint to get a list of thoughts
+//endpoint to GET a list of happy thoughts
 app.get('/thoughts', async (req, res) => {
     const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
     res.json(thoughts)
 })
 
-//endpoint to post a thought
+//endpoint to POST a happy thought
 app.post('/thoughts', async (req, res) => {
   try {
     const newThought = await new Thought(req.body).save()
     res.status(200).json(newThought)
   } catch (error) {
     res.status(400).json({
-      message: 'Could not save to database', error
+      message: 'Could not save to database',
+      error
     })
   }
 })
@@ -86,7 +87,8 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     }
   } catch (error) {
     res.status(400).json({
-      message: 'Invalid request', error
+      message: 'Invalid request',
+      error
     })
   }
 })

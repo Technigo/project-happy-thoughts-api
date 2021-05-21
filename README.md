@@ -6,8 +6,28 @@ The project was to make a backend for our previous project Happy Thoughts with e
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+For my project I used mongoose, Express and MongoDB.
+To test the backend I used Postman and MongoDBCompass, and it's deployed on Heroku.
+
+Endpoints:
+
+GET '/thoughts'
+
+Displays all happy thoughts in the backend.
+
+---
+
+POST '/thougths'
+
+Lets you post a new message to the backend.
+
+---
+
+POST '/thoughts/:thoughtId/like'
+
+Increases nr of likes/hearts.
+
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://project-happythoughts.herokuapp.com/
