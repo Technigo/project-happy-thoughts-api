@@ -10,11 +10,6 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 mongoose.Promise = Promise
 
-
-// Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
 
@@ -23,7 +18,6 @@ const thoughtSchema = new mongoose.Schema({
     type: String,
     required: [true, "Message is reqired"],
     unique: true,
-    // match: /^[^0-9]+$/,
     validate: {
       validator:(value) => {
         return /^[^0-9]+$/.test(value)
@@ -62,7 +56,7 @@ app.get('/thoughts', async (req, res) => {
 
 app.post('/thoughts', async (req, res) => {
   try {
-    const newThought = await new Thought(req.body).save()
+    const newThought = await new Thought({message: req.body.message}).save()
     res.json(newThought)
   } catch (error) {
     if (error.code === 11000) {

@@ -1,13 +1,13 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+This week I learnt how to use POST request and sent it to the API, store the data and validate data. 
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
 
 ## The problem
+I have trouble to keep up with all the info and how to use it in the best way. Luckily my team members are the best and help me through the questions I have. I had a struggle to get last week and this week deployed. But got some awesome help from Ida, a big shout out to you <3!
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+If I had more time I would read up more on backend in generall and how to connect it to the frontend.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://week19happythoughtsapi.herokuapp.com/
