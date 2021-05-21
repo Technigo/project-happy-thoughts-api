@@ -31,7 +31,7 @@ The API has the following endpoints
 - Postman
 
 ## Reflections
-It was a useful exercise to see that I sent in data in another format than the frontend expected when I first created the endpoints, and then it was a quick fix. Otherwise I enjoyed connecting back- and frontend for the first time this week, although I am not a hundred that everything has landed yet.
+It was a useful exercise to see that I sent in data in another format than the frontend expected when I first created the endpoints, and then it was a quick fix. I've added the possibility to add an author in the backend and hence added that in the frontend too. I enjoyed connecting back- and frontend for the first time this week, although I am not a hundred that everything has landed yet. 
 
 If I had more time I would continue to experiement with features that created a virtual "contract" between the frontend and the backend such as  pagination, or experiment with infinite scrolling on the frontend part. 
 
