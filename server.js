@@ -2,8 +2,6 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
-import { json } from 'body-parser'
-import dotenv from 'dotenv'
 import listEndpoints from 'express-list-endpoints'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
@@ -33,14 +31,6 @@ const thoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model('Thought', thoughtSchema)
 
-// if(process.env.RESET_DB) {
-//   const seedDatabase = async () => {
-//     await Thought.deleteMany({})    
-//   }
-//   seedDatabase()
-// }
-
-// Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(express.json())
 
@@ -57,12 +47,9 @@ app.post('/thoughts', async (req, res) => {
   try {
     const newThought = await new Thought({ message: req.body.message }).save()
     res.json(newThought)
-  } catch (error) {
-    if (error.code === 11000) {
-      res.status(400).json({ error: 'Duplicated value', fields: error.keyValue })
-    }
-    res.status(400).json(error)
-  }
+  } catch (error) {    
+    res.status(400).json({ message: 'Invalid request', error })
+  } 
 })
 
 app.delete('/thoughts/:id', async (req, res) => {
@@ -74,20 +61,6 @@ app.delete('/thoughts/:id', async (req, res) => {
     res.status(400).json({ message: "Invalid request", error })
   }
 })
-
-// app.patch('/thoughts/:id', async (req, res) => {
-//   const { id } = req.params
-//   try {
-//     const updatedThought = await Thought.findByIdAndUpdate(id, { message: req.body.message, hearts: +1 })
-//     if (updatedThought) {
-//       res.json(updatedThought)
-//     } else {
-//       res.status(404).json({ message: 'Not found' })
-//     }    
-//   } catch (error) {
-//     res.status(400).json({ message: 'Invalid request', error })
-//   }
-// })
 
 app.post('/thoughts/:id/likes', async (req, res) => {
   const { id } = req.params
