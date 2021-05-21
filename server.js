@@ -53,7 +53,7 @@ app.post('/thoughts', async (req, res) => {
     const addThought = await new Thought(req.body).save()
     res.json(addThought)
   } catch (error) {
-    res.status(400).json({ message: 'Could not save', error })
+    res.status(400).json({ message: 'Something went wrong', error })
   }
 })
 
@@ -62,7 +62,10 @@ app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params
 
   try {
-    const updatedThought = await Thought.findByIdAndUpdate(id, { $inc: { hearts: 1 } }, { new: true })
+    const updatedThought = await Thought.findByIdAndUpdate(id,
+      { $inc: { hearts: 1 } },
+      { new: true }
+    )
     if (updatedThought) {
       res.json(updatedThought)
     } else {
@@ -72,7 +75,6 @@ app.post('/thoughts/:id/like', async (req, res) => {
     res.status(400).json({ message: 'Invalid request', error })
   }
 })
-
 
 // Start the server
 app.listen(port, () => {
