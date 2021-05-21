@@ -9,10 +9,9 @@ mongoose.Promise = Promise
 const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
-    required: true,
-    minlength: 5,
-    maxlength: 140,
-    trim: true
+    required: [true, "Message is required"],
+    minlength: [5, "Message has to be 5 characters or more"],
+    maxlength: [140, "Message has to be less than 140 characters"]
   },
   hearts: {
     type: Number,
@@ -45,17 +44,17 @@ app.get('/thoughts', async (req, res) => {
     res.json(thoughts)
 })
 
-//POST to add a thought
+//Endpoint to post a thought
 app.post('/thoughts', async (req, res) => {
   try {
     const addThought = await new Thought(req.body).save()
     res.json(addThought)
   } catch (error) {
-    res.status(400).json({ message: 'Could not save message', fields: error.keyValue })
+    res.status(400).json({ message: 'Could not save', error })
   }
 })
 
-//POST to like a thought
+//Endpoit to like a thought
 app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params
 
