@@ -3,13 +3,13 @@ import cors from "cors";
 import mongoose from "mongoose";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
-mongoose.connect(mongoUrl, { 
+mongoose.connect(mongoUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useCreateIndex: true
+  useCreateIndex: true,
 });
 mongoose.Promise = Promise;
-mongoose.set('debug', { shell: true })
+mongoose.set("debug", { shell: true });
 
 const thoughtSchema = new mongoose.Schema({
   message: {
@@ -30,27 +30,19 @@ const thoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model("Thought", thoughtSchema);
 
-// Defines the port the app will run on. Defaults to 8080, but can be
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
 const port = process.env.PORT || 8081;
 const app = express();
 
-
-// Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
 
-//  Plug into middleware.
 app.get("/api/uptime", (req, res) => {
-  res.status(200).json({ 
-    state: 'up', 
-    dbState: mongoose.STATES[mongoose.connection.readyState] 
-  })
+  res.status(200).json({
+    state: "up",
+    dbState: mongoose.STATES[mongoose.connection.readyState],
+  });
 });
 
-// Start defining your routes here
 app.get("/", (req, res) => {
   res.send("Hello from the other side 🎶");
 });
@@ -74,7 +66,6 @@ app.post("/thoughts", async (req, res) => {
 });
 
 app.post("/thoughts/:id/likes", async (req, res) => {
-  console.log("puta");
   const { id } = req.params;
 
   try {
