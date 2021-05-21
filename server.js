@@ -69,10 +69,6 @@ app.post('/thoughts', async (req, res) => {
     res.json(newThought)
   } catch (error) {
     res.status(400).json({ sucess: false, error })
-    // if (error.code === 11000) {
-    //   res.status(400).json({ error: "duplicated value", fields: error.keyValue })
-    // }
-    // res.status(400).json(error)
   }
 })
 
@@ -104,7 +100,7 @@ app.post('/thoughts/:id/likes', async (req, res) => {
   }
 });
 
-// delete end point
+// delete end point (WANTED TO CONTINUE WORKING ON THIS, THIS IS WHY IT IS COMMENTED OUT)
 // app.delete('/thoughts/:id', async (req, res) => {
 //   const { id } = req.params
 
