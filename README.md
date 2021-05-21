@@ -1,13 +1,20 @@
 # Project Happy Thoughts API
+This project was made during the Technigo bootcamp. The goal was to use Express and MongoDB to build an API that will serve as the backend to the previous project "Happy thoughts", where you can send Twitter-like messages that are saved to a database. The API should therefore include endpoints for GET requests to return the data (i.e. messages), and to POST so you can send messages and press "like" on messages.
 
-Replace this readme with your own information about your project.
+This API also contains endpoints to delete and edit/patch a message, but those features aren't yet added to the frontend. The endpoint to get all messages sorts them from newest to oldest, and only shows 20 messages. 
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
-
-## The problem
-
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+# Techs/tools used
+* Node.js
+* Express
+* JavaScript
+* MongoDB
+* MongoDB Compass
+* MongoDB Atlas
+* Heroku
+* Mongoose
+* Postman
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+* Finished site with front- and backend: https://determined-engelbart-a7f7f6.netlify.app/
+* API: https://super-happy-thoughts.herokuapp.com/

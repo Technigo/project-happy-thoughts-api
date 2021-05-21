@@ -53,7 +53,7 @@ app.get('/', (req, res) => {
 // get the 20 latest thoughts, sorted from newest
 app.get('/thoughts', async (req, res) => {
   try {
-    const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20).exec()
+    const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20)
     res.json(thoughts)
   } catch (error) {
     res.status(400).json({ message: 'Something went wrong', error })
@@ -66,14 +66,11 @@ app.post('/thoughts', async (req, res) => {
     const newThought = await new Thought(req.body).save()
     res.json(newThought)
   } catch (error) {
-    if (error.code === 11000) {
-      res.status(400).json({ error: 'Duplicated value', fields: error.keyValue })
-    }
     res.json(400).json(error)
   }
 })
 
-// increase likes
+// like a post
 app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params
 
