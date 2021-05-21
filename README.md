@@ -6,7 +6,7 @@ Main learning objectives:
 * Include error handling in order to return good validation errors to the frontend
 * Building an API which works well with an existing frontend
 
-* Set-up: Express API with a MongoDB stored in Atlas and deployed to Heroku. Using Mongoose for creating endpoints and updating the data. 
+Set-up: Express API with a MongoDB stored in Atlas and deployed to Heroku. Using Mongoose for creating endpoints and updating the data. 
   
 ## Endpoints
 The API has the following endpoints 
