@@ -13,13 +13,19 @@ mongoose.Promise = Promise;
 const port = process.env.PORT || 8080;
 const app = express();
 
-//schema
+//schema - validators and error messages, default values
 const thoughtSchema = mongoose.Schema({
   message: {
     type: String,
-    required: [true, "Ops, you forgot to write a message"],
-    minlength: [5, "Try again, the messages needs to be at least five characters long"],
-    maxlength: [140, "Try again, the messages needs to be less than 140 characters"],
+    required: [true, "Ops, you forgot to write a message."],
+    minlength: [
+      5,
+      "Try again, the messages needs to be at least five characters.",
+    ],
+    maxlength: [
+      140,
+      "Try again, the messages needs to be less than 140 characters.",
+    ],
   },
   hearts: {
     type: Number,
@@ -41,7 +47,7 @@ app.get("/", (req, res) => {
   res.send("Hello world");
 });
 
-// post request
+// post request - save new thought to db
 app.post("/thoughts", async (req, res) => {
   try {
     const newThought = await new Thought(req.body).save();
@@ -51,7 +57,25 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
+// delte request - delete thought from db
+app.delete("/thoughts/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedThought = await Thought.findOneAndDelete({ _id: id });
+    if (deletedThought) {
+      res.json(deletedThought);
+    } else {
+      res.status(404).json({ message: "not found" });
+    }
+  } catch (error) {
+    res.status(400).json({ message: "Invalid request", error });
+  }
+});
+
 app.listen(port, () => {
   // eslint-disable-next-line
   console.log(`Server running on http://localhost:${port}`);
 });
+
+//Editing the thoughts, delet, query them with GET request
+// delet, patch, put, get
