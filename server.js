@@ -45,6 +45,11 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
+app.get('/thoughts', async (req,res) => {
+  const allThoughts = await Thought.find().sort({ createdAt: 1 }).limit(20) // .skip(2) // .limit(2)
+  res.json(allThoughts)
+});
+
 app.post('/thoughts', async (req,res) => {
   try {
     const newThought = await new Thought(req.body).save(); // req.body är samma sak som {message: req.body.message}
@@ -55,6 +60,79 @@ app.post('/thoughts', async (req,res) => {
     }
     res.status(400).json(error)
 
+  }
+})
+
+app.delete('/thoughts/:id', async (req,res) => {
+  const { id } = req.params;
+
+
+  try {
+    const deletedThought = await Thought.findOneAndDelete({ _id: id});
+    if (deletedThought) {
+      res.json(deletedThought)
+    } else {
+      res.status(404).json({ message: 'Not Found'});
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error})
+  }
+});
+
+app.patch('/thoughts/:id', async (req,res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate(id, req.body, {new: true});
+    if (updatedThought) {
+      res.json(updatedThought);
+    } else {
+      res.status(404).json({ message: 'Not Found' })
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error})
+  }
+})
+
+app.put('/thoughts/:id', async (req,res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedThought = await Thought.findOneAndReplace(id, req.body, {new: true});
+    if (updatedThought) {
+      res.json(updatedThought);
+    } else {
+      res.status(404).json({ message: 'Not Found' })
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error})
+  }
+})
+
+app.post('/thoughts/:id/likes', async (req,res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedThought = await Thought.findOneAndUpdate(
+      {
+        _id: id
+      },
+      {
+        $inc: { // $inc betyder endast att vi ska uppdatera ett värde
+          hearts: 1
+        }
+      },
+      {
+        new: true
+      }
+    );
+    if (updatedThought) {
+      res.json(updatedThought)
+    } else {
+      res.status(404).json({ message: 'Not Found'})
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error })
   }
 })
 
