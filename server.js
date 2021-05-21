@@ -50,7 +50,7 @@ app.get('/thoughts', async (req, res) => {
   })
 
 app.post('/thoughts', async (req, res) => {
-  const { message } = req.body.message
+  const { message } = req.body
   const thought = new Thought({ message })
     
   try {
