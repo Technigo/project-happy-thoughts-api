@@ -4,10 +4,13 @@ Replace this readme with your own information about your project.
 
 Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
 
+Create the backend for our Happy Thoughts Project. We were to create different endpoints using post and get to show all of our messages as well as add new ones and increase likes on those we had.
+
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+A lot this week was just following the lectures and code-along. Each step was very straight forward and easy to follow I thought.
+If I had more time I would have created a delete-button for my frontend to match the delete-function in my backend.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://happy-thoughts-hannahj.herokuapp.com/
