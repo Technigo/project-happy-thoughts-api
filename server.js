@@ -1,6 +1,8 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import listendpoints from 'listendpoints'
+import listEndpoints from 'express-list-endpoints'
 //import dotenv from 'dotenv'
 
 //dotenv.config()
@@ -20,7 +22,8 @@ const thoughtSchema = new mongoose.Schema({
   //three fields for each schema
   message: {
     type: String,
-    required: [true, "Message is required"], //overrides default error message. 
+    required: [true, "Message is required"], 
+    trim: true, //overrides default error message. 
   //  unique: true,
   //   // enum: ['Hello', 'Sweet', 'Goodbye']  //always is array. Can only send these values
   //   match: /^[^0-9]+$/, //not accepting numbers in message
@@ -55,25 +58,31 @@ app.use(express.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Happy Thoughts API')
+  res.send(listEndpoints(app))
 })
 
 //create post request (can have get request with same name but not problem for mongoose/express when its different methods)
 
 // Thoughts array, limited to 20, sorted by createdAt: newest first
 app.get('/thoughts', async (req, res) => {
+  const [page, per_page] = [Number(page), Number(per_page)]
+  //in FE: const [page, setPage] = use State(1), pass to url 
+
+
   try {
-    const allThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20)
+    const allThoughts = await Thought.find().sort({ createdAt: -1 }).skip((page -1) * per_page).limit(20)//per_page in limit
     res.json(allThoughts)
   } catch {
 
   }
 })
 
+app.get('')
+
 //Post happy thought
 app.post('/thoughts', async (req, res) => {
   try {
-    const newThought = await new Thought(req.body).save()
+    const newThought = await new Thought({ message: req.body.message }).save() //kolla at det ej går o skicka hjärtan från början
     res.json(newThought)
   } catch (error) {
     res.status(400).json(error)
@@ -99,7 +108,7 @@ app.delete('/thoughts/:id', async(req, res) => {
   const { id } = req.params
 
   try {
-    const deletedThought = await Thought.findOneAndDelete({ _id: id })
+    const deletedThought = await Thought.findByIdAndDelete(id)
     if(deletedThought) {
       res.json(deletedThought)
     } else {

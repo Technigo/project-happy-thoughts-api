@@ -11,3 +11,5 @@ Describe how you approached to problem, and what tools and techniques you used t
 ## View it live
 My project is deployed via Heroku: 
 https://a-lenksjo-happy-thoughts-api.herokuapp.com/ 
+
+The frontend application: https://tender-poitras-167886.netlify.app/ 
