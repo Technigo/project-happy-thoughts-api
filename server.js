@@ -52,6 +52,12 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
+app.get('/thoughts', async (req, res) => {
+  const allThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20).exec()
+  
+  res.json(allThoughts)
+})
+
 // POST endpoint for new thought
 app.post('/thoughts', async (req, res) => {
   // const { message } = req.body
@@ -65,6 +71,36 @@ app.post('/thoughts', async (req, res) => {
       res.status(400).json({ error: 'Duplicated value', fields: error.keyValue })
     }
     res.status(400).json(error)
+  }
+})
+
+// POST endpoint to update number of hearts on thought
+app.post('/thoughts/:id/likes', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const updatedThought = await Thought.findOneAndUpdate(
+      { 
+        _id: id 
+      }, 
+      { 
+        $inc: 
+          { 
+            hearts: 1 
+          } 
+      }, 
+      { 
+        new: true 
+      }
+    )
+
+    if (updatedThought) {
+      res.json(updatedThought)
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error })
   }
 })
 
