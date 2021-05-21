@@ -3,7 +3,11 @@ import cors from "cors";
 import mongoose from "mongoose";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+mongoose.connect(mongoUrl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+});
 mongoose.Promise = Promise;
 
 const port = process.env.PORT || 8080;
@@ -13,9 +17,9 @@ const app = express();
 const thoughtSchema = mongoose.Schema({
   message: {
     type: String,
-    required: true,
-    minlength: 5,
-    maxlength: 140,
+    required: [true, "Ops, you forgot to write a message"],
+    minlength: [5, "Try again, the messages needs to be at least five characters long"],
+    maxlength: [140, "Try again, the messages needs to be less than 140 characters"],
   },
   hearts: {
     type: Number,
