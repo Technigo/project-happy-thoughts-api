@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
 
 app.get('/thoughts', async (req, res) => {
   try {
-    const recentThoughts = await Thought.find().sort({ createdAt: -1 })//.limit(20)
+    const recentThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20)
     if(recentThoughts) {
       res.json(recentThoughts)
     } else {
@@ -63,7 +63,7 @@ app.get('/thoughts', async (req, res) => {
 
 app.post('/thoughts', async (req, res) => {
   try {
-    const newThought = await new Thought(req.body).save()
+    const newThought = await new Thought({ message: req.body.message }).save()
     res.json(newThought)
   } catch (error) {
     res.status(400).json({ message: 'Could not save', error })
@@ -83,6 +83,21 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     }
   } catch (error) {
     res.status(400).json({ error: 'Could not find thoughts' })
+  }
+})
+
+app.delete('/thoughts/:thoughtId', async (req, res) => {
+  const { thoughtId } = req.params
+
+  try {
+    const deletedThought = await Thought.findByIdAndDelete(thoughtId)
+    if(deletedThought) {
+      res.json(deletedThought)
+    } else {
+      res.status(404).json({ error: 'No thought with matching id' })
+    }
+  } catch (error) {
+    res.status(400).json({ error: 'Could not delete the thought' })
   }
 })
 
