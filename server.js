@@ -2,6 +2,10 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import listEndpoints from 'express-list-endpoints'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 // eslint-disable-next-line max-len
@@ -17,16 +21,7 @@ const thougthSchema = new mongoose.Schema({
   message: {
     type: String,
     required: [true, 'Empty message not allowed'],
-    unique: true,
     trim: true,
-    // enum: ['Technigo is cool', 'Technigo is great', 'Best bootcamp every']
-    // match: /^[^0-9]+$/,
-    validate: {
-      validator: (value) => {
-        return /^[^0-9]+$/.test(value)
-      },
-      message: 'Numbers are not allowed'
-    },
     minlength: [5, 'Message must be longer than 5 characters'],
     maxlength: [140, 'Message must be shorter than 140 characters']
   },
@@ -42,20 +37,30 @@ const thougthSchema = new mongoose.Schema({
 
 const Thought = mongoose.model('Thought', thougthSchema)
 
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 8081
 const app = express()
 
 app.use(cors())
 app.use(express.json())
 
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send(listEndpoints(app))
 })
 
 app.get('/thoughts', async (req, res) => {
   const allThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20).exec()
   
   res.json(allThoughts)
+})
+
+app.get('/thoughts/:id', async (req, res) => {
+  const { id } = req.params
+
+  const thought = await Thought.findById(id)
+  const thoughtNotHandled = Thought.findById(id)
+  res.json(thought)
+  console.log('111', thought)
+  console.log('222', thoughtNotHandled)
 })
 
 // POST endpoint for new thought
