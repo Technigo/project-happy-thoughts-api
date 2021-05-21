@@ -65,7 +65,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { id } = req.params
 
   try {
-    const updatedThought = await Thought.findByIdAndUpdate(id, { $inc: { hearts: 1 } }, {new: true})
+    const updatedThought = await Thought.findByIdAndUpdate(id, { $inc: { hearts: 1 } })
     if (updatedThought) {
       res.json(updatedThought)
     } else {
