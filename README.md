@@ -11,3 +11,5 @@ Describe how you approached to problem, and what tools and techniques you used t
 ## View it live
 
 Heroku link: https://all-happy-thoughts.herokuapp.com/
+
+Frontend link: https://happy-thoughts-maria-sparre.netlify.app/

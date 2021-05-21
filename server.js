@@ -19,6 +19,7 @@ const thoughtSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Write something, not less than 5 characters'],
     unique: true,
+    trim: true,
     minlength: 5, 
     maxlength: 140,
     // enum: ['']
@@ -46,6 +47,8 @@ app.get('/', (req, res) => {
   res.send(listEndpoints(app))
 })
 app.get('/thoughts', async (req, res) => {
+  // const { page, per_page } = req.query
+ 
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
   res.json(thoughts)
 })
@@ -69,7 +72,7 @@ app.post('/thoughts/:id/likes', async (req, res) => {
   try {
     const updatedThought = await Thought.findOneAndUpdate(
       { _id: id},
-      { $inc: { hearts: 5 }},
+      { $inc: { hearts: 1 }},
       { new: true}
     )
     if (updatedThought) {
