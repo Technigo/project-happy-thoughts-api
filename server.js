@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
 
 app.get('/thoughts', async (req, res) => {
   try {
-    const recentThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20)
+    const recentThoughts = await Thought.find().sort({ createdAt: -1 })//.limit(20)
     if(recentThoughts) {
       res.json(recentThoughts)
     } else {
@@ -71,7 +71,7 @@ app.post('/thoughts', async (req, res) => {
 })
 
 
-app.post('thoughts/:thoughtId/like', async (req, res) => {
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
 
   try {
