@@ -57,7 +57,7 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 app.get('/thoughts', async (req, res) => {
-  const allThoughts = await Thought.find()
+  const allThoughts = await Thought.find().sort({ createdAt: 1 }).limit(10)
   res.json(allThoughts)
 })
 
@@ -78,14 +78,13 @@ app.post('/thoughts', async (req, res) => {
 app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params
   try {
-
     const updatedThought = await Thought.findOneAndUpdate(
       {
         _id: id
       },
       { 
         $inc: {
-          hearts: 1
+          hearts: this.updatedThought += 1
         }
       },
       {
@@ -97,14 +96,6 @@ app.post('/thoughts/:id/like', async (req, res) => {
     } else {
       res.status(404).json({ message: 'Not found' })
     }
-
-
-  //   let updatedThought = await Thought.find({
-  //     _id: id
-  //   })
-  //   updatedThought = [...updatedThought, updatedThought.hearts += 1]
-  //   res.json(updatedThought)
-
   } catch {
     res.status(404).json({ message: "Not found" })
   }
