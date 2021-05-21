@@ -1,12 +1,12 @@
 # Project Happy Thoughts API
-This was part of week 19 in the Technigo bootcamp. I've created an API with GET, POST, DELETE and PUT endpoints to the week 11 FrontEnd project Happy Thoughts. 
+This was part of week 19 in the Technigo bootcamp. I've created an API with GET, POST, DELETE and PUT endpoints to be part of the FrontEnd project Happy Thoughts from week 11. 
 
 ## Endpoints
 The API has the following endpoints 
 
 | METHOD | Path                                      | Description                                                                            |
 | :------|------------------------------------------ | --------------------------------------------------------------------------------------:|
-| https://caroline-happy-thoughts-api.herokuapp.com/ | Welcome page - contains a list of available routes                                     |
+| | https://caroline-happy-thoughts-api.herokuapp.com/ | Welcome page - contains a list of available routes                                     |
 | GET    | /thoughts                                 | Endpoint that returns 20 thoughts, sorted by createdAt to show the most recent thoughts first. |
 | POST | /thoughts                                   | POST a new thought                                                                     |
 | POST | thoughts/:id/like                           | Update like/heart property on a thought object                                         |
@@ -31,4 +31,4 @@ If I had more time I would continue to experiement with features that created a 
 ## View it live
 Backend: https://caroline-happy-thoughts-api.herokuapp.com/
 |:-----------------------------------------------------------------------------------------------------------------------------------------------:|
-FrontEnd - view all thoughts at: https://caro-happy-thoughts.netlify.app/
+FrontEnd: https://caro-happy-thoughts.netlify.app/
