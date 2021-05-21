@@ -1,7 +1,6 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
-import listendpoints from 'listendpoints'
 import listEndpoints from 'express-list-endpoints'
 //import dotenv from 'dotenv'
 
@@ -23,17 +22,7 @@ const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     required: [true, "Message is required"], 
-    trim: true, //overrides default error message. 
-  //  unique: true,
-  //   // enum: ['Hello', 'Sweet', 'Goodbye']  //always is array. Can only send these values
-  //   match: /^[^0-9]+$/, //not accepting numbers in message
-  //   validate: {
-  //     validator: () => {
-  //       //can do a lot of custom things here
-  //       return /^[^0-9]+$/.test(value) //returns true/false
-  //     },
-  //     message: "Numbers are not allowed"
-  //   },
+    trim: true,
     minlength: 5,
     maxlength: 140,
   },
@@ -63,21 +52,15 @@ app.get('/', (req, res) => {
 
 //create post request (can have get request with same name but not problem for mongoose/express when its different methods)
 
-// Thoughts array, limited to 20, sorted by createdAt: newest first
+// Thoughts array
 app.get('/thoughts', async (req, res) => {
-  const [page, per_page] = [Number(page), Number(per_page)]
-  //in FE: const [page, setPage] = use State(1), pass to url 
-
-
   try {
-    const allThoughts = await Thought.find().sort({ createdAt: -1 }).skip((page -1) * per_page).limit(20)//per_page in limit
+    const allThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20)
     res.json(allThoughts)
-  } catch {
-
+  } catch (error) {
+    res.status(400).json(error)
   }
 })
-
-app.get('')
 
 //Post happy thought
 app.post('/thoughts', async (req, res) => {
@@ -130,7 +113,7 @@ app.patch('/thoughts/:id', async(req, res) => {
     } else {
       res.status(404).json({ message: 'Not found' })
     }
-  } catch (error) { //will trigger if id is of incorrect format
+  } catch (error) { 
     res.status(400).json({ message: 'invalid request', error })
   }
 })
@@ -139,7 +122,7 @@ app.put('/thoughts/:id', async(req, res) => {
   const { id } = req.params
 
   try {
-    const updatedThought = await Thought.findOneAndReplace({ _id: id }, req.body, { new: true } ) //new:true gives us the updated object in response
+    const updatedThought = await Thought.findOneAndReplace({ _id: id }, req.body, { new: true } ) 
     
     if (updatedThought) {
       res.json(updatedThought) 
