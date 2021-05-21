@@ -29,6 +29,10 @@ const thoughtSchema = new mongoose.Schema({
   createdAt: {
     type: Date, 
     default: Date.now
+  },
+  userName: {
+    type: String,
+    default: 'Anonymous'
   }
 })
 
@@ -52,8 +56,9 @@ app.get('/thoughts', async (req, res) => {
 
 // POST endpoint that allows us to add thoughts to the database
 app.post('/thoughts', async (req, res) => {
+  const { message, userName } = req.body
   try {
-    const newThought = await new Thought({ message: req.body.message }).save()
+    const newThought = await new Thought({ message, userName: userName || 'Anonymous' }).save()
     res.json(newThought)
   } catch (error) {
     res.status(400).json(error)
@@ -105,28 +110,28 @@ app.delete('/thoughts/:id', async (req, res) => {
 })
 
 // Patch endpoint to be able to update thought
-app.patch('/thoughts/:id', async (req, res) => {
-  const { id } = req.params 
+// app.patch('/thoughts/:id', async (req, res) => {
+//   const { id } = req.params 
 
-  try {
-    const updatedThought = await Thought.findByIdAndUpdate(
-      id, 
-      { 
-        message: req.body.message 
-      }, 
-      { 
-        new: true 
-      }
-    )
-    if (updatedThought) {
-      res.json(updatedThought)
-    } else {
-      res.status(404).json({ message: 'Not found' })
-    }
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid request', error })
-  }
-})
+//   try {
+//     const updatedThought = await Thought.findByIdAndUpdate(
+//       id, 
+//       { 
+//         message: req.body.message 
+//       }, 
+//       { 
+//         new: true 
+//       }
+//     )
+//     if (updatedThought) {
+//       res.json(updatedThought)
+//     } else {
+//       res.status(404).json({ message: 'Not found' })
+//     }
+//   } catch (error) {
+//     res.status(400).json({ message: 'Invalid request', error })
+//   }
+// })
 
 // Put endpoint to replace thought 
 // app.put('/thoughts/:id', async (req, res) => {
