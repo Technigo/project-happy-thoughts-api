@@ -46,7 +46,7 @@ app.get('/', (req, res) => {
 // GET endpoint to retrieve all thoughts from the database. 
 // Sorted by date from newest to oldest. Returning a maximum of 20 thoughts.
 app.get('/thoughts', async (req, res) => {
-  const newThought = await Thought.find().limit(20).sort({ createdAt: 'desc' }).exec()
+  const newThought = await Thought.find().sort({ createdAt: -1 }).limit(20).exec()
   res.json(newThought)
 })
 
