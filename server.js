@@ -1,9 +1,7 @@
-import dotenv from 'dotenv'
+
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
-
-dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
