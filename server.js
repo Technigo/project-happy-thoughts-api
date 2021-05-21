@@ -2,9 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import listEndpoints from 'express-list-endpoints';
-// import dotenv from 'dotenv';
-
-// dotenv.config();
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -63,7 +60,7 @@ app.get('/', (req, res) => {
 
 app.get('/thoughts', async (req, res) => {
   try {
-    const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec(); // Think about implementing .skip method for pagination on the frontend
+    const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec();
     if (thoughts) {
       res.json(thoughts);
     } else {
@@ -78,7 +75,7 @@ app.get('/thoughts/:thoughtId', async (req, res) => {
   const { thoughtId } = req.params;
 
   try {
-    const thought = await Thought.findById(thoughtId);
+    const thought = await Thought.findById(thoughtId).exec();
     if (thought) {
       res.json(thought);
     } else {

@@ -1,8 +1,8 @@
 # Project Happy Thoughts API 💌
 
-Replace this readme with your own information about your project.
+I've built a RESTful API using a database to store and retrieve data.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+I used MongoDB for the database, mongoose for the modelling of data and Express.js (Node.js framework).
 
 ## The problem
 
@@ -13,8 +13,8 @@ I chose to use the npm package express-list-endpoints to list the endpoints in t
 
 ## View it live
 
-Link to my deployed API: https://project-happy-thoughts-isabm5.herokuapp.com/ 
-Link to my deployed frontend application: https://heuristic-bassi-e1a3f1.netlify.app/ 
+* Link to my deployed API: https://project-happy-thoughts-isabm5.herokuapp.com/ 
+* Link to my deployed frontend application: https://heuristic-bassi-e1a3f1.netlify.app/ 
 
 ## Documentation
 
