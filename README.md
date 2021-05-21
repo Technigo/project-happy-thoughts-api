@@ -1,11 +1,11 @@
-# Project Happy Thoughts API
+# Project Happy Thoughts API ❤️
 This project's main goal is to learn GET  & POST requests: expose users to the endpoints, allowing them to POST data to my API and then use that data to save new objects to my Mongo Database.
 
 The frontend for this project has previously been created, so final step was to connect the backend 
 
 You find repository here: https://github.com/Sartish/project-happy-thoughts 💗
 
-## The built 
+## The built 🛠
 I created an API in the Backend using Express and MongoDB including GET request endpoints to return data and POST endpoints to create data stored in MongoDB
 
 I Started of by building a `Thought` Mongoose schema as a model which has properties for the `message` string, a `heart` property for tracking the number of likes, and a `createdAt` property to store when the thought was added.
@@ -61,7 +61,7 @@ https://saras-happy-thought.herokuapp.com/thoughts/${_id}/likes
 
 ## View it live
 
-API: https://saras-happy-thought.herokuapp.com/
+API: https://saras-happy-thought.herokuapp.com
 Frontend application: https://only-happy-thoughts.netlify.app/
 
 
