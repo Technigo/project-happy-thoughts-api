@@ -103,7 +103,7 @@ app.post("/thoughts", async (req, res) => {
       const newThought = await new Thought({message: req.body.message, username: req.body.username, hashtag: hashtag}).save();
       res.json(newThought);
     }else{
-      res.json({message:"user no found"})
+       res.status(400).json({message:"user no found"})
     }
   } catch (error) {
     res.status(400).json(error);
