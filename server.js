@@ -32,7 +32,8 @@ const thoughtSchema = new mongoose.Schema({
   },
   userName: {
     type: String,
-    default: 'Anonymous'
+    default: 'Anonymous',
+    maxlength: [20, 'userName must be a maximum 20 characters!']
   }
 })
 
@@ -48,9 +49,17 @@ app.get('/', (req, res) => {
 })
 
 // GET endpoint to retrieve all thoughts from the database. 
-// Sorted by date from newest to oldest. Returning a maximum of 20 thoughts.
+// Sorted by date from newest to oldest. 
 app.get('/thoughts', async (req, res) => {
-  const newThought = await Thought.find().sort({ createdAt: -1 }).limit(20).exec()
+  const page = Number(req.query.page)
+  const perPage = Number(req.query.perPage)
+
+  const newThought = await Thought.find()
+  // mongoose methods instead of using aggregate
+    .skip((page - 1) * perPage)
+    .sort({ createdAt: -1 })
+    .limit(perPage)
+    .exec()
   res.json(newThought)
 })
 
@@ -108,56 +117,6 @@ app.delete('/thoughts/:id', async (req, res) => {
     res.status(400).json({ message: 'Invalid request', error })
   }
 })
-
-// Patch endpoint to be able to update thought
-// app.patch('/thoughts/:id', async (req, res) => {
-//   const { id } = req.params 
-
-//   try {
-//     const updatedThought = await Thought.findByIdAndUpdate(
-//       id, 
-//       { 
-//         message: req.body.message 
-//       }, 
-//       { 
-//         new: true 
-//       }
-//     )
-//     if (updatedThought) {
-//       res.json(updatedThought)
-//     } else {
-//       res.status(404).json({ message: 'Not found' })
-//     }
-//   } catch (error) {
-//     res.status(400).json({ message: 'Invalid request', error })
-//   }
-// })
-
-// Put endpoint to replace thought 
-// app.put('/thoughts/:id', async (req, res) => {
-//   const { id } = req.params 
-
-//   try {
-//     const updatedThought = await Thought.findOneAndReplace(
-//       { 
-//         _id: id 
-//       }, 
-//       { 
-//         message: req.body.message 
-//       }, 
-//       { 
-//         new: true 
-//       }
-//     )
-//     if (updatedThought) {
-//       res.json(updatedThought)
-//     } else {
-//       res.status(404).json({ message: 'Not found' })
-//     }
-//   } catch (error) {
-//     res.status(400).json({ message: 'Invalid request', error })
-//   }
-// })
 
 // Start the server
 app.listen(port, () => {
