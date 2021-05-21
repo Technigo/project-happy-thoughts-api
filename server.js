@@ -43,19 +43,18 @@ const Thought = mongoose.model('Thought', thoughtSchema)
 app.use(cors())
 app.use(express.json())
 
-// Start defining your routes here
 app.get('/', (req, res) => {
   res.send(listEndpoints(app))
 })
 
 // GET endpoint to retrieve all thoughts from the database. 
 // Sorted by date from newest to oldest. 
+// Mongoose methods instead of using aggregate to skip, sort, limit
 app.get('/thoughts', async (req, res) => {
   const page = Number(req.query.page)
   const perPage = Number(req.query.perPage)
 
   const newThought = await Thought.find()
-  // mongoose methods instead of using aggregate
     .skip((page - 1) * perPage)
     .sort({ createdAt: -1 })
     .limit(perPage)
@@ -63,7 +62,7 @@ app.get('/thoughts', async (req, res) => {
   res.json(newThought)
 })
 
-// POST endpoint that allows us to add thoughts to the database
+// POST endpoint that allows us to add thoughts and username to the database
 app.post('/thoughts', async (req, res) => {
   const { message, userName } = req.body
   try {
@@ -74,7 +73,7 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-// Post endpoint to increase numbers of likes
+// Post endpoint to increase number of likes
 app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params 
 
@@ -119,7 +118,4 @@ app.delete('/thoughts/:id', async (req, res) => {
 })
 
 // Start the server
-app.listen(port, () => {
-  // eslint-disable-next-line
-  console.log(`Server running on http://localhost:${port}`)
-})
+app.listen(port, () => {})

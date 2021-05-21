@@ -12,14 +12,15 @@ The existing frontend was a twitter-like page where the user should post only ha
 ## The problem
 - The setup for this Express API consists of a MongoDB stored in Atlas and deployed to Heroku 
 - Using Mongoose for creating endpoints and manipulating the data 
-- I have created one main thoughtSchema which defines the structure of the document, with default values for hearts and createdAt and with validators for the message.
+- I have created one main thoughtSchema which defines the structure of the document, with default values for hearts and createdAt and with validators for the message. I have also added username with default value 'anonymous' in case the input for the username is left empty, and with maxlength of 20 characters.
 
 I created the following endpoints:
 
 https://sofias-happy-thought-api.herokuapp.com
 
 GET /thoughts
---> To get all thoughts. With sorting to show the newest first and with limit to only show 20. 
+--> To get all thoughts. I used mongoose methods to sort from newest thougth to the oldest, and added .skip() and .limit() to add pagination. With this addition I also needed to update my frontend to make it work. As for now it is fully functioning, however it is possible to click past the last page with thoughts, which is something I will work on fixing later on. 
+Since I do not have a try catch block in this endpoint I added .exec() if there would be an error, to make the error message in the terminal more descriptive.
 
 POST /thoughts
 --> Endpoint to add a new thought to the database. This endpoint expects a JSON body with the thought message.
