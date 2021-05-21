@@ -15,8 +15,8 @@ const thoughtSchema  = new mongoose.Schema({
   message: {
     type: String,
     required: [true, "Ding, dong! Message is required!"],
-    minLength: [5, 'Hey, the minimum length is 5 characters'],
-    maxLength: [140, 'Hey, the maximum length is 140 characters'],
+    minlength: [5, 'Hey, the minimum length is 5 characters'],
+    maxlength: [140, 'Hey, the maximum length is 140 characters'],
     unique: true,
     trim: true
     },
@@ -38,16 +38,6 @@ app.use(express.json())
 
 app.get('/', (req, res) => {
   res.send(listEndpoints(app))
-})
-
-app.use((req, res, next) => {
-  if (mongoose.connection.readyState === 1) {
-    next()
-  } else {
-    res.status(503).json({
-      error: 'Service unavailable'
-    })
-  }
 })
 
 // DEFINING ROUTES AND ENDPOINTS
