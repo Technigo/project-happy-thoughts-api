@@ -45,18 +45,18 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
+  const thoughts = await Thought.find().sort({createdAt: -1 }).limit(20).exec()
   res.json(thoughts)
   })
 
-app.post('/thoughts', async (req, res) => {   
+app.post('/thoughts', async (req, res) => {
   try {
-  const newThought = await new Thought(req.body.message).save()
-  res.status(201).json(newThought)
-  } catch (err) {
-  res.status(400).json({message: 'Could not save your thought to the database', error: err.errors})
-  } 
-})
+    const newThought = await new Thought(req.body.message).save();
+    res.json(newThought);
+  } catch (error) {
+    res.status(400).json({message: 'Could not save your thought to the database', error: err.errors});
+  }
+});
 
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
