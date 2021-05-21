@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
@@ -52,7 +53,19 @@ app.post('/thoughts', async (req, res) => {
     res.status(400).json({ error })
   }
 })
-
+app.patch('/thoughts/:id/hearts', async (req, res) => {
+  const { id } = req.params
+  try {
+    const thoughtUpdate = await Thought.findByIdAndUpdate(id, { $inc: { hearts: 1 } }, { new: true })
+    if (thoughtUpdate) {
+      res.json(thoughtUpdate)
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error })
+  }
+})
 app.get('/thoughts', async (req, res) => {
   try {
     const thoughts = await Thought.aggregate([
@@ -61,8 +74,8 @@ app.get('/thoughts', async (req, res) => {
           createdAt: -1
         }
       },
-      { 
-        $limit: 20 
+      {
+        $limit: 20
       }
     ])
     res.json(thoughts)
