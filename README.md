@@ -29,7 +29,4 @@ It was a useful exercise to see that I sent in data in another format than the f
 If I had more time I would continue to experiement with features that created a virtual "contract" between the frontend and the backend such as  pagination, or experiment with infinite scrolling on the frontend part. 
 
 ## View it live
-|:-----------------------------------------------------------------------------------------------------------------------------------------------|
-Backend: https://caroline-happy-thoughts-api.herokuapp.com/
-|:-----------------------------------------------------------------------------------------------------------------------------------------------|
-FrontEnd: https://caro-happy-thoughts.netlify.app/
+Backend: https://caroline-happy-thoughts-api.herokuapp.com/  FrontEnd: https://caro-happy-thoughts.netlify.app/
