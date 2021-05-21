@@ -47,11 +47,6 @@ app.get('/', (req, res) => {
   res.send(listEndpoints(app))
 })
 
-// app.get('/thoughts', async (req, res) => {
-//   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
-//   res.json(thoughts)
-// })
-
 app.get('/thoughts', async (req, res) => {
   try {
     const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
@@ -73,18 +68,9 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-// app.post('/thoughts/:thoughtId/like', async (req, res) => {
-//   try {
-//     const { thoughtId } = req.params
-//     await Thought.updateOne({ _id: thoughtId }, { $inc: { heart: 1 } })
-//     res.status(200).json()
-//   } catch (err) {
-//     res.status(400).json({ message: 'Thought not found', error: err.errors })
-//   }
-// })
-
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
+
   try {
     const likes = await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
     if (likes) {
@@ -111,7 +97,6 @@ app.delete('/thoughts/:thoughtId', async (req, res) => {
   }
 })
 
-// Start the server
 app.listen(port, () => {
   // eslint-disable-next-line
   console.log(`Server running on http://localhost:${port}`)

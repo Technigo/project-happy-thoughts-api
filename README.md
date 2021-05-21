@@ -1,13 +1,43 @@
-# Project Happy Thoughts API
+# Happy Thoughts API 💌
 
-Replace this readme with your own information about your project.
+The goal for the project was using Express and Mongodb to build an API which includes both GET request endpoints to return data and POST endpoints to create data.
+For the frontend I revisited my previous project _Happy Thoughts_ , a twitter like app where you can see other people's happy thoughts, post your own and give a ❤️ to an existing one.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
 
-## The problem
+## The project
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+The setup for this Express API consists of a MongoDB stored in Atlas and deployed to Heroku.
+The main 'Thought' model have three properties: message, hearts & cretedAt and some validations rules such as required and max- and min length.
+All enpoints have a try/catch for error handling. If some input is invalid, a proper error message will show.
 
-## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+## Endpoints
+
+### /
+Root: List of the endpoints
+
+### GET /thoughts
+Displays the latest 20 thoughts, sorted by createdAt to show the most recent thoughts first.
+
+### POST /thoughts
+This endpoint expects a JSON body with the thought message, like this: { "message": "Express is great!" }
+
+### POST /thoughts/:thoughtsId/like
+This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its `hearts` property to add one heart.
+
+### DELETE /thoughts
+This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and delete it. (This endpoint was only for learning purposes and is not implemented in the frontend)
+
+
+## Tech & Tools used ⛏💻
+
+* Node.js
+* MongoDB
+* Mongoose
+* Express
+
+
+## View it live ❤️
+
+Frontend: https://happy-thoughts-2021.netlify.app/
+Backend (API) : https://annsofi-books-api.herokuapp.com/
