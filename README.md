@@ -30,5 +30,5 @@ If I had more time I would continue to experiement with features that created a 
 
 ## View it live
 Backend: https://caroline-happy-thoughts-api.herokuapp.com/
-|:-----------------------------------------------------------------------------------------------------------------------------------------------:|
+|:-----------------------------------------------------------------------------------------------------------------------------------------------|
 FrontEnd: https://caro-happy-thoughts.netlify.app/
