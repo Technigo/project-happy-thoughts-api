@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
+const mongoUrl = process.env.MONGO_URL //|| "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 mongoose.Promise = Promise
 
@@ -56,7 +56,7 @@ app.post('/thoughts', async (req,res) => {
     res.json(newThought);
   } catch (error) {
     if(error.code===11000){
-      res.status(400).json({ error: 'Duplicated valye', field: error.keyValue })
+      res.status(400).json({ error: 'Duplicated value', field: error.keyValue })
     }
     res.status(400).json(error)
 
@@ -141,3 +141,11 @@ app.listen(port, () => {
   // eslint-disable-next-line
   console.log(`Server running on http://localhost:${port}`)
 })
+
+
+
+
+
+//mongodb+srv://myUser:myuserpassword@cluster0.prpaq.mongodb.net/happyThoughts?retryWrites=true&w=majority
+
+//mongodb+srv://myUser:myuserpassword@cluster0.prpaq.mongodb.net/happyThoughts?retryWrites=true&w=majority
