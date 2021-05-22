@@ -24,7 +24,8 @@ const thoughtSchema = new mongoose.Schema({
       },
       message: "Numbers are not allowed",
     },
-    minlength: 4,
+    minlength: 5,
+    maxlength: 140,
   },
   hearts: {
     type: Number,
@@ -42,18 +43,18 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("Hello world");
+  res.send("MY HAPPY THOUGHTS");
 });
 
 app.get("/thoughts", async (req, res) => {
   const allThougths = await Thought.find().sort({ createdAt: -1 }).limit(20);
   res.json(allThougths);
-  console.log("bum");
 });
 
 app.post("/thoughts", async (req, res) => {
   try {
-    const newThought = await new Thought(req.body).save();
+    const { message } = req.body;
+    const newThought = await new Thought({ message }).save();
     res.json(newThought);
   } catch (error) {
     if (error.code === 11000) {
@@ -90,11 +91,6 @@ app.delete("/thoughts/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    //v1 - only delete
-    // const deletedThoughts = await Thought.deleteOne({ _id: id });
-    // res.json(deletedThoughts);
-
-    //v2 - find and delete
     const deletedThoughts = await Thought.findOneAndDelete({ _id: id });
     if (deletedThoughts) {
       res.json(deletedThoughts);

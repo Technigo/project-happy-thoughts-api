@@ -1,13 +1,15 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+My own API with POST, GET, PATCH, DELETE and PUT methods that I have used for my HAPPY THOUGHTS (frontend) project.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## Endpoints
 
-## The problem
-
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+/thoughts - GET and POST methods for sending and retrieving thoughts.
+/thoughts/:id/like - POST method for adding a LIKE to a thought.
+/thoughts/:id - PATCH, PUT and DELETE updating of deleting the thought.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Frontend - https://my-happy-thoughts.netlify.app/
+
+Backend - https://my-happy-thoughts-app.herokuapp.com/
