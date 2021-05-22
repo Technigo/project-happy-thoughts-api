@@ -1,17 +1,16 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This week's project was to build an API which includes both GET request endpoints to return data and POST endpoints to create data. When the Api was finished we where to replace an old API in an previous frontend project with the newly built.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+This week was a bit easier than last week, but i still struggled with deploying on Heroku and the understanding on how to connect with MongoDB and also using postman.
 
-importerade endpoint listan
+I created all the endpoints needed for the previous frontend which was requierd for the blue level. After connecting the frontend with my own API Url I got help from a team member to add a delete request in the backend and then create a delete button to delete posts in the frontend, which was superfun!! I think that was when I understood how it is all connected :D
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
-
 https://small-api-happy-thoughts.herokuapp.com/thoughts
+
+Link to the site where the api is used:
+https://upbeat-keller-4300b0.netlify.app
