@@ -1,6 +1,6 @@
 # Project Happy Thoughts API
 
-This week's project is to use Express and Mongodb to build an API which includes both GET request endpoints to return data and POST endpoints to create data.
+This week's project is to use Express and MongoDB to build an API which includes both GET request endpoints to return data and POST endpoints to create data.
 
 For this project I have built a frontend that has a form to write a new 'happy thought', lists recent thoughts, and shows a count of 'hearts' on each thought. Users could then click the heart to like a thought. 
 Find the Happy Thoughts Frontend live here: https://happy-thoughts-app.netlify.app/
@@ -16,17 +16,17 @@ Find the Happy Thoughts Frontend live here: https://happy-thoughts-app.netlify.a
 
 ## Documentation - ROUTES
 
-#BASE URL 
+### BASE URL
     showing useful details on the main endpoints of this API: https://app-happy-thoughts.herokuapp.com/
 
 
-#GET /thoughts
+### GET /thoughts
 This endpoint return a maximum of 20 thoughts, sorted by createdAt to show the most recent thoughts first.
 
-#POST /thoughts
+### POST /thoughts
 This endpoint expects a JSON body with the thought `message`, like this: `{ "message": "Express is great!" }`. If the input is valid (message must be between 5 - 140 characters), the thought should be saved, and the response should include the saved thought object, including its `_id`. If the input is invalid, you'll get an error message explaining what went wrong.
 
-#POST /thoughts/:thoughtId/like
+### POST /thoughts/:thoughtId/likes
 This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API finds that thought, and update its hearts property to add one heart. If the id is invalid, an error message will show.
 
 ## View it live
