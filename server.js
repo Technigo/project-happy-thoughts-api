@@ -53,9 +53,39 @@ app.get('/thoughts', async (req, res) => {
   res.json(allThoughts)
 })
 
-app.post('/thoughts', async (req, res) => {
+app.get('/thoughts/category/:tag', async (req, res) => {
+  const { tag } = req.params
+
   try {
-    const newThought = await new Thought({ message: req.body.message, user: req.body.user, hashtag: req.body.hashtag }).save()
+    const thoughtsByCategory = await Thought.find({ hashtag: tag })
+    res.json(thoughtsByCategory)
+  } catch (error) {
+    res.status(400).json({ error: 'Something went wrong', details: error })
+  }
+})
+
+app.get('/thoughts/user/:name', async (req, res) => {
+  const { name } = req.params
+
+  try {
+    const thoughtsByUser = await Thought.find({ user: name })
+    res.json(thoughtsByUser)
+  } catch (error) {
+    res.status(400).json({ error: 'Something went wrong', details: error })
+  }
+})
+
+app.post('/thoughts', async (req, res) => {
+  let tag
+
+  if (req.body.hashtag.charAt(0) === '#') {
+    tag = req.body.hashtag.slice(1) 
+  } else {
+    tag = req.body.hashtag
+  }
+
+  try {
+    const newThought = await new Thought({ message: req.body.message, user: req.body.user, hashtag: tag }).save()
     res.json(newThought)
   } catch (error) {
     res.status(400).json(error)
