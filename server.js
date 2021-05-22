@@ -54,7 +54,7 @@ app.get('/thoughts', async (req, res) => {
 
   try {
     const allThoughts = await Thought.find()
-      .sort({createdAt: -1 })
+      .sort({createdAt: 1 })
       .skip((page - 1) * per_page)
       .limit(per_page)//.skip(20).limit(20) if you want to show another 20
     res.json(allThoughts)
