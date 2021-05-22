@@ -1,5 +1,5 @@
 # Project Happy Thoughts API
-In this weeks project we were suppposed to create our own API to connect to our Frontend project Happy Thoughts we made during week 11.
+In this weeks project we were supposed to create our own API to connect to our Frontend project Happy Thoughts we made during week 11.
 
 
 ## The problem
