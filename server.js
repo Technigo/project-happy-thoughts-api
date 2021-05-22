@@ -17,6 +17,7 @@ const thoughtSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 5,
+    maxlength: 140,
     trim: true,
     message: "Numbers are not allowed"
   },
@@ -27,6 +28,12 @@ const thoughtSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  user: {
+    type: String
+  },
+  hashtag: {
+    type: String
   }
 })
 
@@ -38,7 +45,7 @@ app.use(express.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Welcome to Sandras happy thoughts API!')
 })
 
 app.get('/thoughts', async (req, res) => {
@@ -48,7 +55,7 @@ app.get('/thoughts', async (req, res) => {
 
 app.post('/thoughts', async (req, res) => {
   try {
-    const newThought = await new Thought(req.body).save()
+    const newThought = await new Thought({ message: req.body.message, user: req.body.user, hashtag: req.body.hashtag }).save()
     res.json(newThought)
   } catch (error) {
     res.status(400).json(error)
