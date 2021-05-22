@@ -18,6 +18,12 @@ const thoughtSchema = new mongoose.Schema({
     maxlength: 140,
     required: true,
   },
+  name: {
+    type: String,
+    minlength: 2,
+    maxlength: 30,
+    required: true,
+  },
   hearts: {
     type: Number,
     default: 0,
@@ -57,8 +63,8 @@ app.get("/thoughts", async (req, res) => {
 
 app.post("/thoughts", async (req, res) => {
   try {
-    const { message } = req.body;
-    const thought = await new Thought({ message }).save();
+    const { message, name } = req.body;
+    const thought = await new Thought({ message, name }).save();
     res.status(200).json(thought);
   } catch (err) {
     res.status(400).json({ message: "Could not save", errors: err });
