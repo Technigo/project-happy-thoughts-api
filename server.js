@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
 })
 
 // Endpoint to get the most recent 20 thoughts in descending order
-app.post('/thoughts', async (req, res) => {
+app.get('/thoughts', async (req, res) => {
   try {
     const allThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20)
     if (allThoughts) {
@@ -86,6 +86,13 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   }
 })
 
+// Starting the server
+app.listen(port, () => {
+  // eslint-disable-next-line
+  console.log(`Server running on http://localhost:${port}`)
+})
+
+// UNUSED CODE
 // // Endpoint to delete a thought
 // app.delete('/thoughts/:id', async (req, res) => {
 //   const { id } = req.params
@@ -129,9 +136,3 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
 //     res.status(400).json({ message: 'Invalid request', error })
 //   }
 // })
-
-// Starting the server
-app.listen(port, () => {
-  // eslint-disable-next-line
-  console.log(`Server running on http://localhost:${port}`)
-})
