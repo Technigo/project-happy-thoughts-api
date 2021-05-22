@@ -1,7 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import listEndpoints from "express-list-endpoints";
 import mongoose from "mongoose";
 
 dotenv.config();
@@ -42,14 +41,16 @@ const thoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model("Thought", thoughtSchema);
 
-// Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
 
-// Start defining your routes here
+// All my endpoints
+
 app.get("/", (req, res) => {
-  res.send(listEndpoints(App));
+  res.send("❤ Welcome to Happy Thoughts app ❤");
 });
+
+//endpoint to get existing thoughts, sorted by the time they were created with the most recent being presented first, and limited to 20.
 
 app.get("/thoughts", async (req, res) => {
   const allThoughts = await Thought.find()
@@ -58,6 +59,8 @@ app.get("/thoughts", async (req, res) => {
     .exec();
   res.json(allThoughts);
 });
+
+//endpoint to post new thoughts
 
 app.post("/thoughts", async (req, res) => {
   try {
@@ -72,6 +75,8 @@ app.post("/thoughts", async (req, res) => {
     res.status(400).json(error);
   }
 });
+
+//endpoint to post likes to existing thoughts
 
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
@@ -100,6 +105,8 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
   }
 });
 
+//endpoint to delete an existing endpoint
+
 app.delete("/thoughts/:thoughtId", async (req, res) => {
   const { thoughtId } = req.params;
 
@@ -115,11 +122,17 @@ app.delete("/thoughts/:thoughtId", async (req, res) => {
   }
 });
 
+//endpoint to update an existing thought
+
 app.patch("/thoughts/:thoughtId", async (req, res) => {
   const { thoughtId } = req.params;
 
   try {
-    const updatedThought = await Thought.findByIdAndUpdate( thoughtId, req.body, { new: true });
+    const updatedThought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      req.body,
+      { new: true }
+    );
     if (updatedThought) {
       res.json(updatedThought);
     } else {
@@ -131,7 +144,4 @@ app.patch("/thoughts/:thoughtId", async (req, res) => {
 });
 
 // Start the server
-app.listen(port, () => {
-  // eslint-disable-next-line
-  console.log(`Server running on http://localhost:${port}`);
-});
+app.listen(port, () => {});
