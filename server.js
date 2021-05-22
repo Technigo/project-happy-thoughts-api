@@ -47,7 +47,7 @@ app.use(express.json());
 // All my endpoints
 
 app.get("/", (req, res) => {
-  res.send("❤ Welcome to Happy Thoughts app ❤");
+  res.send("❤ Welcome to Happy Thoughts app ❤. Use GET /thoughts to get the existing thoughts.");
 });
 
 //endpoint to get existing thoughts, sorted by the time they were created with the most recent being presented first, and limited to 20.
