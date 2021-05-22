@@ -11,5 +11,4 @@ My own API with POST, GET, PATCH, DELETE and PUT methods that I have used for my
 ## View it live
 
 Frontend - https://my-happy-thoughts.netlify.app/
-
 Backend - https://my-happy-thoughts-app.herokuapp.com/
