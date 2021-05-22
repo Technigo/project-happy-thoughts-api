@@ -1,13 +1,12 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This is a Happy Thoughts app which is like a positive version of Twitter. In this project I used Express and MongoDB to build an API which includes both GET request endpoints to return data as well as POST endpoints to create data.
+In the front end the user can post a happy thought which will be listed on the page and shows the count of 'likes' on each thought. User can then like any message and the the number of likes increases by 1.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://project-happy-thoughts-sari.herokuapp.com/

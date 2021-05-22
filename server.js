@@ -36,7 +36,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('Hello world');
+  res.send('Welcome to Happy Thoughts API. To view all the results, go to https://project-happy-thoughts-sari.herokuapp.com/thoughts');
 });
 
 app.get('/thoughts', async (req, res) => {
