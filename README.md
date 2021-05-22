@@ -4,9 +4,9 @@ My own API with POST, GET, PATCH, DELETE and PUT methods that I have used for my
 
 ## Endpoints
 
-➡️ /thoughts - GET and POST methods for sending and retrieving thoughts.
-➡️ /thoughts/:id/like - POST method for adding a LIKE to a thought.
-➡️ /thoughts/:id - PATCH, PUT and DELETE updating of deleting the thought.
+● /thoughts - GET and POST methods for sending and retrieving thoughts.
+● /thoughts/:id/like - POST method for adding a LIKE to a thought.
+● /thoughts/:id - PATCH, PUT and DELETE updating of deleting the thought.
 
 ## View it live
 
