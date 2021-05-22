@@ -22,7 +22,7 @@ const thoughtSchema = new mongoose.Schema({
   },
   username: {
     type: String,
-    default: 'Anonymous' // if it is empty, how to do it? 
+    default: 'Anonymous' 
   },
   hashtag: {
     type: Array, 
@@ -75,7 +75,7 @@ app.get('/thoughts', async (req, res) => {
 })
 
 app.post('/thoughts', async (req, res) => {
-  const tags = req.body.message.trim().split(' ').map((item) => `#${item}`)
+  const tags = req.body.message.trim().split(' ').map((item) => ` #${item}`)
 
   const tagsUnique = []
 
