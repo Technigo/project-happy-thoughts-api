@@ -1,6 +1,9 @@
 # Project Happy Thoughts API
 
 Replace this readme with your own information about your project.
+- How to build a full API which includes handling of user input
+- How to include error handling to return good validation errors
+- How to build an API which works well with an existing frontend
 
 Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
 
