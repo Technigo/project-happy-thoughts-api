@@ -1,4 +1,5 @@
 import express from "express";
+import listEndpoints from 'express-list-endpoints'
 import mongoose from 'mongoose'
 
 const router = express.Router();
@@ -26,6 +27,14 @@ const Thought = mongoose.model("Thought", messageSchema)
 const catchError = (res, err, msg) => {
   return res.status(400).json({ message: msg, errors: err.errors })
 }
+
+router.get('/', async (req, res) => {
+  try {
+    res.json(listEndpoints(router))
+  } catch (err) {
+    res.status(404).send({ error: "Not found" })
+  }
+})
 
 router.post('/thoughts', async (req, res) => {
   const { message } = req.body;
