@@ -11,9 +11,9 @@ mongoose.Promise = Promise
 const thoughtSchema = new mongoose.Schema({
   message: {
     type: String, 
-    required: [true, 'Oh you silly, message is required!'], 
+    required: [true, 'Message is required!'], 
     trim: true,
-    minlength: 5,
+    minlength: [5, 'You have to have at least 5 character and I just got {VALUE}'],
     maxlength: 140
   }, 
   hearts: {
@@ -21,8 +21,12 @@ const thoughtSchema = new mongoose.Schema({
     default: 0
   },
   username: {
-    type: String, 
+    type: String,
     default: 'Anonymous' // if it is empty, how to do it? 
+  },
+  hashtag: {
+    type: Array, 
+    default: []
   },
   createdAt: {
     type: Date, 
@@ -63,7 +67,7 @@ app.get('/thoughts', async (req, res) => {
     res.json({  
       page, 
       size, 
-      data: thoughts 
+      data: thoughts  
     })
   } catch (error) {
     res.status(400).json(error)
@@ -71,8 +75,18 @@ app.get('/thoughts', async (req, res) => {
 })
 
 app.post('/thoughts', async (req, res) => {
+  const tags = req.body.message.trim().split(' ').map((item) => `#${item}`)
+
+  const tagsUnique = []
+
+  tags.forEach((item) => {
+    if (!tagsUnique.includes(item)) {
+      tagsUnique.push(item)
+    } 
+  }) 
+
   try {
-    const newThought = await new Thought(req.body).save()
+    const newThought = await new Thought({ message: req.body.message, hashtag: tagsUnique }).save()
     res.status(200).json(newThought)
   } catch (error) {
     res.status(400).json(error)
