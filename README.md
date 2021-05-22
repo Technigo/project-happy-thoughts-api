@@ -10,6 +10,18 @@ To complete the project, I also created one patch endpoint to make it possible y
 
 I decided not to go for the red and black requirements this week, since I wanted to focus a bit on planning for the final sprint, and also to wrap up previous projects a bit.
 
+To use the endpoints, you have the following options:
+
+GET /thoughts to get the existing thoughts
+
+POST /thoughts to post a thought of your own
+
+POST /thoughts/:thoughtId/like to post a like to a specified existing thought
+
+PATCH /thoughts/:thoughtId to update a specified existing thought
+
+DELETE /thoughts/:thoughtId to delete a specified existing thought
+
 
 ## View it live
 
