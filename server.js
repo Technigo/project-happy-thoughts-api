@@ -1,7 +1,10 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import dotenv from 'dotenv'
 import listEndpoints from 'express-list-endpoints'
+
+dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -41,26 +44,38 @@ app.get('/', (req, res) => {
 
 // Endpoint to get the most recent 20 thoughts in descending order
 app.post('/thoughts', async (req, res) => {
-  const allThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20)
-  res.json(allThoughts)
+  try {
+    const allThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20)
+    if (allThoughts) {
+      res.status(200).json(allThoughts)
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error })
+  }
 })
 
 // Endpoint to post a new thought 
 app.post('/thoughts', async (req, res) => {
   try {
-    const newThought = await new Thought(req.body).save()
-    res.status(200).json(newThought)
+    const newThought = await new Thought({ message: req.body.message }).save()
+    if (newThought) {
+      res.status(200).json(newThought)
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
   } catch (error) {
     res.status(400).json({ message: 'Invalid request', error })
   }
 })
 
 // Endpoint to update likes/hearts 
-app.post('/thoughts/:id/likes', async (req, res) => {
-  const { id } = req.params
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
 
   try {
-    const updatedThought = await Thought.findOneAndUpdate({ _id: id }, { $inc: { hearts: 1 } }, { new: true })
+    const updatedThought = await Thought.findOneAndUpdate(thoughtId, { $inc: { hearts: 1 } }, { new: true })
     if (updatedThought) {
       res.json(updatedThought)
     } else {
@@ -71,49 +86,49 @@ app.post('/thoughts/:id/likes', async (req, res) => {
   }
 })
 
-// Endpoint to delete a thought
-app.delete('/thoughts/:id', async (req, res) => {
-  const { id } = req.params
+// // Endpoint to delete a thought
+// app.delete('/thoughts/:id', async (req, res) => {
+//   const { id } = req.params
 
-  try {
-    const deletedThought = await Thought.deleteOne({ _id: id })
-    res.json(deletedThought)
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid request', error })
-  }
-})
+//   try {
+//     const deletedThought = await Thought.deleteOne({ _id: id })
+//     res.json(deletedThought)
+//   } catch (error) {
+//     res.status(400).json({ message: 'Invalid request', error })
+//   }
+// })
 
-// Endpoint to replace a thought
-app.put('/thoughts/:id', async (req, res) => {
-  const { id } = req.params
+// // Endpoint to replace a thought
+// app.put('/thoughts/:id', async (req, res) => {
+//   const { id } = req.params
 
-  try {
-    const replacedThought = await Thought.findOneAndReplace({ _id: id }, req.body, { new: true })
-    if (replacedThought) {
-      res.json(replacedThought)
-    } else {
-      res.status(404).json({ message: 'Not found' })
-    }
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid request', error })
-  }
-})
+//   try {
+//     const replacedThought = await Thought.findOneAndReplace({ _id: id }, req.body, { new: true })
+//     if (replacedThought) {
+//       res.json(replacedThought)
+//     } else {
+//       res.status(404).json({ message: 'Not found' })
+//     }
+//   } catch (error) {
+//     res.status(400).json({ message: 'Invalid request', error })
+//   }
+// })
 
-// Endpoint to update a thought
-app.patch('/thoughts/:id', async (req, res) => {
-  const { id } = req.params
+// // Endpoint to update a thought
+// app.patch('/thoughts/:id', async (req, res) => {
+//   const { id } = req.params
 
-  try {
-    const updatedThought = await Thought.findByIdAndUpdate(id, req.body, { new: true })
-    if (updatedThought) {
-      res.json(updatedThought)
-    } else {
-      res.status(404).json({ message: 'Not found' })
-    }
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid request', error })
-  }
-})
+//   try {
+//     const updatedThought = await Thought.findByIdAndUpdate(id, req.body, { new: true })
+//     if (updatedThought) {
+//       res.json(updatedThought)
+//     } else {
+//       res.status(404).json({ message: 'Not found' })
+//     }
+//   } catch (error) {
+//     res.status(400).json({ message: 'Invalid request', error })
+//   }
+// })
 
 // Starting the server
 app.listen(port, () => {
