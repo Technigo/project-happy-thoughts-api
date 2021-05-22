@@ -7,7 +7,7 @@ For the frontend I revisited my previous project _Happy Thoughts_ , a twitter li
 ## The project
 
 The setup for this Express API consists of a MongoDB stored in Atlas and deployed to Heroku.
-The main 'Thought' model have three properties: message, hearts & cretedAt and some validations rules such as required and max- and min length.
+The main 'Thought' model have three properties: message, hearts & createdAt and some validations rules such as required and max- and min length.
 All enpoints have a try/catch for error handling. If some input is invalid, a proper error message will show.
 
 
