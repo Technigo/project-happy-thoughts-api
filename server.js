@@ -44,8 +44,19 @@ app.get('/', (req, res) => {
 
 //Endpoint to fetch a thoughts list
 app.get('/thoughts', async (req, res) => {
+  // const page = Number(req.query.page)
+  // const per_page = Number(req.query.per_page)// below is the alternative way, more elegant
+  
+  // Creating a possibility to pass two query parameters: 
+  //page - which page we want to display. page is string
+  //per_page - how many elements should be on the list for that page. per_page is string
+  const [page, per_page] = [Number(req.query.page), Number(req.query.per_page)]
+
   try {
-    const allThoughts = await Thought.find().sort({createdAt: -1 }).limit(20)//.skip(20).limit(20) if you want to show another 20
+    const allThoughts = await Thought.find()
+      .sort({createdAt: 1 })
+      .skip((page - 1) * per_page)
+      .limit(per_page)//.skip(20).limit(20) if you want to show another 20
     res.json(allThoughts)
   } catch (error) {
     res.status(400).json({ message: 'Something went wrong', error })
