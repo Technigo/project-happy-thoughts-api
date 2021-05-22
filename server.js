@@ -16,7 +16,7 @@ const thoughtSchema = mongoose.Schema({
     trim: true,
     validate: {
       validator: (value) => {
-        return !(/\b(fuck)\b/.test(value))
+        return (/\b(fuck)\b/.test(value))
       },
       message: "Cursing words are not allowed"
     }
