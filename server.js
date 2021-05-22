@@ -12,10 +12,13 @@ const app = express();
 const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
-    required: [true, 'message is required'],
+    required: [true, 'A message minimun of 5 characters is required'],
     trim: true,
-    minlength: 2,
-    maxlength: 20,
+    minlength: [5, 'Please type a message at least 5 characters long'],
+    maxlength: [
+      140,
+      'You have exceded the maximun amount of characters of 140, please shorten the message',
+    ],
   },
   hearts: {
     type: Number,
@@ -37,59 +40,32 @@ app.get('/', (req, res) => {
 });
 
 app.get('/thoughts', async (req, res) => {
-    const allThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20)
-    res.json(allThoughts)
-
-})
+  const allThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20);
+  res.json(allThoughts);
+});
 
 app.post('/thoughts', async (req, res) => {
+  const { message } = req.body;
+
   try {
-    const newThought = await new Thought(req.body).save();
+    const newThought = await new Thought({ message }).save();
     res.json(newThought);
   } catch (error) {
     res.status(400).json(error);
   }
 });
 
-app.post('/thoughts/:id/likes', async (req, res) => {
-  const { id } = req.params;
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params;
 
   try {
-    const updatedThought = await Thought.findByIdAndUpdate(id, {
-      $inc: { hearts: 1 }}, { new: true }
-    )
-    if (updatedThought) {
-      res.json(updatedThought)
-    } else {
-      res.status(404).json({ message: 'Not found' });
-    }
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid request', error })
-  }
-});
-
-app.delete('/thoughts/:id', async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const deletedThought = await Thought.findOneAndDelete({ _id: id });
-    if (deletedThought) {
-      res.json(deletedThought);
-    } else {
-      res.status(404).json({ message: 'Not found' });
-    }
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid request', error });
-  }
-});
-
-app.patch('/thoughts/:id', async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const updatedThought = await Thought.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
+    const updatedThought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      {
+        $inc: { hearts: 1 },
+      },
+      { new: true }
+    );
     if (updatedThought) {
       res.json(updatedThought);
     } else {
@@ -100,12 +76,48 @@ app.patch('/thoughts/:id', async (req, res) => {
   }
 });
 
-app.put('/thoughts/:id', async (req, res) => {
-  const { id } = req.params;
+app.delete('/thoughts/:thoughtId', async (req, res) => {
+  const { thoughtId } = req.params;
+
+  try {
+    const deletedThought = await Thought.findOneAndDelete({ _id: thoughtId });
+    if (deletedThought) {
+      res.json(deletedThought);
+    } else {
+      res.status(404).json({ message: 'Not found' });
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error });
+  }
+});
+
+app.patch('/thoughts/:thoughtId', async (req, res) => {
+  const { thoughtId } = req.params;
+
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      req.body,
+      {
+        new: true,
+      }
+    );
+    if (updatedThought) {
+      res.json(updatedThought);
+    } else {
+      res.status(404).json({ message: 'Not found' });
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error });
+  }
+});
+
+app.put('/thoughts/:thoughtId', async (req, res) => {
+  const { thoughtId } = req.params;
 
   try {
     const updatedThought = await Thought.findOneAndReplace(
-      { _id: id },
+      { _id: thoughtId },
       req.body,
       { new: true }
     );
