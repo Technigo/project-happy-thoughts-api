@@ -1,13 +1,14 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+The project is about building an Express app that can serve as a backend to an already existing frontend app - Happy Thoughts, kind of a twitter. The backend can provide the frontend with a list of thoughts (GET), create a new thoght (POST), add a heart to a thought (POST), and delete a thought (DELETE). 
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+I started by setting up a Mongodb locally and set up a mongoose schema for the data. 
 
-## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
 
-## View it live
+Backend:
+https://lars-happy-thoughts-backend.herokuapp.com/thoughts
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Frontend:
+https://dreamy-noether-ab8986.netlify.app
+

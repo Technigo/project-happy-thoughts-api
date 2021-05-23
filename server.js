@@ -1,8 +1,8 @@
 import express from 'express'
-// import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
+import listEndpoints from 'express-list-endpoints'
 
 dotenv.config()
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
@@ -13,27 +13,14 @@ mongoose.connect(mongoUrl, {
 })
 mongoose.Promise = Promise
 
-// Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
 const port = process.env.PORT || 8082
 const app = express()
 
 const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
-    // required: [true, "Du måste skriva något!"],
-    unique: true,
-    // enum: ['Hej', 'Hello', 'Yo']
-    // match: /^[^0-9]+$/ // No numbers
-    // validate: {
-    //   validator: (value) => {
-    //     return /^[^0-9]+$/.test(value)
-    //   },
-    //   message: "Numbers are not allowed"
-    // },
-    minlength: 2,
+    required: true,
+    minlength: 5,
     maxlength: 140
   },
   hearts: {
@@ -48,17 +35,24 @@ const thoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model('Thought', thoughtSchema)
 
-// Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(express.json())
 
-// Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  try {
+    res.send(listEndpoints(app))
+  } catch (error) {
+    res.status(404).json({ error: 'Page not found' })
+  }
 })
+
 app.get('/thoughts', async (req, res) => {
-  const allThoughts = await Thought.find().sort({ createdAt: 1 }).limit(10)
-  res.json(allThoughts)
+  try {
+    const allThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20)
+    res.json(allThoughts)
+  } catch (error) {
+    res.status(404).json({ error: 'Page not found' })
+  }
 })
 
 app.post('/thoughts', async (req, res) => {
@@ -74,6 +68,31 @@ app.post('/thoughts', async (req, res) => {
     res.status(400).json(error)
   }
 })
+app.post('/thoughts', async (req, res) => {
+  try {
+    const newThought = await new Thought({
+      message: req.body.message
+    }).save()
+    res.json(newThought)  
+  } catch (error) {
+    if (error.code === 11000) {
+      res.status(400).json({ error: "Duplicated value", fields: error.keyValue })
+    }
+    res.status(400).json(error)
+  }
+})
+
+app.delete('/thoughts/delete/:id', async (req, res) => {
+  const { id } = req.params
+  try {
+    const updatedThoughts = await Thought.findByIdAndDelete({
+      _id: id
+    })
+    res.json(updatedThoughts)
+  } catch (error) {
+    res.status(400).json({ error: "Could not delete", fields: error.keyValue })
+  }
+})
 
 app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params
@@ -84,7 +103,7 @@ app.post('/thoughts/:id/like', async (req, res) => {
       },
       { 
         $inc: {
-          hearts: this.updatedThought += 1
+          hearts: 1
         }
       },
       {
@@ -94,14 +113,13 @@ app.post('/thoughts/:id/like', async (req, res) => {
     if (updatedThought) {
       res.json(updatedThought);
     } else {
-      res.status(404).json({ message: 'Not found' })
+      res.status(404).json({ message: 'Thought not found' })
     }
   } catch {
-    res.status(404).json({ message: "Not found" })
+    res.status(400).json({ message: "Failed to heart that thought. Sorry!" })
   }
 })
 
-// Start the server
 app.listen(port, () => {
   // eslint-disable-next-line
   console.log(`Server running on http://localhost:${port}`)
