@@ -1,13 +1,26 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+In week 19 of the Technigo Front End Bootcamp the assignment was to use Express and Mongo DB to build an API that include both GET request endpoints and POST endpoints to create data.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+The fundamental idea is for it to be an API used for a pervious frontend project called Happy Thoughts - a twitter like site focusing on positivity and friendliness where the user can post own thoughts, and read and like thoughts from others.
+
+General requirements:
+
+• The API should implement the routes GET /thoughts, POST /thoughts and POST /thoughts/thoughtId/like
+• The GET /thoughts endpoint should only return 20 results, ordered by createdAt in descending order.
+• The API should validate user input and return appropriate errors if the input is invalid.
+• In the POST /thoughts endpoint to create a new thought, if the input was invalid and the API is returning errors, it should set the response status to 400 (bad request).
+• The endpoint to add hearts to a thought should return an appropriate error if the thought was not found.
+At this current state I am in the process of connecting this API to the existing frontend project, I am really looking forward to see the full circle of the frontend and backend code - for the first time both of which I have created!
+
+I have saved some unused and commented out code in this project for future reference – as I would like to add more of the methods for additional features, like deleting and editing a posted thought.
+
+The API is deployed to Heroku and the database is deployed using Mongo Cloud.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Link to API: https://is-happy-thoughts.herokuapp.com/
+Link to API endpoint of thoughts: https://is-happy-thoughts.herokuapp.com/thoughts
+Link to fullstack project: TBC
