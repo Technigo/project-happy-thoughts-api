@@ -52,10 +52,7 @@ app.get('/thoughts/:id', async (req, res) => {
   const { id } = req.params
 
   const thought = await Thought.findById(id)
-  const thoughtNotHandled = Thought.findById(id)
   res.json(thought)
-  console.log('111', thought)
-  console.log('222', thoughtNotHandled)
 })
 
 // POST endpoint for new thought
