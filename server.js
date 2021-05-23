@@ -12,12 +12,11 @@ const app = express()
 const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
-    required: [true, "Message is required"], // Du kan göra så på samtliga, text på unique etc etc där du kan skriva ett meddelande
-    unique: true,  // /^[0-9]+$/ Detta betyder att vi endast accepterar siffror
-    //match: /^[^0-9]+$/,   // /^[^0-9]+$/ Detta betyder att vår input inte får innehålla siffror. Oavsett om vi bara skriver siffror eller text+siffra
+    required: [true, "Message is required"], 
+    unique: true,  
     validate: {
       validator: (value) => {
-        return /^[^0-9]+$/.test(value); // Vi gör så att ifall vi använder siffror så får vi ett meddelande som vi skrivit nedan att nummer ej tillåtna 
+        return /^[^0-9]+$/.test(value); 
       },
       message: "Numbers are not allowed"
     },
@@ -46,27 +45,24 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req,res) => {
-  const allThoughts = await Thought.find().sort({ createdAt: 1 }).limit(20) // .skip(2) // .limit(2)
+  const allThoughts = await Thought.find().sort({ createdAt: 1 }).limit(20) 
   res.json(allThoughts)
 });
 
 app.post('/thoughts', async (req,res) => {
   try {
-    const newThought = await new Thought(req.body).save(); // req.body är samma sak som {message: req.body.message}
+    const newThought = await new Thought({message: req.body.message}).save(); 
     res.json(newThought);
   } catch (error) {
     if(error.code===11000){
       res.status(400).json({ error: 'Duplicated value', field: error.keyValue })
     }
     res.status(400).json(error)
-
   }
 })
 
 app.delete('/thoughts/:id', async (req,res) => {
   const { id } = req.params;
-
-
   try {
     const deletedThought = await Thought.findOneAndDelete({ _id: id});
     if (deletedThought) {
@@ -81,7 +77,6 @@ app.delete('/thoughts/:id', async (req,res) => {
 
 app.patch('/thoughts/:id', async (req,res) => {
   const { id } = req.params;
-
   try {
     const updatedThought = await Thought.findByIdAndUpdate(id, req.body, {new: true});
     if (updatedThought) {
@@ -96,7 +91,6 @@ app.patch('/thoughts/:id', async (req,res) => {
 
 app.put('/thoughts/:id', async (req,res) => {
   const { id } = req.params;
-
   try {
     const updatedThought = await Thought.findOneAndReplace(id, req.body, {new: true});
     if (updatedThought) {
@@ -118,7 +112,7 @@ app.post('/thoughts/:id/likes', async (req,res) => {
         _id: id
       },
       {
-        $inc: { // $inc betyder endast att vi ska uppdatera ett värde
+        $inc: { 
           hearts: 1
         }
       },

@@ -1,13 +1,16 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Build an backend-API to the twitter-like app "happy thoughts" where the user can post messages, see all the messages, and like posted messages.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Tech used:
+- MongoDB
+- Mogoose
+- Express
+- JS
 
 ## View it live
+https://project-happy-thought-api-fd.herokuapp.com/thoughts 
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+- /thougths = Get all the thougths
