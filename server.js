@@ -92,7 +92,7 @@ app.post('/thoughts', async (req, res) => {
     res.status(201).json(newThought);
   } catch (err) {
     if (err.code === 11000) {
-      res.status(400).json({ message: 'Duplicated value', fields: err.keyValue })
+      res.status(400).json({ message: 'Duplicated value', fields: err.keyValue });
     }
     res.status(400).json({ message: 'Could not save the thought to the database.', err });
   }
