@@ -63,7 +63,7 @@ app.post('/thoughts', async (req, res) => {
 })
 
 //Endpoint for likes
-app.post('/thoughts/:thoughtId/likes', async (req, res) => {
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
   try {
     const updatedThought = await Thought.findOneAndUpdate({ _id: thoughtId }, { $inc: { hearts: 1 } }, { new: true })
