@@ -12,3 +12,6 @@ POST (/thoughts) - allows the user to post a new message
 POST (/thoughts/:id/like) - allows the user to like a message
 
 ## View it live
+
+Frontend: https://happy-thoughts-carolinef.netlify.app/
+Backend: https://carolinef-happy-thoughts-api.herokuapp.com/
