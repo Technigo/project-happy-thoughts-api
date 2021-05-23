@@ -67,6 +67,7 @@ app.get("/", async (req, res) => {
 app.post("/user/create", async (req, res)=>{
   try {
     const newUser = await new User({username: req.body.username}).save()
+    console.log(newUser)
     res.json(newUser)  
   } catch (error) {
     res.status(400).json(error)

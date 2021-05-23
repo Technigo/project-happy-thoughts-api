@@ -1,13 +1,16 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+For this project i created the API for happy thoughts  with mongo DB and connect it with the frontend. 
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+For the happy Thoughts project i created the following features:
+
+- User login: with options to create a new user (POS - https://happy-thoughts-api-mongodb.herokuapp.com/user/create) and validate existing users ( GET- https://happy-thoughts-api-mongodb.herokuapp.com/users/ ) 
+- Get happy Thoughst to show the last 20 messages. (POS-https://happy-thoughts-api-mongodb.herokuapp.com/)
+- Post new messages,it´s required username (POS- https://happy-thoughts-api-mongodb.herokuapp.com/thoughst)
+- Post Like to a message. ( POS - https://happy-thoughts-api-mongodb.herokuapp.com/thoughts/id/like)
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://happy-thoughts-api-mongodb.herokuapp.com/
