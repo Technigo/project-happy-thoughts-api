@@ -14,7 +14,6 @@
     "@babel/helper-compilation-targets": "^7.13.16",
     "@babel/node": "^7.14.2",
     "@babel/preset-env": "^7.14.2",
-    "@types/express-list-endpoints": "^4.0.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
