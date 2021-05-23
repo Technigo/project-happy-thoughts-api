@@ -42,13 +42,13 @@ app.get('/', (_, res) => {
   res.send(listEndpoints(app))
 })
 
-//Endpoint that show the thought with a limit on 20 thoughts per page
+//Endpoint that show thoughts with a limit on 20 thoughts per page
 app.get('/thoughts', async (_, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
   res.json(thoughts)
 })
 
-//Endpoint where the user can post their thoughts
+//Endpoint for posting thoughts
 app.post('/thoughts', async (req, res) => {
   try {
     const { message } = req.body
@@ -62,11 +62,11 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-//Endpoint where the user can like a posted thought
-app.post('/thoughts/:id/likes', async (req, res) => {
-  const { id } = req.params
+//Endpoint for likes
+app.post('/thoughts/:thoughtId/likes', async (req, res) => {
+  const { thoughtId } = req.params
   try {
-    const updatedThought = await Thought.findOneAndUpdate({ _id: id }, { $inc: { hearts: 1 } }, { new: true })
+    const updatedThought = await Thought.findOneAndUpdate({ _id: thoughtId }, { $inc: { hearts: 1 } }, { new: true })
     if (updatedThought) {
       res.json(updatedThought)
     } else {
