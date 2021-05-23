@@ -6,7 +6,7 @@ This week's assignment was to build a Restful API that allows users to post data
 
 Technologies: Mongo DB, Mongoose, API, Express, Javascript ES6, Node.js
 
-Routes:
+Routes:<br>
 GET (/thoughts) - displays all messages<br>
 POST (/thoughts) - allows the user to post a new message<br>
 POST (/thoughts/:id/like) - allows the user to like a message<br>
