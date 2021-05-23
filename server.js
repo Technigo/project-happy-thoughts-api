@@ -3,6 +3,7 @@ import cors from "cors";
 import mongoose, { get } from "mongoose";
 import listEndpoints from 'express-list-endpoints'
 
+
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, {
   useNewUrlParser: true,
@@ -38,9 +39,10 @@ const Thought = mongoose.model("Thought", thoughtSchema);
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send(listEndpoints(app))
-})
+// list enpoints
+app.get("/", (req, res) => {
+  res.send(listEndpoints(app));
+});
 
 // GET request - show thoughts, sort, limit to 20 messages
 app.get('/thoughts', async (req,res) => {
@@ -89,39 +91,39 @@ app.delete("/thoughts/:id", async (req, res) => {
 });
 
 // Change in the frontend where we use POST for increasing hearts...
-// PATCH request - updates entity
-app.patch("/thoughts/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const updatedThought = await Thought.findByIdAndUpdate(id, req.body, { new: true, });
-    if (updatedThought) {
-      res.json(updatedThought);
-    } else {
-      res.status(404).json({ message: "Not found" });
-    }
-  } catch (error) {
-    res.status(400).json({ message: "Invalied requeset", error });
-  }
-});
+// // PATCH request - updates entity
+// app.patch("/thoughts/:id", async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const updatedThought = await Thought.findByIdAndUpdate(id, req.body, { new: true, });
+//     if (updatedThought) {
+//       res.json(updatedThought);
+//     } else {
+//       res.status(404).json({ message: "Not found" });
+//     }
+//   } catch (error) {
+//     res.status(400).json({ message: "Invalied requeset", error });
+//   }
+// });
 
-// PUT request - replace entity
-app.put("/thoughts/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const updatedThought = await Thought.findOneAndReplace(
-      { _id: id },
-      req.body,
-      { new: true }
-    );
-    if (updatedThought) {
-      res.json(updatedThought);
-    } else {
-      res.status(404).json({ message: "Not found" });
-    }
-  } catch (error) {
-    res.status(400).json({ message: "Invalied requeset", error });
-  }
-});
+// // PUT request - replace entity
+// app.put("/thoughts/:id", async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const updatedThought = await Thought.findOneAndReplace(
+//       { _id: id },
+//       req.body,
+//       { new: true }
+//     );
+//     if (updatedThought) {
+//       res.json(updatedThought);
+//     } else {
+//       res.status(404).json({ message: "Not found" });
+//     }
+//   } catch (error) {
+//     res.status(400).json({ message: "Invalied requeset", error });
+//   }
+// });
 
 app.listen(port, () => {
   // eslint-disable-next-line
