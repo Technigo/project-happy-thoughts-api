@@ -1,0 +1,8 @@
+version: "3.8"
+services:
+  mongodb_container:
+    image: mongo:latest
+    container_name: mongodb_container
+    ports:
+      - 27017:27017
+    restart: unless-stopped
