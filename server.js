@@ -57,7 +57,7 @@ app.get('/thoughts/category/:tag', async (req, res) => {
   const { tag } = req.params
 
   try {
-    const thoughtsByCategory = await Thought.find({ hashtag: tag })
+    const thoughtsByCategory = await Thought.find({ hashtag: tag }).sort({ createdAt: -1 }).limit(20)
     res.json(thoughtsByCategory)
   } catch (error) {
     res.status(400).json({ error: 'Something went wrong', details: error })
@@ -68,7 +68,7 @@ app.get('/thoughts/user/:name', async (req, res) => {
   const { name } = req.params
 
   try {
-    const thoughtsByUser = await Thought.find({ user: name })
+    const thoughtsByUser = await Thought.find({ user: name }).sort({ createdAt: -1 }).limit(20)
     res.json(thoughtsByUser)
   } catch (error) {
     res.status(400).json({ error: 'Something went wrong', details: error })
