@@ -1,13 +1,18 @@
 # Project Happy Thoughts API
-
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This weeks project was about building a full API including handling of user input, error handling and connect it with an existing frontend.
 
 ## The problem
+Endpoints are:
+GET /thoughts --> get thoughts
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+POST /thoughts --> post a thought 
+
+POST /thoughts/:thoughtId/like --> post a like to a specific thought
+
+PATCH /thoughts/:thoughtId --> update thought
+
+DELETE /thoughts/:thoughtId --> delete thought
 
 ## View it live
+https://happy-thoughts-noemi.herokuapp.com/
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.

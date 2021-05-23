@@ -59,7 +59,7 @@ app.get('/thoughts', async (req, res) => {
 
 //post new thought
 app.post('/thoughts', async (req, res) => {
-  
+
   try{
     const newThought = await new Thought(req.body).save()
     res.json(newThought)
@@ -72,24 +72,28 @@ app.post('/thoughts', async (req, res) => {
 })
 
 //increasing likes
-app.post('thoughts/:id/likes', async (req, res) => {
-  const { id } = req.params
+app.post('thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
 
   try {
-    const updatedThought = await Thought.findByIdAndUpdate( { _id: id }, {$inc: {hearts: 1}}, {new: true})
+    const updatedThought = await Thought.findOneAndUpdate(
+      { _id: thoughtId },
+      { $inc: {hearts: 1} },
+      { new: true }
+    );  
     if (updatedThought) {
-      res.json(updatedThought)
+      res.json(updatedThought);
     } else {
-      res.status(404).json( {message: 'not found'} )
+      res.status(404).json({ message: "Not found" });
     }
   } catch (error) {
-    res.status(400).json( {message: 'invalid request', error })
+    res.status(400).json({ message: "Invalid request", error });
   }
-})
+});
 
 //delete thought
-app.delete('/thought/:id', async (req, res) => {
-  const { id } = req.params
+app.delete('/thought/:thoughtId', async (req, res) => {
+  const { thoughtId } = req.params
 
   try {
     const deletedThought = await Thought.findByIdAndDelete({ id })
@@ -104,8 +108,8 @@ app.delete('/thought/:id', async (req, res) => {
 })
 
 //update thought
-app.patch('/thoughts/:id', async (req, res) => {
-  const { id } = req.params
+app.patch('/thoughts/:thoughtId', async (req, res) => {
+  const { thoughtId } = req.params
 
   try {
     const updatedThought = await Thought.findByIdAndUpdate(id, { message: req.body }, { new: true })
