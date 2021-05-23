@@ -4,7 +4,7 @@ This is the backend of an app called Happy thoughts. The app allows you to post 
 
 ## The problem
 
-I used Mongoose methods from the lectures. The endpoints worked when I tried them locally. i did not manage to deploy.
+I used Mongoose methods from the lectures. The endpoints worked when I tried them locally. i did not manage to deploy. I get Application error on the deployed endpoint and I don't see the collection in Mongo DB Atlas.
 
 ## View it live
 
