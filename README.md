@@ -1,20 +1,30 @@
 # Project Happy Thoughts API 💌
 
-I've built a RESTful API using a database to store and retrieve data.
+I've built my own version of Twitter (RESTful API) using a database to store the happy thoughts! I used MongoDB for the database, mongoose for the modelling of data and Express.js (Node.js framework).
 
-I used MongoDB for the database, mongoose for the modelling of data and Express.js (Node.js framework).
+I've also got a frontend to go with this API, which makes this my very first fullstack application! 😍
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+The main task was to build a RESTful API and to use a database to store the data (thought or hearts on an existing thought) that is POSTed, and the possibility to GET the thoughts.
 
-I chose to use the npm package express-list-endpoints to list the endpoints in the home endpoint. I continuously tested my API using Postman and checked out my database using MongoDB Compass. 
+I started with setting up the database using MongoDB and built a mongoose model for the thought which has a set of properties, for instance the message, hearts and createdAt, with validations to them. With the database and model ready, I began building the different endpoints and request methods I would need for the application (see documentation below for the full list). 
+
+I've also implemented error handling throughout the project. For instance, the user will get an appropriate error message and response status to every request. Furthermore, I've implemented try and catch blocks in the code. 
+
+I've also added the possibility for the user to enter a username (or remain anonymous, which will be what is shown on the message if no user is filled in) and a tag, which will be displayed in the thought. A user can also edit a POSTed message and then update it (PATCH request).
+
+I chose to use the npm package express-list-endpoints to list the endpoints in the home ('/') endpoint. I continuously tested my API using Postman and checked out my database using MongoDB Compass. 
+
+If I had more time I would do the following,
+- Add filtering and sorting options to the endpoint which returns all thoughts. That way the user could choose to sort by oldest first, or only show thoughts which have a lot of hearts
+- Implement infinite scrolling on the frontend using the react-infinite-scroller package
 
 
 ## View it live
 
 * Link to my deployed API: https://project-happy-thoughts-isabm5.herokuapp.com/ 
-* Link to my deployed frontend application: https://heuristic-bassi-e1a3f1.netlify.app/ 
+* Link to my deployed fullstack application: https://heuristic-bassi-e1a3f1.netlify.app/ 
 
 ## Documentation
 
