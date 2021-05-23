@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose, { get } from "mongoose";
+import listEndpoints from 'express-list-endpoints'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, {
@@ -13,19 +14,13 @@ mongoose.Promise = Promise;
 const port = process.env.PORT || 8080;
 const app = express();
 
-//schema - validators and error messages, default values
+//schema - types, validators, error messages, default values
 const thoughtSchema = mongoose.Schema({
   message: {
     type: String,
     required: [true, "Ops, you forgot to write a message."],
-    minlength: [
-      5,
-      "Try again, the messages needs to be at least five characters.",
-    ],
-    maxlength: [
-      140,
-      "Try again, the messages needs to be less than 140 characters.",
-    ],
+    minlength: [5, "The messages needs to be at least five characters.",],
+    maxlength: [140, "The messages needs to be less than 140 characters."],
   },
   hearts: {
     type: Number,
@@ -33,7 +28,7 @@ const thoughtSchema = mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now, // can be written like () => Date.now()
+    default: Date.now,
   },
 });
 
@@ -43,31 +38,31 @@ const Thought = mongoose.model("Thought", thoughtSchema);
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Hello world");
-});
+app.get('/', (req, res) => {
+  res.send(listEndpoints(app))
+})
 
-// GET request - show thoughts, sort latest post on top, limit to 20 messages
+// GET request - show thoughts, sort, limit to 20 messages
 app.get('/thoughts', async (req,res) => {
   const allThoughts = await Thought.find().sort( { createdAt: -1 } ).limit(20)
   res.json(allThoughts)
 })
 
-// POST request - save new thought to db - add message: req.body again (not to manipulat hearts or date)
+// POST request - save new thought to db
 app.post("/thoughts", async (req, res) => {
   try {
-    const newThought = await new Thought(req.body).save();
+    const newThought = await new Thought({message: req.body.message}).save();
     res.json(newThought);
   } catch (error) {
     res.status(400).json(error);
   }
 });
 
-// POST request - update hearts to the db
+// POST request - increas hearts to the db
 app.post("/thoughts/:id/likes", async (req, res) => {
   const { id } = req.params;
   try {
-    const updatedThought = await Thought.findOneAndUpdate( {_id: id}, { $inc: { hearts: 1 }}, { new: true});
+    const updatedThought = await Thought.findOneAndUpdate({ _id: id }, { $inc: { hearts: 1 }}, { new: true });
     if (updatedThought) {
       res.json(updatedThought);
     } else {
