@@ -19,7 +19,7 @@ const thoughtSchema = new mongoose.Schema({
     maxlength: [
       140,
       'You have exceded the maximun amount of characters of 140, please shorten the message',
-    ],
+    ]
   },
   hearts: {
     type: Number,
@@ -47,7 +47,7 @@ app.get('/thoughts', async (req, res) => {
   const allThoughts = await Thought.find()
     .skip((page - 1) * per_page)
     .limit(per_page)
-    .sort({ createdAt: 'desc' })
+    .sort({ createdAt: -1 })
 
   res.json(allThoughts);
 });
