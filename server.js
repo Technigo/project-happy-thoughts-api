@@ -76,10 +76,10 @@ app.get('/thoughts', async (req, res) => {
         }
       },
       {
-        $skip: Number((page || 1 - 1) * perPage || 10 + 1)
+        $skip: ((+page - 1) * perPage) || 0
       },
       {
-        $limit: Number(perPage || 20)
+        $limit: +perPage || 20
       }
     ])
     res.json(thoughts)
