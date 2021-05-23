@@ -1,8 +1,8 @@
 import express from 'express'
 import cors from 'cors'
-import mongoose from 'mongoose'
+import mongoose from 'mongoose' 
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
+const mongoUrl = process.env.MONGO_URL || "mongodb+srv://tuttibalutti:RZhL2GP40uxXsqaM@cluster0.le3iv.mongodb.net/happy-thoughts-finder?retryWrites=true&w=majority"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 mongoose.Promise = Promise
 
@@ -47,7 +47,7 @@ app.get('/thoughts', async (req, res) => {
 
 app.post('/thoughts', async (req, res) => {
   try {
-  const newThought = await new Thought(req.body).save()
+  const newThought = await new Thought({ message: req.body.message }).save()
   res.json(newThought)
   } catch (error) {
     if (error.code === 11000) {
@@ -59,9 +59,10 @@ app.post('/thoughts', async (req, res) => {
 
 app.post('/thoughts/:id/likes', async (req, res) => {
   const { id } = req.params
-
+  console.log(id)
   try {
-    const updatedThought = await Thought.findOneAndUpdate(id, { $inc: { hearts: 1 } }, { new: true })
+    const updatedThought = await Thought.findOneAndUpdate({ _id: id }, { $inc: { hearts: 1 } }, { new: true })
+    console.log(updatedThought.id)
     if (updatedThought) {
       res.json(updatedThought)
     }
