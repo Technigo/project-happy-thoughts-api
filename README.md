@@ -1,13 +1,21 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+The assignment was to create a backend for the happy thoughts API using Mongoose, MongoDB and Heroku
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Tech used:
+> Mongoose
+> MongoDB
+> Mongo Cloud Atlas for database hosting
+> Heroku for server hosting
+> Postman for testing
+
+I had a sub-optimal week this week due to personal reasons, so I went for basic requirements. If I had more time I would have added hashtags and user data fields, among other things.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Heroku Build:
+
+Updated Happy Thoughts Frontend:
+
