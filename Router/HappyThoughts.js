@@ -1,28 +1,9 @@
 import express from "express";
 import listEndpoints from 'express-list-endpoints'
-import mongoose from 'mongoose'
+
+const Thought = require('../Models/Thought')
 
 const router = express.Router();
-
-const messageSchema = mongoose.Schema(
-  {
-    message: {
-      type: String,
-      required: [true, 'A message is needed'],
-      minlength: 5,
-      maxlength: 140
-    },
-    createdAt: {
-      type: Date,
-      default: () => new Date()
-    },
-    hearts: {
-      type: Number,
-      default: 0
-    }
-  }
-)
-const Thought = mongoose.model("Thought", messageSchema)
 
 const catchError = (res, err, msg) => {
   return res.status(400).json({ message: msg, errors: err.errors })
