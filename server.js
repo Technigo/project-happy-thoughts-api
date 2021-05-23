@@ -38,7 +38,15 @@ app.use(cors())
 app.use(express.json())
 
 app.get('/', (req, res) => {
-  res.send({ message: "See file docs.md for list of endpoints and their uses <3"})
+  res.json({ 
+    enpoints: [
+      { method: "GET", path: "/thoughts", description: "Gets the 20 most recent thoughts, start of array being the newest ones." },
+      { method: "POST", path: "/thoughts", description: "Posts a new thought. Min 4 characters, max 140. Words can't be longer than 30 characters." },
+      { method: "DELETE", path: "/thoughts/:id", description: "Deletes a thought with the _id provided as the slug." },
+      { method: "PUT", path: "/thoughts/:id", description: "Edits the message (only!) a thought with the _id provided as the slug." },
+      { method: "POST", path: "/thoughts/:id/likes", description: "The thought with the _id provided as the slug gets its likes/hearts increased by 1. Method is POST instead of PUT or PATCH because of the characteristics of the previously developed frontend." }
+    ]
+  })
 })
 
 app.get('/thoughts', async (req, res) => {

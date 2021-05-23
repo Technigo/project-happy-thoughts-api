@@ -16,6 +16,7 @@ I had a sub-optimal week this week due to personal reasons, so I went for basic 
 ## View it live
 
 Heroku Build:
+https://martin-d-happy-thoughts-api.herokuapp.com/
 
 Updated Happy Thoughts Frontend:
-
+https://confident-dijkstra-e73913.netlify.app/
