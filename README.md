@@ -1,13 +1,21 @@
 # Project Happy Thoughts API
+This week's project was to use our new skills with Express and Mongodb to build an API which includes both GET request endpoints to return data and POST endpoints to create data. This API is then used for my ❤️ Happy Thought ❤️ project where users can post their thoughts. 
 
-Replace this readme with your own information about your project.
+## What I have learned 🧠
+- How to build a registration flow
+- How to handle authentication, both in the frontend and in the backend
+- How to build a frontend and backend at the same time
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
-
-## The problem
-
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+## Endpoints
+- GET '/': returns the list of all endpoints;
+- GET '/thoughts': returns a list of all;
+- POST '/thoughts': posts for message, username and hashtag;
+- POST '/'/thoughts/:thoughtId/like': posts for likes; 
 
 ## View it live
+BE: https://poggi-happy-thoughts-api.herokuapp.com/
+FE: https://poggi-happy-thoughts.netlify.app/
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+
+
+

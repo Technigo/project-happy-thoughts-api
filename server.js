@@ -86,7 +86,13 @@ app.post('/thoughts', async (req, res) => {
   }) 
 
   try {
-    const newThought = await new Thought({ message: req.body.message, username: req.body.username, hashtag: tagsUnique }).save()
+    const newThought = await new Thought(
+      { 
+        message: req.body.message, 
+        username: req.body.username,
+        hashtag: tagsUnique 
+      }
+    ).save()
     res.status(200).json(newThought)
   } catch (error) {
     res.status(400).json(error)
