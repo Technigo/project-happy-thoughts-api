@@ -9,4 +9,6 @@ In the front end the user can post a happy thought which will be listed on the p
 
 ## View it live
 
-https://project-happy-thoughts-sari.herokuapp.com/
+Backend: https://project-happy-thoughts-sari.herokuapp.com/
+
+Frontend: https://epic-panini-e991cd.netlify.app/

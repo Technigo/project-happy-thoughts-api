@@ -41,7 +41,13 @@ app.get('/', (req, res) => {
 });
 
 app.get('/thoughts', async (req, res) => {
-  const allThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20);
+  const page = Number(req.query.page)
+  const per_page = Number(req.query.per_page)
+
+  const allThoughts = await Thought.find()
+    .skip((page - 1) * per_page)
+    .limit(per_page)
+
   res.json(allThoughts);
 });
 
