@@ -52,10 +52,9 @@ app.get('/', (req, res) => {
   res.send(listEndpoints(app))
 })
 
-app.get('/thoughts', (req, res) => {
-  Thought.find().then((thoughts) => {
-    res.json(thoughts)
-  })
+app.get('/thoughts', async (req, res) => {
+  const allThoughts = await Thought.find().sort({ createdAt: -1 })
+  res.json(allThoughts)
 })
 
 app.post('/thoughts', async (req, res) => {
