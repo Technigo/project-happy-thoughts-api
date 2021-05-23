@@ -2,9 +2,9 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import listEndpoints from 'express-list-endpoints'
-//import dotenv from 'dotenv'
+import dotenv from 'dotenv'
 
-//dotenv.config()
+dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 
@@ -34,7 +34,6 @@ const Thought = mongoose.model('Thought', thoughtSchema)
 const port = process.env.PORT || 8080
 const app = express()
 
-// Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(express.json())
 
