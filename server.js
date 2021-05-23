@@ -57,7 +57,7 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-app.post('/thoughts/:id/likes', async (req, res) => {
+app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params
   console.log(id)
   try {
