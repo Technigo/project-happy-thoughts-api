@@ -67,6 +67,7 @@ app.patch('/thoughts/:id/hearts', async (req, res) => {
   }
 })
 app.get('/thoughts', async (req, res) => {
+  const { page, perPage } = req.query
   try {
     const thoughts = await Thought.aggregate([
       {
@@ -75,7 +76,10 @@ app.get('/thoughts', async (req, res) => {
         }
       },
       {
-        $limit: 20
+        $skip: Number((page || 1 - 1) * perPage || 10 + 1)
+      },
+      {
+        $limit: Number(perPage || 20)
       }
     ])
     res.json(thoughts)
