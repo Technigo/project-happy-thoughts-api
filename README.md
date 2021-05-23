@@ -13,8 +13,8 @@ This week's project was to use our new skills with Express and Mongodb to build 
 - POST '/'/thoughts/:thoughtId/like': posts for likes; 
 
 ## View it live
-BE: https://poggi-happy-thoughts-api.herokuapp.com/
-FE: https://poggi-happy-thoughts.netlify.app/
+- BE: https://poggi-happy-thoughts-api.herokuapp.com/
+- FE: https://poggi-happy-thoughts.netlify.app/
 
 
 
