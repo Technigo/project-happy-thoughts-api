@@ -4,8 +4,14 @@ This is the backend of an app called Happy thoughts. The app allows you to post 
 
 ## The problem
 
-I used Mongoose methods from the lectures.
+I used Mongoose methods from the lectures. The endpoints worked when I tried them locally. i did not manage to deploy.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://linneas-happy-thoughts.herokuapp.com/thoughts 
+Use with GET to return 20 latest thoughts sorted chronologically by creation time.
+Use with POST to add a thought. This endpoint expects a JSON body with the thought message, like this: { "message": "Express is great!" }.
+
+https://linneas-happy-thoughts.herokuapp.com//thoughts/:id/likes
+This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its hearts property to add one heart.
+
