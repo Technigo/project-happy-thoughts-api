@@ -1,12 +1,10 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This is the backend of an app called Happy thoughts. The app allows you to post a thought and like the existing thoughts. I have built the frontend in an earlier project. The purpose of this project was to practise setting up an API that allows users to POST data to a database in MongoDB. It is built using Node.js with Express and MongoDB with Mongoose.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I used Mongoose methods from the lectures.
 
 ## View it live
 

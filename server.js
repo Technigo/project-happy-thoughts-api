@@ -1,6 +1,9 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+
+dotenv. config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -23,18 +26,12 @@ const Thought = mongoose.model('Thought', {
   }
 })
 
-// Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
 
-// Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(express.json())
 
-// Start defining your routes here
 app.get('/', (_, res) => {
   res.send('Hello world')
 })
@@ -58,9 +55,31 @@ app.post('/thoughts', async (req, res) => {
 })
 
 //Adds a like (a heart) to a specifik thought
-app.post('/thougts/:thoughtId/like', async (req, res) => {
-  const addHeart = await 
-})
+app.post('/thoughts/:id/likes', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate(
+      id, 
+      { 
+        $inc: {
+          hearts: 1
+        }
+      },
+      {
+        new: true
+      }
+    )
+    if (updatedThought) {
+      res.json(updatedThought)
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
+  } catch (error) {
+    res.status(400).json({message: 'Invalid request', error })
+  }
+}
+)
 
 // Start the server
 app.listen(port, () => {
