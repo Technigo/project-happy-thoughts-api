@@ -70,8 +70,12 @@ app.delete('/thoughts/:id', async (req, res) => {
   const { id } = req.params
 
   try {
-    const deletedThought = await Thought.deleteOne({ _id: id })
-    res.json(deletedThought)
+    const deletedThought = await Thought.findOneAndDelete({ _id: id });
+    if (deletedThought) {
+      res.json(deletedThought);
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    }
   } catch (error) {
     res.status(400).json({ message: 'Invalid request', error })
   }
