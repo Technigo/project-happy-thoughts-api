@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
-import listEndPoints from 'express-List-endpoints'
+import listEndpoints from 'express-list-endpoints'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true })
@@ -51,7 +51,7 @@ const Thought = mongoose.model('Thought', thoughtSchema)
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send(listEndPoints(app))
+  res.send(listEndpoints(app))
 })
 
 app.get('/thoughts', async (req, res) => {
