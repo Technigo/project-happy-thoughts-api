@@ -11,7 +11,7 @@ const port = process.env.PORT || 9000
 const app = express()
 
 //CREATES SCHEMA
-const thoughtSchema  = new mongoose.Schema({
+const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     required: [true, "Ding, dong! Message is required!"],
@@ -30,7 +30,7 @@ const thoughtSchema  = new mongoose.Schema({
   }
 })
 //CREATES SINGLE THOUGHT MODEL
-const Thougt = mongoose.model('Thought', thoughtSchema)
+const Thought = mongoose.model('Thought', thoughtSchema)
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
@@ -46,27 +46,18 @@ app.get('/', (req, res) => {
 })
 
 //GET /thoughts: ENDOPINT TO SHOW 20 RECENT POSTS
-app.get('/thoughts', async (req, res) => {
-  try {
-  const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20)
-  res.json(thoughts)
-  } catch (error) {
-    res.status(400).json({ message: 'Ouch, something went wrong', error })
-  }
-})
+
 
 //ENDPOINT TO POST A THOUGHT
 app.post('/thoughts', async (req, res) => {
-  try {
-    const newThought = await new Thought(req.body).save()
-    res.json(newThought)
-  }  catch (error)  {
-    if (error.code === 11000) {
-       res.status(400).json({ message: 'Could not save to database', error })
-     }
-     res.status(400).json(error)
-  }
+  const newThought = await new Thought({
+    message: req.body.message,
+    hearts: 0,
+    createdAt: Date.now()
+  }).save()
+  res.json(newThought)
 })
+
 
 //ENDPOINT TO DELETE A THOUGHT
 app.delete('/thoughts/:thoughtId', async (req, res) => {
@@ -86,26 +77,7 @@ app.delete('/thoughts/:thoughtId', async (req, res) => {
 })
 
 //ENDPOINT TO ADD LIKES/HEARTS
-app.post('/thoughts/:thoughtId/likes', async (req, res) => {
-  const { thoughtId } = req.params
 
-  try {
-    const likedThought = await Thought.findByIdAndUpdate(
-      thoughtId,
-      { 
-        $inc: {
-           hearts: 1 
-        }
-      }, //$inc is a mogoose query selector that updates a number value
-      { 
-        new: true // { new:true } is responsible for sending back an object with updated values
-      } )
-    res.json(likedThought)
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid request', error })
-  }
-
-})
 
 // Start the server
 app.listen(port, () => {
