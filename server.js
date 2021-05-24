@@ -60,7 +60,7 @@ app.post('/thoughts', async (req, res) => {
   res.json(newThought)
   } catch (error) {
     if (error.code === 11000) {
-    res.status(400).json({error: 'Duplicated value', fields: error.keyValue})
+    res.status(400).json( { message: 'Duplicated value', fields: error.keyValue })
   }
   res.status(400).json(error)
   }
@@ -70,7 +70,7 @@ app.delete('/thoughts/:id', async (req, res) => {
   const { id } = req.params
 
   try {
-    const deletedThought = await Thought.findOneAndDelete({ _id: id });
+    const deletedThought = await Thought.findByIdAndDelete({ id });
     if (deletedThought) {
       res.json(deletedThought);
     } else {
