@@ -81,6 +81,21 @@ app.delete('/thoughts/:id', async (req, res) => {
   }
 })
 
+app.patch('/thoughts/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate(id, req.body, { new: true });
+    if (updatedThought) {
+      res.json(updatedThought);
+    } else {
+      res.status(404).json({ message: 'Not found' });
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   // eslint-disable-next-line
