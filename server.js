@@ -15,9 +15,24 @@ app.use(express.json())
 
 const thoughtSchema = new mongoose.Schema({
   message: {
-    type:String,
-    required:true,
-    unique:true
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    validate: {
+      validator:(value) => {
+        return /^[^0-9]+$/.test(value)
+      },
+      message: "Numbers are not allowed. Try again, please."
+    },
+    minlength: {
+      value: 5,
+      message:"Your message is too short. Try again, please."
+    },
+    maxlength: {
+      value: 140,
+      message:"Your message is too long. Try again, please."
+    }
   },
   hearts: {
     type: Number,
@@ -25,7 +40,7 @@ const thoughtSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-  default: Date.now
+    default: Date.now
   }
 })
 
@@ -42,7 +57,10 @@ app.post('/thoughts', async (req, res) => {
   const newThought = await new Thought(req.body).save()
   res.json(newThought)
   } catch (error) {
-    res.status(400).json(error)
+    if (error.code === 11000) {
+    res.status(400).json({error: 'Duplicated value', fields: error.keyValue})
+  }
+  res.status(400).json(error)
   }
 })
 
