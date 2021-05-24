@@ -25,14 +25,16 @@ const thoughtSchema = new mongoose.Schema({
       },
       message: "Numbers are not allowed. Try again, please."
     },
-    minlength: {
+    minlength: 5,
+    maxlength:140
+    /* minlength: {
       value: 5,
       message:"Your message is too short. Try again, please."
     },
     maxlength: {
       value: 140,
       message:"Your message is too long. Try again, please."
-    }
+    } */
   },
   hearts: {
     type: Number,
@@ -61,6 +63,17 @@ app.post('/thoughts', async (req, res) => {
     res.status(400).json({error: 'Duplicated value', fields: error.keyValue})
   }
   res.status(400).json(error)
+  }
+})
+
+app.delete('/thoughts/:id', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const deletedThought = await Thought.deleteOne({ _id: id })
+    res.json(deletedThought)
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error })
   }
 })
 
