@@ -1,7 +1,10 @@
 import express from 'express'
+import dotenv from "dotenv";
 import cors from 'cors'
 import mongoose from 'mongoose'
 import listEndpoints from 'express-list-endpoints'
+
+dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
@@ -15,6 +18,12 @@ const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     required: [true, "Ding, dong! Message is required!"],
+    validate: {
+      validator: (value) => {
+        return /^[^0-9]+$/.test(value);
+      },
+      message: "Numbers are not allowed",
+    },
     minlength: [5, 'Hey, the minimum length is 5 characters'],
     maxlength: [140, 'Hey, the maximum length is 140 characters'],
     unique: true,
@@ -46,17 +55,29 @@ app.get('/', (req, res) => {
 })
 
 //GET /thoughts: ENDOPINT TO SHOW 20 RECENT POSTS
+app.get("/thoughts", async (req, res) => {
+  const allThoughts = await Thought.find()
+    .sort({ createdAt: -1 })
+    .limit(20)
+    .exec();
+  res.json(allThoughts);
+});
 
 
 //ENDPOINT TO POST A THOUGHT
-app.post('/thoughts', async (req, res) => {
-  const newThought = await new Thought({
-    message: req.body.message,
-    hearts: 0,
-    createdAt: Date.now()
-  }).save()
-  res.json(newThought)
-})
+app.post("/thoughts", async (req, res) => {
+  try {
+    const newThought = await new Thought(req.body).save();
+    res.json(newThought);
+  } catch (error) {
+    if (error.code === 11000) {
+      res
+        .status(400)
+        .json({ error: "Duplicated value", fields: error.keyValue });
+    }
+    res.status(400).json(error);
+  }
+});
 
 
 //ENDPOINT TO DELETE A THOUGHT
@@ -77,6 +98,34 @@ app.delete('/thoughts/:thoughtId', async (req, res) => {
 })
 
 //ENDPOINT TO ADD LIKES/HEARTS
+
+
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+
+  try {
+    const updatedThought = await Thought.findOneAndUpdate(
+      {
+        _id: thoughtId,
+      },
+      {
+        $inc: {
+          hearts: 1,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+    if (updatedThought) {
+      res.json(updatedThought);
+    } else {
+      res.status(404).json({ message: "Not found" });
+    }
+  } catch (error) {
+    res.status(400).json({ message: "Invalid request", error });
+  }
+});
 
 
 // Start the server
