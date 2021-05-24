@@ -4,9 +4,11 @@ This is the backend of an app called Happy thoughts. The app allows you to post 
 
 ## The problem
 
-I used Mongoose methods from the lectures. The endpoints worked when I tried them locally. i did not manage to deploy. I get Application error on the deployed endpoint and I don't see the collection in Mongo DB Atlas.
+I used Mongoose methods from the lectures. The endpoints worked when I tried them locally. Then I had trouble deploying. I got an error trying to look at the Heroku endpoint and I didn't see any collection in my MongoDB Atlas cluster. After much trouble shooting together with a team mate, it turned out I shouldn't have quotes around my connection string in the config vars in Heroku settings. Removing them, it worked!
 
 ## View it live
+
+###ENDPOINTS
 
 https://linneas-happy-thoughts.herokuapp.com/thoughts 
 Use with GET to return 20 latest thoughts sorted chronologically by creation time.
@@ -14,4 +16,10 @@ Use with POST to add a thought. This endpoint expects a JSON body with the thoug
 
 https://linneas-happy-thoughts.herokuapp.com//thoughts/:id/likes
 This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its hearts property to add one heart.
+
+###FULLSTACK PROJECT
+https://happy-thoughts-indeed.netlify.app/ 
+
+Here is the frontend I had made earlier connected to the backend of this project.
+
 
