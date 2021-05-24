@@ -21,13 +21,13 @@ const thoughtSchema = new mongoose.Schema({
     unique: true,
     trim: true,
     validate: {
-      validator:(value) => {
+      validator: (value) => {
         return /^[^0-9]+$/.test(value)
       },
       message: "Numbers are not allowed. Try again, please."
     },
     minlength: 5,
-    maxlength:140
+    maxlength: 140
     /* minlength: {
       value: 5,
       message:"Your message is too short. Try again, please."
@@ -66,7 +66,7 @@ app.post('/thoughts', async (req, res) => {
   res.json(newThought)
   } catch (error) {
     if (error.code === 11000) {
-    res.status(400).json( { message: 'Duplicated value', fields: error.keyValue })
+    res.status(400).json( { message: 'Duplicated value', fields: error.keyValue } )
   }
   res.status(400).json(error)
   }
