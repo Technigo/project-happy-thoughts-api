@@ -53,6 +53,12 @@ app.get('/', (req, res) => {
   res.send('Happy thoughts')
 })
 
+app.get('/thoughts', async (req, res) => {
+  const allThoughts = await Thought.find().sort({ createdAt: -1 });
+  res.json(allThoughts);
+});
+
+
 //Creating a new thought based on our model
 app.post('/thoughts', async (req, res) => {
   try {
