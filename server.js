@@ -90,19 +90,19 @@ app.patch('/thoughts/:id', async (req, res) => {
 })
 
 // another endpoint to change a thought
-  app.put('/thoughts/:id', async (req, res) => {
-    const { id } = req.params
-    try {
-      const updatedThought = await Thought.findOneAndUpdate({ _id: id }, req.body, { new: true })
-      if (updatedThought) {
-        res.json(updatedThought)
-      } else {
-        res.status(400).json({ message: 'Not found' })
-      }
-    } catch (error) {
-      res.status(400).json({ messge: 'Invalid request', error })
+app.put('/thoughts/:id', async (req, res) => {
+  const { id } = req.params
+  try {
+    const updatedThought = await Thought.findOneAndUpdate({ _id: id }, req.body, { new: true })
+    if (updatedThought) {
+      res.json(updatedThought)
+    } else {
+      res.status(400).json({ message: 'Not found' })
     }
-  })
+  } catch (error) {
+    res.status(400).json({ messge: 'Invalid request', error })
+  }
+})
 
 // Endpoint to like a thought
 app.post('/thoughts/:id/like', async (req, res) => {
