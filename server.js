@@ -27,7 +27,8 @@ const thoughtSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: () => Date.now
+    //default: () => Date.now
+    default: Date.now
   }
 })
 
@@ -37,7 +38,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use((_, res, next) => {
-  if(mongoose.connection.readyState === 1) {
+  if (mongoose.connection.readyState === 1) {
     next()
   } else {
     res.status(503).json({ error: 'Service not available' })
@@ -50,8 +51,8 @@ app.get('/', (_, res) => {
 
 app.get('/thoughts', async (_, res) => {
   try {
-    const allThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20)
-    res.json(allThoughts)
+    const everyThought = await Thought.find().sort({ createdAt: -1 }).limit(20)
+    res.json(everyThought)
   } catch (error) {
     res.status(400).json(error)
   }
@@ -70,7 +71,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { id } = req.params
 
   try {
-    const newLike = await Thought.findByIdAndUpdate({ id }, {$inc: {hearts: 1}} )
+    const newLike = await Thought.findByIdAndUpdate({ id }, {$inc: {hearts: 1} })
     if (newLike) {
       res.json(newLike)
     } else {
