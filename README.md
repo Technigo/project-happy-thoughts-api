@@ -12,6 +12,16 @@ To solve the problem I used:
 - MongoDB Compass for testing
 - Postman for testing
 
+Endpoints: 
+- GET /thoughts
+    - gets the 20 most recent thoughts, sorted in descending order (new thought on top)
+- POST /thoughts
+    - posts a new thought. Requirements are min 4 characters and max 140 in one message, and the value must be unique. 
+- POST /thoughts/:id/like
+    - increases the amount of likes/hearts by 1 on the thought with the provided _id.
+- DELETE /thoughts/:id
+    - deletes the thought with the provided _id.
+
 If I had more time I would experiment with more features that would require changes in the frontend to really understand how FE and BE is connected.  
 
 ## View it live
