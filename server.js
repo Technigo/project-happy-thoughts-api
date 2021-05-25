@@ -69,7 +69,7 @@ app.post('/thoughts/:id/like', async (req, res) => {
   } catch (error) {
     res.status(404).json({ message: 'Thought not found' })
   }
-})
+}) 
 
 app.delete('/thoughts/:id', async (req, res) => {
   const { id } = req.params

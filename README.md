@@ -1,13 +1,23 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+The assignment was to create a backend including a REST-API using Mongoose and MongoDB. The API is then used in my previous Happy Thought frontend-project.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+To solve the problem I used:
+- MongoDB as data storage
+- Mongoose to define the document structure in the database
+- Mongo Cloud Atlas for database hosting
+- Heroku for backend server hosting
+- MongoDB Compass for testing
+- Postman for testing
+
+If I had more time I would experiment with more features that would require changes in the frontend to really understand how FE and BE is connected.  
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Backend deployed on Heroku: 
+https://happy-thoughts-finder.herokuapp.com/
+
+Frontend deployed on Netlify: 
+https://epic-euler-f992c6.netlify.app/
