@@ -1,10 +1,10 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
-// import dotenv from 'dotenv'
-// import listEndpoints from 'express-list-endpoints'
+import dotenv from 'dotenv'
+import listEndpoints from 'express-list-endpoints'
 
-// dotenv.config()
+dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndexes: true })
@@ -33,7 +33,6 @@ const thoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model('Thought', thoughtSchema)
 
-
 app.use(cors())
 app.use(express.json())
 
@@ -45,16 +44,18 @@ app.use((_, res, next) => {
   }
 })
 
-// Trying to make listEndpoints to work but app crashes. 
-// app.get("/", (_, res) => {
-//   res.send(listEndpoints(app));
-// });
+app.get('/', (_, res) => {
+  res.send(listEndpoints(app))
+})
 
-app.get("/", (_, res) => {
-  res.send("hello");
-});
-
-// app.get('/thoughts')
+app.get('/thoughts', async (_, res) => {
+  try {
+    const allThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20)
+    res.json(allThoughts)
+  } catch (error) {
+    res.status(400).json(error)
+  }
+})
 
 app.post('/thoughts', async (req, res) => {
   try {
@@ -65,10 +66,19 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-// app.post('/thoughts/:thoughtId/like', async (req, res) => {
-//   const newLike = await new 
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { id } = req.params
 
-// })
+  try {
+    const newLike = await Thought.findByIdAndUpdate({ id }, {$inc: {hearts: 1}} )
+    if (newLike) {
+      res.json(newLike)
+    } else {
+      res.status(404).json({ message: 'Not found' })
+    } 
+  } catch (error) {
+      res.status(400).json({ message: 'invalid request', error })
+  }})
 
 // Start the server
 app.listen(port, () => {
