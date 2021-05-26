@@ -93,7 +93,7 @@ app.put('/thoughts/:id', async (req, res) => {
   }
 })
 
-app.post('/thoughts/:id/likes', async (req, res) => { //post request instead of patch as to fit the already developed frontend
+app.post('/thoughts/:id/like', async (req, res) => { //post request instead of patch as to fit the already developed frontend
   const { id } = req.params
   try {
     const updatedThought = await Thought.findByIdAndUpdate( id, { $inc: { hearts: 1} }, { new: true })
