@@ -12,13 +12,7 @@ How to validate data and ensure my database only contains 'good' data
 
 ## Tech I used
 
-Express
-Mongo DB
-Mongoose
-Atlas
-Heroku
-Postman
-Compass
+Express :: Mongo DB :: Mongoose :: Atlas :: Heroku :: Postman :: Compass
 
 ## How I built it
 
