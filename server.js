@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 import listEndpoints from 'express-list-endpoints'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true })
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 mongoose.Promise = Promise
 
 const port = process.env.PORT || 8080
@@ -26,16 +26,8 @@ const thoughtSchema = new mongoose.Schema({
       },
       message: "Numbers are not allowed. Try again, please."
     },
-    minlength: 5,
-    maxlength: 140
-    /* minlength: {
-      value: 5,
-      message:"Your message is too short. Try again, please."
-    },
-    maxlength: {
-      value: 140,
-      message:"Your message is too long. Try again, please."
-    } */
+    minlength: [5, "Your message is too short. Min 5 characters, please."],
+    maxlength: [140, "Your message is too long. Max 140 characters, please."]
   },
   hearts: {
     type: Number,
@@ -49,24 +41,25 @@ const thoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model('Thought', thoughtSchema)
 
-// Start defining your routes here
+//List of endpoints
 app.get('/', (req, res) => {
   res.send(listEndpoints(app))
 })
 
+//Endpoint that will display the happy thoughts stored in the database
 app.get('/thoughts', async (req, res) => {
   const allThoughts = await Thought.find().sort({ createdAt: -1 });
   res.json(allThoughts);
 });
 
-//Creating a new thought based on our model
+//Endpoint to post a new thought by user
 app.post('/thoughts', async (req, res) => {
   try {
   const newThought = await new Thought(req.body).save()
   res.json(newThought)
   } catch (error) {
     if (error.code === 11000) {
-    res.status(400).json( { message: 'Duplicated value', fields: error.keyValue } )
+    res.status(400).json({ message: 'Duplicated value', fields: error.keyValue })
   }
   res.status(400).json(error)
   }
@@ -100,6 +93,7 @@ app.post('/thoughts/:id/likes', async (req, res) => {
   }
 });
 
+//Endpoint to delete a thought
 app.delete('/thoughts/:id', async (req, res) => {
   const { id } = req.params
 
@@ -114,36 +108,6 @@ app.delete('/thoughts/:id', async (req, res) => {
     res.status(400).json({ message: 'Invalid request', error })
   }
 })
-
-app.patch('/thoughts/:id', async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const updatedThought = await Thought.findByIdAndUpdate(id, req.body, { new: true });
-    if (updatedThought) {
-      res.json(updatedThought);
-    } else {
-      res.status(404).json({ message: 'Not found' });
-    }
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid request', error });
-  }
-});
-
-app.put('/thoughts/:id', async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const updatedThought = await Thought.findOneAndReplace({ _id: id }, req.body, { new: true });
-    if (updatedThought) {
-      res.json(updatedThought);
-    } else {
-      res.status(404).json({ message: 'Not found' });
-    }
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid request', error });
-  }
-});
 
 // Start the server
 app.listen(port, () => {

@@ -1,13 +1,33 @@
+<!-- @format -->
+
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+In this week's project I used Express and Mongodb to build an API of "happy thoughts" which includes both POST request endpoints to allow the user to enter a "happy thought" and also GET endpoints to return the collection of "happy thoughts".
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## What I learned
 
-## The problem
+How to use POST requests to send data to my API
+How to store data in my database from POST requests
+How to validate data and ensure my database only contains 'good' data
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+## Tech I used
+
+Express
+Mongo DB
+Mongoose
+Atlas
+Heroku
+Postman
+Compass
+
+## How I built it
+
+1. I first created a model and schema for each new thought. This schema contains Mongoose validators so the user can only enter valid and 'good' data.
+2. In order for the user to enter a new thought that will be stored in MongoDB, I created a POST endpoint using Mongoose functions.
+3. There is also a GET endpoint that will display the whole collection of thoughts in ascendant order.
+4. A DELETE endpoint will make possible to delete a thought by id.
+5. For error handling I implemented try and catch in all endpoints
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://my-happythoughts-api.herokuapp.com/
