@@ -7,7 +7,7 @@ import listEndpoints from 'express-list-endpoints'
 dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndexes: true })
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 mongoose.Promise = Promise
 
 const port = process.env.PORT || 8080
@@ -70,7 +70,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { id } = req.params
 
   try {
-    const newLike = await Thought.findByIdAndUpdate({ id }, {$inc: {hearts: 1} })
+    const newLike = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1} })
     if (newLike) {
       res.json(newLike)
     } else {
