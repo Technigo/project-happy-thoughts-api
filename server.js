@@ -19,11 +19,11 @@ const thoughtSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 5,
-    maxlenght: 140,
+    maxlenght: 140
   },
   hearts: {
     type: Number,
-    default: 0,
+    default: 0
   },
   createdAt: {
     type: Date,
@@ -42,13 +42,13 @@ app.get('/', (_, res) => {
   res.send(listEndpoints(app))
 })
 
-//Endpoint that show thoughts with a limit on 20 thoughts per page
+// Endpoint that show thoughts with a limit on 20 thoughts per page
 app.get('/thoughts', async (_, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
   res.json(thoughts)
 })
 
-//Endpoint for posting thoughts
+// Endpoint for posting thoughts
 app.post('/thoughts', async (req, res) => {
   try {
     const { message } = req.body
@@ -62,7 +62,7 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-//Endpoint for likes
+// Endpoint for likes
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
   try {
