@@ -47,7 +47,7 @@ app.get('/', (req, res) => {
 // End point to POST a new thought
 app.post('/thoughts', async (req, res) => {
   try {
-    const savedThought = await new Thought(req.body).save()
+    const savedThought = await new Thought(req.body.message).save()
     res.json(savedThought)
   } catch (error) {
     if (error.code === 11000) {
