@@ -47,9 +47,9 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-  const { page = 1, size = 20 } = req.query
+  const { page = 1, size = 20, count } = req.query
     
-  const count = await Thought.countDocuments() 
+  // const count = await Thought.countDocuments() 
 
   try {
     const thoughts = await Thought
@@ -57,40 +57,18 @@ app.get('/thoughts', async (req, res) => {
       .limit(Number(size))
       .skip((page - 1) * size)
       .sort({ createdAt: 'desc' })
+      .countDocuments(Math.ceil(count / size)) 
       .exec()
 
     res.json({  
       data: thoughts,
-      totalPages: Math.ceil(count / size),
-      currenPage: page
+      currenPage: page,
+      totalPages: size
     })
   } catch (error) {
     res.status(400).json(error)
   }
 })
-
-// app.get('/thoughts', async (req, res) => {
-//   const { page = 1, size = 20 } = req.query
-
-//   try {
-//     const thoughts = await Thought
-//       .find()
-//       .limit(Number(size * 1))
-//       .skip((page - 1) * size)
-//       .sort({ createdAt: 'desc' })
-//       .exec()
-
-//     const count = await Thought.countDocuments() 
-
-//     res.json({  
-//       data: thoughts,
-//       totalPages: Math.ceil(count / size),
-//       currenPage: page
-//     })
-//   } catch (error) {
-//     res.status(400).json(error)
-//   }
-// })
 
 app.post('/thoughts', async (req, res) => {
   const tags = req.body.message.trim().split(' ').map((item) => ` #${item}`)
