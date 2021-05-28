@@ -47,15 +47,10 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-  let { page, size } = req.query
-  
-  if (!page) {
-    page = 1
-  }
-  if (!size) {
-    size = 20
-  }
-  
+  const { page = 1, size = 20 } = req.query
+    
+  const count = await Thought.countDocuments() 
+
   try {
     const thoughts = await Thought
       .find()
@@ -65,9 +60,9 @@ app.get('/thoughts', async (req, res) => {
       .exec()
 
     res.json({  
-      page, 
-      size, 
-      data: thoughts
+      data: thoughts,
+      totalPages: Math.ceil(count / size),
+      currenPage: page
     })
   } catch (error) {
     res.status(400).json(error)
