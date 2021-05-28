@@ -47,7 +47,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-  const { page = 1, size = 20, count } = req.query
+  const { page = 1, size = 20 } = req.query
     
   // const count = await Thought.countDocuments() 
 
