@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
 app.get('/thoughts', async (req, res) => {
   const { page = 1, size = 20 } = req.query
     
-  // const count = await Thought.countDocuments() 
+  const countAllThoughts = await Thought.countDocuments() 
 
   try {
     const thoughts = await Thought
@@ -57,12 +57,11 @@ app.get('/thoughts', async (req, res) => {
       .limit(Number(size))
       .skip((page - 1) * size)
       .sort({ createdAt: 'desc' })
-      .countDocuments() 
       .exec()
 
     res.json({  
       data: thoughts,
-      totalPages: Math.ceil(thoughts / size),
+      totalPages: Math.ceil(countAllThoughts / size),
       currenPage: page
     })
   } catch (error) {
