@@ -94,21 +94,8 @@ app.patch('/thoughts/:id', async (req, res) => {
     res.status(400).json({ message: 'invalid request', error });
   }
 });
-//This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its `hearts` property to add one heart.
-// app.post('/:thoughtsid/like', async (req, res) => {
-//   const { thoughtsid } = req.params;
 
-//   try {
-//     await Thought.findOneAndUpdate(
-//       { _id: thoughtsid },
-//       { $inc: { hearts: 1 } },
-//       { new: true }
-//     );
-//     res.status(201).send();
-//   } catch (err) {
-//     res.status(400).send({ message: NOT_FOUND });
-//   }
-// });
+//This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its `hearts` property to add one heart.
 
 app.post('/:thoughtsid/like', async (req, res) => {
   const { thoughtsid } = req.params;
