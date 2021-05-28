@@ -57,13 +57,13 @@ app.get('/thoughts', async (req, res) => {
       .limit(Number(size))
       .skip((page - 1) * size)
       .sort({ createdAt: 'desc' })
-      .countDocuments(Math.ceil(count / size)) 
+      .countDocuments() 
       .exec()
 
     res.json({  
       data: thoughts,
-      currenPage: page,
-      totalPages: size
+      totalPages: Math.ceil(thoughts / size),
+      currenPage: page
     })
   } catch (error) {
     res.status(400).json(error)
