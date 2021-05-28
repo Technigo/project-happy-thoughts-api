@@ -47,9 +47,9 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-  const { page = 1, size = 20, countAllThoughts } = req.query
+  const { page = 1, size = 20 } = req.query
     
-  // const countAllThoughts = await Thought.countDocuments() 
+  const countAllThoughts = await Thought.countDocuments() 
 
   try {
     const thoughts = await Thought
@@ -57,12 +57,11 @@ app.get('/thoughts', async (req, res) => {
       .limit(Number(size))
       .skip((page - 1) * size)
       .sort({ createdAt: 'desc' })
-      .countDocuments({ messages: Math.ceil(countAllThoughts / size) })
       .exec()
 
     res.json({  
       data: thoughts,
-      totalPages: size,
+      totalPages: Math.ceil(countAllThoughts / size) ,
       currenPage: page
     })
   } catch (error) {
