@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
 app.get('/thoughts', async (req, res) => {
   const { page = 1, size = 20, countAllThoughts } = req.query
     
-  const countAllThoughts = await Thought.countDocuments() 
+  // const countAllThoughts = await Thought.countDocuments() 
 
   try {
     const thoughts = await Thought
