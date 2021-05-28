@@ -61,7 +61,7 @@ app.get('/thoughts', async (req, res) => {
 
     res.json({  
       data: thoughts,
-      totalPages: Math.ceil(countAllThoughts / size) ,
+      totalPages: Math.ceil(countAllThoughts / size),
       currenPage: page
     })
   } catch (error) {
