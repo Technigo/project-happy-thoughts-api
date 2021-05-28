@@ -46,37 +46,16 @@ app.get('/', (req, res) => {
   res.send(listEndpoints(app))
 })
 
-// app.get('/thoughts', async (req, res) => {
-//   let { page, size } = req.query
-  
-//   if (!page) {
-//     page = 1
-//   }
-//   if (!size) {
-//     size = 20
-//   }
-  
-//   try {
-//     const thoughts = await Thought
-//       .find()
-//       .limit(Number(size))
-//       .skip((page - 1) * size)
-//       .sort({ createdAt: 'desc' })
-//       .exec()
-
-//     res.json({  
-//       page, 
-//       size, 
-//       data: thoughts
-//     })
-//   } catch (error) {
-//     res.status(400).json(error)
-//   }
-// })
-
 app.get('/thoughts', async (req, res) => {
-  const { page = 1, size = 20 } = req.query
-
+  let { page, size } = req.query
+  
+  if (!page) {
+    page = 1
+  }
+  if (!size) {
+    size = 20
+  }
+  
   try {
     const thoughts = await Thought
       .find()
@@ -85,17 +64,38 @@ app.get('/thoughts', async (req, res) => {
       .sort({ createdAt: 'desc' })
       .exec()
 
-    const count = await Thought.countDocuments() 
-
     res.json({  
-      data: thoughts,
-      totalPages: Math.ceil(count / size),
-      currenPage: page
+      page, 
+      size, 
+      data: thoughts
     })
   } catch (error) {
     res.status(400).json(error)
   }
 })
+
+// app.get('/thoughts', async (req, res) => {
+//   const { page = 1, size = 20 } = req.query
+
+//   try {
+//     const thoughts = await Thought
+//       .find()
+//       .limit(Number(size * 1))
+//       .skip((page - 1) * size)
+//       .sort({ createdAt: 'desc' })
+//       .exec()
+
+//     const count = await Thought.countDocuments() 
+
+//     res.json({  
+//       data: thoughts,
+//       totalPages: Math.ceil(count / size),
+//       currenPage: page
+//     })
+//   } catch (error) {
+//     res.status(400).json(error)
+//   }
+// })
 
 app.post('/thoughts', async (req, res) => {
   const tags = req.body.message.trim().split(' ').map((item) => ` #${item}`)
