@@ -1,9 +1,11 @@
 import express, { response } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import crypto from 'crypto'
+import bycrypt from 'bcrypt'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
 mongoose.Promise = Promise;
 
 const port = process.env.PORT || 8080;
@@ -12,10 +14,22 @@ const app = express();
 
 // to create users 
 const User= mongoose.model('Users',{
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
   username:{
     type: String,
-    lowercase: true,
     unique: true
+  },
+  password:{
+    type: String,
+    required:true
+  },
+  accessToken:{
+    type: String,
+    default: ()=> crypto.randomBytes(128).toString('hex')
   }
 })
 
@@ -46,44 +60,84 @@ const Thought = mongoose.model("Thoughts", {
   }
 });
 
+const authenticateUser = async (req, res, next)=>{
+  const accessToken = req.header('Authorization')
+
+  try {
+    const user = await User.findOne({ accessToken })
+    if (user) {
+      next()
+    }else{
+    res.status(401).json({message: 'Not authenticated',error})
+      
+    }
+  } catch (error) {
+    res.status(400).json({message:'Invalid request',error})
+  }
+}
+
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
 app.use(paginate.middleware(20, 50))
 
 // Get  all Thoughts
+app.get("/", authenticateUser)
 app.get("/", async (req, res) => {
-  /* const pagination  = req.query.page
-  console.log(pagination) */
+
   try{
     const allThoughts = await Thought.find().limit(req.query.limit).sort({createDate: -1})
     res.json(allThoughts)
   }catch(error){
-    res.status(400).json(error)
+    res.status(400).json({message:'Invalid request',error})
   }
 });
 
 //Create user
 app.post("/user/create", async (req, res)=>{
+  const { email, username, password} = req.body
   try {
-    const newUser = await new User({username: req.body.username}).save()
-    console.log(newUser)
-    res.json(newUser)  
+    const salt = bycrypt.genSaltSync()
+
+    const newUser = await new User({
+      email,
+      username,
+      password: bycrypt.hashSync(password, salt)
+    }).save()
+
+    res.json({
+      userId: newUser._id,
+      username: newUser.username,
+      accessToken: newUser.accessToken
+    })  
   } catch (error) {
-    res.status(400).json(error)
+    res.status(400).json({message:'Invalid request',error})
   }
 })
-//search users
-app.get("/users", async (req, res)=>{
+
+app.post('/signin', async (req, res)=>{
+  const { username, password }= req.body
+
   try {
-    const allUser= await User.find()
-    res.json(allUser)
+    const user = await User.findOne({username})
+
+    if (user && bycrypt.compareSync(password, user.password)) {
+      res.json({
+        userId: user._id,
+        username: user.username,
+        accessToken: user.accessToken
+      })  
+    }else{
+      res.status(400).json({message:'User no found',error})
+    }
   } catch (error) {
     res.status(400).json(error)
+    
   }
 })
 
 // Post a new Thought
+app.post("/thoughts", authenticateUser)
 app.post("/thoughts", async (req, res) => {
 
   const hashtag = []
