@@ -20,7 +20,7 @@ const User= mongoose.model('Users',{
 })
 
 //to create Thoughts 
-const Thought = mongoose.model("Thoughts", {
+const Thought = mongoose.model("Thought", {
   message: {
     type: String,
     required: true,
@@ -53,8 +53,6 @@ app.use(paginate.middleware(20, 50))
 
 // Get  all Thoughts
 app.get("/", async (req, res) => {
-  /* const pagination  = req.query.page
-  console.log(pagination) */
   try{
     const allThoughts = await Thought.find().limit(req.query.limit).sort({createDate: -1})
     res.json(allThoughts)
@@ -67,7 +65,6 @@ app.get("/", async (req, res) => {
 app.post("/user/create", async (req, res)=>{
   try {
     const newUser = await new User({username: req.body.username}).save()
-    console.log(newUser)
     res.json(newUser)  
   } catch (error) {
     res.status(400).json(error)
@@ -85,7 +82,6 @@ app.get("/users", async (req, res)=>{
 
 // Post a new Thought
 app.post("/thoughts", async (req, res) => {
-
   const hashtag = []
   const stringToArray= req.body.message.trim().split(" ")
 
