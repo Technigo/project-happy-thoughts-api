@@ -30,4 +30,6 @@ Increases nr of likes/hearts.
 
 ## View it live
 
-https://project-happythoughts.herokuapp.com/
+Backend: https://project-happythoughts.herokuapp.com/
+
+Frontend: https://send-happy-thoughts.netlify.app/
