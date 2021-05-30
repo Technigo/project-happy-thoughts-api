@@ -26,7 +26,7 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 100,
+    maxlength: 140,
   },
   heart: {
     type: Number,
