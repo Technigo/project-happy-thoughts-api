@@ -11,7 +11,6 @@ const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     required: true,
-    unique: true,
     trim: true,
     minlength: 5,
     maxlength: 140
