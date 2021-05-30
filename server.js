@@ -56,7 +56,7 @@ app.get('/thoughts', async (req, res) => {
       .find()
       .limit(Number(size))
       .skip((page - 1) * size)
-      .sort({ $or: [{ createdAt: -1 }, { hearts: -1 }] })
+      .sort({ createdAt: 'desc' })
       .exec()
 
     res.json({  
