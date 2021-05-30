@@ -94,7 +94,7 @@ app.get("/", async (req, res) => {
 });
 
 //Create user
-app.post("/user/create", async (req, res)=>{
+app.post("/signup", async (req, res)=>{
   const { email, username, password} = req.body
   try {
     const salt = bycrypt.genSaltSync()
@@ -131,7 +131,7 @@ app.post('/signin', async (req, res)=>{
       res.status(400).json({message:'User no found',error})
     }
   } catch (error) {
-    res.status(400).json(error)
+    res.status(400).json({message:'User no found',error})
     
   }
 })
@@ -150,16 +150,9 @@ app.post("/thoughts", async (req, res) => {
       hashtag.push(word)
     }
   })
-
   try {
-    const findUser = await User.find({username: req.body.username})
-    
-    if(findUser.length){
-      const newThought = await new Thought({message: req.body.message, username: req.body.username, hashtag: hashtag}).save();
+    const newThought = await new Thought({message: req.body.message, username: req.body.username, hashtag: hashtag}).save();
       res.json(newThought);
-    }else{
-       res.status(400).json({message:"user no found"})
-    }
   } catch (error) {
     res.status(400).json(error);
   }
