@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import moment from "moment";
 
 import { API_URL } from "../../reusable/urls";
 import thoughts from "../../reducers/thoughts";
@@ -12,6 +13,8 @@ import {
   ButtonContainer,
   SendButton,
   LimitedCharacters,
+  Time,
+  MessageListItemContainer,
 } from "./style";
 
 const Thoughts = () => {
@@ -81,10 +84,12 @@ const Thoughts = () => {
           </LimitedCharacters>
         </ButtonContainer>
       </Form>
+
       {thoughtsItems.map((thought) => (
-        <div className="notes" key={thoughts._id}>
+        <MessageListItemContainer className="notes" key={thoughts._id}>
           {thought.message}
-        </div>
+          <Time>{moment(thought.message.createdAt).fromNow()}</Time>
+        </MessageListItemContainer>
       ))}
     </MainWrapper>
   );

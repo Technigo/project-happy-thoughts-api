@@ -49,6 +49,18 @@ const LimitedCharacters = styled.span`
   color: ${({ length }) => (length > 130 ? "red" : "#7a7a7a")};
 `;
 
+const Time = styled.p`
+  color: #7a7a7a;
+  text-align: right;
+`;
+
+const MessageListItemContainer = styled.li`
+  border: 2px solid #7e7e7e;
+  margin-bottom: calc(var(--spacing) * 10);
+  padding: calc(var(--spacing) * 4);
+  box-shadow: 8px 8px 0 0 #000;
+`;
+
 export {
   MainWrapper,
   Form,
@@ -57,4 +69,6 @@ export {
   ButtonContainer,
   SendButton,
   LimitedCharacters,
+  Time,
+  MessageListItemContainer,
 };
