@@ -22,7 +22,6 @@ const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     required: [true, 'Message is required'],
-    unique: true,
     trim: true,
     validate: {
       validator: (value) => {
