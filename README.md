@@ -14,9 +14,7 @@ General requirements:
 - In the POST /thoughts endpoint to create a new thought, if the input was invalid and the API is returning errors, it should set the response status to 400 (bad request).
 - The endpoint to add hearts to a thought should return an appropriate error if the thought was not found.
 
-At this current state I am in the process of connecting this API to the existing frontend project, I am really looking forward to see the full circle of the frontend and backend code - for the first time both of which I have created!
-
-I have saved some unused and commented out code in this project for future reference – as I would like to add more of the methods for additional features, like deleting and editing a posted thought.
+It was a lot of fun to go full circle with front and backend code, both of which I have created! I have saved some unused and commented out code in this project for future reference – as I would like to add more of the methods for additional features, like deleting and editing a posted thought.
 
 The API is deployed to Heroku and the database is deployed using Mongo Cloud.
 
@@ -24,4 +22,4 @@ The API is deployed to Heroku and the database is deployed using Mongo Cloud.
 
 Link to API: https://is-happy-thoughts.herokuapp.com/
 Link to API endpoint of thoughts: https://is-happy-thoughts.herokuapp.com/thoughts
-Link to fullstack project: TBC
+Link to fullstack project: https://pensive-shirley-fd39b0.netlify.app/
