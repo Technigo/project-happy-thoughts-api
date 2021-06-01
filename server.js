@@ -26,7 +26,7 @@ const thoughtSchema = new mongoose.Schema({
     },
     minlength: [5, 'Hey, the minimum length is 5 characters'],
     maxlength: [140, 'Hey, the maximum length is 140 characters'],
-    unique: true,
+    unique: false,
     trim: true
     },
   hearts: {

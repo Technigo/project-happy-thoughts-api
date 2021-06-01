@@ -10,4 +10,6 @@ Describe how you approached to problem, and what tools and techniques you used t
 
 ## View it live
 
-https://happy-thoughts-api-estefania.herokuapp.com/
+FRONTEND: https://happy-thoughts-app-estefania.netlify.app/
+
+BACKEND: https://happy-thoughts-api-estefania.herokuapp.com/
