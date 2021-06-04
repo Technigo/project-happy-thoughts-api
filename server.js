@@ -29,6 +29,7 @@ const thoughtSchema = new mongoose.Schema({
     unique: false,
     trim: true
     },
+  username: String,
   hearts: {
     type: Number,
     default: 0
