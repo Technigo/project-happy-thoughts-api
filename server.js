@@ -14,14 +14,14 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-// SCHEMA
+// SCHEMAS
 const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     required: [true, 'Message is required'],
     minlength: 5,
     maxlength: 140,
-    trim: true,
+    trim: true
   },
   hearts: {
     type: Number,
@@ -29,7 +29,7 @@ const thoughtSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-		default: Date.now
+    default: Date.now
   }
 })
 
