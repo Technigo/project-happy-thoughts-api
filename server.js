@@ -12,8 +12,7 @@ const app = express()
 const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
-    required: [true, "Message is required"], 
-    unique: true,  
+    required: [true, "Message is required"],  
     validate: {
       validator: (value) => {
         return /^[^0-9]+$/.test(value); 
@@ -89,20 +88,6 @@ app.patch('/thoughts/:id', async (req,res) => {
   }
 })
 
-app.put('/thoughts/:id', async (req,res) => {
-  const { id } = req.params;
-  try {
-    const updatedThought = await Thought.findOneAndReplace(id, req.body, {new: true});
-    if (updatedThought) {
-      res.json(updatedThought);
-    } else {
-      res.status(404).json({ message: 'Not Found' })
-    }
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid request', error})
-  }
-})
-
 app.post('/thoughts/:id/likes', async (req,res) => {
   const { id } = req.params;
 
@@ -138,8 +123,3 @@ app.listen(port, () => {
 
 
 
-
-
-//mongodb+srv://myUser:myuserpassword@cluster0.prpaq.mongodb.net/happyThoughts?retryWrites=true&w=majority
-
-//mongodb+srv://myUser:myuserpassword@cluster0.prpaq.mongodb.net/happyThoughts?retryWrites=true&w=majority
