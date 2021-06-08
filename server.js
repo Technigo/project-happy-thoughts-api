@@ -21,7 +21,6 @@ const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     required: [true, "Message is required"],
-    unique: [true, "Message has to be unique"],
     minlength: [5, "Message has to be at least 5 characters"],
     maxlength: [140, "Message cannot exceed 140 characters"]
   },
