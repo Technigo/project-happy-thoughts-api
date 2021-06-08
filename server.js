@@ -30,7 +30,7 @@ const thoughtSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now()
+    default: Date.now
   }
 })
 
@@ -45,7 +45,6 @@ app.get('/', (req, res) => {
 
 // End point to POST a new thought
 app.post('/thoughts', async (req, res) => {
-
   try {
     const savedThought = await new Thought({ message: req.body.message }).save()
     res.json(savedThought)
