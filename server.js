@@ -42,11 +42,11 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.get("/", (req, res) => {
+app.get("/", (_, res) => {
   res.send(endPoints);
 });
 
-app.get("/thoughts", async (req, res)  => {
+app.get("/thoughts", async (_, res)  => {
     const allThoughts= await Thought.find().sort({ createdAt: -1 });
     res.json(allThoughts);
 });
@@ -107,23 +107,7 @@ app.delete("/thoughts/:id", async (req, res) => {
   }
 });
 
-// app.patch('/thoughts/:id', async (req, res) => {
-//   const { id } = req.params;
-
-//   try{
-//     const  updatedThought = await Thought.findByIdAndUpdate(id, { message: req.body.message }, { new: true });
-//     if (updatedThought){
-//       res.json(updatedThought);
-//     } else {
-//       res.status(404).json({ message: 'Not found' });
-//     }
-//   } catch (error) {
-//     res.status(400).json({ message: 'Invalid request', error });
-//   }
-// });
-
 // Start the server
 app.listen(port, () => {
-  // eslint-disable-next-line
-  console.log(`Server running on http://localhost:${port}`);
+ 
 });
