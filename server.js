@@ -96,11 +96,6 @@ app.delete("/thoughts/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    //v1 - only delte
-    // const deletedThought = await Thought.deleteOne({ _id: id });
-    // res.json(deletedThought);
-
-    //v2 - find and delete
     const deletedThought = await Thought.findOneAndDelete({ _id: id });
     if (deletedThought) {
       res.json(deletedThought);
