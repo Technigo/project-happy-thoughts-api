@@ -1,6 +1,10 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import dotenv from 'dotenv';
+import endPoints from 'express-list-endpoints';
+
+dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, {
@@ -39,7 +43,7 @@ app.use(express.json());
 
 // Routes
 app.get("/", (req, res) => {
-  res.send("Hello world");
+  res.send(endPoints);
 });
 
 app.get("/thoughts", async (req, res)  => {
