@@ -18,7 +18,7 @@ const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     required: [true, 'did someone forget to type in a message? (someone = you)'],
-    unique: true,
+    unique: false,
     trim: true, //clearing out spaces
     validate:{
       validator: (value) => {
