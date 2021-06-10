@@ -2,6 +2,9 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import listEndpoints from 'express-list-endpoints'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
@@ -23,8 +26,8 @@ const thoughtSchema = new mongoose.Schema({
       },
       message: 'numbers are not allowed'
     },
-    minlength: 5,
-    maxlength: 140,
+    minlength: [5, 'Please give me more than 5 characters. This is too boring!'],
+    maxlength: [140, 'Please not so many characters! Write a book already!'],
   },
   hearts: {
     type: Number,
