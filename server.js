@@ -39,7 +39,7 @@ app.use(cors());
 app.use(express.json());
 
 //Get all Thoughts
-app.get("/", async (_, res)  => {
+app.get("/thoughts", async (_, res)  => {
     const allThoughts= await Thought.find().sort({ createdAt: -1 });
     res.json(allThoughts);
 });
@@ -103,4 +103,6 @@ app.delete("/thoughts/:id", async (req, res) => {
 });
 
 // Start the server
-app.listen(port, () => {});
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`)
+});
