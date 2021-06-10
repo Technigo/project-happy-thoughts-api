@@ -38,16 +38,13 @@ const Thought = mongoose.model("Thought", thoughtSchema);
 app.use(cors());
 app.use(express.json());
 
-// Routes
-app.get("/", (_, res) => {
-  res.send('Hello World');
-});
-
-app.get("/thoughts", async (_, res)  => {
+//Get all Thoughts
+app.get("/", async (_, res)  => {
     const allThoughts= await Thought.find().sort({ createdAt: -1 });
     res.json(allThoughts);
 });
 
+//Create a thought
 app.post("/thoughts", async (req, res) => {
   try { 
     const newThought = await new Thought(req.body).save().limit(20)
@@ -62,6 +59,7 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
+//update likes to thought
 app.post("/thoughts/:id/likes", async (req, res) => {
   const { id } = req.params;
 
