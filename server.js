@@ -2,15 +2,12 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
-import endPoints from 'express-list-endpoints';
+// import endPoints from 'express-list-endpoints';
 
 dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
-mongoose.connect(mongoUrl, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true,
 });
 mongoose.Promise = Promise;
 
@@ -23,8 +20,8 @@ const thoughtSchema = new mongoose.Schema({
     required: [true, "Message Required"],
     unique: true,
     trim: [true],
-    minlength: [5, "Must be a minimum of 5 characters."],
-    maxlength: [140, "Must have a maximum of 140 characters!"],
+    minlength: [5, 'Must be a minimum of 5 characters.'],
+    maxlength: [140, 'Must have a maximum of 140 characters!'],
   },
   hearts: {
     type: Number,
@@ -43,7 +40,7 @@ app.use(express.json());
 
 // Routes
 app.get("/", (_, res) => {
-  res.send(endPoints);
+  res.send('Hello World');
 });
 
 app.get("/thoughts", async (_, res)  => {
@@ -108,6 +105,4 @@ app.delete("/thoughts/:id", async (req, res) => {
 });
 
 // Start the server
-app.listen(port, () => {
- 
-});
+app.listen(port, () => {});
