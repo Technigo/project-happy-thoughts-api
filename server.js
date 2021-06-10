@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
-// import endPoints from 'express-list-endpoints';
+import listEndpoints from 'express-list-endpoints'
 
 dotenv.config()
 
@@ -37,6 +37,10 @@ const Thought = mongoose.model("Thought", thoughtSchema);
 
 app.use(cors());
 app.use(express.json());
+
+app.get("/", async (req, res) => {
+  res.send(listEndpoints(app));
+})
 
 //Get all Thoughts
 app.get("/thoughts", async (_, res)  => {
