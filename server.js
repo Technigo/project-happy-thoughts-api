@@ -99,7 +99,7 @@ app.delete('/thought/:thoughtId', async (req, res) => {
   const { thoughtId } = req.params
 
   try {
-    const deletedThought = await Thought.findByIdAndDelete({ id })
+    const deletedThought = await Thought.findByIdAndDelete({ _id: thoughtId })
     if (deletedThought) {
       res.json(deletedThought)
     } else {
@@ -115,7 +115,11 @@ app.patch('/thoughts/:thoughtId', async (req, res) => {
   const { thoughtId } = req.params
 
   try {
-    const updatedThought = await Thought.findByIdAndUpdate(id, { message: req.body }, { new: true })
+    const updatedThought = await Thought.findByIdAndUpdate(
+      thoughtId, 
+      req.body, 
+      { new: true }
+    )
     if (updatedThough) {
       res.json(updatedThought)
     } else {
