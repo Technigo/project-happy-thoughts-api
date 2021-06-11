@@ -95,7 +95,7 @@ app.post('thoughts/:thoughtId/like', async (req, res) => {
 });
 
 //delete thought
-app.delete('/thought/:thoughtId', async (req, res) => {
+app.delete('/thoughts/:thoughtId', async (req, res) => {
   const { thoughtId } = req.params
 
   try {
@@ -117,7 +117,7 @@ app.patch('/thoughts/:thoughtId', async (req, res) => {
   try {
     const updatedThought = await Thought.findByIdAndUpdate(
       thoughtId, 
-      req.body, 
+      { message: req.body }, 
       { new: true }
     )
     if (updatedThough) {
