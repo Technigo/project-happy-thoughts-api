@@ -11,3 +11,5 @@ If I had more time I would read up more on backend in generall and how to connec
 ## View it live
 
 https://week19happythoughtsapi.herokuapp.com/
+
+https://angry-curran-00f336.netlify.app/
