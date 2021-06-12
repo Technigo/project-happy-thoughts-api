@@ -8,6 +8,7 @@ dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+mongoose.set('useFindAndModify', false)
 mongoose.Promise = Promise
 
 const port = process.env.PORT || 8080
@@ -75,7 +76,7 @@ app.post('/thoughts', async (req, res) => {
 })
 
 //increasing likes
-app.post('thoughts/:thoughtId/like', async (req, res) => {
+app.post('/thoughts/:thoughtId/likes', async (req, res) => {
   const { thoughtId } = req.params
 
   try {
@@ -115,21 +116,16 @@ app.patch('/thoughts/:thoughtId', async (req, res) => {
   const { thoughtId } = req.params
 
   try {
-    const updatedThought = await Thought.findByIdAndUpdate(
-      thoughtId, 
-      { message: req.body }, 
-      { new: true }
-    )
-    if (updatedThough) {
-      res.json(updatedThought)
+    const updatedThought = await Thought.findOneAndReplace({ _id: thoughtId }, req.body, { new: true });
+    if (updatedThought) {
+      res.json(updatedThought);
     } else {
-      res.status(404).json({ message: 'not found' })
+      res.status(404).json({ message: 'Not found' });
     }
-  } catch {
-    res.status(400).json({ message: 'invalid request', error })
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid request', error });
   }
-})
-
+});
 // start server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
