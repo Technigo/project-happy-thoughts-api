@@ -8,7 +8,6 @@ dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
-mongoose.set('useFindAndModify', false)
 mongoose.Promise = Promise
 
 const port = process.env.PORT || 8080
