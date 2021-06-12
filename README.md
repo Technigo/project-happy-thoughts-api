@@ -15,4 +15,5 @@ DELETE /thoughts/:thoughtId --> delete thought
 
 ## View it live
 https://happy-thoughts-noemi.herokuapp.com/
+https://project11-happythoughts.netlify.app/
 
