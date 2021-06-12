@@ -17,7 +17,6 @@ const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     required: [true, "Message is reqired"],
-    unique: true,
     validate: {
       validator:(value) => {
         return /^[^0-9]+$/.test(value)
