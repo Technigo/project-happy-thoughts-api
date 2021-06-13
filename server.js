@@ -21,16 +21,16 @@ const thoughtSchema = new mongoose.Schema({
     unique: true,
     trim: [true],
     minlength: [5, 'Must be a minimum of 5 characters.'],
-    maxlength: [140, 'Must have a maximum of 140 characters!'],
+    maxlength: [140, 'Must have a maximum of 140 characters!']
   },
   hearts: {
     type: Number,
-    default: 0, //should have this default value always
+    default: 0 // should have this default value always
   },
   createdAt: {
     type: Date,
-    default: Date.now,
-  },
+    default: Date.now
+  }
 });
 
 const Thought = mongoose.model("Thought", thoughtSchema);
@@ -42,13 +42,13 @@ app.get("/", async (req, res) => {
   res.send(listEndpoints(app));
 })
 
-//Get all Thoughts
-app.get("/thoughts", async (_, res)  => {
-    const allThoughts= await Thought.find().sort({ createdAt: -1 }).limit(20);
-    res.json(allThoughts);
+// Get all Thoughts
+app.get("/thoughts", async (_, res) => {
+  const allThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20);
+  res.json(allThoughts);
 });
 
-//Create a thought
+// Create a thought
 app.post("/thoughts", async (req, res) => {
   try { 
     const newThought = await new Thought(req.body).save().limit(20)
@@ -63,7 +63,7 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
-//update likes to thought
+// update likes to thought
 app.post("/thoughts/:id/likes", async (req, res) => {
   const { id } = req.params;
 
