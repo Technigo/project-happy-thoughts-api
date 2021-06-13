@@ -10,3 +10,5 @@ I have had problems posting the likes to my API instead of the previous one!
 
 Have a look at my API here:
 https://happy-thoughts-by-nazanin.herokuapp.com/api/thoughts
+Front-end:
+https://distracted-jang-145440.netlify.app/
