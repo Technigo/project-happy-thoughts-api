@@ -1,4 +1,4 @@
-Project built during Technigo Bootcamp
+Project week 19 of Technigo bootcamp
 
 # Project Happy Thoughts API
 
