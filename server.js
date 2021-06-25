@@ -49,14 +49,6 @@ app.get('/thoughts', async (req, res) => {
 
 // Endpoint to post thoughts
 app.post('/thoughts', async (req, res) => {
-  // const { message } = req.body
-  // const thought = new Thought({ message })
-  // try {
-  //   const postedThought = await thought.save()
-  //   res.json(postedThought)
-  // } catch (error) {
-  //   res.status(400).json({ message: 'Could not post thought', error: err.errors })
-  // }
   try { 
     const newThought = await new Thought(req.body).save().limit(20)
     res.json(newThought);
