@@ -61,12 +61,7 @@ app.post('/thoughts', async (req, res) => {
     const newThought = await new Thought(req.body).save().limit(20)
     res.json(newThought);
   } catch (error) {
-    if (error.code === 11000) {
-      res
-        .status(400)
-        .json({ error: "Duplicated value", fields: error.keyValue });
-    }
-    res.status(400).json(error);
+    res.status(400).json({ message: 'Could not post thought', error: err.errors })
   }
 });
 
