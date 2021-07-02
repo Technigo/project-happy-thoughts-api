@@ -51,7 +51,7 @@ app.get("/", (req, res) => {
 
 app.get("/thoughts");
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find();
+  const thoughts = await Thought.find().sort({ createdAt: "desc" });
   res.json(thoughts);
 });
 
