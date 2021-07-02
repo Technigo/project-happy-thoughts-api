@@ -30,7 +30,7 @@ const Thoughts = () => {
     fetch(API_URL("thoughts"), options)
       .then((res) => res.json())
       .then((data) => dispatch(thoughts.actions.setThoughts(data)));
-  }, [dispatch, thoughtsItems, addThought]);
+  }, [dispatch]);
 
   const addThought = (e) => {
     e.preventDefault();
@@ -46,7 +46,7 @@ const Thoughts = () => {
       fetch(API_URL("thoughts"), options)
         .then((res) => res.json())
         .then((data) =>
-          dispatch(thoughts.actions.setThoughts([...thoughtsItems, data]))
+          dispatch(thoughts.actions.setThoughts([data, ...thoughtsItems]))
         )
         .then(setNewThought(""));
     }
