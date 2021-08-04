@@ -34,7 +34,7 @@ const Thought = mongoose.model('Thought', thoughtSchema)
 const port = process.env.PORT || 8080
 const app = express()
 // To solve CORS error
-const cors = require('cors')
+//const cors = require('cors')
 
 app.use(cors())
 app.use(express.json())
