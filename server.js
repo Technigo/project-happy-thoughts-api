@@ -8,8 +8,6 @@ dotenv.config()
 
 const port = process.env.PORT || 9000
 const app = express()
-// To solve CORS error
-//const cors = require('cors')
 
 app.use(express.json())
 app.use(cors())
