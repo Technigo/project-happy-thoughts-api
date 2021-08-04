@@ -6,6 +6,15 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
+const port = process.env.PORT || 9000
+const app = express()
+// To solve CORS error
+//const cors = require('cors')
+
+app.use(express.json())
+app.use(cors())
+
+
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -30,14 +39,6 @@ const thoughtSchema = new mongoose.Schema({
 })
 
 const Thought = mongoose.model('Thought', thoughtSchema)
-
-const port = process.env.PORT || 8080
-const app = express()
-// To solve CORS error
-//const cors = require('cors')
-
-app.use(cors())
-app.use(express.json())
 
 // ROUTES
 app.get('/', (req, res) => {
