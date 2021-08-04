@@ -33,6 +33,8 @@ const Thought = mongoose.model('Thought', thoughtSchema)
 
 const port = process.env.PORT || 8080
 const app = express()
+// To solve CORS error
+const cors = require('cors')
 
 app.use(cors())
 app.use(express.json())
@@ -56,6 +58,7 @@ app.get('/thoughts', async (req, res) => {
 app.post('/thoughts', async (req, res) => {
   try {
     const newThought = await new Thought({ message: req.body.message }).save()
+    res.json(newThought)
   } catch (error) {
     res.status(400).json(error)
   }
