@@ -37,10 +37,6 @@ const thoughtSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now //also () => Date.now()
-  },
-  username: {
-    type: String,
-    default: "Anonymous"
   }
 })
 //CREATES SINGLE THOUGHT MODEL
@@ -72,11 +68,10 @@ app.get("/thoughts", async (req, res) => {
 //ENDPOINT TO POST A THOUGHT
 app.post("/thoughts", async (req, res) => {
   try {
-    const { message, username } = req.body
-    const newThought = await new Thought({message, username}).save();
+    const newThought = await new Thought(req.body).save();
     res.json(newThought);
   } catch (error) {
-    if (error.name === "ValidationError") {
+    if (error.code === 11000) {
       res
         .status(400)
         .json({ error: "The thought should have a length between 5 and 140 characters" });
