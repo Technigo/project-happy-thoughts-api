@@ -50,8 +50,8 @@ app.get("/thoughts", async (req, res) => {
 
   try {
     const thoughts = await Thought.find()
-      .skip(page * 20)
-      .limit(20)
+      .skip(page * 15)
+      .limit(15)
       .sort({ createdAt: -1 });
     res.json(thoughts);
   } catch (error) {
