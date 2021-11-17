@@ -15,3 +15,5 @@ POST (/thoughts/:id/like) - allows the user to like a message<br>
 
 Frontend: https://happy-thoughts-carolinef.netlify.app/<br>
 Backend: https://carolinef-happy-thoughts-api.herokuapp.com/
+
+Github frontend: https://github.com/CarolineF3/project-happy-thoughts
