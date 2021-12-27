@@ -2,11 +2,17 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
+const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts'
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-// Defines the port the app will run on. Defaults to 8080, but can be 
+const Thought = mongoose.model('Thought', {
+  message: String,
+  heart: { type: Number, default: 0 },
+  createdAt: { type: Date, default: () => new Date() },
+})
+
+// Defines the port the app will run on. Defaults to 8080, but can be
 // overridden when starting the server. For example:
 //
 //   PORT=9000 npm start
@@ -20,6 +26,12 @@ app.use(express.json())
 // Start defining your routes here
 app.get('/', (req, res) => {
   res.send('Hello world')
+})
+
+app.post('/thoughts', async (req, res) => {
+  const thought = new Thought(req.body)
+  await thought.save()
+  res.json(thought)
 })
 
 // Start the server
