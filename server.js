@@ -8,7 +8,7 @@ mongoose.Promise = Promise
 
 const Thought = mongoose.model('Thought', {
   message: { type: String, minLength: 4, maxLength: 250 },
-  heart: { type: Number, default: 0 },
+  hearts: { type: Number, default: 0 },
   createdAt: { type: Date, default: () => new Date() },
 })
 
@@ -48,7 +48,7 @@ app.post('/thoughts/:id/like', async (req, res) => {
   try {
     const thought = await Thought.findByIdAndUpdate(
       { _id: id },
-      { $inc: { heart: 1 } },
+      { $inc: { hearts: 1 } },
       { new: true }
     )
     res.status(200).json(thought)
