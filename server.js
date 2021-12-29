@@ -7,7 +7,7 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
 const Thought = mongoose.model('Thought', {
-  message: String,
+  message: { type: String, minLength: 4, maxLength: 250 },
   heart: { type: Number, default: 0 },
   createdAt: { type: Date, default: () => new Date() },
 })
@@ -24,14 +24,37 @@ app.use(cors())
 app.use(express.json())
 
 // Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world')
+app.get('/thoughts', async (req, res) => {
+  try {
+    const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20)
+    res.status(200).json(thoughts)
+  } catch (error) {
+    res.status(400).json({ message: 'Could not find thoughts', errors: err.errors })
+  }
 })
 
 app.post('/thoughts', async (req, res) => {
-  const thought = new Thought(req.body)
-  await thought.save()
-  res.json(thought)
+  const { message } = req.body
+  try {
+    const thought = await new Thought({ message: message }).save()
+    res.status(201).json(thought)
+  } catch (err) {
+    res.status(400).json({ message: 'Could not save thought', errors: err.errors })
+  }
+})
+
+app.post('/thoughts/:id/like', async (req, res) => {
+  const { id } = req.params
+  try {
+    const thought = await Thought.findByIdAndUpdate(
+      { _id: id },
+      { $inc: { heart: 1 } },
+      { new: true }
+    )
+    res.status(200).json(thought)
+  } catch (err) {
+    res.status(400).json({ message: 'Could not find thought', errors: err.errors })
+  }
 })
 
 // Start the server
