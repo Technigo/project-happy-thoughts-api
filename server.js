@@ -46,11 +46,12 @@ app.get('/', (req, res) => {
   res.send('Hi Lovely People, this is Karas Happy Thoughts API. Get Happy People')
 })
 
+// endpoint for users to fetch the most recent 20 thoughts
 app.get('/thoughts', async (req,res) => {
-  const thoughts = await Thought.find().sort({createdAt:'desc'}).limit(20).exec();
-  res.json(thoughts)
+  const allThoughts = await Thought.find().sort({createdAt:'desc'}).limit(20).exec();
+  res.json(allThoughts)
 })
-
+//endpoint for the user to post a thought
 app.post ('/thoughts', async (req,res) =>{
   //Retrieve the information sent by the client to our API endpoint
   const {message} = req.body;
@@ -67,6 +68,13 @@ app.post ('/thoughts', async (req,res) =>{
   }
 })
 
+
+// add endpoint to like/add hearts
+app.post('thoughts/:thoughtId/like', async (req,res) => {
+  const { thoughtId } = req.params
+
+  const likedThought = await Thought.findOneAndUpdate()
+})
 
 // Start the server
 app.listen(port, () => {
