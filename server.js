@@ -12,7 +12,13 @@ const app = express();
 
 // v1 Schema method:
 const ThoughtSchema = new mongoose.Schema({
-  message: { type: String, required: true, minlength: 5, maxlength: 140 },
+  message: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 140,
+    trim: true, //checks whitespaces in the beginning and the end of the string - still counts the spaces between words.
+  },
   hearts: { type: Number, default: 0 },
   category: {
     type: String,
