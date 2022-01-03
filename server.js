@@ -22,12 +22,11 @@ const MemberSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    enum: ['Jennie', 'Matilda', 'Karin', 'Maksymilian'],
   },
   description: {
     type: String,
     minlength: 5,
-    maxlength: 10,
+    maxlength: 15,
     trim: true,
   },
   score: {
