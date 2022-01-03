@@ -1,5 +1,7 @@
 node_modules
 .DS_Store
+.env
+.idea
 .env.local
 .env.development.local
 .env.test.local
