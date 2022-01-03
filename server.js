@@ -54,49 +54,70 @@ app.use(cors());
 app.use(express.json());
 
 // Start defining your routes here
-app.post("/thoughts", async (req, res) => {
-  try {
-    const thought = new Thought({
-      message: req.body.message,
-      category: req.body.category,
-      name: req.body.name,
+// v1 async await method -
+// app.post("/thoughts", async (req, res) => {
+//   try {
+//     const { name, message, category } = req.body;
+//     const newThought = await new Thought({
+//       message,
+//       name,
+//       category,
+//     }).save();
+//     res.status(201).json({ response: newThought, success: true });
+//   } catch (error) {
+//     res.status(400).json({
+//       response: error,
+//       success: false,
+//     });
+//   }
+// });
+
+// v2 promises -
+
+app.post("/thoughts", (req, res) => {
+  const { name, message, category } = req.body;
+
+  new Thought({ name, message, category })
+    .save()
+    .then((data) => {
+      res.status(201).json({ response: data, success: true });
+    })
+    .catch((error) => {
+      res.status(400).json({ response: error, success: false });
     });
-    await thought.save();
-    res.json(thought);
-  } catch (error) {
-    res.status(400).json({
-      response:
-        "The text needs to be betweeen 5-140 characters or you have used an invalid category.",
-      success: false,
-    });
-  }
 });
 
-app.get("/thoughts", async (req, res) => {
-  let queryCategory = req.query.category;
+app.get("/thoughts", (req, res) => {
+  const queryCategory = req.query.category;
 
   if (!queryCategory) {
-    const thoughts = await Thought.find().sort({ createdAt: -1 });
-    res.json(thoughts.slice(0, 20));
+    Thought.find()
+      .sort({ createdAt: -1 })
+      .then((data) => {
+        res.json(data.slice(0, 20));
+      });
   } else {
-    const thoughts = await Thought.find({ category: cat }).sort({
-      createdAt: -1,
-    });
-    res.json(thoughts.slice(0, 20));
+    Thought.find({ category: queryCategory })
+      .sort({
+        createdAt: -1,
+      })
+      .then((data) => {
+        res.json(data.slice(0, 20));
+      });
   }
 });
 
-app.post("/thoughts/:id/like", async (req, res) => {
+app.post("/thoughts/:id/like", (req, res) => {
   const { id } = req.params;
-  const thought = await Thought.findOne({ _id: id });
-
-  if (thought) {
-    thought.hearts += 1;
-    await thought.save();
-    res.json(thought);
-  } else {
-    res.status(404).json({ response: "Could not save heart!", success: false });
-  }
+  Thought.findOne({ _id: id })
+    .then((data) => {
+      data.hearts += 1;
+      data.save();
+      res.json(data);
+    })
+    .catch((error) => {
+      res.status(404).json({ response: error, success: false });
+    });
 });
 
 // Start the server
