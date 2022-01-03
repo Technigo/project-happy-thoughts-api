@@ -6,12 +6,17 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-const Thought = mongoose.model('Thought', {
+// first thing to do define the model, spefing the type with schema of properties
+const ThoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     required: true,
     minlength: 5,
-    maxlenght: 140
+    maxlenght: 140, 
+    trim: true
+  },
+  username: {
+    type: String
   },
   hearts: {
     type: Number,
@@ -22,6 +27,10 @@ const Thought = mongoose.model('Thought', {
     default: Date.now
   }
 })
+
+// creating model with types of schema from thoughtschema
+const Thought = mongoose.model('Thought', ThoughtSchema);
+
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
 //
@@ -43,17 +52,34 @@ app.get('/thoughts', async (req, res) => {
   res.json(thoughts)
 });
 
+// post requests 
 app.post('/thoughts', async (req, res) => {
   // Retrieve the information sent by the client to our API endpoint
-  const { message } = req.body;
+  const { message, username } = req.body;
   // use mongoose model to create the database entry
-  const thought = new Thought({ message });
+  const thought = new Thought({ message, username });
   try {
     // Success case
     const savedThought = await thought.save();
     res.status(201).json(savedThought)
   } catch (err) {
     res.status(404).json({ message: "Could not save thought to the database", error: err.errors });
+  }
+});
+
+// update for likes 
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params;
+
+  try {
+    // first argument passing id, second what property should be updated
+    const thoughtLiked = await Thought.findByIdAndUpdate(
+      thoughtId, 
+      { $inc: { hearts: 1 } }, { new: true }
+    ); // inc = inscrese, new is options of that method 
+    res.status(201).json({ message: thoughtLiked, success: true })
+  } catch (err) {
+    res.status(400).json({ message: "Could not find that Thought", error: err.errors });
   }
 });
 

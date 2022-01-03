@@ -10,6 +10,8 @@ Describe how you approached to problem, and what tools and techniques you used t
 
 ## View it live
 
+https://happy-thoughts-backend.herokuapp.com/thoughts
+
 ## **🔵 Blue Level (Minimum Requirements)**
 
 - Your API should implement the routes exactly as documented above.
