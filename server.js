@@ -13,12 +13,14 @@ const Thought = mongoose.model('Thought', {
     type: String,
     required: true,
     minlength: [5,'Please get more Wordy. More Words. More Love. Nuff said innit.'],
-    maxlength: [140, 'Alrighty, thats enough words from you, Chatterbox']
+    maxlength: [140, 'Alrighty, thats enough words from you, Chatterbox'],
+    trim: true,
   },
 
   createdAt:{
     type: Date,
     default: Date.now,
+    // can also be written as () => Date.now(), as an anonymous call-back function
     required: true,
   },
 
@@ -51,29 +53,36 @@ app.get('/thoughts', async (req,res) => {
   const allThoughts = await Thought.find().sort({createdAt:'desc'}).limit(20).exec();
   res.json(allThoughts)
 })
-//endpoint for the user to post a thought
+
+
+//endpoint for the user to POST a thought
 app.post ('/thoughts', async (req,res) =>{
-  //Retrieve the information sent by the client to our API endpoint
-  const {message} = req.body;
+  //Retrieve the information sent by the client to our API endpoint from the request body
+  const { message } = req.body;
 
   //Use our mongoose model to create the database entry
   const thought = new Thought ({message})
 
-  try{
+  try {
     // success
     const savedThought = await thought.save() 
-    res.status(201).json(savedThought) 
+    res.status(201).json(savedThought) // 201 status code means somethng has been successfully created
   } catch (err) {
     res.status(400).json({message:"Could not save thought to the database", error: err.errors})
   }
 })
 
 
-// add endpoint to like/add hearts
+// add POST endpoint to like/add hearts
 app.post('thoughts/:thoughtId/like', async (req,res) => {
   const { thoughtId } = req.params
 
-  const likedThought = await Thought.findOneAndUpdate()
+  try {
+    const likedThought = await Thought.findByIdAndUpdate(thoughtId, { $inc: { hearts: 1 } }, {new: true})
+    res.status(201).json(likedThought)
+  } catch (err) {
+    res.status(400).json({message:"Could not add that like to the database", error: err.errors})
+  }
 })
 
 // Start the server
