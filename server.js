@@ -115,14 +115,14 @@ app.get("/thoughts", async (req, res) => {
 
 app.post("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
-  const thought = await Thought.findOne({ _id: id });
 
-  if (thought) {
-    thought.hearts += 1;
-    await thought.save();
-    res.json(thought);
-  } else {
-    res.status(404).json({ response: "Could not save heart!", success: false });
+  try {
+    const updatedLikes = await Thought.findByIdAndUpdate(id, {
+      $inc: { hearts: 1 },
+    });
+    res.status(200).json({ response: updatedLikes, success: true });
+  } catch (error) {
+    res.status(404).json({ response: error, success: false });
   }
 });
 
