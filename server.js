@@ -29,7 +29,7 @@ app.use(express.json());
 // Start defining your routes here
 app.post("/thoughts", async (req, res) => {
   try {
-    const thought = new Thought({ text: req.body.text });
+    const thought = new Thought({ message: req.body.message });
     await thought.save();
     res.json(thought);
   } catch (error) {
