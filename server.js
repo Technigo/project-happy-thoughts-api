@@ -78,8 +78,16 @@ app.post('thoughts/:thoughtId/like', async (req,res) => {
   const { thoughtId } = req.params
 
   try {
-    const likedThought = await Thought.findByIdAndUpdate(thoughtId, { $inc: { hearts: 1 } }, {new: true})
-    res.status(201).json(likedThought)
+    const likedThought = await Thought.findByIdAndUpdate(
+      thoughtId, 
+      { $inc: { hearts: 1, } }, 
+      {new: true}
+      )
+      if(likedThought){
+        res.status(201).json(likedThought)
+      } else {
+        res.status(404).json({ message: 'Not found!' })
+      } 
   } catch (err) {
     res.status(400).json({message:"Could not add that like to the database", error: err.errors})
   }
