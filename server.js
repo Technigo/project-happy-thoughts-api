@@ -74,7 +74,7 @@ app.post ('/thoughts', async (req,res) =>{
 
 
 // add POST endpoint to like/add hearts
-app.post('thoughts/:thoughtId/like', async (req,res) => {
+app.post('/thoughts/:thoughtId/like', async (req,res) => {
   const { thoughtId } = req.params
 
   try {
