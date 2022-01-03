@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
+mongoose.set("useFindAndModify", false);
 
 // Defines the port the app will run on. Defaults to 8080, but can be
 // overridden when starting the server. For example:
@@ -41,7 +42,13 @@ app.get("/", (req, res) => {
   res.send("Hello world");
 });
 
-app.get("/thoughts", (req, res) => {});
+app.get("/thoughts", async (req, res) => {
+  const thoughts = await Thought.find()
+    .sort({ createdAt: "desc" })
+    .limit(20)
+    .exec();
+  res.json(thoughts);
+});
 
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
@@ -55,10 +62,15 @@ app.post("/thoughts", async (req, res) => {
 
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
-  const updatedThought = await Thought.findByIdAndUpdate(thoughtId, {
-    $inc: { hearts: 1 },
-  });
   try {
+    const updatedThought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      {
+        $inc: { hearts: 1 },
+      },
+      { new: true }
+    );
+
     res.status(200).json({ response: updatedThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
