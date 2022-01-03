@@ -13,6 +13,31 @@ mongoose.Promise = Promise
 const port = process.env.PORT || 8080
 const app = express()
 
+const MemberSchema = new mongoose.Schema({
+  name: {
+  type: String,
+  required: true,
+  unique: true, 
+  enum: ['Jennie', 'Matilda', 'Karin', 'Maksymilian'],
+  },
+  description: {
+  type: String,
+  minlength: 5,
+  maxlength: 10,
+  trim: true,
+  },
+  score: { 
+  type: Number,
+  default: 0
+  },
+  createdAt: {
+  type: Number,
+  default: () => Date.now()
+  }
+})   
+
+const Member = mongoose.model('Member', MemberSchema)
+
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(express.json())
@@ -20,6 +45,10 @@ app.use(express.json())
 // Start defining your routes here
 app.get('/', (req, res) => {
   res.send('Hello world')
+})
+
+app.post('members', (req, res) => {
+
 })
 
 // Start the server
