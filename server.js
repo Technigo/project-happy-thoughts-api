@@ -49,6 +49,12 @@ app.get('/', (req, res) => {
 })
 
 
+// Get thoughts
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await Thought.find().sort({ createdAt: "desc"})
+  res.json(thoughts)
+})
+
 // v1 async await
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body
