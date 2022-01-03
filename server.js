@@ -29,10 +29,10 @@ const TweetSchema = new mongoose.Schema({
     type: Number,
     default: () => Date.now(),
   },
-  //data available: Mixed, Buffer, Date, ObjectID, Array, Decimal128, Map, Schema
-  // uniqe: true, //check if that name is reserved, throw an error
-  // enum: ['Jennie', 'Matilda', 'Karin', 'Maks'], //specify only allowed value, ex tags to choose from
 })
+//data available: Mixed, Buffer, Date, ObjectID, Array, Decimal128, Map, Schema
+// uniqe: true, //check if that name is reserved, throw an error
+// enum: ['Jennie', 'Matilda', 'Karin', 'Maks'], //specify only allowed value, ex tags to choose from
 
 const Tweet = mongoose.model('Tweet', TweetSchema)
 
@@ -48,11 +48,11 @@ app.get('/', (req, res) => {
 app.post('/', async (req, res) => {
   const { message } = req.body
 
+  // name: name is shorened to: name
+
   try {
     //Success
     const newTweet = await new Tweet({
-      // name: name,
-      //description: description,
       message: message,
       //stop here, saved in node but not in mondoDB
     }).save()
@@ -61,6 +61,29 @@ app.post('/', async (req, res) => {
   } catch (error) {
     //error
     res.status(400).json({ response: error, success: false })
+  }
+})
+
+app.post('/:id/hearts', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    //mongo operator
+    const updatedHeart = await Tweet.findByIdAndUpdate(
+      id,
+      {
+        $inc: {
+          hearts: 1,
+        },
+      },
+      {
+        new: true, //
+      },
+    )
+    console.log('req body', req.body)
+    res.status(201).json({ response: updatedHeart, success: true })
+  } catch (error) {
+    res.status(400).json({ response: 'No tweet with that ID', sucess: false })
   }
 })
 
