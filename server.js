@@ -3,10 +3,10 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 mongoose.Promise = Promise
 
-//mongodb://localhost/happyThoughts
+
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
@@ -59,7 +59,7 @@ app.post('/members', async (req, res) => {
 
   try {
     const newMember = await new Member({ name, description }).save()
-    res.status(201).json({ response: newMemeber, success: true })
+    res.status(201).json({ response: newMember, success: true })
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
