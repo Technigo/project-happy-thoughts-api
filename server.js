@@ -55,69 +55,75 @@ app.use(express.json());
 
 // Start defining your routes here
 // v1 async await method -
-// app.post("/thoughts", async (req, res) => {
-//   try {
-//     const { name, message, category } = req.body;
-//     const newThought = await new Thought({
-//       message,
-//       name,
-//       category,
-//     }).save();
-//     res.status(201).json({ response: newThought, success: true });
-//   } catch (error) {
-//     res.status(400).json({
-//       response: error,
-//       success: false,
-//     });
-//   }
-// });
-
-// v2 promises -
-
-app.post("/thoughts", (req, res) => {
-  const { name, message, category } = req.body;
-
-  new Thought({ name, message, category })
-    .save()
-    .then((data) => {
-      res.status(201).json({ response: data, success: true });
-    })
-    .catch((error) => {
-      res.status(400).json({ response: error, success: false });
+app.post("/thoughts", async (req, res) => {
+  try {
+    const { name, message, category } = req.body;
+    const newThought = await new Thought({
+      message,
+      name,
+      category,
+    }).save();
+    res.status(201).json({ response: newThought, success: true });
+  } catch (error) {
+    res.status(400).json({
+      response: error,
+      success: false,
     });
-});
-
-app.get("/thoughts", (req, res) => {
-  const queryCategory = req.query.category;
-
-  if (!queryCategory) {
-    Thought.find()
-      .sort({ createdAt: -1 })
-      .then((data) => {
-        res.json(data.slice(0, 20));
-      });
-  } else {
-    Thought.find({ category: queryCategory })
-      .sort({
-        createdAt: -1,
-      })
-      .then((data) => {
-        res.json(data.slice(0, 20));
-      });
   }
 });
 
-app.post("/thoughts/:id/like", (req, res) => {
-  const { id } = req.params;
-  Thought.findOne({ _id: id })
-    .then((data) => {
-      data.hearts += 1;
-      data.save();
-      res.json(data);
-    })
-    .catch((error) => {
-      res.status(404).json({ response: error, success: false });
+// v2 promises -
+
+// app.post("/thoughts", (req, res) => {
+//   const { name, message, category } = req.body;
+
+//   new Thought({ name, message, category })
+//     .save()
+//     .then((data) => {
+//       res.status(201).json({ response: data, success: true });
+//     })
+//     .catch((error) => {
+//       res.status(400).json({ response: error, success: false });
+//     });
+// });
+
+// v3 - mongoose callbakck
+// app.post(`/thoughts`, (req, res) => {
+//   const { name, message, category } = req.body;
+//   new Thought({ name, message, category }).save((error, data) => {
+//     if (error) {
+//       res.status(400).json({ response: error, success: false });
+//     } else {
+//       res.status(201).json({ response: data, success: true });
+//     }
+//   });
+// });
+
+app.get("/thoughts", async (req, res) => {
+  let queryCategory = req.query.category;
+
+  if (!queryCategory) {
+    const thoughts = await Thought.find().sort({ createdAt: -1 });
+    res.json(thoughts.slice(0, 20));
+  } else {
+    const thoughts = await Thought.find({ category: cat }).sort({
+      createdAt: -1,
     });
+    res.json(thoughts.slice(0, 20));
+  }
+});
+
+app.post("/thoughts/:id/like", async (req, res) => {
+  const { id } = req.params;
+  const thought = await Thought.findOne({ _id: id });
+
+  if (thought) {
+    thought.hearts += 1;
+    await thought.save();
+    res.json(thought);
+  } else {
+    res.status(404).json({ response: "Could not save heart!", success: false });
+  }
 });
 
 // Start the server
