@@ -7,7 +7,7 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
 const Thought = mongoose.model("Thought", {
-  text: { type: String, required: true, minlength: 5, maxlength: 140 },
+  message: { type: String, required: true, minlength: 5, maxlength: 140 },
   hearts: { type: Number, default: 0 },
   createdAt: {
     type: Date,
