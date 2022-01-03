@@ -16,20 +16,17 @@ const port = process.env.PORT || 8080
 const app = express()
 
 
-//Mongoose Schema for member model
-const MemberSchema = new mongoose.Schema({
-  name: {
+//Mongoose Schema for thought model
+const ThoughtSchema = new mongoose.Schema({
+  message: {
     type: String,
     required: true,
     unique: true,
-  },
-  description: {
-    type: String,
-    minlength: 5,
-    maxlength: 15,
     trim: true,
+    minlength: 5,
+    maxlength: 140,
   },
-  score: {
+  hearts: {
     type: Number,
     default: 0,
   },
@@ -40,7 +37,7 @@ const MemberSchema = new mongoose.Schema({
 })
 
 //Mongoose model with Schema
-const Member = mongoose.model('Member', MemberSchema)
+const Thought = mongoose.model('Thought', ThoughtSchema)
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
@@ -53,37 +50,24 @@ app.get('/', (req, res) => {
 
 
 // v1 async await
-app.post('/members', async (req, res) => {
-  const { name, description } = req.body
+app.post('/thoughts', async (req, res) => {
+  const { message } = req.body
 
   try {
-    const newMember = await new Member({ name, description }).save()
-    res.status(201).json({ response: newMember, success: true })
+    const newThought = await new Thought({ message }).save()
+    res.status(201).json({ response: newThought, success: true })
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
 })
 
 
-// v2 promises
-/* app.post('/members', (req, res) => {
-  const { name, description } = req.body
-
-  new Member({ name, description }).save()
-    .then(data => {
-      res.status(201).json({ response: data, success: true })
-    })
-    .catch(error => {
-      res.status(400).json({ response: error, success: false })
-    })
-}) */
-
-app.post('/members/:id/score', async (req, res) => {
+app.post('/thoughts/:id/hearts', async (req, res) => {
   const { id } = req.params
 
   try {
-    const updatedMember =  await Member.findByIdAndUpdate(id, { $inc: { score: 1 } })
-    res.status(200).json({ response: updatedMember, success: true })
+    const updatedThought =  await Thought.findByIdAndUpdate(id, { $inc: { hearts: 1 } })
+    res.status(200).json({ response: updatedThought, success: true })
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
