@@ -13,6 +13,26 @@ mongoose.Promise = Promise
 const port = process.env.PORT || 8080
 const app = express()
 
+const ThoughtSchema = new mongoose.Schema({
+  message: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 150,
+    trim: true,
+  },
+  hearts: {
+    type: Number,
+    default: 0,
+  },
+  createdAt: {
+    type: Number,
+    default: () => Date.now(),
+  }
+})
+
+const Thought = mongoose.Model('Thought', ThoughtSchema)
+
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(express.json())
