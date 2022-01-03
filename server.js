@@ -41,13 +41,12 @@ app.post("/thoughts", async (req, res) => {
 });
 
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find();
-  res.json(thoughts);
+  const thoughts = await Thought.find().sort({ createdAt: -1 });
+  res.json(thoughts.slice(0, 20));
 });
 
 app.post("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
-
   const thought = await Thought.findOne({ _id: id });
 
   if (thought) {
