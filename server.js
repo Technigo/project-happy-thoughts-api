@@ -3,7 +3,11 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts'
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoUrl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+})
 mongoose.Promise = Promise
 
 // Defines the port the app will run on. Defaults to 8080, but can be
@@ -14,7 +18,7 @@ const port = process.env.PORT || 8080
 const app = express()
 
 //make scheme seperate if need to reuse or combine
-const TweetSchema = new mongoose.Schema({
+const ThoughtSchema = new mongoose.Schema({
   message: {
     type: String, //always need a type
     required: true,
@@ -34,15 +38,20 @@ const TweetSchema = new mongoose.Schema({
 // uniqe: true, //check if that name is reserved, throw an error
 // enum: ['Jennie', 'Matilda', 'Karin', 'Maks'], //specify only allowed value, ex tags to choose from
 
-const Tweet = mongoose.model('Tweet', TweetSchema)
+const Thought = mongoose.model('Thought', ThoughtSchema)
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(express.json())
 
 // Start defining your routes here
-app.get('/', (req, res) => {
-  res.json('Hello world')
+app.get('/', async (req, res) => {
+  try {
+    const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20)
+    res.json(thoughts)
+  } catch (error) {
+    res.status(400).json({ response: error, success: false })
+  }
 })
 
 app.post('/', async (req, res) => {
@@ -52,12 +61,12 @@ app.post('/', async (req, res) => {
 
   try {
     //Success
-    const newTweet = await new Tweet({
+    const newThought = await new Thought({
       message: message,
       //stop here, saved in node but not in mondoDB
     }).save()
     //dont know how long time save takes, hence await
-    res.status(201).json({ response: newTweet, success: true })
+    res.status(201).json({ response: newThought, success: true })
   } catch (error) {
     //error
     res.status(400).json({ response: error, success: false })
@@ -69,7 +78,7 @@ app.post('/:id/hearts', async (req, res) => {
 
   try {
     //mongo operator
-    const updatedHeart = await Tweet.findByIdAndUpdate(
+    const updatedHeart = await Thought.findByIdAndUpdate(
       id,
       {
         $inc: {
@@ -77,13 +86,13 @@ app.post('/:id/hearts', async (req, res) => {
         },
       },
       {
-        new: true, //
+        new: true, //updated document directly- find in documentary
       },
     )
     console.log('req body', req.body)
     res.status(201).json({ response: updatedHeart, success: true })
   } catch (error) {
-    res.status(400).json({ response: 'No tweet with that ID', sucess: false })
+    res.status(400).json({ response: 'No Thought with that ID', sucess: false })
   }
 })
 
