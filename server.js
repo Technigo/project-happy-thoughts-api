@@ -2,11 +2,12 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
+const mongoUrl = process.env.MONGO_URL || "mongodb+srv://dandeloid:m0ng0@cluster0.0pplx.mongodb.net/happy"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 mongoose.Promise = Promise
 
-
+//mongodb://localhost/happyThoughts
+// mongodb+srv://dandeloid:m0ng0@cluster0.0pplx.mongodb.net/happy
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
@@ -49,9 +50,9 @@ app.get('/', (req, res) => {
 })
 
 
-// Get thoughts
+// Get thoughts in descending order
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: "desc"})
+  const thoughts = await Thought.find().sort({ createdAt: "desc"}).limit(20)
   res.json(thoughts)
 })
 
@@ -67,7 +68,7 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-
+// Post method for adding likes/hearts
 app.post('/thoughts/:id/hearts', async (req, res) => {
   const { id } = req.params
 
