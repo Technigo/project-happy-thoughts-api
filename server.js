@@ -3,6 +3,8 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
@@ -47,8 +49,38 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
-app.post('members', (req, res) => {
+// Post request for new members
+app.post('/members', async (req, res) => {
+  const { name, description } = req.body;
 
+try {
+  const newMember = await new Member({ name, description }).save()
+  res.status(201).json({ response: newMember, success: true })
+} catch (error) {
+res.status(400).json({ response: error, success: false })
+}
+})
+
+// Post request for increasing score
+app.post('/members/:id/score', async (req, res) => {
+  const { id } = req.params
+
+  try {
+  const updatedMember = await Member.findByIdAndUpdate(
+    id, 
+    {
+     $inc: { 
+       score: 1, 
+      },
+    },
+    {
+      new: true
+    }
+    )
+  res.status(200).json({ response: updatedMember, success: true })
+  } catch (error) {
+  res.status(400).json({ response: error, success: false })
+  }
 })
 
 // Start the server
