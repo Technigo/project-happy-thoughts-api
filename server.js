@@ -21,7 +21,7 @@ const ThoughtSchema = new mongoose.Schema({
 		maxlength: 140,
 		trim: true,
 		required: true,
-		//enum:['person','dogs', 'books','food']
+		//enum:['Food thoughts','Project thoughts', 'Home thoughts','Travel thoughts']
 	},
 	hearts: {
 		type: Number,
@@ -53,7 +53,7 @@ app.get('/thoughts', async (req, res) => {
 		res.status(200).json(allThoughts);
 	} catch (error) {
 		res.status(404).json({
-			message: 'can not find thoughts',
+			message: 'Can not find thoughts',
 			errors: error.errors,
 			success: false,
 		});
@@ -105,7 +105,7 @@ app.post('/thoughts', async (req, res) => {
 // });
 
 //path param to increase the likes
-app.post('/thoughts/:id/like', async (req, res) => {
+app.post('/thoughts/:ThoughtId/like', async (req, res) => {
 	const { id } = req.params;
 	try {
 		const updatedHeart = await Thought.findByIdAndUpdate(
