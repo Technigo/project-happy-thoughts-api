@@ -45,7 +45,7 @@ const AllUsermessages = mongoose.model("AllUsermessages", HappySchema);
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("hello");
+  res.send("HALLÅ");
 });
 
 /* GET/ message
@@ -58,7 +58,7 @@ app.get("/thoughts", async (req, res) => {
     .exec();
 
   try {
-    res.status(200).json({ response: message, success: true });
+    res.status(200).json(message);
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
@@ -91,12 +91,12 @@ and update its hearts property to add one heart.
 
  */
 
-app.post("/thoughts/:thoughtsId/like", async (req, res) => {
-  const { thoughtsId } = req.params;
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
 
   try {
     const likeUpdate = await AllUsermessages.findByIdAndUpdate(
-      thoughtsId,
+      thoughtId,
       {
         $inc: { hearts: 1 }
       },
