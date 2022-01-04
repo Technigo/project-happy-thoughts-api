@@ -49,7 +49,7 @@ const AllUsermessages = mongoose.model("AllUsermessages", happySchema);
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("HALLÅ");
+  res.send("Welcome to this API");
 });
 
 /* GET/ message
