@@ -47,19 +47,35 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 });
 
-app.post('/members', async (req, res) => {
+// v1 - async await
+// app.post('/members', async (req, res) => {
+//   const { name, description } = req.body;
+
+//   //success
+//   try {
+//     const newMember = await new Member({  name, description }).save();
+//     res.status(201).json({ response: newMember, succes: true });
+//   //if something goes wrong (doesn't match the schema)
+//   } catch (error) {
+//     res.status(400).json({  response: error, success: false });
+//   }
+
+// });
+
+
+// v2 - promises
+app.post('/members', (req, res) => {
   const { name, description } = req.body;
 
-  //success
-  try {
-    const newMember = await new Member({  name, description }).save();
-    res.status(201).json({ response: newMember, succes: true });
-  //if something goes wrong (doesn't match the schema)
-  } catch (error) {
-    res.status(400).json({  response: error, success: false });
-  }
-
+  new Member({ name, description }).save()
+    .then(data => {
+      res.status(201).json({ response: data, success: true })
+    })
+    .catch(error => {
+      res.status(400).json({ response: error, success: false });
+    })
 });
+
 
 // Start the server
 app.listen(port, () => {
