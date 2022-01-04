@@ -53,17 +53,28 @@ app.get('/thoughts', async (req, res) => {
 });
 
 // post requests 
+// app.post('/thoughts', async (req, res) => {
+//  // Retrieve the information sent by the client to our API endpoint
+//  const { message, username } = req.body;
+//  // use mongoose model to create the database entry
+//  const thought = new Thought({ message, username });
+//  try {
+//    // Success case
+//    const savedThought = await thought.save();
+//    res.status(201).json(savedThought)
+//  } catch (err) {
+//  res.status(404).json({ message: "Could not save thought to the database", error: err.errors });
+//  }
+// });
+
 app.post('/thoughts', async (req, res) => {
-  // Retrieve the information sent by the client to our API endpoint
-  const { message, username } = req.body;
-  // use mongoose model to create the database entry
-  const thought = new Thought({ message, username });
+  const { message } = req.body;
+
   try {
-    // Success case
-    const savedThought = await thought.save();
-    res.status(201).json(savedThought)
-  } catch (err) {
-    res.status(404).json({ message: "Could not save thought to the database", error: err.errors });
+    const newThought = await new Thought({ message }).save();
+    res.status(201).json({ response: newThought, success: true });
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
   }
 });
 
