@@ -14,6 +14,11 @@ const port = process.env.PORT || 8080
 const app = express()
 
 const ThoughtSchema = new mongoose.Schema({
+   name: {
+    type: String,
+    minlength: 2,
+    maxlength: 500,
+   },
    message: {
      type: String,
      required: true,
@@ -24,6 +29,10 @@ const ThoughtSchema = new mongoose.Schema({
      type: Number,
      default: 0,
      max: 0,
+   },
+   category: {
+     type: String,
+     enum: ['Love', 'Friendship', 'Work', 'Project', 'Relationships', 'School'],
    },
    createdAt: {
      type: Date,
@@ -56,10 +65,10 @@ app.get('/thoughts', async (req, res) => {
 // post endpoint (V1 async await)
 
 app.post('/thoughts', async (req, res) => {
-   const { message } = req.body
+   const { message, category, name } = req.body
 
   try {
-    const newThought = await new Thought({ message }).save()
+    const newThought = await new Thought({ message, category, name }).save()
     res.status(201).json({ 
       response: newThought, 
       success: true 
