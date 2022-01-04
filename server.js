@@ -23,14 +23,13 @@ const ThoughtSchema = new mongoose.Schema({
   },
   tags: {
     type: String,
-    enum: ["Food thought", "Random thought", "Work thought"],
+    enum: ["Food thought", "Random thought", "Work thought", "Other thought"],
     required: true,
   },
   name: {
     type: String,
     minlength: 1,
     maxlength: 300,
-    required: true,
     default: "anonymous",
   },
   hearts: {
@@ -51,7 +50,7 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello world");
+  res.send("Only happy thoughts here.");
 });
 
 app.get("/thoughts", async (req, res) => {
