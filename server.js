@@ -7,10 +7,17 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
 const ThoughtSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    minlenght: 2,
+    maxlength: 20,
+    trim: true
+  },
   text: {
     type: String,
     required: true,
-    minLenght: 5,
+    minlenght: 5,
     maxlength: 140,
     trim: true
   },
@@ -50,9 +57,9 @@ app.get('/thoughts', async (req, res) => {
 })
 
 app.post('/thoughts', async (req, res) => {
-  const { text } = req.body
+  const { name, text } = req.body
 
-  const thought = new Thought({text})
+  const thought = new Thought({name, text})
 
   try {
     const newThought = await thought.save()
