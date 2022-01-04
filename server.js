@@ -36,7 +36,7 @@ const HappySchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  id: {
+  thoughtsId: {
     type: Number
   }
 });
