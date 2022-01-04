@@ -3,7 +3,11 @@ import cors from "cors";
 import mongoose from "mongoose";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/HappyApi";
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
+mongoose.connect(mongoUrl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true
+});
 mongoose.Promise = Promise;
 
 // Defines the port the app will run on. Defaults to 8080, but can be
@@ -96,15 +100,24 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
 
   try {
     const likeUpdate = await AllUsermessages.findByIdAndUpdate(
-      {_id: thoughtId,},
       {
-        $inc: { hearts: 1 }
+        _id: id
       },
-
-      { new: true }
+      {
+        $inc: {
+          hearts: 1
+        }
+      },
+      {
+        new: true
+      }
     );
 
-    res.json(likeUpdate);
+    if (likeUpdate) {
+      res.json(likeUpdate);
+    } else {
+      res.status(404).json({ message: "Not found" });
+    }
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
