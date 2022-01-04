@@ -3,7 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/HappyApi";
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
 mongoose.Promise = Promise;
 
 // Defines the port the app will run on. Defaults to 8080, but can be
@@ -19,7 +19,7 @@ app.use(express.json());
 
 /* Schema for bookings */
 
-const HappySchema = new mongoose.Schema({
+const happySchema = new mongoose.Schema({
   hearts: {
     type: Number,
     default: 0
@@ -41,7 +41,7 @@ const HappySchema = new mongoose.Schema({
   }
 });
 
-const AllUsermessages = mongoose.model("AllUsermessages", HappySchema);
+const AllUsermessages = mongoose.model("AllUsermessages", happySchema);
 
 // Start defining your routes here
 app.get("/", (req, res) => {
