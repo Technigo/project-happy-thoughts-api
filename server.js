@@ -68,6 +68,15 @@ app.get('endpoints', (req, res) => {
   res.send(listEndpoints(app));
 });
 
+// get the thoughts max 20 sorted by createdAt descending order
+app.get('/thoughts', async (req, res) => {
+  const thoughtsList = await Thought.find()
+    .sort({ createdAt: 'desc' })
+    .limit(20)
+    .exec();
+  res.json(thoughtsList);
+});
+
 app.post('/thoughts', async (req, res) => {
   const { message, userName } = req.body;
   try {
