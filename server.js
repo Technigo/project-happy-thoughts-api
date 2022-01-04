@@ -85,13 +85,13 @@ app.post("/thoughts", async (req, res) => {
 
 /* 
 
-POST messages/:thoughtsId/like
+POST /thoughts/:thoughtsId/like
 This endpoint doesn't require a JSON body. Given a valid message id in the URL, the API should find that message,
 and update its hearts property to add one heart.
 
  */
 
-app.post("/:thoughtsId/like", async (req, res) => {
+app.post("/thoughts/:thoughtsId/like", async (req, res) => {
   const { thoughtsId } = req.params;
 
   try {
