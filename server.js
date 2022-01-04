@@ -16,7 +16,9 @@ const ThoughtSchema = new mongoose.Schema({
     trim: true
   },
   username: {
-    type: String
+    type: String,
+    maxLength: 20,
+    default: 'Anonymous'
   },
   hearts: {
     type: Number,
@@ -47,32 +49,19 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 });
 
+// getting all of the thoughts and sorting them
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec();
   res.json(thoughts)
 });
 
-// post requests 
-// app.post('/thoughts', async (req, res) => {
-//  // Retrieve the information sent by the client to our API endpoint
-//  const { message, username } = req.body;
-//  // use mongoose model to create the database entry
-//  const thought = new Thought({ message, username });
-//  try {
-//    // Success case
-//    const savedThought = await thought.save();
-//    res.status(201).json(savedThought)
-//  } catch (err) {
-//  res.status(404).json({ message: "Could not save thought to the database", error: err.errors });
-//  }
-// });
-
+// post the message
 app.post('/thoughts', async (req, res) => {
-  const { message } = req.body;
+  const { message, username } = req.body;
 
   try {
-    const newThought = await new Thought({ message }).save();
-    res.status(201).json({ response: newThought, success: true });
+    const newThought = await new Thought({ message, username }).save();
+    res.status(201).json({ response: newThought, username });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
