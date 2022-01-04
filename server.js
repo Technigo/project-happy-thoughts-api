@@ -49,11 +49,15 @@ app.get('/', (req, res) => {
 
 // Sort thoughts by createdAt and return the most recent thoughts first (max. 20 of them)
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find()
-    .sort({ createdAt: 'desc' })
-    .limit(20)
-    .exec();
-  res.json(thoughts);
+  try {
+    const thoughts = await Thought.find()
+      .sort({ createdAt: 'desc' })
+      .limit(20)
+      .exec();
+    res.json(thoughts);
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
 });
 
 // Retrieve the info sent by the client to our API endpoint
