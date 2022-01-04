@@ -17,16 +17,15 @@ const app = express();
 // scheema : name. description etc
 // This way, when you are going to reuse your schema
 // Enum = only allowed values
-const thoughtSchema = new mongoose.Schema({
-  text: {
+const ThoughtSchema = new mongoose.Schema({
+  message: {
     type: String,
     required: true,
-    unique: true,
     minlength: 5,
     maxlength: 140,
     trim: true,
   },
-  like: {
+  hearts: {
     type: Number,
     default: 0,
   },
@@ -36,7 +35,7 @@ const thoughtSchema = new mongoose.Schema({
   },
 });
 //Mongoose model with Schema
-const Thought = mongoose.model("Thought", thoughtSchema);
+const Thought = mongoose.model("Thought", ThoughtSchema);
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
@@ -50,10 +49,7 @@ app.get("/", (req, res) => {
 //Endpoint that return thoughts in descending order
 app.get("/thoughts", async (req, res) => {
   try {
-    const thoughts = await Thought.find()
-      .sort({ createdAt: "desc" })
-      .limit(20)
-      .exec();
+    const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20);
     res.status(201).json({ response: thoughts, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
@@ -61,8 +57,9 @@ app.get("/thoughts", async (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
+  const { message } = req.body;
   try {
-    const newThought = await new Thought(req.body).save();
+    const newThought = await new Thought({ message }).save();
     res.status(201).json({ response: newThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
@@ -70,16 +67,14 @@ app.post("/thoughts", async (req, res) => {
 });
 
 // Post method for adding likes/hearts
-app.post("/thoughts/:id/likes", async (req, res) => {
+app.post("/thoughts/:id/hearts", async (req, res) => {
   const { id } = req.params;
 
   try {
     const updatedThought = await Thought.findByIdAndUpdate(
+      id,
       {
-        _id: id,
-      },
-      {
-        $inc: { likes: 1 },
+        $inc: { hearts: 1 },
       },
       { new: true }
     );
