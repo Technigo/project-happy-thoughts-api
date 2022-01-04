@@ -25,7 +25,6 @@ const ThoughtSchema = new mongoose.Schema({
     type: String,
     minlength: 5,
     maxlength: 140,
-    required: true,
     trim: true
   },
   heart: {
@@ -49,24 +48,24 @@ app.get('/', (req, res) => {
 
 // Sort thoughts by createdAt and return the most recent thoughts first (max. 20 of them)
 app.get('/thoughts', async (req, res) => {
-  // try {
-  const thoughts = await Thought.find()
-    .sort({ createdAt: 'desc' })
-    .limit(20)
-    .exec();
-  res.status(200).json(thoughts);
-  /* } catch (error) {
+  try {
+    const thoughts = await Thought.find()
+      .sort({ createdAt: 'desc' })
+      .limit(20)
+      .exec();
+    res.json(thoughts);
+  } catch (error) {
     res.status(400).json({ response: error, success: false });
-  } */
+  }
 });
 
-// Retrieve the info sent by the client to our API endpoint
+// Retrieve the info sent by the client to the API endpoint
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body;
 
   try {
     const newThought = await new Thought({ message }).save();
-    res.status(201).json({ response: newThought, success: true });
+    res.status(201).json({ newThought });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
