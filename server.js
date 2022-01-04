@@ -48,19 +48,18 @@ app.get('/', (req, res) => {
 });
 
 // v1 - async await
-// app.post('/members', async (req, res) => {
-//   const { name, description } = req.body;
+app.post('/members', async (req, res) => {
+  const { name, description } = req.body;
 
-//   //success
-//   try {
-//     const newMember = await new Member({  name, description }).save();
-//     res.status(201).json({ response: newMember, succes: true });
-//   //if something goes wrong (doesn't match the schema)
-//   } catch (error) {
-//     res.status(400).json({  response: error, success: false });
-//   }
-
-// });
+  //success
+  try {
+    const newMember = await new Member({  name, description }).save();
+    res.status(201).json({ response: newMember, succes: true });
+  //if something goes wrong (doesn't match the schema)
+  } catch (error) {
+    res.status(400).json({  response: error, success: false });
+  }
+});
 
 
 // v2 - promises
@@ -77,20 +76,39 @@ app.get('/', (req, res) => {
 // });
 
 // v3 - mongoose callback
-app.post('/members', (req, res) => {
-  const { name, description } = req.body;
+// app.post('/members', (req, res) => {
+//   const { name, description } = req.body;
 
-  new Member({ name, description })
-    .save((error, data) => {
-      if (error) {
-        res.status(400).json({ response: error, success: false });
-      } else {
-        res.status(201).json({ response: data, success: true });
+//   new Member({ name, description })
+//     .save((error, data) => {
+//       if (error) {
+//         res.status(400).json({ response: error, success: false });
+//       } else {
+//         res.status(201).json({ response: data, success: true });
+//       }
+//     });
+// });
+
+app.post('/members/:id/score', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedMember = await Member.findByIdAndUpdate(
+      id, 
+      { 
+        $inc: { 
+          score: 1 
+        },
+      },
+      {
+        new: true,
       }
-    });
+     );
+    res.status(200).json({ response: updatedMember, success: true });
+  } catch (error) { 
+    res.status(400).json({ response: error, success: false });
+  }
 });
-
-
 
 // Start the server
 app.listen(port, () => {
