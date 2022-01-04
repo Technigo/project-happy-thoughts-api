@@ -7,13 +7,13 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
 const ThoughtSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    minlenght: 2,
-    maxlength: 20,
-    trim: true
-  },
+  // name: {
+  //   type: String,
+  //   required: true,
+  //   minlenght: 2,
+  //   maxlength: 20,
+  //   trim: true
+  // },
   text: {
     type: String,
     required: true,
