@@ -48,19 +48,20 @@ app.get("/", (req, res) => {
 
 //Endpoint that return thoughts in descending order
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find()
-    .sort({ createdAt: "desc" })
-    .limit(20)
-    .exec();
-  res.json(thoughts);
+  try {
+    const thoughts = await Thought.find()
+      .sort({ createdAt: "desc" })
+      .limit(20)
+      .exec();
+    res.status(201).json({ response: thoughts, success: true });
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
 });
 
 app.post("/thoughts", async (req, res) => {
-  // Retrieve the information sent by the client to our API endpoint
-  const { text } = req.body;
-
   try {
-    const newThought = await new Thought({ text }).save();
+    const newThought = await new Thought(req.body).save();
     res.status(201).json({ response: savedThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
