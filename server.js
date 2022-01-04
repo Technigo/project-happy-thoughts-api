@@ -49,8 +49,7 @@ app.get('/', (req, res) => {
 })
 
 
-
-// post request
+// v1: post request using async await
 app.post('/members', async (req, res) => {
   const { name, description } = req.body;
 
@@ -63,8 +62,44 @@ try {
 }
 });
 
+// v2: post request using promises
+
+// app.post('/members', (req, res) => {
+//   const { name, description } = req.body;
+
+//   new Member( { name, description }).save()
+
+//   .then(data => {
+//     res.status(201).json({ response: data, success: true });
+//   })
+//   .catch(error => {
+//     res.status(400).json({ response: error, success: false });
+//   })
+// });
 
 
+// v3: mongoose callback
+// app.post('/members', (req, res) => {
+//   const { name, description } = req.body;
+
+//   new Member({ name, description })
+//   .save((error, data) => {
+
+//     if (error) {
+//       res.status(400).json( { response: error, success: false });
+//     } else {
+//       res.status(201).json( { response: data, sucess: true });
+//     }
+
+//   })
+// })
+
+
+app.patch('/members/:id/score', (req, res) => {
+
+
+
+});
 
 
 // Start the server
