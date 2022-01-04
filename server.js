@@ -76,6 +76,19 @@ app.get('/', (req, res) => {
 //     })
 // });
 
+// v3 - mongoose callback
+app.post('/members', (req, res) => {
+  const { name, description } = req.body;
+
+  new Member({ name, description })
+    .save((error, data) => {
+      if (error) {
+        res.status(400).json({ response: error, success: false });
+      } else {
+        res.status(201).json({ response: data, success: true });
+      }
+    });
+});
 
 
 
