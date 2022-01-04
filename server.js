@@ -53,6 +53,27 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
+app.patch('/thoughts/:id/hearts', async (req, res) => {
+  const { id } = req.params
+
+  try {
+  const updatedThought = await Thought.findByIdAndUpdate(
+    id, 
+    { 
+      $inc: { 
+        hearts: 1,
+      }, 
+    },
+    {
+      new: true,
+    }
+  )
+  res.status(200).json({ response: updatedThought, success: true })
+  } catch (error) {
+    res.status(400).json({ response: error, success: false })
+  }
+})
+
 // Start the server
 app.listen(port, () => {
   // eslint-disable-next-line
