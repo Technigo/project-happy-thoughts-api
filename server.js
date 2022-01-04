@@ -4,7 +4,12 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoUrl, { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true, 
+  useCreateIndex: true, 
+  useFindAndModify: true
+})
 mongoose.Promise = Promise
 
 const thoughtSchema = new mongoose.Schema({
@@ -61,6 +66,36 @@ app.post('/thoughts', async (req, res) => {
     res.status(201).json({ response: newThought, success: true });
   } catch (error) {
     // Bad request
+    res.status(400).json({ response: error, success: false });
+  }
+})
+
+// endpoint to increase hearts/likes
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
+
+  try {
+    const updatedLike = await Thought.findByIdAndUpdate(
+      // Argument 1 - id
+      thoughtId,
+      // Argument 2 - properties to change 
+      {
+        $inc: {
+          hearts: 1
+        }
+      },
+      // Argument 3 - options (not mandatory). {new: true} is needed to send an updated value from the DB to the frontend
+      {
+        new: true
+      }
+    )
+
+    if (!updatedLike) {
+      res.status(404).json({ response: ' No thought found with this ID', success: false})
+    } else {
+      res.status(200).json({ response: updatedLike, success: true });
+    }
+  } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
 })
