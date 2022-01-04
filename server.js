@@ -17,10 +17,11 @@ const app = express();
 // scheema : name. description etc
 // This way, when you are going to reuse your schema
 // Enum = only allowed values
-const ThoughtSchema = new mongoose.Schema({
+const thoughtSchema = new mongoose.Schema({
   text: {
     type: String,
     required: true,
+    unique: true,
     minlength: 5,
     maxlength: 140,
     trim: true,
@@ -30,12 +31,12 @@ const ThoughtSchema = new mongoose.Schema({
     default: 0,
   },
   createdAt: {
-    type: Number,
+    type: Date,
     default: Date.now,
   },
 });
 //Mongoose model with Schema
-const Thought = mongoose.model("Thought", ThoughtSchema);
+const Thought = mongoose.model("Thought", thoughtSchema);
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
@@ -62,7 +63,7 @@ app.get("/thoughts", async (req, res) => {
 app.post("/thoughts", async (req, res) => {
   try {
     const newThought = await new Thought(req.body).save();
-    res.status(201).json({ response: savedThought, success: true });
+    res.status(201).json({ response: newThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
@@ -74,7 +75,9 @@ app.post("/thoughts/:id/likes", async (req, res) => {
 
   try {
     const updatedThought = await Thought.findByIdAndUpdate(
-      id,
+      {
+        _id: id,
+      },
       {
         $inc: { likes: 1 },
       },
