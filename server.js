@@ -21,6 +21,18 @@ const ThoughtSchema = new mongoose.Schema({
     maxlength: 140,
     required: true,
   },
+  tags: {
+    type: String,
+    enum: ["Food thought", "Random thought", "Work thought"],
+    required: true,
+  },
+  name: {
+    type: String,
+    minlength: 1,
+    maxlength: 300,
+    required: true,
+    default: "anonymous",
+  },
   hearts: {
     type: Number,
     default: 0,
@@ -51,9 +63,9 @@ app.get("/thoughts", async (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
-  const { message } = req.body;
+  const { message, tags, name } = req.body;
   try {
-    const newThought = await new Thought({ message }).save();
+    const newThought = await new Thought({ message, tags, name }).save();
     res.status(201).json({ response: newThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
