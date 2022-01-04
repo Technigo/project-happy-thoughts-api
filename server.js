@@ -52,10 +52,11 @@ app.post('/members', async (req, res) => {
 
   //success
   try {
-    const newMember = new Member({  name, description })
-  //if something goes wrong
-  } catch {
-
+    const newMember = await new Member({  name, description }).save();
+    res.status(201).json({ response: newMember, succes: true });
+  //if something goes wrong (doesn't match the schema)
+  } catch (error) {
+    res.status(400).json({  response: error, success: false });
   }
 
 });
