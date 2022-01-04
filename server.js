@@ -13,17 +13,127 @@ mongoose.Promise = Promise
 const port = process.env.PORT || 8080
 const app = express()
 
+const ThoughtSchema = new mongoose.Schema({
+   message: {
+     type: String,
+     required: true,
+     minlength: 5,
+     maxlength: 140,
+   },
+   likes: {
+     type: Number,
+     default: 0,
+     max: 0,
+   },
+   createdAt: {
+     type: Date,
+     default: () => new Date()
+   },
+})
+
+const Thought = mongoose.model('Thought', ThoughtSchema)
+
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(express.json())
 
 // Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world')
+app.get('/thoughts', async (req, res) => {
+  try {
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+  res.status(200).json({
+    response: thoughts,
+    success: true
+  })
+  } catch (error) {
+    res.status(400).json({
+      response: error,
+      success: false
+    })
+  }
+})
+
+// post endpoint (V1 async await)
+
+app.post('/thoughts', async (req, res) => {
+   const { message } = req.body
+
+  try {
+    const newThought = await new Thought({ message }).save()
+    res.status(201).json({ 
+      response: newThought, 
+      success: true 
+    })
+  } catch (error) {
+    res.status(400).json({ 
+      response: error, 
+      success: false 
+    })
+  }
+})
+
+// post endpoint (V2 promises)
+
+// app.post('/members', (req, res) => {
+//   const { name, description } = req.body
+
+//   new Member ({ name, description }).save()
+//   .then(data => {
+//     res.status(201).json({ 
+//       response: data, 
+//       success: true })
+//     .catch(error => {
+//       res.status(400).json({ 
+//         response: error, 
+//         response: false })
+//     })
+//   })
+// })
+
+// v3 mongoose callback
+
+// app.post('/members', (req, res) => {
+//   const { name, description } = req.body
+
+//   new Member({ name, description })
+//   .save((error, data) => {
+//     if (error) {
+//       res.status(400).json({ 
+//        response: error, 
+//        response: false })
+//     } else {
+//       res.status(201).json({ 
+//       response: data, 
+//       success: true })
+//     }
+//   })
+
+app.post('/thoughts/:id/likes', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate(id, { 
+      $inc: { 
+        likes: 1,
+      },
+     },
+     {
+       new: true,
+     })
+    res.status(200).json({ 
+      response: updatedThought, 
+      success: true 
+    })
+  } catch (error) {
+    res.status(400).json({ 
+      response: error, 
+      success: false 
+    })
+  }
 })
 
 // Start the server
 app.listen(port, () => {
   // eslint-disable-next-line
-  console.log(`Server running on http://localhost:${port}`)
+  console.log(`Server running on http://localhost:${port} ~('@')~`)
 })
