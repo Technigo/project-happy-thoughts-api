@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happymessages";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/HappyApi";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -45,7 +45,7 @@ const AllUsermessages = mongoose.model("AllUsermessages", HappySchema);
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send(AllUsermessages);
+  res.send("hello");
 });
 
 /* GET/ message
