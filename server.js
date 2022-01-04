@@ -64,17 +64,19 @@ app.get('/', (req, res) => {
 
 
 // v2 - promises
-app.post('/members', (req, res) => {
-  const { name, description } = req.body;
+// app.post('/members', (req, res) => {
+//   const { name, description } = req.body;
 
-  new Member({ name, description }).save()
-    .then(data => {
-      res.status(201).json({ response: data, success: true })
-    })
-    .catch(error => {
-      res.status(400).json({ response: error, success: false });
-    })
-});
+//   new Member({ name, description }).save()
+//     .then(data => {
+//       res.status(201).json({ response: data, success: true })
+//     })
+//     .catch(error => {
+//       res.status(400).json({ response: error, success: false });
+//     })
+// });
+
+
 
 
 // Start the server
