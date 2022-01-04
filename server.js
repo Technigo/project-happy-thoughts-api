@@ -56,7 +56,7 @@ app.get('/thoughts', async (req, res) => {
   })
   } catch (error) {
     res.status(400).json({
-      response: error,
+      response: error.error,
       success: false
     })
   }
