@@ -45,7 +45,7 @@ const AllUsermessages = mongoose.model("AllUsermessages", HappySchema);
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("messages");
+  res.send(AllUsermessages);
 });
 
 /* GET/ message
