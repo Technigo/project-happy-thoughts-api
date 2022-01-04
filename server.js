@@ -28,6 +28,7 @@ const ThoughtSchema = new mongoose.Schema({
     trim: true, //dubbelscheck after white spaces in beginning and end
   },
   hearts: {
+    type: Number,
     default: 0,
   },
   createdAt: {
