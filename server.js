@@ -1,6 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import listEndpoints from 'express-list-endpoints';
+// import dotenv from 'dotenv';
+
+// require('dotenv').config();
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -18,7 +22,7 @@ const ThoughtSchema = new mongoose.Schema({
   // hearts: Number,
   message: {
     type: String,
-    required: true,
+    required: [true, 'A message is required'],
     // unique: true,
     minlength: 5,
     maxlength: 140,
@@ -40,6 +44,10 @@ const ThoughtSchema = new mongoose.Schema({
     type: Date,
     default: () => new Date()
   }
+  // userName: {
+  //   type: String,
+  //   default: "Anonymous"
+  // }
 });
 
 const Thought = mongoose.model('Thought', ThoughtSchema);
@@ -50,16 +58,53 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world');
+  res.send(
+    'This is the home of Happy Thoughts by Ida. Please see <a href="https://github.com/IdaAspen/project-happy-thoughts-api/blob/master/Documentation.md">documentation</a>'
+  );
+});
+
+// get the endpoints
+app.get('endpoints', (req, res) => {
+  res.send(listEndpoints(app));
 });
 
 app.post('/thoughts', async (req, res) => {
-  const { message } = req.body;
+  const { message, userName } = req.body;
   try {
-    const newThought = await new Thought({ message }).save();
+    const newThought = await new Thought({ message, userName }).save();
     res.status(201).json({ response: newThought, success: true });
   } catch (error) {
-    res.status(400).json({ respose: error, success: false });
+    // if (error === 'ValidatorError') {
+    //   res.status(400).json({
+    //     message: 'Your thought should be between 5 and 140 characters',
+    //     success: false
+    //   });
+    // } else {
+    res.status(400).json({ response: error, success: false });
+  }
+});
+
+// or use app.patch and findOneAndUpdate()
+app.post('thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params;
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      // {
+      //   _id: thoughtId
+      // },
+      {
+        $inc: {
+          hearts: 1
+        }
+      },
+      {
+        new: true
+      }
+    );
+    res.status(200).json({ response: updatedThought, success: true });
+  } catch {
+    res.status(404).json({ response: 'Incorrect Id', sucess: false });
   }
 });
 
