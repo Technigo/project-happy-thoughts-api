@@ -7,7 +7,7 @@ mongoose.connect(mongoUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
-  useFindAndModify: true,
+  useFindAndModify: false,
 });
 mongoose.Promise = Promise;
 
@@ -49,7 +49,10 @@ app.get("/", (req, res) => {
 //Endpoint that return thoughts in descending order
 app.get("/thoughts", async (req, res) => {
   try {
-    const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20);
+    const thoughts = await Thought.find()
+      .sort({ createdAt: "desc" })
+      .limit(20)
+      .exec();
     res.status(201).json({ response: thoughts, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
@@ -57,9 +60,10 @@ app.get("/thoughts", async (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
-  const { message } = req.body;
+  const { message, hearts } = req.body;
+
   try {
-    const newThought = await new Thought({ message }).save();
+    const newThought = await new Thought({ message, hearts }).save();
     res.status(201).json({ response: newThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
