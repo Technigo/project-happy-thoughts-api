@@ -54,9 +54,9 @@ app.get('/thoughts', async (req, res) => {
       .sort({ createdAt: 'desc' })
       .limit(20)
       .exec();
-    res.status(200).json(thoughts);
+    res.json(thoughts);
   } catch (error) {
-    res.status(400).json({ response: error, success: false });
+    res.status(404).json({ response: error, success: false });
   }
 });
 
@@ -88,6 +88,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
         new: true
       }
     );
+    res.status(200).json(updatedThought);
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
