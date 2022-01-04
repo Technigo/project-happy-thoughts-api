@@ -2,12 +2,11 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
-const mongoUrl = process.env.MONGO_URL || "mongodb+srv://dandeloid:m0ng0@cluster0.0pplx.mongodb.net/happy"
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 mongoose.Promise = Promise
 
-//mongodb://localhost/happyThoughts
-// mongodb+srv://dandeloid:m0ng0@cluster0.0pplx.mongodb.net/happy
+
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
@@ -62,6 +61,7 @@ app.post('/thoughts', async (req, res) => {
 
   try {
     const newThought = await new Thought({ message }).save()
+    db.thoughts.deleteOne({})
     res.status(201).json({ response: newThought, success: true })
   } catch (error) {
     res.status(400).json({ response: error, success: false })
