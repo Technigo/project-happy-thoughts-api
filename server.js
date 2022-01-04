@@ -58,7 +58,7 @@ app.get("/thoughts", async (req, res) => {
     .exec();
 
   try {
-    res.send.json(message);
+    res.json(message);
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
@@ -75,7 +75,7 @@ app.post("/thoughts", async (req, res) => {
 
   try {
     const saveAllUsermessages = await messages.save();
-    res.status(200).json(saveAllUsermessages);
+    res.json(saveAllUsermessages);
   } catch (error) {
     res
       .status(400)
@@ -104,7 +104,7 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
       { new: true }
     );
 
-    res.status(200).json(likeUpdate);
+    res.json(likeUpdate);
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
