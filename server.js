@@ -56,7 +56,7 @@ app.get('/thoughts', async (req, res) => {
       .exec();
     res.status(200).json(thoughts);
   } catch (error) {
-    res.status(404).json({ response: error, success: false });
+    res.status(400).json({ response: error, success: false });
   }
 });
 
