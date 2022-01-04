@@ -96,7 +96,7 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
 
   try {
     const likeUpdate = await AllUsermessages.findByIdAndUpdate(
-      thoughtId,
+      {_id: thoughtId,},
       {
         $inc: { hearts: 1 }
       },
