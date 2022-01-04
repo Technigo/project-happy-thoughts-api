@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import dotenv from 'dotenv'
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts'
 mongoose.connect(mongoUrl, {
@@ -92,7 +93,7 @@ app.post('/:id/hearts', async (req, res) => {
     console.log('req body', req.body)
     res.status(201).json({ response: updatedHeart, success: true })
   } catch (error) {
-    res.status(400).json({ response: 'No Thought with that ID', sucess: false })
+    res.status(400).json({ response: 'No thought with that ID', sucess: false })
   }
 })
 
