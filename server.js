@@ -10,7 +10,7 @@ mongoose.connect(mongoUrl, {
 });
 mongoose.Promise = Promise;
 
-//mongo is a framework for Mongoose
+//Mongo is a framework for Mongoose
 
 // Defines the port the app will run on. Defaults to 8080, but can be
 // overridden when starting the server. For example:
@@ -25,13 +25,13 @@ app.use(express.json());
 
 
 const thoughtSchema = new mongoose.Schema({//call the function the same as the model (it's a method)
-	//here we specify the types
+  //here we specify the types
   message: {
     type: String,
     required: [true, "Message is required!"],
     minlength: 5,
-    maxlength: 140,
- 
+    maxlength: 140
+
   },
   hearts: {
     type: Number,
@@ -39,7 +39,7 @@ const thoughtSchema = new mongoose.Schema({//call the function the same as the m
   },
   createdAt: {
     type: Date,
-    default: Date.now,
+    default: Date.now
   },
 });
 
@@ -70,16 +70,19 @@ app.get("/thoughts", async (req, res) => {
 
 // v1 - async await
 app.post('/thoughts', async (req, res) => {
-	const { message } = req.body;
+  const { message } = req.body;
 
-	try {
+  try {
     //sucessfull request
-		const newHappyThought = await new Member({ message }).save();
-		res.status(201).json({ response: newHappyThought, success: true });
-	} catch (error) {
+    const newHappyThought = new HappyThought({ message });
+    await new HappyThought({ message }).save();
+
+    res.status(201).json({ response: newHappyThought, success: true });
+
+  } catch (error) {
     //No good request
-		res.status(400).json({ response: error, success: false });
-	}
+    res.status(400).json({ response: error, success: false });
+  }
 });
 
 
@@ -102,7 +105,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
       }
     );
 
-if (!updatedLike) {
+    if (!likeUpdate) {
       res.status(404).json({ response: 'No thought found with this specific ID', success: false })
     } else {
       res.status(200).json({ response: updatedLike, success: true });
@@ -114,6 +117,6 @@ if (!updatedLike) {
 
 // Start the server
 app.listen(port, () => {
-	// eslint-disable-next-line
-	console.log(`Server running on http://localhost:${port}`);
+  // eslint-disable-next-line
+  console.log(`Server running on http://localhost:${port}`);
 });
