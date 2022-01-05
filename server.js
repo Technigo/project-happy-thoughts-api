@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-
+// mongodb://localhost/happyThoughts
 const mongoUrl = process.env.MONGO_URL || "MONGO_URL";
 mongoose.connect(mongoUrl, {
   useNewUrlParser: true,
@@ -66,7 +66,7 @@ app.post("/thoughts", async (req, res) => {
 
   try {
     const newThought = await new Thought({ message }).save();
-    res.status(201).json({ response: newThought, success: true });
+    res.status(201).json(newThought);
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
@@ -84,7 +84,7 @@ app.post("/thoughts/:thoughtId/hearts", async (req, res) => {
       },
       { new: true }
     );
-    res.status(200).json({ response: updatedThought, succes: true });
+    res.status(200).json(updatedThought);
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
