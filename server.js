@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import listEndpoints from 'express-list-endpoints';
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -37,9 +38,9 @@ const Thought = mongoose.model('Thought', ThoughtSchema);
 app.use(cors());
 app.use(express.json());
 
-// Start defining your routes here
+// Lists all endpoints
 app.get('/', (req, res) => {
-  res.send('Hello world');
+  res.send(listEndpoints(app));
 });
 
 app.get('/thoughts', async (req, res) => {
@@ -66,15 +67,12 @@ app.post('/thoughts/:thoughtID/like', async (req, res) => {
 
   try {
     const updatedThought = await Thought.findByIdAndUpdate(
-      // Argument 1 - id
       thoughtID,
-      // Argument 2 - properties to change
       {
         $inc: {
           hearts: 1,
         },
       },
-      // Argument 3 - options (not mandatory)
       {
         new: true,
       }
