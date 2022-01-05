@@ -103,7 +103,7 @@ app.delete('/thoughts/:id', async (req, res) => {
 })
 
 // Patch thought message
-app.patch('/thoughts/:id', (req, res) => {
+/* app.patch('/thoughts/:id', (req, res) => {
   const { id } = req.params
 
   try {
@@ -116,7 +116,7 @@ app.patch('/thoughts/:id', (req, res) => {
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
-})
+}) */
 
 // Start the server
 app.listen(port, () => {
