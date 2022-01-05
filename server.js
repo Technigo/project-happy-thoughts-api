@@ -8,7 +8,7 @@ mongoose.connect(mongoUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
-  useFindAndModify: true,
+  useFindAndModify: false,
 })
 mongoose.Promise = Promise
 
@@ -26,6 +26,7 @@ const ThoughtSchema = new mongoose.Schema({
     unique: true,
     minlength: 5,
     maxlength: 140,
+    trim: true,
   },
   hearts: {
     type: Number,
@@ -75,9 +76,7 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
 
   try {
     const updatedHearts = await Thought.findByIdAndUpdate(
-      // Argument 1 - id
       thoughtId,
-      // Argument 2 - properties to change
       {
         $inc: {
           hearts: 1,
@@ -93,20 +92,42 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
   }
 })
 
-// app.delete('/thoughts/:id', async (req, res) => {
-//   const { id } = req.params
+app.delete("/thoughts/:id", async (req, res) => {
+  const { id } = req.params
 
-//   try {
-//     const deletedThought = await Thought.findOneAnddelete({ _id: id })
-//     if (deletedThought)
-//     res.status(200).json({response: deletedThought, success: true})
-//     else {
-//       res.status(404).json({response: error, success: false })
-//     }
-//   }  catch (error) {
-//     res.status(400).json({ response: error, success: false})
-//   }
-// })
+  try {
+    const deletedThought = await Thought.findOneAndDelete({ _id: id })
+    if (deletedThought) {
+      res.status(200).json({ response: deletedThought, success: true })
+    } else {
+      res.status(404).json({ response: error, success: false })
+    }
+  } catch (error) {
+    res.status(400).json({ response: error, success: false })
+  }
+})
+
+app.patch("/thoughts/:id", async (req, res) => {
+  const { id } = req.params
+  const { message } = req.body
+  const { hearts } = req.params
+
+  try {
+    const updatedThought = await Thought.findOneAndUpdate(
+      { _id: id },
+      { message },
+      { hearts },
+      { new: true }
+    )
+    if (updatedThought) {
+      res.status(200).json({ response: updatedThought, success: true })
+    } else {
+      res.status(404).json({ response: "thought not found", success: false })
+    }
+  } catch (error) {
+    res.status(400).json({ response: error, success: false })
+  }
+})
 
 // Start the server
 app.listen(port, () => {
