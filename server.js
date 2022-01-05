@@ -14,9 +14,10 @@ const Thought = mongoose.model('Thought', {
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 140
+    maxlength: 140,
+    trim: true
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -25,6 +26,9 @@ const Thought = mongoose.model('Thought', {
     default: () => Date.now()
   }
 });
+
+app.use(cors());
+app.use(express.json());
 
 app.get('/thoughts', async (req, res) => {
   const {
@@ -40,8 +44,16 @@ app.get('/thoughts', async (req, res) => {
   res.status(200).json({ response: thoughts, success: true });
 });
 
-app.use(cors());
-app.use(express.json());
+app.post('/thoughts', async (req, res) => {
+  const { message } = req.body;
+
+  try {
+    const newThought = await new Thought({ message }).save();
+    res.status(201).json({ response: newThought, success: true });
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
