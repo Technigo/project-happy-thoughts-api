@@ -51,7 +51,10 @@ app.get('/', (req, res) => {
 
 // getting all of the thoughts and sorting them
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec();
+  const thoughts = await Thought.find({})
+    .sort({ createdAt: 'desc' })
+    .limit(20)
+    .exec();
   res.json(thoughts)
 });
 
@@ -79,7 +82,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     ); // inc = inscrese, new is options of that method 
     res.status(200).json({ message: thoughtLiked, success: true })
   } catch (err) {
-    res.status(400).json({ message: "Could not find that Thought", error: err.errors });
+    res.status(400).json({ message: "Could not find that Thought", error: err });
   }
 });
 
