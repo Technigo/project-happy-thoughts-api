@@ -36,6 +36,16 @@ const Thought = mongoose.model("Thought", ThoughtSchema);
 app.use(cors());
 app.use(express.json());
 
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next();
+  } else {
+    res.status(503).json({
+      error: "Connection problems",
+    });
+  }
+});
+
 // Start defining your routes here
 app.get("/thoughts", async (req, res) => {
   const thoughts = await Thought.find()
@@ -80,10 +90,17 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
         new: true,
       }
     );
-    res.status(200).json({
-      message: likedThought,
-      success: true,
-    });
+    if (likedThought) {
+      res.status(200).json({
+        message: likedThought,
+        success: true,
+      });
+    } else {
+      res.status(400).json({
+        message: "Couldn't find post",
+        success: false,
+      });
+    }
   } catch (error) {
     res.status(400).json({
       message: error,
