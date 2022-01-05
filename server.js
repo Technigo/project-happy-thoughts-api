@@ -52,7 +52,7 @@ app.get('/', (req, res) => {
 
 // Get 20 latest thoughts in descending order
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find({}).sort({ createdAt: 'desc'}).limit(20)
+  const thoughts = await Thought.find().sort({ createdAt: 'desc'}).limit(20)
   res.status(200).json({ response: thoughts, success: true })
 })
 
