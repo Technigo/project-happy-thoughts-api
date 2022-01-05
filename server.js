@@ -28,8 +28,6 @@ const ThoughtSchema = new mongoose.Schema({
   },
   name: {
     type: String,
-    minlength: 1,
-    maxlength: 300,
   },
   hearts: {
     type: Number,
