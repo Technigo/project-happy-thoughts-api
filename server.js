@@ -8,7 +8,7 @@ mongoose.connect(mongoUrl, {
   useNewUrlParser: true, 
   useUnifiedTopology: true, 
   useCreateIndex: true, 
-  useFindAndModify: true
+  useFindAndModify: false
 })
 mongoose.Promise = Promise
 
@@ -91,7 +91,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     )
 
     if (!updatedLike) {
-      res.status(404).json({ response: ' No thought found with this ID', success: false})
+      res.status(404).json({ response: ' No thought found with this ID', success: false })
     } else {
       res.status(200).json({ response: updatedLike, success: true });
     }
