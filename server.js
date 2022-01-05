@@ -25,7 +25,7 @@ const ThoughtSchema = new mongoose.Schema({
     maxlength: 140,
     trim: true,
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0,
   },
@@ -45,7 +45,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.json({
     message:
-      "Hello all thoughts! View all thoughts at http://happy-thoughts-patrik.herokuapp.com/thoughts",
+      "View all thoughts at http://happy-thoughts-patrik.herokuapp.com/thoughts",
   });
 });
 
@@ -55,7 +55,9 @@ app.get("/thoughts", async (req, res) => {
     const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20);
     res.status(201).json(thoughts);
   } catch (error) {
-    res.status(400).json({ response: error, success: false });
+    res
+      .status(404)
+      .json({ message: "Could not find any thoughts!", success: false });
   }
 });
 
@@ -71,12 +73,12 @@ app.post("/thoughts", async (req, res) => {
 });
 
 // Post method for adding likes/hearts
-app.post("/thoughts/:id/hearts", async (req, res) => {
-  const { id } = req.params;
+app.post("/thoughts/:thoughtId/hearts", async (req, res) => {
+  const { thoughtId } = req.params;
 
   try {
     const updatedThought = await Thought.findByIdAndUpdate(
-      id,
+      thoughtId,
       {
         $inc: { hearts: 1 },
       },
