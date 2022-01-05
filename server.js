@@ -18,15 +18,15 @@ const ThoughtSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 150,
+    maxlength: 140,
     trim: true,
   },
-  hearts: {
+  heart: {
     type: Number,
     default: 0,
   },
   createdAt: {
-    type: Number,
+    type: Date,
     default: () => Date.now(),
   }
 })
@@ -42,26 +42,34 @@ app.get('/', (req, res) => {
   res.send('Hello world! This is an API for posting happy thoughts')
 })
 
+// This endpoint returns a maximum of 20 thoughts, sorted by createdAt to show the most recent thoughts first
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+  res.status(200).json(thoughts)
+})
+
+// This endpoint expects a JSON body with the thought message
 app.post('/thoughts', async (req, res) => {
-  const { message, hearts } = req.body
+  const { message } = req.body
 
   try {
-  const newThought = await new Thought({ message, hearts }).save()
+  const newThought = await new Thought({ message }).save()
   res.status(201).json({ response: newThought, success: true })
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
 })
 
-app.patch('/thoughts/:id/hearts', async (req, res) => {
-  const { id } = req.params
+// This endpoint updates the heart/amount of likes by 1
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
 
   try {
   const updatedThought = await Thought.findByIdAndUpdate(
-    id, 
+    thoughtId, 
     { 
       $inc: { 
-        hearts: 1,
+        like: 1,
       }, 
     },
     {
