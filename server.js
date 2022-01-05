@@ -57,7 +57,7 @@ app.get('/thoughts', async (req, res) => {
   } catch (error) {
     res
       .status(404)
-      .json({ message: 'Could not find any thoughts!', errors: err.errors });
+      .json({ message: 'Could not find any thoughts!', errors: error.errors });
   }
 });
 
