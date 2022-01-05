@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
+const mongoUrl = process.env.MONGO_URL || "MONGO_URL";
 mongoose.connect(mongoUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -25,7 +25,7 @@ const ThoughtSchema = new mongoose.Schema({
     maxlength: 140,
     trim: true,
   },
-  hearts: {
+  heart: {
     type: Number,
     default: 0,
   },
@@ -43,27 +43,27 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Cowabunga");
+  res.json({
+    message:
+      "Hello all thoughts! View all thoughts at http://happy-thoughts-patrik.herokuapp.com/thoughts",
+  });
 });
 
 //Endpoint that return thoughts in descending order
 app.get("/thoughts", async (req, res) => {
   try {
-    const thoughts = await Thought.find()
-      .sort({ createdAt: "desc" })
-      .limit(20)
-      .exec();
-    res.status(201).json({ response: thoughts, success: true });
+    const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20);
+    res.status(201).json(thoughts);
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
 });
 
 app.post("/thoughts", async (req, res) => {
-  const { message, hearts } = req.body;
+  const { message } = req.body;
 
   try {
-    const newThought = await new Thought({ message, hearts }).save();
+    const newThought = await new Thought({ message }).save();
     res.status(201).json({ response: newThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
