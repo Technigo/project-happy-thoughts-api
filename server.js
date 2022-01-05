@@ -32,7 +32,7 @@ const ThoughtSchema = new mongoose.Schema({
     default: 0
   },
   createdAt: {
-    type: Number,
+    type: Date,
     default: () => Date.now()
   }
 });
