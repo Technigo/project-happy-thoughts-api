@@ -2,6 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import listEndpoints from 'express-list-endpoints';
+import dotenv from 'dotenv';
+
+dotenv.config()
+
+import thoughts from './data/thoughts.json';
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -42,6 +47,19 @@ const Thought = mongoose.model('Thought', ThoughtSchema);
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+
+if (process.env.RESET_DB) {
+  const seedDatabase = async () => {
+    await Thought.deleteMany({});
+
+    booksData.forEach(item => {
+      const newThought = new Thought(item);
+      newThought.save();
+    });
+  };
+  seedDatabase();
+  console.log('Database has been reset')
+ }
 
 // Lists all of the endpoints
 app.get('/', (req, res) => res.send(listEndpoints(app)));
