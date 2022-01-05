@@ -61,7 +61,7 @@ app.get("/thoughts", async (req, res) => {
   } catch (error) {
     res
       .status(400)
-      .json({ message: "No thoughts found today", errors: err.errors });
+      .json({ message: "No thoughts found today", success: false });
   }
 });
 

@@ -8,4 +8,4 @@ There were no real problems this week. However getting the correct status codes 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://happythoughts-api-w19.herokuapp.com/
