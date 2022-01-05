@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts'
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
-mongoose.set('useFindAndModify', false)
+// mongoose.set('useFindAndModify', false)
 
 const port = process.env.PORT || 8080
 const app = express()
@@ -17,17 +17,6 @@ const HappyThoughtSchema = new mongoose.Schema({
     maxlength: 140,
     required: true,
   },
-  tags: {
-    type: String,
-    enum: ['Food thought', 'Random thought', 'Work thought', 'Other thought'],
-    required: true,
-  },
-  name: {
-    type: String,
-    minlength: 1,
-    maxlength: 300,
-    default: 'anonymous',
-  },
   hearts: {
     type: Number,
     default: 0,
@@ -38,7 +27,7 @@ const HappyThoughtSchema = new mongoose.Schema({
   },
 })
 
-const Happy = mongoose.model('Thought', HappyThoughtSchema)
+const Happy = mongoose.model('Happy', HappyThoughtSchema)
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
@@ -70,7 +59,7 @@ app.post('/thoughts', async (req, res) => {
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
   try {
-    const updatedThought = await Thought.findByIdAndUpdate(
+    const updatedThought = await Happy.findByIdAndUpdate(
       thoughtId,
       {
         $inc: { hearts: 1 },
