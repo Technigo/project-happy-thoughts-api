@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import listEndpoints from "express-list-endpoints";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -58,19 +59,31 @@ const Thought = mongoose.model("Thought", ThoughtSchema);
 mongoose.set("useFindAndModify", false);
 
 // Start defining your routes here
+
+// first endpoint which sums up the endpoints provided
 app.get("/", (req, res) => {
-  res.send("Hello world");
+  res.send({
+    "Welcome to the Happy thoughts endpoint, here's the list of endpoints to use":
+      listEndpoints(app),
+  });
 });
 
+// endpoint to get the 20 latest thoughts posted to the API
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find()
-    .sort({ createdAt: "desc" })
-    .limit(20)
-    .exec();
-  res.json(thoughts);
+  try {
+    const thoughts = await Thought.find()
+      .sort({ createdAt: "desc" })
+      .limit(20)
+      .exec();
+    res.status(200).json(thoughts);
+  } catch (error) {
+    res
+      .status(400)
+      .json({ message: "No thoughts found today", errors: err.errors });
+  }
 });
-// app.get("/thougths", async (req, res) => {});
 
+// endpoint to use to post new messages to the API
 app.post("/thougths", async (req, res) => {
   const { message } = req.body;
 
@@ -78,7 +91,11 @@ app.post("/thougths", async (req, res) => {
     const newThought = await new Thought({ message }).save();
     res.status(201).json({ response: newThought, success: true });
   } catch (error) {
-    res.status(400).json({ response: error, success: false });
+    res.status(400).json({
+      message:
+        "Could not post thought. Remeber that the min and max characters are 5-140.",
+      success: false,
+    });
   }
 });
 
@@ -99,7 +116,10 @@ app.post("/thougths/:thoughtsId/like", async (req, res) => {
     );
     res.status(200).json({ response: updatedThought, success: true });
   } catch (error) {
-    res.status(400).json({ response: error, success: false });
+    res.status(400).json({
+      message: "Could not find that specific thought",
+      success: false,
+    });
   }
 });
 
