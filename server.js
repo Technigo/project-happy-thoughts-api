@@ -28,6 +28,12 @@ const Thought = mongoose.model('Thought', {
     type: Number,
     default: 0
 
+  },
+
+  name:{
+    type: String,
+    minlength: 3,
+    default: 'Anonymous',
   }
 })
 
@@ -58,14 +64,13 @@ app.get('/thoughts', async (req,res) => {
 //endpoint for the user to POST a thought
 app.post ('/thoughts', async (req,res) =>{
   //Retrieve the information sent by the client to our API endpoint from the request body
-  const { message } = req.body;
+  const { message, name } = req.body;
 
   //Use our mongoose model to create the database entry
-  const thought = new Thought ({message})
 
   try {
     // success
-    const savedThought = await thought.save() 
+    const savedThought = await new Thought({message, name:name}).save() 
     res.status(201).json(savedThought) // 201 status code means somethng has been successfully created
   } catch (err) {
     res.status(400).json({message:"Could not save thought to the database", error: err.errors})
