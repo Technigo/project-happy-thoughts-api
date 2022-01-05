@@ -108,7 +108,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     if (!likeUpdate) {
       res.status(404).json({ response: 'No thought found with this specific ID', success: false })
     } else {
-      res.status(200).json({ response: updatedLike, success: true });
+      res.status(200).json({ response: likeUpdate, success: true });
     }
   } catch (error) {
     res.status(400).json({ response: error, success: false });
