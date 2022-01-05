@@ -1,8 +1,6 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This weeks project is all about creating my own API to connect a earlier weeks project of Happy thoughts.
 
 ## The problem
 
