@@ -22,10 +22,10 @@ const ThoughtSchema = new mongoose.Schema({
     trim: true,
     validate: {
       validator: (value) => {
-        return !/^\S{31,}$/.test(value)
+        return !/^\S{31,}$/.test(value);
       },
-      message: "Message contains words that are too long, please user shorter words."
-    }
+      message: 'Message contains words that are too long, please user shorter words.',
+    },
   },
   likes: {
     type: Number,
@@ -46,15 +46,36 @@ app.use(express.json());
 // Lists all of the endpoints
 app.get('/', (req, res) => res.send(listEndpoints(app)));
 
-
+app.get('/thoughts', async (req, res) => {
+  const allThoughts = await Thought.find().sort({ createdAt: -1 }.limit(20));
+  res.json(allThoughts);
+});
 
 app.post('/thoughts', async (req, res) => {
   const { name, thought } = req.body;
 
   try {
-    const newMember = await new Thought({ name, thought }).save();
-    res.status(201).json({ response: newMember, success: true });
+    const newThought = await new Thought({ name, thought }).save();
+    res.status(201).json({ response: newThought, success: true });
   } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
+});
+
+app.get('/thoughts/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const updatedThought = await Thought.findOneAndReplace(
+      { _id: id },
+      { message: req.body.message },
+      { new: true }
+    );
+    if (updatedThought) {
+      res.json(updatedThought);
+    } else {
+      res.status(404).json({ message: 'Not found' });
+    }
+  } catch {
     res.status(400).json({ response: error, success: false });
   }
 });
@@ -65,16 +86,15 @@ app.post('/thoughts/:id/likes', async (req, res) => {
   try {
     const updatedThought = await Thought.findByIdAndUpdate(
       id,
-      {
-        $inc: {
-          likes: 1,
-        },
-      },
-      {
-        new: true,
-      }
+      { $inc: { likes: 1 } },
+      { new: true }
     );
     res.status(200).json({ response: updatedThought, success: true });
+    if (updatedThought) {
+      res.json(updatedThought);
+    } else {
+      res.status(404).json({ message: 'Not found' });
+    }
   } catch {
     res.status(400).json({ response: error, success: false });
   }
