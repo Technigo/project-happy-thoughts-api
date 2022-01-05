@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable comma-dangle */
 /* eslint-disable max-len */
 /* eslint-disable arrow-parens */
@@ -46,8 +47,23 @@ app.use(cors());
 app.use(express.json());
 
 // Start defining your routes here
+app.get('/', (req, res) => {
+  res.json('Hello World');
+});
+
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find({}).sort({ createdAt: 'desc' }); // 1 equals to ascending
+  const {
+    page,
+    perPage,
+    pageNum = Number(page),
+    perPageNum = Number(perPage),
+  } = req.query; // how many we want to skip and how many we want per page, query params are ALWAYS strings, so we have to turn them into numbers
+
+  const thoughts = await Thought.find({})
+    .sort({ createdAt: 'desc' })
+    .skip((pageNum - 1) * perPageNum)
+    .limit(perPageNum);
+
   res.status(200).json({ response: thoughts, success: true });
 });
 
