@@ -54,9 +54,8 @@ app.get('/', (req, res) => {
 
 
 //GET: This endpoint should return a maximum of 20 messages, sorted by createdAt to show the most recent messages first. */
-
 app.get("/thoughts", async (req, res) => {
-  const message = await AllUsermessages.find()
+  const message = await HappyThought.find()
     .sort({ createdAt: "desc" })
     .limit(20)
     .exec();
@@ -86,28 +85,32 @@ app.post('/thoughts', async (req, res) => {
 
 //endpoint to increase likes
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
-  const { thoughtId } = req.params
+  const { thoughtId } = req.params;
 
-	try {
-		const updatedMember = await Member.findByIdAndUpdate(
-			// Argument 1 - id
-			id,
-			// Argument 2 - properties to change
-			{
-				$inc: {
-					score: 1,
-				},
-			},
-			// Argument 3 - options (not mandatory)
-			{
-				new: true,
-			}
-		);
-		res.status(200).json({ response: updatedMember, success: true });
-	} catch (error) {
-		res.status(400).json({ response: error, success: false });
-	}
-});
+  try {
+    const likeUpdate = await HappyThought.findByIdAndUpdate(
+      {
+        _id: thoughtId
+      },
+      {
+        $inc: {
+          hearts: 1
+        }
+      },
+      {
+        new: true
+      }
+    );
+
+if (!updatedLike) {
+      res.status(404).json({ response: 'No thought found with this specific ID', success: false })
+    } else {
+      res.status(200).json({ response: updatedLike, success: true });
+    }
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
+})
 
 // Start the server
 app.listen(port, () => {
