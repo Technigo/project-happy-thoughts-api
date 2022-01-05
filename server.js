@@ -82,14 +82,24 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     }
   )
 
-  if (!updatedHeart) {
+  if (updatedHeart) {
+    res.json(updatedHeart)
+  } else {
+    res.status(404).json({ response: 'No happy thought with this ID', success: false })
+  }
+}
+catch (error) {
+  res.status(400).json({ response: error, success: false })
+}
+
+  /* if (!updatedHeart) {
     res.status(404).json({ response: 'No happy thought with this ID', success: false })
     } else {
   res.status(200).json({ response: updatedHeart, success: true })
     }
   } catch (error) {
     res.status(400).json({ response: error, success: false })
-  }
+  } */
 })
 
 // Start the server
