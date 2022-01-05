@@ -44,9 +44,10 @@ const Member = mongoose.model('Member', MemberSchema)
 app.use(cors())
 app.use(express.json())
 
-// Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world')
+// Get request to get members
+app.get('/members', async (req, res) => {
+  const members = await Member.find({}).sort({ createdAt: 1 }).limit(2)
+  res.status(200).json({ response: members, success: true })
 })
 
 // Post request for new members
