@@ -42,15 +42,18 @@ app.use(express.json());
 //----ENDPOINTS------
 // Start defining your routes here
 app.get('/', (req, res) => {
-	res.send('Hello world');
+	res.send(
+		'Hello world, Welcome to Madelene Happy Thoughts API  - see this API live at 👉:https://mt-dotse-happy-thoughts.netlify.app/'
+	);
 });
 
 app.get('/thoughts', async (req, res) => {
 	try {
 		const allThoughts = await Thought.find()
 			.sort({ createdAt: 'desc' })
+			//.skip(5) to skip the first two objects
 			.limit(20);
-		res.status(200).json(allThoughts);
+		res.status(200).json({ response: allThoughts, success: true });
 	} catch (error) {
 		res.status(404).json({
 			message: 'Can not find thoughts',
@@ -119,15 +122,53 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
 				new: true,
 			}
 		);
-		res.status(200).json({ response: updatedHeart, success: true });
+		if (updatedHeart) {
+			res.status(201).json({ response: updatedHeart, success: true });
+		} else {
+			res.status(404).json({ message: 'Not found!', success: false });
+		}
 	} catch (error) {
-		res.status(404).json({
-			message: 'Can not find the thought',
+		res.status(400).json({
+			message: 'Can not update the heart/like',
 			errors: error.error,
 			success: false,
 		});
 	}
 });
+
+//Endpoint to delete a thought
+app.delete('/thoughts/:id/', async (req, res) => {
+	const { id } = req.params;
+
+	try {
+		const deletedThoughts = await Thought.findOneAndDelete({ _id: id }); //findOneAndDelete()
+		//status 204 means no content and should be used in combination with deleteOne
+		//status 200 should go with findOneAndDeleteOne
+
+		if (deletedThoughts) {
+			res.status(200).json({ response: deletedThoughts, success: true });
+		} else {
+			res
+				.status(404)
+				.json({ response: ' can not find the thought', success: false });
+		}
+	} catch (error) {
+		res.status(400).json({
+			message: 'Can not delete the thought',
+			errors: error.error,
+			success: false,
+		});
+	}
+});
+
+// Endpoint to update a message
+// app.patch('/thought/:id', (req, res) => {
+// 	const { id } = req.params;
+// 	const { message } = req.body;
+
+// 	Thought.findOneAndUpdated({ _id: id }, { message }, {new:true})
+// 	.then(updated);
+// });
 
 // Start the server
 app.listen(port, () => {
