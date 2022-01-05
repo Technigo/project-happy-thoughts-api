@@ -1,37 +1,31 @@
 {
-  "name": "express-api-starter",
-  "version": "1.0.0",
-  "description": "Starter project to get up and running with express quickly",
-  "scripts": {
-    "start": "babel-node server.js",
-    "dev": "nodemon server.js --exec babel-node",
-    "lint": "eslint .",
-    "heroku-postbuild": "npm run build"
+  “name”: “express-api-starter”,
+  “version”: “1.0.0",
+  “description”: “Starter project to get up and running with express quickly”,
+  “scripts”: {
+    “start”: “babel-node server.js”,
+    “dev”: “nodemon server.js --exec babel-node”,
+    “lint”: “eslint .”
   },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@babel/helper-compilation-targets": "^7.16.7",
-    "@babel/node": "^7.8.3",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "mongoose": "^5.13.14",
-    "nodemon": "^2.0.2",
-    "serve": "^13.0.2"
+  “author”: “”,
+  “license”: “ISC”,
+  “dependencies”: {
+    “@babel/core”: “^7.16.7",
+    “@babel/node”: “^7.16.7",
+    “@babel/preset-env”: “^7.16.7",
+    “cors”: “^2.8.5",
+    “express”: “^4.17.2",
+    “mongoose”: “^5.13.14",
+    “nodemon”: “^2.0.15"
   },
-  "devDependencies": {
-    "@babel/core": "^7.16.7",
-    "@babel/plugin-proposal-class-static-block": "^7.16.7",
-    "@babel/preset-env": "^7.16.7",
-    "babel-loader": "^8.2.3",
-    "eslint-config-airbnb": "^18.0.1",
-    "eslint-config-import": "^0.13.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.16.0",
-    "eslint-plugin-react-hooks": "^2.3.0"
-  },
-  "resolutions": {
-    "@babel/preset-env": "7.5.5"
+  “devDependencies”: {
+    “babel-eslint”: “^10.0.3”,
+    “eslint”: “^6.8.0”,
+    “eslint-config-airbnb”: “^18.2.1”,
+    “eslint-config-import”: “^0.13.0”,
+    “eslint-plugin-import”: “^2.25.4”,
+    “eslint-plugin-jsx-a11y”: “^6.5.1”,
+    “eslint-plugin-react”: “^7.28.0”,
+    “eslint-plugin-react-hooks”: “^2.3.0”
   }
 }
