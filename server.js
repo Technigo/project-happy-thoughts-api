@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import listEndpoints from "express-list-endpoints";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -21,8 +22,14 @@ const ThoughtSchema = new mongoose.Schema({
     minlength: 5,
     required: true,
   },
+  category: {
+    type: String,
+    enum: ["food", "hobby", "poetry", "politic", "other"],
+    default: "other",
+  },
+  writer: { type: String, default: "anonymous" },
   hearts: { type: Number, default: 0 },
-  createdAt: { type: Number, default: () => Date.now() },
+  createdAt: { type: Date, default: Date.now },
 });
 const Thought = mongoose.model("Thought", ThoughtSchema);
 
@@ -32,30 +39,71 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello world");
+  res.send(listEndpoints(app));
 });
 
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find()
+  const {
+    oldest,
+    all,
+    writer,
+    page,
+    perPage,
+    pageNum = Number(page),
+    perPageNum = Number(perPage),
+  } = req.query;
+  let thoughts = await Thought.find()
     .sort({ createdAt: "desc" })
-    .limit(20)
-    .exec();
+    .skip((pageNum - 1) * perPageNum)
+    .limit(perPageNum);
+  if (oldest) {
+    thoughts = await Thought.find().sort({ createdAt: "asc" }).limit(20);
+  }
+  if (all) {
+    thoughts = await Thought.find().sort({ createdAt: "desc" });
+  }
+  if (writer) {
+    thoughts = await Thought.find({
+      writer: { $regex: writer },
+    });
+  }
+
+  if (thoughts) {
+    res.json(thoughts);
+  }
+});
+
+app.get("/thoughts/category/:category", async (req, res) => {
+  const { category } = req.params;
+  let thoughts = await Thought.find({
+    category: { $regex: category },
+  });
   res.json(thoughts);
 });
 app.post("/thoughts", async (req, res) => {
-  const { message } = req.body;
+  const { message, writer, category } = req.body;
   try {
-    const newMessage = await new Thought({ message }).save();
-    res.status(201).json({ response: newMessage, success: true });
-  } catch (error) {
-    res.status(404).json({ response: error, success: false });
+    const newMessage = await new Thought({ message, writer, category }).save();
+    if (newMessage) {
+      res.status(200).json({ response: newMessage, success: true });
+    } else {
+      res
+        .status(404)
+        .json({ response: "can not create thought", success: false });
+    }
+  } catch (err) {
+    res.status(400).json({
+      response: "Can not create thought",
+      errors: err.errors,
+      success: false,
+    });
   }
 });
-app.post("/thoughts/:id/like", async (req, res) => {
-  const { id } = req.params;
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
   try {
     const addLike = await Thought.findByIdAndUpdate(
-      id,
+      thoughtId,
       {
         $inc: {
           hearts: 1,
@@ -63,9 +111,17 @@ app.post("/thoughts/:id/like", async (req, res) => {
       },
       { new: true }
     );
-    res.status(200).json({ response: addLike, success: true });
-  } catch (error) {
-    res.status(400).json({ response: error, success: false });
+    if (addLike) {
+      res.status(200).json({ response: addLike, success: true });
+    } else {
+      res.status(404).json({ response: "invalid id", success: false });
+    }
+  } catch (err) {
+    res.status(400).json({
+      response: "can´t find a thought with this id",
+      errors: err.errors,
+      success: false,
+    });
   }
 });
 
