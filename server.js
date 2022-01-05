@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
@@ -19,15 +21,15 @@ const ThoughtSchema = new mongoose.Schema({
     required: true,
     minlength: 5,
     maxlength: 140,
-    trim: true,
+    trim: true
   },
   heart: {
     type: Number,
-    default: 0,
+    default: 0
   },
   createdAt: {
     type: Date,
-    default: () => Date.now(),
+    default: () => Date.now()
   }
 })
 
@@ -71,12 +73,12 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     // Argument 2 - properties to change
     { 
       $inc: { 
-        heart: 1,
-      }, 
+        heart: 1
+      }
     },
     // Argument 3 - options (not mandatory)
     {
-      new: true,
+      new: true
     }
   )
 
