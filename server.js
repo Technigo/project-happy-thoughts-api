@@ -23,12 +23,6 @@ const ThoughtSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 140,
     trim: true,
-    validate: {
-      validator: (value) => {
-        return !/^\S{31,}$/.test(value)
-      },
-      message: 'Message contains words that are too long, please user shorter words.',
-    },
   },
   likes: {
     type: Number,
@@ -50,40 +44,22 @@ app.use(express.json());
 app.get('/', (req, res) => res.send(listEndpoints(app)));
 
 app.get('/thoughts', async (req, res) => {
-  const allThoughts = await Thought.find();
-  res.json(allThoughts);
+  const allThoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+  res.status(200).json(allThoughts);
 });
 
 app.post('/thoughts', async (req, res) => {
-  const { name, thought } = req.body;
+  const { thought } = req.body;
 
   try {
-    const newThought = await new Thought({ name, thought }).save();
+    const newThought = await new Thought({ thought }).save();
     res.status(201).json({ response: newThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
 });
 
-app.get('/thoughts/:id', async (req, res) => {
-  const { id } = req.params;
-  try {
-    const updatedThought = await Thought.findOneAndReplace(
-      { _id: id },
-      { message: req.body.message },
-      { new: true }
-    );
-    if (updatedThought) {
-      res.json(updatedThought);
-    } else {
-      res.status(404).json({ message: 'Not found' });
-    }
-  } catch {
-    res.status(400).json({ response: error, success: false });
-  }
-});
-
-app.post('/thoughts/:id/likes', async (req, res) => {
+app.post('/thoughts/:thoughtId/likes', async (req, res) => {
   const { id } = req.params;
 
   try {
