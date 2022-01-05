@@ -54,7 +54,7 @@ app.get('/thoughts', async (req, res) => {
 			.sort({ createdAt: 'desc' })
 			//.skip(5) to skip the first two objects
 			.limit(20);
-		res.status(200).json({ response: allThoughts, success: true });
+		res.status(200).json(allThoughts);
 	} catch (error) {
 		res.status(404).json({
 			message: 'Can not find thoughts',
