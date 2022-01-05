@@ -46,7 +46,7 @@ app.use(express.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Hello world, welcome to Happy Thoughts API - made by Darya // See this API live in action here: https://happy-thoughts-react-project.netlify.app/')
 });
 
 // getting all of the thoughts and sorting them

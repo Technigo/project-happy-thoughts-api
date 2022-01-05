@@ -1,23 +1,24 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+This project's main goal is to learn POST requests: expose users to my endpoints, allowing them to POST data to my API and then use that data to save new objects to my Mongo Database.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+For this I'll be using the "Happy Thoughts" Frontend: this is a Twitter-like app including a form in which users can write a new 'happy thought', list recent thoughts, and it also shows a count of 'hearts' on each thought. Users can then click the heart to like a thought 💕 For this to work, I created an API in the Backend using Express and MongoDB including both GET request endpoints to return data and POST endpoints to create data.
 
-## The problem
+Find the Happy Thoughts Frontend live here: https://happy-thoughts-react-project.netlify.app/
+(and its repository here: https://github.com/DALA746/project-happy-thoughts 
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+## What I learned
+
+- How to use POST requests to send data to your API
+- How to store data in your database from POST requests
+- How to validate data and ensure your database only contains 'good' data
+- How to build a full API which includes handling of user input
+- How to build an API which works well with an existing frontend
 
 ## View it live
 
-https://happy-thoughts-backend.herokuapp.com/thoughts
+https://happy-thoughts-backend.herokuapp.com/
 
-## **🔵 Blue Level (Minimum Requirements)**
 
-- Your API should implement the routes exactly as documented above.
-- Your `GET /thoughts` endpoint should only return 20 results, ordered by `createdAt` in descending order.
-- Your API should validate user input and return appropriate errors if the input is invalid.
-- In the `POST /thoughts` endpoint to create a new thought, if the input was invalid and the API is returning errors, it should set the response status to `400` (bad request).
-- The endpoint to add hearts to a thought should return an appropriate error if the thought was not found.
 
 
