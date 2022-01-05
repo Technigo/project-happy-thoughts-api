@@ -20,6 +20,7 @@ A Post request using async/await keywords, finding an ID and updates the heart p
 
 ## View it live
 
-https://project-happy-thoughts-api-kim.herokuapp.com/
+Heroku app: https://project-happy-thoughts-api-kim.herokuapp.com/
+
 The API used in the frontend project: https://happy-thoughts-kim.netlify.app/
 
