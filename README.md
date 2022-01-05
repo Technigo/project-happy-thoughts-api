@@ -1,13 +1,26 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Earlier, for the Happy Thoughts project, I built a frontend in React which uses an API to store thoughts and updating likes. For this project, the assignment was to build my own API which works in the same way and should become a drop-in replacement for the API I used in the React frontend.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+For this new API, I started to build a 'Thought' Mongoose model which has properties for the 'message' string, a 'heart' property for tracking the number of likes, and a 'createdAt' property to store when the thought was added.
+
+After that I needed to add 3 endpoints:
+
+'GET /thoughts'
+A Get request using async/await keywords, and methods for the endpoint to return a maximum of 20 thoughts, sorted by 'createdAt' to show the most recent thoughts first.
+
+'POST /thoughts'
+A Post request using async/await keywords, creating a new thought 'message', which is being stored in the database with the save() method.
+
+'POST /thoughts/:thoughtId/like'
+A Post request using async/await keywords, finding an ID and updates the heart property value by 1, using the findByIdAndUpdate() method.
+
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Heroku app: https://project-happy-thoughts-api-kim.herokuapp.com/
+
+The API used in the frontend project: https://happy-thoughts-kim.netlify.app/
+
