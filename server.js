@@ -53,16 +53,34 @@ app.get('/', (req, res) => {
 
 app.get('/thoughts', async (req, res) => {
   const {
+    sort,
     page,
     perPage,
     pageNum = Number(page),
     perPageNum = Number(perPage),
+    sortNum = Number(sort),
   } = req.query; // how many we want to skip and how many we want per page, query params are ALWAYS strings, so we have to turn them into numbers
 
+  // version 1 - mongoose
   const thoughts = await Thought.find({})
-    .sort({ createdAt: 'desc' })
+    .sort({ createdAt: sortNum })
     .skip((pageNum - 1) * perPageNum)
     .limit(perPageNum);
+
+  // version 2 -mongo
+  // const thoughts = await Thought.aggregate([
+  //   {
+  //     $sort: {
+  //       createdAt: sortNum,
+  //     },
+  //   },
+  //   {
+  //     $skip: (pageNum - 1) * perPageNum,
+  //   },
+  //   {
+  //     $limit: perPageNum,
+  //   },
+  // ]);
 
   res.status(200).json({ response: thoughts, success: true });
 });
@@ -127,6 +145,17 @@ app.post('/thoughts/:id/like', async (req, res) => {
       }
     );
     res.status(200).json({ response: updatedHeart, success: true });
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
+});
+
+app.delete('thoughts/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedThought = await Thought.findOneAndDelete({ _id: id });
+    res.status(200).json({ response: deletedThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
