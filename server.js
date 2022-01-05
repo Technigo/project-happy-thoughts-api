@@ -162,15 +162,6 @@ app.delete('/thoughts/:id/', async (req, res) => {
 	}
 });
 
-// Endpoint to update a message
-// app.patch('/thought/:id', (req, res) => {
-// 	const { id } = req.params;
-// 	const { message } = req.body;
-
-// 	Thought.findOneAndUpdated({ _id: id }, { message }, {new:true})
-// 	.then(updated);
-// });
-
 // Start the server
 app.listen(port, () => {
 	// eslint-disable-next-line
