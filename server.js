@@ -108,7 +108,7 @@ app.post('/thoughts', async (req, res) => {
 // 	});
 // });
 
-//path param to increase the likes
+//Enpoint to increase the hearts/likes
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
 	const { thoughtId } = req.params;
 	try {
@@ -138,29 +138,29 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
 });
 
 //Endpoint to delete a thought
-// app.delete('/thoughts/:id/', async (req, res) => {
-// 	const { id } = req.params;
+app.delete('/thoughts/:id/', async (req, res) => {
+	const { id } = req.params;
 
-// 	try {
-// 		const deletedThoughts = await Thought.findOneAndDelete({ _id: id }); //findOneAndDelete()
-// 		//status 204 means no content and should be used in combination with deleteOne
-// 		//status 200 should go with findOneAndDeleteOne
+	try {
+		const deletedThoughts = await Thought.findOneAndDelete({ _id: id }); //findOneAndDelete()
+		//status 204 means no content and should be used in combination with deleteOne
+		//status 200 should go with findOneAndDeleteOne
 
-// 		if (deletedThoughts) {
-// 			res.status(200).json({ response: deletedThoughts, success: true });
-// 		} else {
-// 			res
-// 				.status(404)
-// 				.json({ response: ' can not find the thought', success: false });
-// 		}
-// 	} catch (error) {
-// 		res.status(400).json({
-// 			message: 'Can not delete the thought',
-// 			errors: error.error,
-// 			success: false,
-// 		});
-// 	}
-// });
+		if (deletedThoughts) {
+			res.status(200).json({ response: deletedThoughts, success: true });
+		} else {
+			res
+				.status(404)
+				.json({ response: 'Can not find the thought', success: false });
+		}
+	} catch (error) {
+		res.status(400).json({
+			message: 'Can not delete the thought',
+			errors: error.error,
+			success: false,
+		});
+	}
+});
 
 // Endpoint to update a message
 // app.patch('/thought/:id', (req, res) => {
