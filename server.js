@@ -3,43 +3,30 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import listEndpoints from 'express-list-endpoints';
 // import dotenv from 'dotenv';
-
 // require('dotenv').config();
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-// Defines the port the app will run on. Defaults to 8080, but can be
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
+// Defines the port the app will run on.
 const port = process.env.PORT || 8080;
 const app = express();
 
 const ThoughtSchema = new mongoose.Schema({
-  // message: String,
-  // hearts: Number,
   message: {
     type: String,
     required: [true, 'A message is required'],
-    // unique: true,
     minlength: 5,
     maxlength: 140,
     trim: true
+    // unique: true,
     // enum: ['Jennie', 'Matilda', 'Karin', 'Maks'] (array of string, specify allowed values)
   },
   hearts: {
     type: Number,
     default: 0
-    // maxlength: 10,
-    // trim: true the whitespaces before and after text block will
-    // be ignored if it is a lot, not the whitespaces between the words
   },
-  // score: {
-  //   type: Number,
-  //   default: 0
-  // },
   createdAt: {
     type: Date,
     default: () => new Date()
@@ -47,7 +34,7 @@ const ThoughtSchema = new mongoose.Schema({
   // userName: {
   //   type: String,
   //   default: "Anonymous"
-  // }
+  // } if using this, add userName in post thoughts route
 });
 
 const Thought = mongoose.model('Thought', ThoughtSchema);
@@ -70,17 +57,24 @@ app.get('endpoints', (req, res) => {
 
 // get the thoughts max 20 sorted by createdAt descending order
 app.get('/thoughts', async (req, res) => {
-  const thoughtsList = await Thought.find()
+  // const {
+  //   page,
+  //   perPage,
+  //   pageNum = Number(page),
+  //   perPageNum = Number(perPage)
+  // } = req.query;
+
+  const thoughtsList = await Thought.find({})
     .sort({ createdAt: 'desc' })
-    .limit(20)
-    .exec();
-  res.json(thoughtsList);
+    // .skip((pageNum -1) * perPageNum)
+    .limit(20); // perPageNum
+  res.status(200).json({ response: thoughtsList, success: true });
 });
 
 app.post('/thoughts', async (req, res) => {
-  const { message, userName } = req.body;
+  const { message } = req.body;
   try {
-    const newThought = await new Thought({ message, userName }).save();
+    const newThought = await new Thought({ message }).save();
     res.status(201).json({ response: newThought, success: true });
   } catch (error) {
     // if (error === 'ValidatorError') {
@@ -94,14 +88,11 @@ app.post('/thoughts', async (req, res) => {
 });
 
 // or use app.patch and findOneAndUpdate()
-app.post('thoughts/:thoughtId/like', async (req, res) => {
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params;
   try {
     const updatedThought = await Thought.findByIdAndUpdate(
       thoughtId,
-      // {
-      //   _id: thoughtId
-      // },
       {
         $inc: {
           hearts: 1
@@ -111,11 +102,42 @@ app.post('thoughts/:thoughtId/like', async (req, res) => {
         new: true
       }
     );
-    res.status(200).json({ response: updatedThought, success: true });
-  } catch {
-    res.status(404).json({ response: 'Incorrect Id', sucess: false });
+    if (updatedThought) {
+      res.status(200).json({ response: updatedThought, success: true });
+    } else {
+      res.status(404).json({ response: 'Thought not found', sucess: false });
+    }
+  } catch (error) {
+    res.status(400).json({ response: error, sucess: false });
   }
 });
+
+// app.delete('/thoughts/:thoughtId', async (req, res) => {
+//   const { thoughtId } = req.params;
+
+//   try {
+//     const deletedThought = await Thought.findOneAndDelete({ _id: thoughtId });
+//     if (deletedThought) {
+//       res.status(200).json({ response: deletedThought, success: true });
+//     } else {
+//       res.status(404).json({ response: 'Thought not found', sucess: false });
+//     }
+//   } catch (error) {
+//     res.status(400).json({ response: error, sucess: false });
+//   }
+// });
+
+// app.patch('/thoughts/:thoughtId', async (req, res) => {
+//   const { thoughtId } = req.params;
+//   const { updatedMessage } = req.body;
+//   // should it be name: updateMessage??
+//   Thought.findOneAndUpdate(
+//     { _id: thoughtId },
+//     { message: updatedMessage },
+//     { new: true }
+//   );
+//   // EJ KLAR, se onsdagens lektion
+// });
 
 // Start the server
 app.listen(port, () => {
