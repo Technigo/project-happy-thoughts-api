@@ -7,13 +7,6 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
 const ThoughtSchema = new mongoose.Schema({
-  // name: {
-  //   type: String,
-  //   required: true,
-  //   minlenght: 2,
-  //   maxlength: 20,
-  //   trim: true
-  // },
   text: {
     type: String,
     required: true,
@@ -59,12 +52,12 @@ app.get('/thoughts', async (req, res) => {
 app.post('/thoughts', async (req, res) => {
   const { name, text } = req.body
 
-  const thought = new Thought({name, text})
+  // const thought = new Thought({name, text})
 
   try {
-    const newThought = await thought.save()
+    const newThought = await new Thought({ name, text }).save()
     res.status(201).json({ response: newThought, sucess: true })
-  } catch (err) {
+  } catch (error) {
      res.status(400).json({ message: 'Could not save thought to the Database', success: false })
   }
 })
@@ -73,17 +66,17 @@ app.post('/thoughts/:id/likes', async (req, res) => {
   const { id } = req.params
 
   try {
-    const thought = await Thought.findByIdAndUpdate(
+    const updatedThought = await Thought.findByIdAndUpdate(
       id,
       { $inc: 
         { likes: 1 } },
       { 
-        new: true 
+        new: true
       }
     )
-    res.status(200).json(thought)
-  } catch (err) {
-    res.status(400).json({ message: 'Could not find thought', errors: err.errors })
+    res.status(200).json({ response: updatedThought, success: true })
+  } catch (error) {
+    res.status(400).json({ response: 'Could not find thought', success: false })
   }
 })
 
