@@ -6,8 +6,6 @@ import dotenv from 'dotenv';
 
 dotenv.config()
 
-import thoughts from './data/thoughts.json';
-
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
@@ -27,7 +25,7 @@ const ThoughtSchema = new mongoose.Schema({
     trim: true,
     validate: {
       validator: (value) => {
-        return !/^\S{31,}$/.test(value);
+        return !/^\S{31,}$/.test(value)
       },
       message: 'Message contains words that are too long, please user shorter words.',
     },
@@ -48,24 +46,11 @@ const Thought = mongoose.model('Thought', ThoughtSchema);
 app.use(cors());
 app.use(express.json());
 
-if (process.env.RESET_DB) {
-  const seedDatabase = async () => {
-    await Thought.deleteMany({});
-
-    booksData.forEach(item => {
-      const newThought = new Thought(item);
-      newThought.save();
-    });
-  };
-  seedDatabase();
-  console.log('Database has been reset')
- }
-
 // Lists all of the endpoints
 app.get('/', (req, res) => res.send(listEndpoints(app)));
 
 app.get('/thoughts', async (req, res) => {
-  const allThoughts = await Thought.find().sort({ createdAt: -1 }.limit(20));
+  const allThoughts = await Thought.find();
   res.json(allThoughts);
 });
 
