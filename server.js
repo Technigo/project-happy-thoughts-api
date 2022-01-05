@@ -39,7 +39,7 @@ app.use(express.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Hello world! This is an API for posting happy thoughts')
 })
 
 app.post('/thoughts', async (req, res) => {
