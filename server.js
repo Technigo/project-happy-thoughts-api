@@ -2,6 +2,7 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import listEndpoints from 'express-list-endpoints'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { 
@@ -11,6 +12,26 @@ mongoose.connect(mongoUrl, {
   useFindAndModify: false
 })
 mongoose.Promise = Promise
+
+// Defines the port the app will run on. Defaults to 8080, but can be 
+// overridden when starting the server. For example:
+//
+//   PORT=9000 npm start
+const port = process.env.PORT || 8080
+const app = express()
+
+// Add middlewares to enable cors and json body parsing
+app.use(cors())
+app.use(express.json())
+
+// check via middleware, if we are connected to the database
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: 'Service unavailable' })
+  }
+})
 
 const thoughtSchema = new mongoose.Schema({
   message: {
@@ -34,20 +55,17 @@ const thoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model('Thought', thoughtSchema)
 
-// Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
-const port = process.env.PORT || 8080
-const app = express()
-
-// Add middlewares to enable cors and json body parsing
-app.use(cors())
-app.use(express.json())
-
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Welcome to the happy thoughts API')
+})
+
+// route provides all endpoints
+app.get('/endpoints', (req, res) => {
+  res.json({
+    response: listEndpoints(app),
+    success: true
+  })
 })
 
 // Endpoint returns a maximum of 20 thoughts, sorted by createdAt to show the most recent thoughts first.
