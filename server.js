@@ -87,7 +87,7 @@ app.post('/thoughts/:id/hearts', async (req, res) => {
 
 
 // Delete Thought by Id
-app.delete('/thoughts/:id', async (req, res) => {
+/* app.delete('/thoughts/:id', async (req, res) => {
   const { id } = req.params
 
   try {
@@ -100,10 +100,10 @@ app.delete('/thoughts/:id', async (req, res) => {
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
-})
+}) */
 
 // Patch thought message
-app.patch('/thoughts/:id', (req, res) => {
+/* app.patch('/thoughts/:id', (req, res) => {
   const { id } = req.params
   const { message } = req.body
 
@@ -117,7 +117,7 @@ app.patch('/thoughts/:id', (req, res) => {
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
-})
+}) */
 
 // Start the server
 app.listen(port, () => {
