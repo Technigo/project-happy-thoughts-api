@@ -30,7 +30,6 @@ const ThoughtSchema = new mongoose.Schema({
     type: String,
     minlength: 1,
     maxlength: 300,
-    default: "anonymous",
   },
   hearts: {
     type: Number,
