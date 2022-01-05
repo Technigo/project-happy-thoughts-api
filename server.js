@@ -60,8 +60,8 @@ app.post('/thoughts', async (req, res) => {
   const { message, username } = req.body;
 
   try {
-    const newThought = await new Thought({ message, username }).save();
-    res.status(201).json({ response: newThought, username });
+    const newThought = await new Thought({ message, username: username || 'Anonymous' }).save();
+    res.status(200).json({ response: newThought });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
@@ -77,11 +77,23 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
       thoughtId, 
       { $inc: { hearts: 1 } }, { new: true }
     ); // inc = inscrese, new is options of that method 
-    res.status(201).json({ message: thoughtLiked, success: true })
+    res.status(200).json({ message: thoughtLiked, success: true })
   } catch (err) {
     res.status(400).json({ message: "Could not find that Thought", error: err.errors });
   }
 });
+
+// delete thought 
+app.delete('/thoughts/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deleteMessage = await Thought.findOneAndDelete({ _id: id });
+    res.status(200).json({ response: deleteMessage })
+  } catch (err) {
+    res.status(400).json({ response: "Could not delete message", error: err });
+  }
+})
 
 // Start the server
 app.listen(port, () => {
