@@ -65,18 +65,26 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
 
   try {
-  const updatedThought = await Thought.findByIdAndUpdate(
+  const updatedHeart = await Thought.findByIdAndUpdate(
+    // Argument 1 - id
     thoughtId, 
+    // Argument 2 - properties to change
     { 
       $inc: { 
-        like: 1,
+        heart: 1,
       }, 
     },
+    // Argument 3 - options (not mandatory)
     {
       new: true,
     }
   )
-  res.status(200).json({ response: updatedThought, success: true })
+
+  if (!updatedHeart) {
+    res.status(404).json({ response: 'No happy thought with this ID', success: false })
+    } else {
+  res.status(200).json({ response: updatedHeart, success: true })
+    }
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
