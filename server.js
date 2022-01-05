@@ -18,24 +18,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// const Thought = mongoose.model("Thought", {
-//   message: {
-//     type: String,
-//     required: true,
-//     minlength: 5,
-//     maxlength: 140,
-//     trim: true,
-//   },
-//   heart: {
-//     type: Number,
-//     default: 0,
-//   },
-//   createdAt: {
-//     type: Number,
-//     default: () => Date.now,
-//   },
-// });
-
 const ThoughtSchema = new mongoose.Schema({
   message: {
     type: String,
@@ -99,6 +81,7 @@ app.post("/thougths", async (req, res) => {
   }
 });
 
+// endpoint to increase the likes - click the hearts
 app.post("/thougths/:thoughtsId/like", async (req, res) => {
   const { thoughtsId } = req.params;
 
