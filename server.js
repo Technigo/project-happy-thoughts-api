@@ -23,7 +23,7 @@ const ThoughtSchema = new mongoose.Schema({
     maxlength: 140,
     trim: true
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -67,13 +67,13 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
 
   try {
-  const updatedHeart = await Thought.findByIdAndUpdate(
+  const updatedHearts = await Thought.findByIdAndUpdate(
     // Argument 1 - id
     thoughtId, 
     // Argument 2 - properties to change
     { 
       $inc: { 
-        heart: 1
+        hearts: 1
       }
     },
     // Argument 3 - options (not mandatory)
@@ -82,8 +82,8 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     }
   )
 
-  if (updatedHeart) {
-    res.json(updatedHeart)
+  if (updatedHearts) {
+    res.json(updatedHearts)
   } else {
     res.status(404).json({ response: 'No happy thought with this ID', success: false })
   }
@@ -91,15 +91,6 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
 catch (error) {
   res.status(400).json({ response: error, success: false })
 }
-
-  /* if (!updatedHeart) {
-    res.status(404).json({ response: 'No happy thought with this ID', success: false })
-    } else {
-  res.status(200).json({ response: updatedHeart, success: true })
-    }
-  } catch (error) {
-    res.status(400).json({ response: error, success: false })
-  } */
 })
 
 // Start the server
