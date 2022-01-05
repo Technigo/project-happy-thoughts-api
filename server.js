@@ -66,7 +66,7 @@ app.get("/thoughts", async (req, res) => {
 });
 
 // endpoint to use to post new messages to the API
-app.post("/thougths", async (req, res) => {
+app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
 
   try {
