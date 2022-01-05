@@ -103,12 +103,11 @@ app.delete('/thoughts/:id', async (req, res) => {
 })
 
 // Patch thought message
-/* app.patch('/thoughts/:id', (req, res) => {
+app.patch('/thoughts/:id', (req, res) => {
   const { id } = req.params
-  const { message } = req.body
 
   try {
-    const updatedThought = await Thought.findOneAndUpdate( {_id: id}, { message }, {new: true})
+    const updatedThought = await Thought.findByIdAndUpdate( id, req.body, {new: true})
     if (updatedThought){
       res.status(200).json({ response: updatedThought, success: true })
     } else {
@@ -117,7 +116,7 @@ app.delete('/thoughts/:id', async (req, res) => {
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
-}) */
+})
 
 // Start the server
 app.listen(port, () => {
