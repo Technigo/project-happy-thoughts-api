@@ -62,7 +62,7 @@ app.post('/thoughts', async (req, res) => {
 
   try {
     const newThought = await new Thought({ message }).save()
-    
+    await Thought.deleteOne({})
     res.status(201).json({ response: newThought, success: true })
   } catch (error) {
     res.status(400).json({ response: error, success: false })
@@ -103,21 +103,25 @@ app.delete('/thoughts/:id', async (req, res) => {
 })
 
 // Patch thought message
-/* app.patch('/thoughts/:id', (req, res) => {
+app.patch('/thoughts/:id', (req, res) => {
   const { id } = req.params
   const { message } = req.body
 
-  try {
-    const updatedThought = await Thought.findOneAndUpdate( {_id: id}, { message }, {new: true})
-    if (updatedThought){
-      res.status(200).json({ response: updatedThought, success: true })
-    } else {
-      res.status(404).json({ response: 'Thought not found', success: false })
-    }
-  } catch (error) {
-    res.status(400).json({ response: error, success: false })
-  }
-}) */
+	try {
+		const updatedThought = await Thought.findOneAndUpdate(
+			{ _id: id },
+			{ message },
+			{ new: true }
+		);
+		if (updatedThought) {
+			res.status(200).json({ response: updatedThought, success: true });
+		} else {
+			res.status(404).json({ response: 'Thought not found', success: false });
+		}
+	} catch (error) {
+		res.status(400).json({ response: error, success: false });
+	}
+})
 
 // Start the server
 app.listen(port, () => {
