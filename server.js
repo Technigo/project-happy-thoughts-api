@@ -70,7 +70,7 @@ app.post ('/thoughts', async (req,res) =>{
 
   try {
     // success
-    const savedThought = await new Thought({message, name:name}).save() 
+    const savedThought = await new Thought({message, name:name || 'Anonymous'}).save() 
     res.status(201).json(savedThought) // 201 status code means somethng has been successfully created
   } catch (err) {
     res.status(400).json({message:"Could not save thought to the database", error: err.errors})
