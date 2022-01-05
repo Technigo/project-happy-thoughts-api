@@ -9,3 +9,5 @@ There were no real problems this week. However getting the correct status codes 
 ## View it live
 
 https://happythoughts-api-w19.herokuapp.com/
+
+https://lisapblome-w11-happythoughts.netlify.app/
