@@ -17,7 +17,7 @@ const port = process.env.PORT || 8080
 const app = express()
 
 
-//Mongoose Schema for Thought model
+//Mongoose Schema for thought model
 const ThoughtSchema = new mongoose.Schema({
   message: {
     type: String,
@@ -50,13 +50,13 @@ app.get('/', (req, res) => {
 })
 
 
-// Get 20 latest thoughts in descending order
+// Get thoughts in descending order
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find({}).sort({ createdAt: 'desc'}).limit(20)
-  res.status(200).json({ response: thoughts, success: true })
+  const thoughts = await Thought.find().sort({ createdAt: "desc"}).limit(20)
+  res.json(thoughts)
 })
 
-// Post thought message and deletes first entry in DB to not max out DB over time
+// Post thought message and deletes first entry in DB to not max out
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body
 
@@ -69,51 +69,13 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-// Post for adding likes/hearts
+// Post method for adding likes/hearts
 app.post('/thoughts/:id/hearts', async (req, res) => {
   const { id } = req.params
 
   try {
-    const updatedHeart =  await Thought.findByIdAndUpdate(id, { $inc: { hearts: 1 } })
-    if (updatedHeart) {
-    res.status(200).json({ response: updatedHeart, success: true })
-    } else {
-      res.status(404).json({ response: 'Not found', success: false })
-    }
-  } catch (error) {
-    res.status(400).json({ response: error, success: false })
-  }
-})
-
-
-// Delete Thought by Id
-app.delete('/thoughts/:id', async (req, res) => {
-  const { id } = req.params
-
-  try {
-    const deletedThought = await Thought.findOneAndDelete({ _id: id })
-    if (deletedThought){
-      res.status(200).json({ response: deletedThought, success: true })
-    } else {
-      res.status(404).json({ response: 'Thought not found', success: false })
-    }
-  } catch (error) {
-    res.status(400).json({ response: error, success: false })
-  }
-})
-
-// Patch thought message
-app.patch('/thoughts/:id', (req, res) => {
-  const { id } = req.params
-  const { message } = req.body
-
-  try {
-    const updatedThought = await Thought.findOneAndUpdate( {_id: id}, { message }, {new: true})
-    if (updatedThought){
-      res.status(200).json({ response: updatedThought, success: true })
-    } else {
-      res.status(404).json({ response: 'Thought not found', success: false })
-    }
+    const updatedThought =  await Thought.findByIdAndUpdate(id, { $inc: { hearts: 1 } })
+    res.status(200).json({ response: updatedThought, success: true })
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
