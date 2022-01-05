@@ -9,51 +9,54 @@ mongoose.Promise = Promise;
 const port = process.env.PORT || 8080;
 const app = express();
 
-const Member = mongoose.model('Member', {
-  name: {
+const Thought = mongoose.model('Thought', {
+  message: {
     type: String,
-    required: false,
-    unique: false,
-    /* enum: ['Jennie', 'Matilda', 'Karin', 'Maksymilian'], */
-  },
-  description: {
-    type: String,
+    required: true,
     minlength: 5,
-    maxlength: 10,
-    trim: true,
+    maxlength: 140
   },
-  score: {
+  heart: {
     type: Number,
-    default: 0,
+    default: 0
   },
   createdAt: {
     type: Date,
-    default: () => Date.now(),
-  },
-});
-
-// Add middlewares to enable cors and json body parsing
-app.use(cors());
-app.use(express.json());
-
-// Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world');
-});
-
-app.post('/members', async (req, res) => {
-  const { name, description } = req.body;
-  try {
-    // den enda anledningen till att man skulle vilja spara den nya medlemmen till en variabel är om man vill sända vidare infon till the frontend. kanske som en konfirmation.
-    const newMember = await new Member({ name, description }).save();
-    res.status(201).json({ response: newMember, success: true });
-  } catch (error) {
-    res.status(400).json({ response: error, success: false });
+    default: () => Date.now()
   }
 });
 
-// Start the server
+app.get('/thoughts', async (req, res) => {
+  const {
+    page,
+    perPage,
+    pageNum = Number(page),
+    perPageNum = Number(perPage)
+  } = req.query;
+
+  const thoughts = await Thought.find({})
+    .sort({ createdAt: 1 })
+    .skip((pageNum - 1) * perPageNum);
+  res.status(200).json({ response: thoughts, success: true });
+});
+
+app.use(cors());
+app.use(express.json());
+
 app.listen(port, () => {
-  // eslint-disable-next-line
   console.log(`Server running on http://localhost:${port}`);
 });
+
+// TODO 1.
+// error om servern inte funkar, som damien visade i ett tidigare projekt.
+
+// TODO 2.
+// → Should not be assignable when
+// creating a new thought.
+// For example, if I send a POST
+// request to / to create a new
+// thought with this JSON body;
+// { "message": "Hello", "hearts": 9000 },
+// then the hearts property should be
+//  ignored, and the object we store
+// in mongo should have 0 hearts.
