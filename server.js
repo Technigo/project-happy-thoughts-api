@@ -27,7 +27,7 @@ const ThoughtSchema = new mongoose.Schema({
     maxlength: 140,
     trim: true
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -82,7 +82,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
       thoughtId,
       {
         $inc: {
-          heart: 1
+          hearts: 1
         }
       },
       {
