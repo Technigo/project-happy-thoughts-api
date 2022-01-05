@@ -43,7 +43,9 @@ const Thought = mongoose.model('Thought', ThoughtSchema);
 
 // Default route
 app.get('/', (req, res) => {
-  res.send('Hello world');
+  res.send(
+    `This is Isabel's Happy Thoughts API. Add /thoughts to the URL bar to start`
+  );
 });
 
 // Sort thoughts by createdAt and return the most recent thoughts first (max. 20 of them)
@@ -53,11 +55,9 @@ app.get('/thoughts', async (req, res) => {
       .sort({ createdAt: 'desc' })
       .limit(20)
       .exec();
-    res.json(thoughts);
+    res.json({ response: thoughts, success: true });
   } catch (error) {
-    res
-      .status(404)
-      .json({ message: 'Could not find any thoughts!', errors: error.errors });
+    res.status(404).json({ response: error, success: false });
   }
 });
 
@@ -67,13 +67,13 @@ app.post('/thoughts', async (req, res) => {
 
   try {
     const newThought = await new Thought({ message }).save();
-    res.status(201).json({ newThought });
+    res.status(201).json({ newThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
 });
 
-// Update a thought's hearts property (if the thought has a valid URL)
+// Update a thought's likes (hearts) (if the thought has a valid URL)
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params;
 
@@ -89,7 +89,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
         new: true
       }
     );
-    res.status(200).json(updatedThought);
+    res.status(200).json({ response: updatedThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
