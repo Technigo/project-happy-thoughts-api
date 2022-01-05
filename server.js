@@ -60,11 +60,11 @@ app.post('/thoughts', async (req, res) => {
 });
 
 app.post('/thoughts/:thoughtId/likes', async (req, res) => {
-  const { id } = req.params;
+  const { thoughtId } = req.params;
 
   try {
     const updatedThought = await Thought.findByIdAndUpdate(
-      id,
+      thoughtId,
       { $inc: { likes: 1 } },
       { new: true }
     );
@@ -72,7 +72,7 @@ app.post('/thoughts/:thoughtId/likes', async (req, res) => {
     if (updatedThought) {
       res.json(updatedThought);
     } else {
-      res.status(404).json({ message: 'Not found' });
+      res.status(404).json({ message: 'Not found', success: false });
     }
   } catch {
     res.status(400).json({ response: error, success: false });
