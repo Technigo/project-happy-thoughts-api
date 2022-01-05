@@ -6,7 +6,7 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 
-const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts';
+const mongoUrl = process.env.port || 'mongodb://localhost/happyThoughts';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -157,7 +157,7 @@ app.delete('thoughts/:id', async (req, res) => {
     const deletedThought = await Thought.findOneAndDelete({ _id: id });
     res.status(200).json({ response: deletedThought, success: true });
   } catch (error) {
-    res.status(400).json({ response: error, success: false });
+    res.status(404).json({ response: error, success: false });
   }
 });
 
