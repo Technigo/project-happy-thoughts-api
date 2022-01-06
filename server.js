@@ -54,10 +54,17 @@ app.use((req, res, next) => {
 
 // Start defining your routes here
 app.get("/thoughts", async (req, res) => {
+  const {
+    page,
+    perPage,
+    pageNum = Number(page),
+    perPageNum = Number(perPage),
+  } = req.query;
+
   const thoughts = await Thought.find()
     .sort({ createdAt: "desc" })
-    .limit(20)
-    .exec();
+    .skip((pageNum - 1) * perPageNum)
+    .limit(perPageNum);
   res.status(200).json({
     message: thoughts,
     success: true,
