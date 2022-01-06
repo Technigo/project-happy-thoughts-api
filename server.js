@@ -86,24 +86,10 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
       res.status(404).json({ response: 'Thought not found', sucess: false });
     }
   } catch (error) {
-    res.status(400).json({ response: error, sucess: false });
+    res.status(400).json({ response: error, success: false });
   }
 });
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
-
-// TODO 1.
-// error om servern inte funkar, som damien visade i ett tidigare projekt.
-
-// TODO 2.
-// → Should not be assignable when
-// creating a new thought.
-// For example, if I send a POST
-// request to / to create a new
-// thought with this JSON body;
-// { "message": "Hello", "hearts": 9000 },
-// then the hearts property should be
-//  ignored, and the object we store
-// in mongo should have 0 hearts.
