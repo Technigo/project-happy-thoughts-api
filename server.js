@@ -40,17 +40,28 @@ const thoughtSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 140
   },
+  // No. of hearts should not be assignable when creating a new thought.
   hearts: {
     type: Number,
     default: 0
-    // Should not be assignable when creating a new thought.
+    
   },
+  // Date should not be assignable when creating a new thought.
   createdAt: {
     type: Date,
     default: Date.now
-    // Should not be assignable when creating a new thought.
+  },
+  // possibility to add the author's name to the thought
+  author: {
+    type: String,
+    minlength: 2,
+    maxlength: 50
+  },
+  // possibility to add a category to the thought
+  category: {
+    type: String,
+    enum: ['Food', 'Home', 'Animals', 'Project', 'Just Happy']
   }
-
 })
 
 const Thought = mongoose.model('Thought', thoughtSchema)
@@ -73,17 +84,17 @@ app.get('/endpoints', (req, res) => {
 
 // Endpoint returns a maximum of 20 thoughts, sorted by createdAt to show the most recent thoughts first.
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20)
   res.status(200).json(thoughts)
 })
 
 // endpoint expects a JSON body with the thought message
 app.post('/thoughts', async (req, res) => {
-  const { message } = req.body
+  const { message, author, category } = req.body
 
   try {
     // success
-    const newThought = await new Thought({ message }).save()
+    const newThought = await new Thought({ message, author, category }).save()
     res.status(201).json({ response: newThought, success: true });
   } catch (error) {
     // Bad request
