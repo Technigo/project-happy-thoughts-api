@@ -50,7 +50,7 @@ app.get('/thoughts', async (req, res) => {
   } = req.query;
 
   // v1 Mongoose
-  const Thoughts = await Member.find({})
+  const thoughts = await Thought.find({})
     .sort({ createdAt: sortNum })
     .skip((pageNum - 1) * perPageNum)
     .limit(20);
@@ -72,7 +72,7 @@ app.get('/thoughts', async (req, res) => {
   //   },
   // ]);
 
-  res.status(200).json({ response: members, success: true });
+  res.status(200).json({ response: thoughts, success: true });
 });
 
 // v1 try catch form
@@ -80,8 +80,8 @@ app.post('/thoughts', async (req, res) => {
   const { message } = req.body;
 
   try {
-    const newThought = await new Member({ message }).save();
-    res.status(201).json({ response: newMember, success: true });
+    const newThought = await new Thought({ message }).save();
+    res.status(201).json({ response: newThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
@@ -114,16 +114,16 @@ app.post('/thoughts', async (req, res) => {
 // 	});
 // });
 
-app.post('/members/:id/score', async (req, res) => {
+app.post('/thoughts/:id/hearts', async (req, res) => {
   const { id } = req.params;
   try {
-    const updatedMember = await Member.findByIdAndUpdate(
+    const updatedThought = await Thought.findByIdAndUpdate(
       // Argument 1 - id
       id,
-      // Argument 2 - properties to change
+      // Argument 2 - properties to change - should it say score inst of hearts?
       {
         $inc: {
-          score: 1,
+          hearts: 1,
         },
       },
       // Argument 3 - options (not mandatory)
@@ -131,62 +131,64 @@ app.post('/members/:id/score', async (req, res) => {
         new: true,
       }
     );
-    res.status(200).json({ response: updatedMember, success: true });
+    res.status(200).json({ response: updatedThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
 });
 
-app.delete('/members/:id', async (req, res) => {
+app.delete('/thoughts/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    const deletedMember = await Member.findOneAndDelete({ _id: id });
-    if (deletedMember) {
-      res.status(200).json({ response: deletedMember, success: true });
+    const deletedThought = await Thought.findOneAndDelete({ _id: id });
+    if (deletedThought) {
+      res.status(200).json({ response: deletedThought, success: true });
     } else {
-      res.status(404).json({ response: 'Member not found', success: false });
+      res
+        .status(404)
+        .json({ response: 'Happy thought not found', success: false });
     }
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
 });
 
-app.patch('/members/:id', (req, res) => {
+app.patch('/thoughts/:id', async (req, res) => {
   const { id } = req.params;
-  const { name } = req.body;
+  const { message } = req.body;
 
+  // v1 async
 
-  //v1 async
-
-	try {
-		const updatedMember = await Member.findOneAndUpdate(
-			{ _id: id },
-			{ name },
-			{ new: true }
-		);
-		if (updatedMember) {
-			res.status(200).json({ response: updatedMember, success: true });
-		} else {
-			res.status(404).json({ response: 'Member not found', success: false });
-		}
-	} catch (error) {
-		res.status(400).json({ response: error, success: false });
-
-
+  try {
+    const updatedThought = await Thought.findOneAndUpdate(
+      { _id: id },
+      { message }, // is this correct??
+      { new: true }
+    );
+    if (updatedThought) {
+      res.status(200).json({ response: updatedThought, success: true });
+    } else {
+      res
+        .status(404)
+        .json({ response: 'Happy Thought not found', success: false });
+    }
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
 
   // v2 promises
-  Member.findOneAndUpdate({ _id: id }, { name }, { new: true })
-    .then((updatedMember) => {
-      if (updatedMember) {
-        res.status(200).json({ response: updatedMember, success: true });
-      } else {
-        res.status(404).json({ response: 'Member not found', success: false });
-      }
-    })
-    .catch((error) => {
-      res.status(400).json({ response: error, success: false });
-    });
+  // Member.findOneAndUpdate({ _id: id }, { name }, { new: true })
+  //   .then((updatedMember) => {
+  //     if (updatedMember) {
+  //       res.status(200).json({ response: updatedMember, success: true });
+  //     } else {
+  //       res.status(404).json({ response: 'Member not found', success: false });
+  //     }
+  //   })
+  //   .catch((error) => {
+  //     res.status(400).json({ response: error, success: false });
+  //   });
 });
 
 // Start the server
