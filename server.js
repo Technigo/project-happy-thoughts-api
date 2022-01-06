@@ -13,6 +13,7 @@ const ThoughtSchema = new mongoose.Schema({
 		required: true,
 		minlength: 5,
 		maxlength: 140,
+		trim: true,
 	},
 	hearts: {
 		type: Number,
@@ -20,7 +21,7 @@ const ThoughtSchema = new mongoose.Schema({
 	},
 	createdAt: {
 		type: Date,
-		default: Date.now(),
+		default: () => Date.now(),
 	},
 });
 
