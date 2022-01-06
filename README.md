@@ -15,8 +15,10 @@ This endpoint expects a JSON body with the thought `message`, like this: `{ "mes
 ### `POST thoughts/:thoughtId/like`
 This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its `hearts` property to add one heart.
 
+This api is connected with the frontend of [project-happy-thoughts](https://project-happy-thougths.netlify.app/) and works smoothly.
+
 ## The problem
-To develop this week approach I followed the videos about how to use sort and limit operations from database. I applied mongoose validation to some parts of the schema and also default value for date.
+To develop this week approach I followed the videos about how to use sort and limit operations from database. I applied mongoose validation to some parts of the schema and also default value for date. Finally the backend and frontend build in this course was conected. 
 
 ## View it live
-See: 
+See: https://project-happy-thoughts-backend.herokuapp.com/
