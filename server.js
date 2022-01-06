@@ -51,30 +51,33 @@ app.get('/', (req, res) => {
 
 // getting all of the thoughts and sorting them
 app.get('/thoughts', async (req, res) => {
-  const {
-    sort,
-    page,
-    perPage,
-    sortNum = Number(sort),
-    pageNum = Number(page),
-    perPageNum = Number(perPage)
-  } = req.query;
+  // const {
+  //  sort,
+  //  page,
+  //  perPage,
+  //  sortNum = Number(sort),
+  //  pageNum = Number(page),
+  //  perPageNum = Number(perPage)
+  // } = req.query;
 
-  const thoughts = await Thought.aggregate([
-    {
-      $sort: {
-        createdAt: sortNum
-      }
-    },
-    {
-      $skip: (pageNum - 1) * perPageNum
-    },
-    {
-      $limit: perPageNum
-    }
-  ]);
+  // const thoughts = await Thought.aggregate([
+  //  {
+  //    $sort: {
+  //      createdAt: sortNum
+  //    }
+  //  },
+  //  {
+  //    $skip: (pageNum - 1) * perPageNum
+  //  },
+  //  {
+  //    $limit: perPageNum
+  //  }
+  // ]);
 
-  res.status(200).json({ response: thoughts, success: true });
+  // res.status(200).json({ response: thoughts, success: true });
+
+  const thoughts = await Thought.find({})
+  res.json(thoughts)
 });
 
 // post the message
