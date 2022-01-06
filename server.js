@@ -26,12 +26,13 @@ const ThoughtSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ['Personal', 'Weather', 'Food', 'Studies', ''],
-    default: ''
+    enum: ['Personal', 'Weather', 'Food', 'Studies', 'Other'],
+    default: 'Other'
   },
   name: {
     type: String,
-    default: "anonymous"
+    default: 'anonymous',
+    maxlength: 15
   }
 })
 
@@ -80,7 +81,7 @@ app.get('/thoughts', async (req, res) => {
 app.post('/thoughts', async (req, res) => {
   const { message, category, name } = req.body
   try {
-    const newThought = await new Thought({ message, category, name }).save()
+    const newThought = await new Thought({ message, category, name: name || 'anonymous' }).save()
     res.status(201).json({
       response: newThought,
       success: true
