@@ -30,17 +30,23 @@ const Thought = mongoose.model('Thought', {
 app.use(cors());
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.send('Hello world!');
+});
+
 app.get('/thoughts', async (req, res) => {
-  const {
+  /*  const {
     page,
     perPage,
     pageNum = Number(page),
     perPageNum = Number(perPage)
-  } = req.query;
+  } = req.query; */
 
   const thoughts = await Thought.find({})
-    .sort({ createdAt: 1 })
-    .skip((pageNum - 1) * perPageNum);
+    .sort({ createdAt: -1 })
+    .limit(20)
+    .exec();
+  /* .skip((pageNum - 1) * perPageNum); */
   res.status(200).json({ response: thoughts, success: true });
 });
 
@@ -55,6 +61,58 @@ app.post('/thoughts', async (req, res) => {
   }
 });
 
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params;
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      {
+        $inc: {
+          hearts: 1
+        }
+      },
+      {
+        new: true
+      }
+    );
+    if (updatedThought) {
+      res.status(200).json({ response: updatedThought, success: true });
+    } else {
+      res.status(404).json({ response: 'Thought not found', sucess: false });
+    }
+  } catch (error) {
+    res.status(400).json({ response: error, sucess: false });
+  }
+});
+
+// Någonting fel med the brackets
+/* app.post('/thoughts/:thoughtId/like', async (req, res) => {
+    const { thoughtId } = req.params; */
+/* const { hearts } = req.body; */
+/* try {
+    const updatedThought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      {
+        $inc: {
+          hearts: 1
+        }
+      },
+      {
+        new: true
+      }
+    );
+
+    if (updatedThought) {
+      res.status(200).json({ response: updatedHearts, success: true });
+    } else {
+          res.status(404).json({ response: 'thought not found', success: false });
+    }
+  }
+    catch (error) => {
+        res.status(400).json({ response: error, success: false });
+    }
+});
+ */
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
