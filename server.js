@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import req from "express/lib/request";
+import res from "express/lib/response";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -80,6 +82,20 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
     );
 
     res.status(200).json({ response: updatedThought, success: true });
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
+});
+
+app.delete("/thought/:id", async (res, req) => {
+  const { id } = req.params;
+  try {
+    const deleteThought = await Thought.findByIdAndDelete({ _id: id });
+    if (deleteThought) {
+      res.status(200).json({ restpnse: deleteThought, success: true });
+    } else {
+      res.status(404).json({ response: "Thoguth not found", success: false });
+    }
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
