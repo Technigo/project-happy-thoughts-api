@@ -46,14 +46,13 @@ app.use(express.json())
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello world this is my own happy thoughts api")
+  res.send(
+    "Hi! This is an API for my happy thoughts project: https://waliem-project-happy-thoughts.netlify.app/"
+  )
 })
 
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find()
-    .sort({ createdAt: "desc" })
-    .limit(20)
-    .exec()
+  const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20)
   res.json(thoughts)
 })
 

@@ -1,13 +1,30 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+This project aimed at creating my own api for a previous project called Happy thoughts to be replaced by the external api used before.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## FEATURES
 
-## The problem
+it has the following endpoints:
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+GET /thoughts - Returns all thoughts by find() function. and then it limit the amount of thoughts saved in the database to maximum of 20 thoughts and finally sorts the thoughts in a descending order.
+
+POST /thoughts - Made it possible to post a new thought to the database by massing in a message in the body.
+
+POST /thoughts/:thoughtId/like - Made it possible to "like" a thought by using findByIdAndUpdate() function to update the amount of likes increase by 1 each time.
+
+DELETE /thoughts/:id - Made it possible to delete a thought by using findOneAndDelete() function.
+
+PATCH /thoughts/:id - Made it possible to update a thought by using findOneAndUpdate().
+
+All of the endpoints have error handling with a try and catch block.
+
+## The process and obstacles
+
+The learning objectives was to create a thought model and a schema. each of the properties should have special rules or validations that I had to implement to make it a good API to fit the frontend.
+I built the thoughtschema with a message, hearts and createdAt according to the requirements. Then I created POST endpoints using mongoose queries with helper functions. I chose to go for the async await approach in my endpoints instead of promises because I wanted to get more familiar with the usage of that which I had less experience with compaared to promises.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Backend: https://happy-thoughts-project-api.herokuapp.com
+
+frontend: https://waliem-project-happy-thoughts.netlify.app/
