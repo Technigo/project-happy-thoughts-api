@@ -13,30 +13,6 @@ mongoose.Promise = Promise
 const port = process.env.PORT || 8080
 const app = express()
 
-// lecture code
-// const MemberSchema = new mongoose.Schema({
-//   name: {
-//     type: String,
-//     required: true,
-//     unique: true,
-//     enum: ['Jennie', 'Matilda', 'Karin', 'Maksymilian'],
-//   }, 
-//   description: {
-//     type: String,
-//     minlength: 5,
-//     maxlength: 10,
-//     trim: true,
-//   },
-//   score: {
-//     type: Number,
-//     default: 0,
-//   },
-//   createdAt: {
-//     type: Date,
-//     default: () => Date.now()
-//   },
-// })
-
 const ThoughtSchema = new mongoose.Schema({
   message: {
     type: String,
@@ -54,9 +30,6 @@ const ThoughtSchema = new mongoose.Schema({
   },
 })
 
-// lecture code
-// const Member = mongoose.model('Member', MemberSchema)
-
 const Thought = mongoose.model('Thought', ThoughtSchema)
 
 // Add middlewares to enable cors and json body parsing
@@ -69,20 +42,9 @@ app.get('/', (req, res) => {
   res.send('Hello beautiful world')
 })
 
-// lecture code
-// app.post('/members', async (req, res) => {
-//   const { name, description } = req.body
-
-//   try {
-//     const newMember = await new Member({ name, description }).save()
-//     res.status(201).json({ response: newMember, success: true })
-//   } catch (error) {
-//     res.status(400).json({ response: error, success: false })
-//   }
-// })
-
 // ### `GET /thoughts`
-// This endpoint should return a maximum of 20 thoughts, sorted by `createdAt` to show the most recent thoughts first.
+// This endpoint should return a maximum of 20 thoughts, sorted by `createdAt`
+// to show the most recent thoughts first.
 
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
@@ -96,10 +58,10 @@ app.get('/thoughts', async (req, res) => {
 // and the response should include the saved thought object, including its `_id`.
 
 app.post('/thoughts', async (req, res) => {
-  const { id, message } = req.body
+  const { thoughtId, message } = req.body
 
   try {
-    const newThought = await new Thought({ id, message }).save()
+    const newThought = await new Thought({ thoughtId, message }).save()
     res.status(201).json({ response: newThought, success: true })
   } catch (error) {
     res.status(400).json({ response: error, success: false })
