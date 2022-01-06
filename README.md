@@ -1,13 +1,16 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+An API built with Express and Mongodb that includes GET request endpoints to return data and POST endpoints to create data. The project is connected to one of my frontend projects that is linked below.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I created a Mongoose model that has properties for the message string, a heart property for tracking the number of likes, and a createdAt property to store when the thought was added. Each of the properties has some special validations in order to make a good API for the frontend. I added the following endpoints:
+
+ GET /thoughts: To list the 20 most recent thoughts
+ POST /thoughts: To post a new thought to the API
+ POST /thought/:thoughtId/like: To like a thought with that id
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Link to API: https://happy-thoughts-api-rephili.herokuapp.com/
+Link to frontend built in React: https://happy-thoughts-rephili.netlify.app/
