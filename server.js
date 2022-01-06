@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
+import listEndpoints from 'express-list-endpoints';
 
 dotenv.config();
 
@@ -41,6 +42,10 @@ const Thougth = mongoose.model("Thougth", {
   }
 })
 // Start defining your routes here
+app.get('/', (req, res) => {
+  res.json(listEndpoints(app));
+})
+
 app.get('/thoughts', async (req, res) => {
   try {
     const thought = await Thougth.find().sort({ createdAt: 'desc' }).limit(20)
