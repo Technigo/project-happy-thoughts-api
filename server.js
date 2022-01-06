@@ -1,10 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import { restart } from 'nodemon';
+import listEndpoints from 'express-list-endpoints';
 
-const mongoUrl =
-  process.env.MONGO_URL || 'mongodb://localhost/happyThoughtsMarpet';
+const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -21,6 +20,7 @@ const ThoughtSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 140,
     trim: true,
+    required: true,
   },
   hearts: {
     type: Number,
@@ -37,6 +37,17 @@ const Thought = mongoose.model('Thought', ThoughtSchema);
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+
+// Defining routes starts here
+app.get('/', (req, res) => {
+  res.send(
+    'This is the db of Maria Peterssons Happy thoughts-project. Please go to /endpoints to see the possible endpoints.'
+  );
+});
+// See all possible endpoints
+app.get('/endpoints', (req, res) => {
+  res.send(listEndpoints(app));
+});
 
 // Start defining your routes here
 app.get('/thoughts', async (req, res) => {
