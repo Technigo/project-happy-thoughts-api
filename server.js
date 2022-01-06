@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import listEndpoints from 'express-list-endpoints'
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts'
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -12,7 +13,7 @@ const Thought = mongoose.model('Thought', {
     required: true,
     minlength: 5,
     maxlength: 140,
-    trim: true,
+    trim: true, // remove the white spaces from the strings (beginning and ending)
   },
   hearts: {
     type: Number,
@@ -35,9 +36,18 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+// unreachable database -> status 503
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: 'Service unavailable' })
+  }
+})
+
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send(listEndpoints(app))
 })
 
 // GET list of posts, maximum 20 posts and sorted by date (recent first)
@@ -46,7 +56,7 @@ app.get('/thoughts', async (req, res) => {
     .sort({ createdAt: 'desc' })
     .limit(20)
     .exec()
-  if (thoughts > 0) {
+  if (thoughts.length > 0) {
     res.status(200).json(thoughts) // 200 - ok
   } else {
     res.status(404).json({ message: 'No posts yet' })
@@ -78,7 +88,9 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     const addHeart = await Thought.findByIdAndUpdate(
       { _id: thoughtId },
       { $inc: { hearts: 1 } },
-      { new: true, useFindAndModify: false } // useFindAndModify to remove DeprecationWarning
+      { new: true, useFindAndModify: false }
+      // new: true - returns the document after the update
+      // useFindAndModify: false - remove DeprecationWarning
     )
     if (addHeart) {
       res.status(200).json(addHeart)
@@ -89,7 +101,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     res
       .status(400) // 400 - bad request
       .json({
-        message: `Could not update the hearts`,
+        message: `Could not update the hearts, invalid request`,
         error: err,
       })
   }
@@ -101,38 +113,63 @@ app.delete('/thoughts/:thoughtId', async (req, res) => {
 
   try {
     const deletedThought = await Thought.findOneAndDelete({ _id: thoughtId })
+    // Use status code 204 (no content) when using deleteOne()
     if (deletedThought) {
       res.status(200).json(deletedThought)
     } else {
       res.status(404).json({ message: `Post by id '${thoughtId}' not found` })
     }
   } catch (err) {
-    res.status(400).json({ message: 'Could not delete the post', error: err })
+    res.status(400).json({
+      message: 'Could not delete the post, invalid request',
+      error: err,
+    })
   }
 })
 
 // Edit a post - with promises
-// app.patch('/thoughts/:thoughtId', (res, req) => {
-//   const { id } = req.params
-//   const { updatedMessage } = req.body
+app.patch('/thoughts/:thoughtId', async (req, res) => {
+  const { thoughtId } = req.params
+  const { updatedMessage } = req.body
 
-//   Thought.findOneAndUpdate(
-//     { _id: id },
-//     { message: updatedMessage },
-//     { new: true }
-//   )
-//     //shorthand const { message } = req.body, findOneAndUpdate({_id: id}, {message}, {new: true})
-//     .then((updatedThought) => {
-//       if (updatedThought) {
-//         res.status(200).json({ updatedThought })
-//       } else {
-//         res.status(404).json({ messageresponse: 'Thought not found' })
-//       }
-//     })
-//     .catch((err) => {
-//       res.status(400).json({ message: 'error', error: err })
-//     })
-// })
+  Thought.findOneAndUpdate(
+    { _id: thoughtId },
+    { message: updatedMessage },
+    { new: true }
+  )
+    .then((updatedThought) => {
+      if (updatedThought) {
+        res.status(200).json({ updatedThought })
+      } else {
+        res.status(404).json({ message: `Post by id '${thoughtId}' not found` })
+      }
+    })
+    .catch((err) => {
+      res.status(400).json({
+        message: 'Could not edit the post, invalid request',
+        error: err,
+      })
+    })
+
+  //  Edit a post - with async await
+  //   try {
+  //     const updatedThought = await Thought.findOneAndUpdate(
+  //       { _id: thoughtId },
+  //       { message: updatedMessage },
+  //       { new: true, useFindAndModify: false }
+  //     )
+  //     if (updatedThought) {
+  //       res.status(200).json(updatedThought)
+  //     } else {
+  //       res.status(404).json({ message: `Post by id '${thoughtId}' not found` })
+  //     }
+  //   } catch (err) {
+  //     res.status(400).json({
+  //       message: 'Could not edit the post, invalid request',
+  //       error: err,
+  //     })
+  //   }
+})
 
 // Start the server
 app.listen(port, () => {
