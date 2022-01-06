@@ -1,13 +1,13 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+The assignment was to create my own API to a twitter-like app that i already made the frontend part to.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+To make the API i used Mongo, mongoose and express.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I approached the problem very methodological and thought out a plan for what to do in what order. Then I crossed one item off the list in the pre decided order. If i had more time i would love to make a username input for the frontend to store in the model as well so the users have the posibility to show who the message is from.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://hedvigs-happy-thoughts.herokuapp.com

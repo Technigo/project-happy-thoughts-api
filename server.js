@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import listEndpoints from 'express-list-endpoints';
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -30,23 +31,27 @@ const Thought = mongoose.model('Thought', {
 app.use(cors());
 app.use(express.json());
 
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next();
+  } else {
+    res.status(503).json({ error: 'Service unavailable' });
+  }
+});
+
+app.get('/endpoints', (req, res) => {
+  res.send(listEndpoints(app));
+});
+
 app.get('/', (req, res) => {
   res.send('Hello world!');
 });
 
 app.get('/thoughts', async (req, res) => {
-  /*  const {
-    page,
-    perPage,
-    pageNum = Number(page),
-    perPageNum = Number(perPage)
-  } = req.query; */
-
   const thoughts = await Thought.find({})
     .sort({ createdAt: -1 })
     .limit(20)
     .exec();
-  /* .skip((pageNum - 1) * perPageNum); */
   res.status(200).json({ response: thoughts, success: true });
 });
 
@@ -85,34 +90,6 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   }
 });
 
-// Någonting fel med the brackets
-/* app.post('/thoughts/:thoughtId/like', async (req, res) => {
-    const { thoughtId } = req.params; */
-/* const { hearts } = req.body; */
-/* try {
-    const updatedThought = await Thought.findByIdAndUpdate(
-      thoughtId,
-      {
-        $inc: {
-          hearts: 1
-        }
-      },
-      {
-        new: true
-      }
-    );
-
-    if (updatedThought) {
-      res.status(200).json({ response: updatedHearts, success: true });
-    } else {
-          res.status(404).json({ response: 'thought not found', success: false });
-    }
-  }
-    catch (error) => {
-        res.status(400).json({ response: error, success: false });
-    }
-});
- */
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
