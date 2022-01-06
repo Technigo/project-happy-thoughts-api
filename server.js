@@ -2,6 +2,8 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import listEndpoints from 'express-list-endpoints'
+import req from 'express/lib/request'
+import res from 'express/lib/response'
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts'
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -11,7 +13,7 @@ mongoose.Promise = Promise
 const port = process.env.PORT || 8080
 const app = express()
 
-const HappyThoughtSchema = new mongoose.Schema({
+const ThoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     minlength: 5,
@@ -28,7 +30,7 @@ const HappyThoughtSchema = new mongoose.Schema({
   },
 })
 
-const Thought = mongoose.model('Thought', HappyThoughtSchema)
+const Thought = mongoose.model('Thought', ThoughtSchema)
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
@@ -41,15 +43,11 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-  try {
-    const thoughts = await Thought.find()
-      .sort({ createdAt: 'desc' })
-      .limit(20)
-      .exec()
-    res.status(200).json({ response: thoughts, success: true })
-  } catch (error) {
-    res.status(400).json({ response: error, success: false })
-  }
+  const thoughts = await Thought.find()
+    .sort({ createdAt: 'desc' })
+    .limit(20)
+    .exec()
+  res.json(thoughts)
 })
 
 app.post('/thoughts', async (req, res) => {
