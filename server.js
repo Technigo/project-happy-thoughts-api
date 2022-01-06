@@ -86,7 +86,7 @@ app.get('/thoughts', async (req, res) => {
   res.status(200).json({ response: thoughts, success: true });
 });
 
-// v1 try catch form
+// Posting new thoughts w async
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body;
 
@@ -125,6 +125,7 @@ app.post('/thoughts', async (req, res) => {
 // 	});
 // });
 
+// increasing hearts/likes
 app.post('/thoughts/:id/hearts', async (req, res) => {
   const { id } = req.params;
   try {
@@ -148,33 +149,34 @@ app.post('/thoughts/:id/hearts', async (req, res) => {
   }
 });
 
-app.delete('/thoughts/:id', async (req, res) => {
-  const { id } = req.params;
+// deleting a thought
+// app.delete('/thoughts/:id', async (req, res) => {
+//   const { id } = req.params;
 
-  try {
-    const deletedThought = await Thought.findOneAndDelete({ _id: id });
-    if (deletedThought) {
-      res.status(200).json({ response: deletedThought, success: true });
-    } else {
-      res
-        .status(404)
-        .json({ response: 'Happy thought not found', success: false });
-    }
-  } catch (error) {
-    res.status(400).json({ response: error, success: false });
-  }
-});
+//   try {
+//     const deletedThought = await Thought.findOneAndDelete({ _id: id });
+//     if (deletedThought) {
+//       res.status(200).json({ response: deletedThought, success: true });
+//     } else {
+//       res
+//         .status(404)
+//         .json({ response: 'Happy thought not found', success: false });
+//     }
+//   } catch (error) {
+//     res.status(400).json({ response: error, success: false });
+//   }
+// });
 
+// possibility to change a thought after it is posted
 app.patch('/thoughts/:id', async (req, res) => {
   const { id } = req.params;
   const { message } = req.body;
 
-  // v1 async
-
+  // async
   try {
     const updatedThought = await Thought.findOneAndUpdate(
       { _id: id },
-      { message }, // is this correct??
+      { message },
       { new: true }
     );
     if (updatedThought) {
