@@ -87,12 +87,12 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
   }
 });
 
-app.delete("/thought/:id", async (res, req) => {
+app.delete("/thought/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const deleteThought = await Thought.findByIdAndDelete({ _id: id });
     if (deleteThought) {
-      res.status(200).json({ restpnse: deleteThought, success: true });
+      res.status(200).json({ response: deleteThought, success: true });
     } else {
       res.status(404).json({ response: "Thoguth not found", success: false });
     }
