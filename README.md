@@ -10,7 +10,7 @@ I have created the following endpoints:
 - GET '/' - start
 - GET '/endpoints' - provides all endpoints
 - GET '/thoughts' - endpoint returns a maximum of 20 thoughts, sorted by the time of creation to show the most recent thoughts first.
-- POST '/thoughts' - endpoint for posting new Happy Thoughts. Possibility to add categories and the author's name.
+- POST '/thoughts' - endpoint for posting new Happy Thoughts. Possibility to choose a category for the thought and add the author's name.
 - POST ':thoughtId/like' - endpoint to increase the amount of likes on each individual thought
 
 
