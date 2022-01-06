@@ -6,10 +6,6 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-// Defines the port the app will run on. Defaults to 8080, but can be
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
 
@@ -33,16 +29,42 @@ const ThoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model("Thoughts", ThoughtSchema);
 
-// Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
 
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello world");
-});
+app.get("/thoughts", async (req, res) => {
+  const {
+    sort,
+    page,
+    perPage,
+    sortNum = Number(sort),
+    pageNum = Number(page),
+    perPageNum = Number(perPage),
+  } = req.query;
 
-//app.get("/thoughts", async (req, res) => {});
+  // v1 mongoose
+  // const thoughts = await Thought.find({})
+  //   .sort({ createdAt: sortNum })
+  //   .skip((pageNum - 1) * perPageNum)
+  //   .limit(perPageNum);
+
+  // v2 mongo
+  const thoughts = await Thought.aggregate([
+    {
+      $sort: {
+        createdAt: sortNum,
+      },
+    },
+    {
+      $skip: (pageNum - 1) * perPageNum,
+    },
+    {
+      $limit: perPageNum,
+    },
+  ]);
+
+  res.status(200).json({ response: thoughts, success: true });
+});
 
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
@@ -55,7 +77,7 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
-app.post("/thoughts/:id/hearts", async (req, res) => {
+app.post("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
   try {
     const updatedHearts = await Thought.findByIdAndUpdate(
@@ -75,7 +97,6 @@ app.post("/thoughts/:id/hearts", async (req, res) => {
   }
 });
 
-// Start the server
 app.listen(port, () => {
   // eslint-disable-next-line
   console.log(`Server running on http://localhost:${port}`);
