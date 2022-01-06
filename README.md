@@ -24,5 +24,7 @@ Learnings:
 ## View it live
 
 Visit my deployed API here https://nehrwein-happy-thoughts-api.herokuapp.com
+
 Documentation: https://documenter.getpostman.com/view/18068162/UVXdNe6K
+
 Link to the frontend website https://nehrwein-happy-thoughts.netlify.app/
