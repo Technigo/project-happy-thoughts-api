@@ -41,16 +41,15 @@ app.get('/', (req, res) => {
 })
 
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find()
-    .sort({ createdAt: 'desc' })
-    .limit(20)
-    .exec()
   try {
+    const thoughts = await Thought.find()
+      .sort({ createdAt: 'desc' })
+      .limit(20)
+      .exec()
     res.status(200).json({ response: thoughts, success: true })
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
-  res.json(thoughts)
 })
 
 app.post('/thoughts', async (req, res) => {
