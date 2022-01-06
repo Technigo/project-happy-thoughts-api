@@ -27,6 +27,12 @@ const ThoughtSchema = new mongoose.Schema({
     maxlength: 140,
     trim: true
   },
+  name: {
+    type: String,
+    minlength: 3,
+    maxlength: 20,
+    trim: true
+  },
   hearts: {
     type: Number,
     default: 0
@@ -64,6 +70,17 @@ app.post('/thoughts', async (req, res) => {
   try {
     const newThought = await new Thought({ message }).save();
     res.status(201).json({ newThought, success: true });
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
+});
+
+app.post('/thoughts/user', async (req, res) => {
+  const { name } = req.body;
+
+  try {
+    const userName = await new Thought({ name }).save();
+    res.status(201).json({ response: userName, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
