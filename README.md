@@ -1,6 +1,6 @@
 # Project Happy Thoughts API
 
-An API built with Express and Mongodb that includes GET request endpoints to return data and POST endpoints to create data. The project is connected to one of my frontend projects that is linked below.
+An API built with Express and Mongodb that includes GET request endpoints to return data and POST endpoints to create data.
 
 ## The problem
 
@@ -13,4 +13,3 @@ I created a Mongoose model that has properties for the message string, a heart p
 ## View it live
 
 Link to API: https://happy-thoughts-api-rephili.herokuapp.com/
-Link to frontend built in React: https://happy-thoughts-rephili.netlify.app/
