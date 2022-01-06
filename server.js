@@ -51,32 +51,12 @@ app.get('/', (req, res) => {
 
 // getting all of the thoughts and sorting them
 app.get('/thoughts', async (req, res) => {
-  // const {
-  //  sort,
-  //  page,
-  //  perPage,
-  //  sortNum = Number(sort),
-  //  pageNum = Number(page),
-  //  perPageNum = Number(perPage)
-  // } = req.query;
+  const { page, perPage } = req.query
+  // omvandlar string to number
+  const pageNumber = Number(page)
+  const perPageNumber = Number(perPage)
 
-  // const thoughts = await Thought.aggregate([
-  //  {
-  //    $sort: {
-  //      createdAt: sortNum
-  //    }
-  //  },
-  //  {
-  //    $skip: (pageNum - 1) * perPageNum
-  //  },
-  //  {
-  //    $limit: perPageNum
-  //  }
-  // ]);
-
-  // res.status(200).json({ response: thoughts, success: true });
-
-  const thoughts = await Thought.find({})
+  const thoughts = await Thought.find({}).sort({ createdAt: 'desc' }).skip((pageNumber - 1) * perPageNumber).limit(perPageNumber)
   res.json(thoughts)
 });
 
@@ -104,7 +84,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     ); // inc = inscrese, new is options of that method 
     res.status(200).json({ message: thoughtLiked, success: true })
   } catch (err) {
-    res.status(400).json({ message: "Could not find that Thought", error: err });
+    res.status(400).json({ message: "Could not find that message", error: err });
   }
 });
 
