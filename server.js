@@ -97,6 +97,41 @@ app.post("/thoughts/:id/like", async (req, res) => {
   }
 });
 
+app.delete("/thoughts/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedThought = await Thought.findOneAndDelete({ _id: id });
+    if (deletedThought) {
+      res.status(200).json({ response: deletedThought, success: true });
+    } else {
+      res.status(404).json({ response: "Message not found", success: false });
+    }
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
+});
+
+app.patch("/thoughts/:id", async (req, res) => {
+  const { id } = req.params;
+  const { message } = req.body;
+
+  try {
+    const updatedThought = await Thought.findOneAndUpdate(
+      { _id: id },
+      { message },
+      { new: true }
+    );
+    if (updatedThought) {
+      res.status(200).json({ response: updatedThought, success: true });
+    } else {
+      res.status(404).json({ response: "Message not found", success: false });
+    }
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
+});
+
 app.listen(port, () => {
   // eslint-disable-next-line
   console.log(`Server running on http://localhost:${port}`);
