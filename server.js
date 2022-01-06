@@ -64,7 +64,7 @@ app.get('/thoughts', async (req, res) => {
     pageNum = Number(page),
     amountNum = Number(amount)
   } = req.query
-  const thoughts = await Thought.find()
+  const thoughts = await Thought.find().sort({ createdAt: -1 })
 
   if (page && amount) {
     const thoughtsLimited = await Thought.find()
