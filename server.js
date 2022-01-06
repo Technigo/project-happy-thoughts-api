@@ -15,20 +15,14 @@ mongoose.Promise = Promise;
 const port = process.env.PORT || 8080;
 const app = express();
 
-const MemberSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    unique: true,
-    enum: ['Jennie', 'Matilda', 'Karin', 'Maksymilian'],
-  },
-  description: {
+const ThoughtSchema = new mongoose.Schema({
+  message: {
     type: String,
     minlength: 5,
-    maxlength: 15,
+    maxlength: 140,
     trim: true,
   },
-  score: {
+  hearts: {
     type: Number,
     default: 0,
   },
@@ -38,7 +32,7 @@ const MemberSchema = new mongoose.Schema({
   },
 });
 
-const Member = mongoose.model('Member', MemberSchema);
+const Member = mongoose.model('Thought', ThoughtSchema);
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
