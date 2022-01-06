@@ -32,14 +32,14 @@ const ThoughtSchema = new mongoose.Schema({
   },
 });
 
-const Member = mongoose.model('Thought', ThoughtSchema);
+const Thought = mongoose.model('Thought', ThoughtSchema);
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
 
 // Start defining your routes here
-app.get('/members', async (req, res) => {
+app.get('/thoughts', async (req, res) => {
   const {
     sort,
     page,
@@ -50,37 +50,37 @@ app.get('/members', async (req, res) => {
   } = req.query;
 
   // v1 Mongoose
-  // const members = await Member.find({})
-  //   .sort({ createdAt: sortNum })
-  //   .skip((pageNum - 1) * perPageNum)
-  //   .limit(perPageNum);
+  const Thoughts = await Member.find({})
+    .sort({ createdAt: sortNum })
+    .skip((pageNum - 1) * perPageNum)
+    .limit(20);
 
   // v2 Mongo
-  const members = await Member.aggregate([
-    {
-      $sort: {
-        createdAt: sortNum,
-      },
-    },
+  // const members = await Member.aggregate([
+  //   {
+  //     $sort: {
+  //       createdAt: sortNum,
+  //     },
+  //   },
 
-    {
-      $skip: (pageNum - 1) * perPageNum,
-    },
+  //   {
+  //     $skip: (pageNum - 1) * perPageNum,
+  //   },
 
-    {
-      $limit: perPageNum,
-    },
-  ]);
+  //   {
+  //     $limit: perPageNum,
+  //   },
+  // ]);
 
   res.status(200).json({ response: members, success: true });
 });
 
 // v1 try catch form
-app.post('/members', async (req, res) => {
-  const { name, description } = req.body;
+app.post('/thoughts', async (req, res) => {
+  const { message } = req.body;
 
   try {
-    const newMember = await new Member({ name, description }).save();
+    const newThought = await new Member({ message }).save();
     res.status(201).json({ response: newMember, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
