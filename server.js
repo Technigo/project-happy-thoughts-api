@@ -57,7 +57,10 @@ const Thought = mongoose.model('Thought', thoughtSchema)
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Welcome to the happy thoughts API')
+  res.json({
+    Welcome: 'Welcome to the happy thoughts API',
+    Documentation: 'https://documenter.getpostman.com/view/18068162/UVXdNe6K'
+  })
 })
 
 // route provides all endpoints
