@@ -31,7 +31,7 @@ const Thougth = mongoose.model("Thougth", {
     minlength: 5,
     maxlength: 140
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0,
     max: [1, 'Must be just 1 per time, got {VALUE}']
@@ -71,13 +71,13 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     if (thought === null || !thought) {
       res.status(404).json({ message: 'Thought does not exist', success: "false" });
     } else {
-      const heartUpdated = thought.heart + 1;
+      const heartUpdated = thought.hearts + 1;
       const thoughtUpdated = await Thougth.updateOne({ _id: thoughtId },
         { $set: {
-          heart: heartUpdated
+          hearts: heartUpdated
         } })
       if (thoughtUpdated.nModified > 0) {
-        res.status(200).json({ message: thought.message, heart: heartUpdated, success: "true" });
+        res.status(200).json({ message: thought.message, hearts: heartUpdated, success: "true" });
       } else {
         res.status(404).json({ message: 'nop updated', success: "false" });
       }
