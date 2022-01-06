@@ -42,8 +42,13 @@ app.use(express.json())
 
 //--ROUTES--
 
-// Main endpoint which lists all the endpoints
+// Main endpoint
 app.get('/', (req, res) => {
+  res.send('Welcome to Happy thougths API')
+})
+
+// List of all the endpoints
+app.get('/endpoints', (req, res) => {
   res.send(listEndpoints(app))
 })
 
