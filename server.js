@@ -29,7 +29,7 @@ const ThoughtSchema = new mongoose.Schema({
   },
   writer: { type: String, default: "anonymous" },
   hearts: { type: Number, default: 0 },
-  createdAt: { type: Date, default: Date.now },
+  createdAt: { type: Number, default: Date.now },
 });
 const Thought = mongoose.model("Thought", ThoughtSchema);
 
@@ -84,13 +84,8 @@ app.post("/thoughts", async (req, res) => {
   const { message, writer, category } = req.body;
   try {
     const newMessage = await new Thought({ message, writer, category }).save();
-    if (newMessage) {
-      res.status(200).json({ response: newMessage, success: true });
-    } else {
-      res
-        .status(404)
-        .json({ response: "can not create thought", success: false });
-    }
+
+    res.status(200).json({ response: newMessage, success: true });
   } catch (err) {
     res.status(400).json({
       response: "Can not create thought",
