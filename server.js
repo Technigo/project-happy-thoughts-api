@@ -107,6 +107,8 @@ app.get("/thoughts", async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(0)
       .limit(20);
+    res.json(thoughts);
+
     // else it is gonna find the category which matches the queryCategory
   } else {
     const thoughts = await Thought.find({ category: queryCategory })
@@ -115,6 +117,7 @@ app.get("/thoughts", async (req, res) => {
       })
       .skip(0)
       .limit(20);
+    res.json(thoughts);
   }
 });
 
