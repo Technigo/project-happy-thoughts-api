@@ -20,7 +20,7 @@ const Thought = mongoose.model('Thought', {
   },
   createdAt: {
     type: Date,
-    default: Date.now,
+    default: Date.now, // () => Date.now()
   },
 })
 
@@ -40,17 +40,20 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
-// GET list of thoughts, maximum 20 thoughts and sorted by date (recent first)
+// GET list of posts, maximum 20 posts and sorted by date (recent first)
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find()
     .sort({ createdAt: 'desc' })
     .limit(20)
     .exec()
-
-  res.status(200).json(thoughts)
+  if (thoughts > 0) {
+    res.status(200).json(thoughts) // 200 - ok
+  } else {
+    res.status(404).json({ message: 'No posts yet' })
+  }
 })
 
-// This endpoint expects a JSON body
+// Create a post - with async await
 app.post('/thoughts', async (req, res) => {
   // Retrieve the information sent by the client to our API endpoint
   const { message, hearts } = req.body
@@ -59,46 +62,56 @@ app.post('/thoughts', async (req, res) => {
 
   try {
     const savedThought = await thought.save()
-    res.status(201).json(savedThought)
+    res.status(201).json(savedThought) // 201 - created
   } catch (err) {
     res
-      .status(404) // 400?
-      .json({ message: 'Could not save to the Database', error: err.errors })
+      .status(400) // 400 - bad request
+      .json({ message: 'Could not save to the Database', error: err })
   }
 })
 
-// app.post('/thoughts/:thoughtId/like', async (req, res) => {
-//   const { id } = req.params
-//   const addHeart = await Thought.findById(id) // save and add one heart?
-//   if (addHeart) {
-//     res.status(200).json({
-//       hearts:
-//     })
-//   } else {
-// res.status(404).json({
-//   message: `Thought by id '${id}' not found`,
-//   error: err.errors
-// })
-// }
-// })
+// Like a post by increasing the hearts by 1 - with async await
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
 
-// delete a thought - with async await
-// app.delete('thoughts/:thoughtId', async (req, res) => {
-//   const { id } = req.params
+  try {
+    const addHeart = await Thought.findByIdAndUpdate(
+      { _id: thoughtId },
+      { $inc: { hearts: 1 } },
+      { new: true, useFindAndModify: false } // useFindAndModify to remove DeprecationWarning
+    )
+    if (addHeart) {
+      res.status(200).json(addHeart)
+    } else {
+      res.status(404).json({ message: `Post by id '${thoughtId}' not found` })
+    }
+  } catch (err) {
+    res
+      .status(400) // 400 - bad request
+      .json({
+        message: `Could not update the hearts`,
+        error: err,
+      })
+  }
+})
 
-//   try {
-//     const deletedThought = await Thought.deleteOne({ _id: id }) //findOneAndDelete -> status(200).json(deletedThought)
-//     if (deletedThought) {
-//       res.status(204)
-//     } else {
-//       res.status(404) // Thought not found
-//     }
-//   } catch (err) {
-//     res.status(400).json({ message: 'error', err })
-//   }
-// })
+// Delete a post - with async await
+app.delete('/thoughts/:thoughtId', async (req, res) => {
+  const { thoughtId } = req.params
 
-// edit a thought - with promises
+  try {
+    const deletedThought = await Thought.findOneAndDelete({ _id: thoughtId })
+    if (deletedThought) {
+      res.status(200).json(deletedThought)
+    } else {
+      res.status(404).json({ message: `Post by id '${thoughtId}' not found` })
+    }
+  } catch (err) {
+    res.status(400).json({ message: 'Could not delete the post', error: err })
+  }
+})
+
+// Edit a post - with promises
 // app.patch('/thoughts/:thoughtId', (res, req) => {
 //   const { id } = req.params
 //   const { updatedMessage } = req.body
@@ -108,7 +121,7 @@ app.post('/thoughts', async (req, res) => {
 //     { message: updatedMessage },
 //     { new: true }
 //   )
-//     // shorthand const { message } = req.body, findOneAndUpdate({_id: id}, {message}, {new: true})
+//     //shorthand const { message } = req.body, findOneAndUpdate({_id: id}, {message}, {new: true})
 //     .then((updatedThought) => {
 //       if (updatedThought) {
 //         res.status(200).json({ updatedThought })
