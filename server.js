@@ -66,7 +66,23 @@ app.post("/thoughts", async (req, res) => {
 	}
 });
 
-app.post("thoughts/:thoughtId/like", (req, res) => {});
+// might be using patch to update only one thing, likes, while other like message and createdAt remains the same
+// findOneAndUpdate()
+
+//using mongo operator to increase, inc.  new is to give back the latest, an option
+app.post("thoughts/:thoughtId/like", async (req, res) => {
+	const { thoughtId } = req.params;
+	try {
+		const updatedLike = await Thought.findByIdAndUpdate(
+			thoughtId,
+			{ $inc: { likes: 1 } },
+			{ new: true }
+		);
+		res.status(200).json({ response: updatedLike, success: true });
+	} catch (error) {
+		res.status(400).json({ response: error, success: false });
+	}
+});
 
 // Start the server
 app.listen(port, () => {
