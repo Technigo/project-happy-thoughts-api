@@ -25,7 +25,15 @@ const ThoughtSchema = new mongoose.Schema({
   },
   tags: {
     type: String,
-    enum: ["Food thought", "Random thought", "Work thought", "Other thought"],
+    enum: [
+      "Food thought",
+      "Idea thought",
+      "Christmas thought",
+      "Random thought",
+      "Work thought",
+      "Other thought",
+      "School thought",
+    ],
     required: true,
   },
   name: {
