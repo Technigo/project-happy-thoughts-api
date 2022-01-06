@@ -13,20 +13,15 @@ mongoose.Promise = Promise
 const port = process.env.PORT || 8080
 const app = express()
 
-const MemberSchema = new mongoose.Schema({
-  name: {
+const ThoughtSchema = new mongoose.Schema({
+  message: {
     type: String,
     required: true,
-    unique: true, 
-    enum: ['Jennie', 'Matilda', 'Karin', 'Maksymilian']
-  },
-  description: {
-    type: String,
     minlength: 5,
-    maxlength: 10,
+    maxlength: 140,
     trim: true
   },
-  score: {
+  hearts: {
     type: Number,
     default: 0,
   },
@@ -36,76 +31,60 @@ const MemberSchema = new mongoose.Schema({
   }
 })
 
-const Member = mongoose.model('Member', MemberSchema);
+const Thought = mongoose.model('Thought', ThoughtSchema);
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(express.json())
 
-// Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world')
+
+// Endpoints:
+app.get("/", (req, res) => {
+  res.json({
+    message:
+      "View all thoughts at http:",
+  });
 });
 
-// v1 - async await
-app.post('/members', async (req, res) => {
-  const { name, description } = req.body;
+// return 20 latest thoughts
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await Thought.find({}).sort({ createdAt: 'desc'}).limit(20).exec();
+  res.status(200).json({ response: thoughts, success: true });
+});
 
-  //success
+
+// post thought
+app.post('/thoughts', async (req, res) => {
+  // Retrieve the information sent by client to API endpoint
+  const { message } = req.body;
+
+  // Use mongoose schedule to create the database entry
+  const thought = new Thought({ message });
+
   try {
-    const newMember = await new Member({  name, description }).save();
-    res.status(201).json({ response: newMember, succes: true });
-  //if something goes wrong (doesn't match the schema)
-  } catch (error) {
-    res.status(400).json({  response: error, success: false });
+    // success
+    const savedThought = await thought.save()
+    res.status(201).json(savedThought)
+    //if something goes wrong (doesn't match the schema)
+  } catch (err) {
+    res.status(400).json({message: 'Could not save thought to the database', error: err.errors});
   }
 });
 
-
-// v2 - promises
-// app.post('/members', (req, res) => {
-//   const { name, description } = req.body;
-
-//   new Member({ name, description }).save()
-//     .then(data => {
-//       res.status(201).json({ response: data, success: true })
-//     })
-//     .catch(error => {
-//       res.status(400).json({ response: error, success: false });
-//     })
-// });
-
-// v3 - mongoose callback
-// app.post('/members', (req, res) => {
-//   const { name, description } = req.body;
-
-//   new Member({ name, description })
-//     .save((error, data) => {
-//       if (error) {
-//         res.status(400).json({ response: error, success: false });
-//       } else {
-//         res.status(201).json({ response: data, success: true });
-//       }
-//     });
-// });
-
-app.post('/members/:id/score', async (req, res) => {
+// Uppdating amount of hearts:
+app.post("/thoughts/:id/hearts", async (req, res) => {
   const { id } = req.params;
 
   try {
-    const updatedMember = await Member.findByIdAndUpdate(
-      id, 
-      { 
-        $inc: { 
-          score: 1 
-        },
-      },
+    const updatedThought = await Thought.findByIdAndUpdate(
+      id,
       {
-        new: true,
-      }
-     );
-    res.status(200).json({ response: updatedMember, success: true });
-  } catch (error) { 
+        $inc: { hearts: 1 },
+      },
+      { new: true }
+    );
+    res.status(200).json(updatedThought);
+  } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
 });
