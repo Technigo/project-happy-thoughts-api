@@ -49,12 +49,9 @@ app.get("/thoughts", async (req, res) => {
 		.limit(20)
 		.exec();
 	try {
-		res.status(200).json(thoughts);
-	} catch (err) {
-		res.status(400).json({
-			message: "Not able to execute request",
-			error: err.errors,
-		});
+		res.status(200).json({ response: thoughts, success: true });
+	} catch (error) {
+		res.status(400).json({ response: error, success: false });
 	}
 });
 
@@ -63,12 +60,9 @@ app.post("/thoughts", async (req, res) => {
 	const thought = await new Thought({ message });
 	try {
 		const savedThought = await thought.save();
-		res.status(201).json(savedThought);
-	} catch (err) {
-		res.status(400).json({
-			message: "Not able to execute request",
-			error: err.errors,
-		});
+		res.status(201).json({ response: savedThought, success: true });
+	} catch (error) {
+		res.status(400).json({ response: error, success: false });
 	}
 });
 
