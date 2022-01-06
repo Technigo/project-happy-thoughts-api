@@ -54,7 +54,7 @@ app.use(cors());
 app.use(express.json());
 
 // Start defining your routes here
-// v1 async await method -
+// v1 async await method
 app.post("/thoughts", async (req, res) => {
   try {
     const { name, message, category } = req.body;
@@ -73,7 +73,6 @@ app.post("/thoughts", async (req, res) => {
 });
 
 // v2 promises -
-
 // app.post("/thoughts", (req, res) => {
 //   const { name, message, category } = req.body;
 
@@ -87,7 +86,7 @@ app.post("/thoughts", async (req, res) => {
 //     });
 // });
 
-// v3 - mongoose callbakck
+// v3 - mongoose callback
 // app.post(`/thoughts`, (req, res) => {
 //   const { name, message, category } = req.body;
 //   new Thought({ name, message, category }).save((error, data) => {
@@ -100,22 +99,28 @@ app.post("/thoughts", async (req, res) => {
 // });
 
 app.get("/thoughts", async (req, res) => {
-  let queryCategory = req.query.category;
+  const queryCategory = req.query.category;
 
+  // if there is not a queryCategory it is gonna show all of the categories in descending order
   if (!queryCategory) {
-    const thoughts = await Thought.find().sort({ createdAt: -1 });
-    res.json(thoughts.slice(0, 20));
+    const thoughts = await Thought.find()
+      .sort({ createdAt: -1 })
+      .skip(0)
+      .limit(20);
+    // else it is gonna find the category which matches the queryCategory
   } else {
-    const thoughts = await Thought.find({ category: cat }).sort({
-      createdAt: -1,
-    });
-    res.json(thoughts.slice(0, 20));
+    const thoughts = await Thought.find({ category: queryCategory })
+      .sort({
+        createdAt: -1,
+      })
+      .skip(0)
+      .limit(20);
   }
 });
 
 app.post("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
-
+  // Use findByIdAndUpdate to increase the heart with 1
   try {
     const updatedLikes = await Thought.findByIdAndUpdate(id, {
       $inc: { hearts: 1 },
