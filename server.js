@@ -13,7 +13,8 @@ const ThoughtSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 140
+    maxlength: 140,
+    trim: true
   },
   hearts: {
     type: Number,
@@ -22,6 +23,15 @@ const ThoughtSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: () => new Date()
+  },
+  category: {
+    type: String,
+    enum: ['Personal', 'Weather', 'Food', 'Studies', ''],
+    default: ''
+  },
+  name: {
+    type: String,
+    default: "anonymous"
   }
 })
 
@@ -54,18 +64,23 @@ app.get('/thoughts', async (req, res) => {
     pageNum = Number(page),
     amountNum = Number(amount)
   } = req.query
-
   const thoughts = await Thought.find()
-    .sort({ createdAt: -1 })
-    .skip((pageNum - 1) * amountNum)
-    .limit(amountNum)
-  res.json({ response: thoughts, success: true })
+
+  if (page && amount) {
+    const thoughtsLimited = await Thought.find()
+      .sort({ createdAt: -1 })
+      .skip((pageNum - 1) * amountNum)
+      .limit(amountNum)
+    res.json({ page_number: pageNum, items_on_page: amountNum, num_of_pages: Math.ceil(thoughts.length / amount), response: thoughtsLimited, success: true })
+  } else {
+    res.json({ response: thoughts, success: true })
+  }
 })
 
 app.post('/thoughts', async (req, res) => {
-  const { message } = req.body
+  const { message, category, name } = req.body
   try {
-    const newThought = await new Thought({ message }).save()
+    const newThought = await new Thought({ message, category, name }).save()
     res.status(201).json({
       response: newThought,
       success: true
@@ -77,6 +92,16 @@ app.post('/thoughts', async (req, res) => {
     })
   }
 })
+app.get('/thoughts/category/:category', async (req, res) => {
+  const { category } = req.params
+  const thoughts = await Thought.find({ category: { $regex: category } })
+  if (thoughts.length === 0) {
+    res.status(404).json({ response: `Sorry, there are no thoughts with this category ${category}`, success: false })
+  } else {
+    res.status(200).json({ response: thoughts, success: true })
+  }
+})
+
 
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
