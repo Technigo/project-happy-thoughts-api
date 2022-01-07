@@ -1,13 +1,14 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This is an API created by me to hold the data for a happy thoughts generator. 
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+This week the issue has been connecting my backend to my frontend. But after managing to do that I think it has gone well. 
+
+I also added a function where you can choose which kind of thought you are posting and depending on which you choose the color changes. 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+View frontend here: https://alisebrink-react-project-happy-thoughts.netlify.app/
+View API here: https://alisebrink-happy-thoughts.herokuapp.com/
