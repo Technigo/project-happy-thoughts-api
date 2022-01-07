@@ -27,7 +27,7 @@ const ThoughtSchema = new mongoose.Schema({
     maxlength: 140,
     trim: true
   },
-  name: {
+  userName: {
     type: String,
     minlength: 3,
     maxlength: 20,
@@ -65,10 +65,10 @@ app.get('/thoughts', async (req, res) => {
 
 // Retrieve the info sent by the client to the API endpoint
 app.post('/thoughts', async (req, res) => {
-  const { message, name } = req.body;
+  const { message, userName } = req.body;
 
   try {
-    const newThought = await new Thought({ message, name }).save();
+    const newThought = await new Thought({ message, userName }).save();
     res.status(201).json({ newThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
