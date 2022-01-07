@@ -28,7 +28,7 @@ const ThoughtSchema = new mongoose.Schema({
     //  enum: ['Jennie', 'Matilda', 'Karin', 'Maksymilian'],
   },
 
-  heart: {
+  hearts: {
     type: Number,
     default: 0,
   },
@@ -124,12 +124,12 @@ app.post('/thoughts', async (req, res) => {
 
 // to update the amount of likes on happy Thoughts, find the member (or thought) by the id
 
-app.post('/thoughts/:id/heart', async (req, res) => {
+app.post('/thoughts/:id/hearts', async (req, res) => {
   const { id } = req.params;
 
   try {
     const updatedHeart = await Thought.findByIdAndUpdate(id, {
-      $inc: { heart: 1 },
+      $inc: { hearts: 1 },
     });
     if (updatedHeart) {
       res.status(200).json({ response: updatedHeart, success: true });
