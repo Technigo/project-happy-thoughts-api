@@ -59,7 +59,7 @@ const thoughtSchema = new mongoose.Schema({
   // possibility to add a category to the thought
   category: {
     type: String,
-    enum: ['Food', 'Home', 'Animals', 'Project', 'Just Happy']
+    enum: ['Food', 'Home', 'Animals', 'Project', 'Just Happy', '']
   }
 })
 
