@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
+const mongoUrl = process.env.MONGO_URL || "MONGO_URL"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 mongoose.Promise = Promise
 
@@ -46,7 +46,7 @@ app.get("/", (req, res) => {
   });
 });
 
-// return 20 latest thoughts
+// return 20 latest thoughts ({}?)
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find({}).sort({ createdAt: 'desc'}).limit(20).exec();
   res.status(200).json({ response: thoughts, success: true });
