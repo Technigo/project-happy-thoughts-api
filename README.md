@@ -1,4 +1,4 @@
-# Project Happy Thoughts API
+## Project Happy Thoughts API
 
 A Twitter-inspired backend project with the goal of practicing POST requests and the connection to the frontend.
 
@@ -6,14 +6,15 @@ The user inputs data through the frontend (link at the end of this document). It
 
 NOTE: The UI is based on Technigo's own design. The assignment was to reproduce the wireframe as closely as possible.
 
-## Features
+# Features
 
 - `ThoughtSchema` with the following properties: message (thought), name, hearts (likes), createdAt
 - Input validation with error handling
 - Optional user name input
 - Tested through MongoDB Compass and Postman
 - Deployed via Heroku and MongoDB Atlas
-- Endpoints and requests:
+
+# Endpoints and requests
 
 - `/` (default) -> GET
 - `/thoughts`
