@@ -14,12 +14,12 @@ const port = process.env.PORT || 8080;
 const app = express();
 
 const ThoughtSchema = new mongoose.Schema({
-  // user: {
-  //   type: String,
-  //   default: "Anonymous",
-  //   minlength: 2,
-  //   maxlength: 25,
-  // },
+  user: {
+    type: String,
+    default: "Anonymous",
+    minlength: 2,
+    maxlength: 25,
+  },
   message: {
     type: String,
     required: true,
@@ -72,10 +72,10 @@ app.get("/thoughts", async (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
-  const { message } = req.body;
+  const { message, user } = req.body;
 
   try {
-    const savedThought = await new Thought({ message }).save();
+    const savedThought = await new Thought({ message, user }).save();
     res.status(201).json({
       message: savedThought,
       success: true,
