@@ -79,7 +79,7 @@ app.post("thoughts/:messageId/like", async (req, res) => {
 	try {
 		const updatedLike = await Thought.findByIdAndUpdate(
 			messageId,
-			{ $inc: { likes: 1 } },
+			{ $inc: { hearts: 1 } },
 			{ new: true }
 		);
 		res.status(200).json({ response: updatedLike, success: true });
