@@ -32,6 +32,10 @@ const Thought = mongoose.model("Thoughts", ThoughtSchema);
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("hello");
+});
+
 app.get("/thoughts", async (req, res) => {
   const {
     sort,
