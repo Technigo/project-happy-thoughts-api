@@ -65,16 +65,16 @@ app.get('/thoughts', async (req, res) => {
 
 // Retrieve the info sent by the client to the API endpoint
 app.post('/thoughts', async (req, res) => {
-  const { message } = req.body;
+  const { message, name } = req.body;
 
   try {
-    const newThought = await new Thought({ message }).save();
+    const newThought = await new Thought({ message, name }).save();
     res.status(201).json({ newThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
 });
-
+/* 
 app.post('/thoughts/user', async (req, res) => {
   const { name } = req.body;
 
@@ -84,7 +84,7 @@ app.post('/thoughts/user', async (req, res) => {
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
-});
+}); */
 
 // Update a thought's likes (hearts) (if the thought has a valid URL)
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
