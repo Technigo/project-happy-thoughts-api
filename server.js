@@ -41,7 +41,7 @@ app.use(express.json());
 // Defining routes starts here
 app.get('/', (req, res) => {
   res.send(
-    'This is the db of Maria Peterssons Happy thoughts-project. Please go to /endpoints to see the possible endpoints.'
+    'This is the db of Maria Peterssons Happy thoughts-project. Please go to /endpoints to see the possible endpoints. For frontend, go to https://happy-thoughts-maria-petersson.netlify.app/ .'
   );
 });
 // See all possible endpoints
@@ -49,7 +49,7 @@ app.get('/endpoints', (req, res) => {
   res.send(listEndpoints(app));
 });
 
-// Start defining your routes here
+// Start defining routes here
 app.get('/thoughts', async (req, res) => {
   // Mongoose version
   const thoughts = await Thought.find({}).sort({ createdAt: 'desc' }).limit(20);
@@ -112,17 +112,18 @@ app.patch('/thoughts/:id', async (req, res) => {
   const { id } = req.params;
   const { message } = req.body;
 
-    const updatedThought = await Thought.findOneAndUpdate(
-      { _id: id },
-      { message },
-      { new: true }
-    );
+  const updatedThought = await Thought.findOneAndUpdate(
+    { _id: id },
+    { message },
+    { new: true }
+  );
+  try {
     if (updatedThought) {
       res.status(200).json({ response: updatedThought, success: true });
     } else {
       res
         .status(404)
-        .json({ response: 'Happy Thought not found', success: false });
+        .json({ response: 'Happy thought not found', success: false });
     }
   } catch (error) {
     res.status(400).json({ response: error, success: false });
