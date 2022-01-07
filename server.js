@@ -64,7 +64,7 @@ app.get("/thoughts", async (req, res) => {
   }
   if (writer) {
     thoughts = await Thought.find({
-      writer: { $regex: writer },
+      writer: { $regex: writer, $options: "i" },
     });
   }
 
@@ -76,7 +76,7 @@ app.get("/thoughts", async (req, res) => {
 app.get("/thoughts/category/:category", async (req, res) => {
   const { category } = req.params;
   let thoughts = await Thought.find({
-    category: { $regex: category },
+    category: { $regex: category, $options: "i" },
   });
   res.json(thoughts);
 });
