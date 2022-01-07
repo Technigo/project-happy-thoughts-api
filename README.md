@@ -16,7 +16,8 @@ NOTE: The UI is based on Technigo's own design. The assignment was to reproduce 
 
 # Endpoints and requests
 
-- `/` (default) -> GET
+- `/` (default)
+  - Welcome message. Instructs the user to type the path to the next endpoint.
 - `/thoughts`
   - **GET** (retrieve all thoughts, sort them by date (newest first) and display only the last 20.
   - **POST** (retrieve the info from the input fields to the API endpoint)
