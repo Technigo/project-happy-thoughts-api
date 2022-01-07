@@ -77,7 +77,7 @@ app.post("/thoughts", async (req, res) => {
   try {
     const savedThought = await new Thought({
       message,
-      user: user || "Anonymous",
+      user,
     }).save();
     res.status(201).json({
       message: savedThought,
