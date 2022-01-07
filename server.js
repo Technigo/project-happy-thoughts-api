@@ -21,7 +21,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-/* Schema for bookings */
+
 
 const happySchema = new mongoose.Schema({
   hearts: {
