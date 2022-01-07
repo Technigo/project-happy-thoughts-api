@@ -17,15 +17,14 @@ const ThoughtSchema = new mongoose.Schema({
 		minlength: 5,
 		maxlength: 140,
 		trim: true,
-		// unique: true,
 	},
 	hearts: {
 		type: Number,
 		default: 0,
 	},
 	createdAt: {
-		type: Number,
-		default: Date.now, // can also be written like () => Date.now()
+		type: Date,
+		default: Date.now,
 	},
 });
 
@@ -35,9 +34,10 @@ const Thought = mongoose.model("Thought", ThoughtSchema);
 app.use(cors());
 app.use(express.json());
 
-// Defining routes
+/************************** GET **************************/
+
 app.get("/", (req, res) => {
-	res.send(listEndpoints(app)); // Lists all endpoints
+	res.send(listEndpoints(app));
 });
 
 app.get("/thoughts", async (req, res) => {
@@ -47,7 +47,8 @@ app.get("/thoughts", async (req, res) => {
 	res.status(200).json({ response: thoughts, success: true });
 });
 
-// v1 - async await
+/************************** POST **************************/
+
 app.post("/thoughts", async (req, res) => {
 	const { message } = req.body;
 
@@ -59,41 +60,13 @@ app.post("/thoughts", async (req, res) => {
 	}
 });
 
-// v2 - promises
-// app.post('/thoughts', (req, res) => {
-// 	const { message } = req.body;
-
-// 	new Thought({ message })
-// 		.save()
-// 		.then((data) => {
-// 			res.status(201).json({ response: data, success: true });
-// 		})
-// 		.catch((error) => {
-// 			res.status(400).json({ response: error, success: false });
-// 		});
-// });
-
-// v3 - mongoose callback
-// app.post('/thoughts', (req, res) => {
-// 	const { message } = req.body;
-
-// 	new Thought({ message }).save((error, data) => {
-// 		if (error) {
-// 			res.status(400).json({ response: error, success: false });
-// 		} else {
-// 			res.status(201).json({ response: data, success: true });
-// 		}
-// 	});
-// });
-
-app.post("/thoughts/:id/hearts", async (req, res) => {
+app.post("/thoughts/:id/like", async (req, res) => {
 	const { id } = req.params;
 
 	try {
 		const updatedThought = await Thought.findByIdAndUpdate(
 			id,
 			{
-				// $inc is a mongo operator that helps us increase a value
 				$inc: {
 					hearts: 1,
 				},
@@ -108,11 +81,13 @@ app.post("/thoughts/:id/hearts", async (req, res) => {
 	}
 });
 
+/************************** DELETE **************************/
+
 app.delete("/thoughts/:id", async (req, res) => {
 	const { id } = req.params;
 
 	try {
-		const deletedThought = await Thought.findOneAndDelete({ _id: id }); // if you don't want to send anything back you can use deleteOne instead of findOneAndDelete and use 204 status for the response
+		const deletedThought = await Thought.findOneAndDelete({ _id: id });
 		if (deletedThought) {
 			res.status(200).json({ response: deletedThought, success: true });
 		} else {
@@ -123,11 +98,12 @@ app.delete("/thoughts/:id", async (req, res) => {
 	}
 });
 
+/************************** PATCH **************************/
+
 app.patch("/thoughts/:id", async (req, res) => {
 	const { id } = req.params;
 	const { message } = req.body;
 
-	// v1 - async / await
 	try {
 		const updatedThought = await Thought.findOneAndUpdate(
 			{ _id: id },
@@ -142,19 +118,6 @@ app.patch("/thoughts/:id", async (req, res) => {
 	} catch (error) {
 		res.status(400).json({ response: error, success: false });
 	}
-
-	// v2 - Promises
-	// Thought.findOneAndUpdate({ _id: id }, { message }, { new: true })
-	// 	.then((updatedThought) => {
-	// 		if (updatedThought) {
-	// 			res.status(200).json({ response: updatedThought, success: true });
-	// 		} else {
-	// 			res.status(404).json({ response: 'Thought not found', success: false });
-	// 		}
-	// 	})
-	// 	.catch((error) => {
-	// 		res.status(400).json({ response: error, success: false });
-	// 	});
 });
 
 // Start the server
@@ -162,7 +125,3 @@ app.listen(port, () => {
 	// eslint-disable-next-line
 	console.log(`Server running on http://localhost:${port}`);
 });
-
-// POST request can be used for both creating and updating documents
-// PATCH updates entity
-// PUT replaces entity
