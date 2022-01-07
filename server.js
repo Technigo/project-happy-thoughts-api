@@ -48,7 +48,7 @@ app.use(express.json());
 app.get('/', (req, res) => res.send(listEndpoints(app)));
 
 app.get('/thoughts', async (req, res) => {
-  const allThoughts = await Thought.find().sort({ createdAt: 'desc' }).slice(1,20).exec()
+  const allThoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
   res.status(200).json(allThoughts);
 });
 
