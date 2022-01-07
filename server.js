@@ -51,14 +51,8 @@ app.get("/", (req, res) => {
 
 //Endpoint that return thoughts in descending order
 app.get("/thoughts", async (req, res) => {
-  try {
-    const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20);
-    res.json(thoughts);
-  } catch (error) {
-    res
-      .status(404)
-      .json({ message: "Could not find any thoughts!", success: false });
-  }
+  const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20);
+  res.json(thoughts);
 });
 
 app.post("/thoughts", async (req, res) => {
