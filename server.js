@@ -51,19 +51,19 @@ app.get('/endpoints', (req, res) => {
 
 // Start defining your routes here
 app.get('/thoughts', async (req, res) => {
-  const {
-    sort,
-    page,
-    perPage,
-    sortNum = Number(sort),
-    pageNum = Number(page),
-    perPageNum = Number(perPage),
-  } = req.query;
+  // const {
+  //   sort,
+  //   page,
+  //   perPage,
+  //   sortNum = Number(sort),
+  //   pageNum = Number(page),
+  //   perPageNum = Number(perPage),
+  // } = req.query;
 
   // v1 Mongoose
   const thoughts = await Thought.find({})
-    .sort({ createdAt: sortNum })
-    .skip((pageNum - 1) * perPageNum)
+    .sort({ createdAt: 'desc' })
+    // .skip((pageNum - 1) * perPageNum)
     .limit(20);
 
   // v2 Mongo
@@ -98,31 +98,31 @@ app.post('/thoughts', async (req, res) => {
   }
 });
 
-// v2 - promises
+// // v2 - promises
 // app.post('/members', (req, res) => {
-// 	const { name, description } = req.body;
+//   const { name, description } = req.body;
 
-// 	new Member({ name, description })
-// 		.save()
-// 		.then((data) => {
-// 			res.status(201).json({ response: data, success: true });
-// 		})
-// 		.catch((error) => {
-// 			res.status(400).json({ response: error, success: false });
-// 		});
+//   new Member({ name, description })
+//     .save()
+//     .then((data) => {
+//       res.status(201).json({ response: data, success: true });
+//     })
+//     .catch((error) => {
+//       res.status(400).json({ response: error, success: false });
+//     });
 // });
 
-// v3 - mongoose callback
+// // v3 - mongoose callback
 // app.post('/members', (req, res) => {
-// 	const { name, description } = req.body;
+//   const { name, description } = req.body;
 
-// 	new Member({ name, description }).save((error, data) => {
-// 		if (error) {
-// 			res.status(400).json({ response: error, success: false });
-// 		} else {
-// 			res.status(201).json({ response: data, success: true });
-// 		}
-// 	});
+//   new Member({ name, description }).save((error, data) => {
+//     if (error) {
+//       res.status(400).json({ response: error, success: false });
+//     } else {
+//       res.status(201).json({ response: data, success: true });
+//     }
+//   });
 // });
 
 // increasing hearts/likes
