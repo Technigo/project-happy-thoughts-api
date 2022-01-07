@@ -62,20 +62,31 @@ app.get('/thoughts', async (req, res) => {
   const {
     page,
     amount,
+    oldest,
+    mostLiked,
     pageNum = Number(page),
     amountNum = Number(amount)
   } = req.query
-  const thoughts = await Thought.find().sort({ createdAt: -1 })
+  let thoughts = await Thought.find().sort({ createdAt: -1 })
 
   if (page && amount) {
-    const thoughtsLimited = await Thought.find()
+    thoughts = await Thought.find()
       .sort({ createdAt: -1 })
       .skip((pageNum - 1) * amountNum)
       .limit(amountNum)
-    res.json({ page_number: pageNum, items_on_page: amountNum, num_of_pages: Math.ceil(thoughts.length / amount), response: thoughtsLimited, success: true })
-  } else {
-    res.json({ response: thoughts, success: true })
   }
+  if (oldest) {
+    thoughts = await Thought.find().sort({ createdAt: 1 })
+  }
+  if (mostLiked) {
+    thoughts = await Thought.find().sort({ hearts: -1 })
+  }
+  if (thoughts) {
+    res.json({ page_number: pageNum || 'page and amount are not defined', items_on_page: amountNum || 'page and amount are not defined', num_of_pages: Math.ceil(thoughts.length / amount) || 'page and amount are not defined', response: thoughts, success: true })
+  } else {
+    res.json({ response: 'There are no thoughts', success: false })
+  }
+
 })
 
 app.post('/thoughts', async (req, res) => {
@@ -95,7 +106,7 @@ app.post('/thoughts', async (req, res) => {
 })
 app.get('/thoughts/category/:category', async (req, res) => {
   const { category } = req.params
-  const thoughts = await Thought.find({ category: { $regex: category } })
+  const thoughts = await Thought.find({ category: { $regex: category, $options: 'i' } })
   if (thoughts.length === 0) {
     res.status(404).json({ response: `Sorry, there are no thoughts with this category ${category}`, success: false })
   } else {
