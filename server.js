@@ -39,7 +39,7 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-    res.send("Hello world");
+    res.send("View the happy thoughts frontend at: https://sarah-mottram-happy-thoughts.netlify.app/");
 });
 
 app.get("/thoughts", async (req, res) => {
