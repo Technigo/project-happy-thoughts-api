@@ -126,19 +126,17 @@ app.post('/thoughts', async (req, res) => {
 // });
 
 // increasing hearts/likes
-app.post('/thoughts/:id/hearts', async (req, res) => {
-  const { id } = req.params;
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params;
   try {
     const updatedThought = await Thought.findByIdAndUpdate(
       // Argument 1 - id
-      id,
-      // Argument 2 - properties to change - should it say score inst of hearts?
+      thoughtId,
       {
         $inc: {
           hearts: 1,
         },
       },
-      // Argument 3 - options (not mandatory)
       {
         new: true,
       }
