@@ -34,7 +34,6 @@ const ThoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model('Thought', ThoughtSchema)
 
-new Thought({message: "happy if this works!"}).save()
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
@@ -58,7 +57,6 @@ app.get('/thoughts', async (req, res) => {
     const allThoughts = await Thought.find()
       .sort({ createdAt: 'desc' })
       .limit(20)
-      .exec()
     res.json(allThoughts)
   } catch (err) {
     res.status(400).json({ message: 'No thoughts found', error: err.error})
@@ -84,7 +82,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
  try {
   const updatedThought = await Thought.findByIdAndUpdate(thoughtId, { 
     $inc: { 
-      heart: 1 
+      hearts: 1 
     }
   },
   {
