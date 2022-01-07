@@ -1,13 +1,20 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+API created to POST and GET thoughts for the Happy Thoughts application - https://myhappy-thoughts.netlify.app/
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## Feautures
 
-## The problem
+- GET request to get all thoughts
+- POST request to add new thoughts
+- POST request to increase amount of likes
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+## Production Process
+
+I started by creating a model and a schema, to specify different validation for the properties.
+I created then the POST request to add new thoughts and increase the amount of likes.
+The GET request to display the thought is sorted by decreasing dates and has a limit of 20 thoughts.
+The POST requests have error handling.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://myhappy-thoughts-api.herokuapp.com/
