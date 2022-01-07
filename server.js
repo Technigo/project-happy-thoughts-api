@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose, { now } from "mongoose";
+import listEndpoints from "express-list-endpoints";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -40,7 +41,10 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-	res.send("Hello world");
+	res.send({
+		"Welcome to 450 book reviews - by Linnéa. Full documentation on GitHub 👉  https://github.com/Skrosen/project-mongo-api/blob/master/Documentation.md":
+			listEndpoints(app),
+	});
 });
 
 app.get("/thoughts", async (req, res) => {
