@@ -46,26 +46,10 @@ app.get("/thoughts", async (req, res) => {
     perPageNum = Number(perPage),
   } = req.query;
 
-  // v1 mongoose
   const thoughts = await Thought.find({})
     .sort({ createdAt: sortNum })
     .skip((pageNum - 1) * perPageNum)
     .limit(perPageNum);
-
-  // v2 mongo
-  // const thoughts = await Thought.aggregate([
-  //   {
-  //     $sort: {
-  //       createdAt: sortNum,
-  //     },
-  //   },
-  //   {
-  //     $skip: (pageNum - 1) * perPageNum,
-  //   },
-  //   {
-  //     $limit: perPageNum,
-  //   },
-  // ]);
 
   res.status(200).json({ response: thoughts, success: true });
 });
