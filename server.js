@@ -21,15 +21,13 @@ const ThoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     required: true,
-    // unique: true,
+    unique: true,
+    minlength: 5,
+    maxlength: 140,
+    trim: true, // this trims whitespace that the user might accidentally add, default of trim is false
     //  enum: ['Jennie', 'Matilda', 'Karin', 'Maksymilian'],
   },
-  // description: {
-  //   type: String,
-  //   minlength: 5,
-  //   maxlength: 140,
-  //   trim: true, // this trims whitespace that the user might accidentally add, default of trim is false
-  // },
+
   heart: {
     type: Number,
     default: 0,
@@ -126,7 +124,7 @@ app.post('/thoughts', async (req, res) => {
 
 // to update the amount of likes on happy Thoughts, find the member (or thought) by the id
 
-app.post('/thoughts/:id/like', async (req, res) => {
+app.post('/thoughts/:id/heart', async (req, res) => {
   const { id } = req.params;
 
   try {
