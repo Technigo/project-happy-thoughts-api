@@ -128,21 +128,14 @@ app.post('/thoughts/:id/heart', async (req, res) => {
   const { id } = req.params;
 
   try {
-    const updatedHeart = await Thought.findByIdAndUpdate(
-      // Argument 1 - id
-      id,
-      // Argument 2 - properties to change
-      {
-        $inc: {
-          score: 1,
-        },
-      },
-      // Argument 3 - options (not mandatory)
-      {
-        new: true,
-      }
-    );
-    res.status(200).json({ response: updatedHeart, success: true });
+    const updatedHeart = await Thought.findByIdAndUpdate(id, {
+      $inc: { heart: 1 },
+    });
+    if (updatedHeart) {
+      res.status(200).json({ response: updatedHeart, success: true });
+    } else {
+      res.status(404).json({ response: 'Not found', success: false });
+    }
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
