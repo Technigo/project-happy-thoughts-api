@@ -1,17 +1,33 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+A Twitter-inspired backend project with the goal of practicing POST requests and the connection to the frontend.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+The user inputs data through the frontend (link at the end of this document). It is then stored, displaying the first 20 user inputs ("thoughts").
 
-## The problem
+NOTE: The UI is based on Technigo's own design. The assignment was to reproduce the wireframe as closely as possible.
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+## Features
 
-Challenges:
+- `ThoughtSchema` with the following properties: message (thought), name, hearts (likes), createdAt
+- Input validation with error handling
+- Optional user name input
+- Endpoints and requests:
 
-Unhandled Promise Rejection. It didn't allow for deployment with the original frontend.
+- `/` (default) -> GET
+- `/thoughts`
+  - **GET** (retrieve all thoughts, sort them by date (newest first) and display only the last 20.
+  - **POST** (retrieve the info from the input fields to the API endpoint)
+  - `/thoughts/:thoughtId/like`
+  - **POST** (update a thought's likes upon clicking on the heart)
+
+# Challenges and lessons learned
+
+- The connection from the frontend to the backend took a while to figure out. This kept the app from deploying correctly. The reasons were the following:
+  - Forgetting to declare `config vars` in Heroku.
+  - A naming inconsistency between the frontend (`hearts`) and the backend (`heart`).
+- Managing several inputs (message and user name) through a single handler was difficult. I was created a separated component for the user input at first. But then some classmates suggested simply adding it to the general form. This helped.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Backend: https://happy-thoughts-api-isabel.herokuapp.com/thoughts
+Frontend: https://isabel-gonzalez-happy-thoughts.netlify.app/
