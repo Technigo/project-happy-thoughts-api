@@ -30,6 +30,7 @@ NOTE: The UI is based on Technigo's own design. The assignment was to reproduce 
   - Forgetting to declare `config vars` in Heroku.
   - A naming inconsistency between the frontend (`hearts`) and the backend (`heart`).
 - Managing several inputs (message and user name) through a single handler was difficult. I was created a separated component for the user input at first. But then some classmates suggested simply adding it to the general form. This helped.
+- I still need to figure out how to reset the user name input at the same time.
 
 ## View it live
 
