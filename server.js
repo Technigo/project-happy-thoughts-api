@@ -51,16 +51,16 @@ app.get('/', (req, res) => {
 
 // getting all of the thoughts and sorting them
 app.get('/thoughts', async (req, res) => {
-  // const { page = 1, limit = 20 } = req.query;
+  const { page = 1, limit = 5 } = req.query;
 
   try {
-    const thoughts = await Thought.find()
-    // .limit(limit * 1)
-    // .skip((page - 1) * limit)
-    // .sort({ createdAt: 'desc' })
-    // .exec();
+    const thoughts = await Thought.find({})
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .sort({ createdAt: 'desc' })
+      .exec();
     // const count = await Thought.countDocuments();
-    res.json({ thoughts })
+    res.json({ response: thoughts, success: true })
   } catch (err) {
     res.status(400).json({ response: err, success: false });
   }
@@ -88,9 +88,9 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
       thoughtId, 
       { $inc: { hearts: 1 } }, { new: true }
     ); // inc = inscrese, new is options of that method 
-    res.status(200).json({ message: thoughtLiked, success: true })
+    res.status(200).json({ response: thoughtLiked, success: true })
   } catch (err) {
-    res.status(400).json({ message: "Could not find that message", error: err });
+    res.status(400).json({ response: err, success: false });
   }
 });
 
@@ -102,7 +102,7 @@ app.delete('/thoughts/:id', async (req, res) => {
     const deleteMessage = await Thought.findOneAndDelete({ _id: id });
     res.status(200).json({ response: deleteMessage })
   } catch (err) {
-    res.status(400).json({ response: "Could not delete message", error: err });
+    res.status(400).json({ response: err, success: false });
   }
 })
 
