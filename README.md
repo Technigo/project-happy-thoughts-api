@@ -1,13 +1,12 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Bulding enpoints for earlier happy thoughts projects (frontend). Created Schema with key and values, endpoints for these (POST & GET requests).
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Used MongoDB and Mongoose, deployed with heroku and added the API in my frontend built with react.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Backend: https://carling-happythoughts-api.herokuapp.com/
+Frontend: https://carling-happy-thoughts.netlify.app/
