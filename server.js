@@ -54,7 +54,7 @@ app.get('/thoughts', async (req, res) => {
   // const { page = 1, limit = 20 } = req.query;
 
   try {
-    const thoughts = await Thought.find({})
+    const thoughts = await Thought.find()
     // .limit(limit * 1)
     // .skip((page - 1) * limit)
     // .sort({ createdAt: 'desc' })
