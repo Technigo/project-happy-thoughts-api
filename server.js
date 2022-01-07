@@ -27,6 +27,7 @@ const ThoughtSchema = new mongoose.Schema({
   },
   typeOfMessage: {
     type: String,
+    default: "neutral",
   },
   hearts: {
     type: Number,
@@ -56,7 +57,7 @@ app.post('/thoughts', async (req, res) => {
   const { message, typeOfMessage } = req.body;
 
   try {
-    const newThought = await new Thought({ message, typeOfMessage: typeOfMessage }).save();
+    const newThought = await new Thought({ message, typeOfMessage: typeOfMessage || 'neutral' }).save();
     res.status(201).json({ response: newThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
