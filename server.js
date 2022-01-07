@@ -51,7 +51,7 @@ app.get('/', (req, res) => {
 
 // getting all of the thoughts and sorting them
 app.get('/thoughts', async (req, res) => {
-  const { page = 1, limit = 20 } = req.query;
+  const { page, limit } = req.query;
 
   try {
     const thoughts = await Thought.find({})
