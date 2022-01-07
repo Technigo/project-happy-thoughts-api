@@ -17,7 +17,7 @@ NOTE: The UI is based on Technigo's own design. The assignment was to reproduce 
 - `/thoughts`
   - **GET** (retrieve all thoughts, sort them by date (newest first) and display only the last 20.
   - **POST** (retrieve the info from the input fields to the API endpoint)
-  - `/thoughts/:thoughtId/like`
+- `/thoughts/:thoughtId/like`
   - **POST** (update a thought's likes upon clicking on the heart)
 
 # Challenges and lessons learned
