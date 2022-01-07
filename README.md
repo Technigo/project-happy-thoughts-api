@@ -11,6 +11,8 @@ NOTE: The UI is based on Technigo's own design. The assignment was to reproduce 
 - `ThoughtSchema` with the following properties: message (thought), name, hearts (likes), createdAt
 - Input validation with error handling
 - Optional user name input
+- Tested through MongoDB Compass and Postman
+- Deployed via Heroku and MongoDB Atlas
 - Endpoints and requests:
 
 - `/` (default) -> GET
