@@ -19,7 +19,7 @@ const port = process.env.PORT || 8080;
 const app = express();
 
 const ThoughtSchema = new mongoose.Schema({
-  thought: {
+  message: {
     type: String,
     minlength: 5,
     maxlength: 140,
