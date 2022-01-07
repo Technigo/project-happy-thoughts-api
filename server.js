@@ -60,7 +60,7 @@ app.get('/thoughts', async (req, res) => {
     // .sort({ createdAt: 'desc' })
     // .exec();
     // const count = await Thought.countDocuments();
-    res.json({ response: thoughts, success: true })
+    res.json({ thoughts })
   } catch (err) {
     res.status(400).json({ response: err, success: false });
   }
