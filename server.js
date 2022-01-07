@@ -70,11 +70,11 @@ app.post("/thoughts", async (req, res) => {
 // findOneAndUpdate()
 
 //using mongo operator to increase, $inc.  new is to give back the latest, an option
-app.post("thoughts/:thoughtId/like", async (req, res) => {
-	const { thoughtId } = req.params;
+app.post("thoughts/:messageId/like", async (req, res) => {
+	const { messageId } = req.params;
 	try {
 		const updatedLike = await Thought.findByIdAndUpdate(
-			thoughtId,
+			messageId,
 			{ $inc: { likes: 1 } },
 			{ new: true }
 		);
