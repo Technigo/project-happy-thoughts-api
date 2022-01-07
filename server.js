@@ -51,20 +51,16 @@ app.get('/', (req, res) => {
 
 // getting all of the thoughts and sorting them
 app.get('/thoughts', async (req, res) => {
-  const { page = 1, limit = 20 } = req.query;
+  // const { page = 1, limit = 20 } = req.query;
 
   try {
     const thoughts = await Thought.find({})
-      .limit(limit * 1)
-      .skip((page - 1) * limit)
-      .sort({ createdAt: 'desc' })
-      .exec();
-    const count = await Thought.countDocuments();
-    res.json({
-      thoughts,
-      totalPages: Math.ceil(count / limit),
-      currentPage: page
-    })
+    // .limit(limit * 1)
+    // .skip((page - 1) * limit)
+    // .sort({ createdAt: 'desc' })
+    // .exec();
+    // const count = await Thought.countDocuments();
+    res.json({ response: thoughts, success: true })
   } catch (err) {
     res.status(400).json({ response: err, success: false });
   }
