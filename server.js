@@ -25,6 +25,10 @@ const ThoughtSchema = new mongoose.Schema({
     maxlength: 140,
     trim: true,
   },
+  typeOfMessage: {
+    type: String,
+    default: "",
+  },
   hearts: {
     type: Number,
     default: 0,
@@ -45,15 +49,15 @@ app.use(express.json());
 app.get('/', (req, res) => res.send(listEndpoints(app)));
 
 app.get('/thoughts', async (req, res) => {
-  const allThoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+  const allThoughts = await Thought.find().sort({ createdAt: 'desc' }).slice(1,20).exec()
   res.status(200).json(allThoughts);
 });
 
 app.post('/thoughts', async (req, res) => {
-  const { message } = req.body;
+  const { message, typeOfMessage } = req.body;
 
   try {
-    const newThought = await new Thought({ message }).save();
+    const newThought = await new Thought({ message, typeOfMessage }).save();
     res.status(201).json({ response: newThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
