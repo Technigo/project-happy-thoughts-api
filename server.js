@@ -38,7 +38,8 @@ const thoughtSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 140
+    maxlength: 140,
+    trim: true
   },
   // No. of hearts should not be assignable when creating a new thought.
   hearts: {
