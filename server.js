@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import listEndpoints from 'express-list-endpoints';
 import dotenv from 'dotenv';
 
+// Adding a comment just to be able to push again
 dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts';
@@ -24,7 +25,7 @@ const ThoughtSchema = new mongoose.Schema({
     maxlength: 140,
     trim: true,
   },
-  likes: {
+  hearts: {
     type: Number,
     default: 0,
   },
@@ -59,13 +60,13 @@ app.post('/thoughts', async (req, res) => {
   }
 });
 
-app.post('/thoughts/:thoughtId/likes', async (req, res) => {
+app.post('/thoughts/:thoughtId/hearts', async (req, res) => {
   const { thoughtId } = req.params;
 
   try {
     const updatedThought = await Thought.findByIdAndUpdate(
       thoughtId,
-      { $inc: { likes: 1 } },
+      { $inc: { hearts: 1 } },
       { new: true }
     );
     res.status(200).json({ response: updatedThought, success: true });
