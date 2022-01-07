@@ -27,7 +27,6 @@ const ThoughtSchema = new mongoose.Schema({
   },
   typeOfMessage: {
     type: String,
-    default: "",
   },
   hearts: {
     type: Number,
