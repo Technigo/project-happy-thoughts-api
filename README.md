@@ -4,7 +4,7 @@ This project aimed at creating my own api for a previous project called Happy th
 
 ## FEATURES
 
-it has the following endpoints:
+The API has the following endpoints:
 
 GET /thoughts - Returns all thoughts by find() function. and then it limit the amount of thoughts saved in the database to maximum of 20 thoughts and finally sorts the thoughts in a descending order.
 
@@ -15,6 +15,8 @@ POST /thoughts/:thoughtId/like - Made it possible to "like" a thought by using f
 DELETE /thoughts/:id - Made it possible to delete a thought by using findOneAndDelete() function.
 
 PATCH /thoughts/:id - Made it possible to update a thought by using findOneAndUpdate().
+
+(DELETE and PATCH are not currently used in the front end it is there for future adding on more functions to the project.)
 
 All of the endpoints have error handling with a try and catch block.
 
