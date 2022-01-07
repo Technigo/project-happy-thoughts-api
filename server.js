@@ -62,7 +62,7 @@ app.get("/thoughts", async (req, res) => {
     .exec();
 
   try {
-    res.json(message);
+    res.status(201).json({ response: message, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
@@ -79,7 +79,8 @@ app.post("/thoughts", async (req, res) => {
 
   try {
     const saveAllUsermessages = await messages.save();
-    res.json(saveAllUsermessages);
+    res.status(201).json({ response: saveAllUsermessages, success: true });
+
   } catch (error) {
     res
       .status(400)
