@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import listEndpoints from "express-list-endpoints";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -16,7 +17,6 @@ const app = express();
 const ThoughtSchema = new mongoose.Schema({
   user: {
     type: String,
-    default: "Anonymous",
     minlength: 2,
     maxlength: 25,
   },
@@ -53,6 +53,11 @@ app.use((req, res, next) => {
 });
 
 // Start defining your routes here
+
+app.get("/", (req, res) => {
+  res.send(listEndpoints(app));
+});
+
 app.get("/thoughts", async (req, res) => {
   const {
     page,
@@ -77,7 +82,7 @@ app.post("/thoughts", async (req, res) => {
   try {
     const savedThought = await new Thought({
       message,
-      user,
+      user: user || "Anonymous",
     }).save();
     res.status(201).json({
       message: savedThought,
