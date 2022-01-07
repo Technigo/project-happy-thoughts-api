@@ -1,13 +1,13 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This project creates a backend Mongo database with an API hosted on heroku that can receive both GET and POST requests. It is an API to link to the previously built 'happy thoughts' front end, which is a site where happy thoughts can be posted, viewed and liked.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I linked a new Mongo cloud collection into my technigo projects cluster, used postman to send and view the GET and POST results and mongo compass to view the data in the database. I hosted this site on heroku and the front end that uses the API is hosted on netlify.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Frontend: https://sarah-mottram-happy-thoughts.netlify.app/
+
+Backend: https://sarah-mottram-happy-thoughts.herokuapp.com/
