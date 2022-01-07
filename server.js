@@ -69,7 +69,7 @@ app.post('/thoughts', async (req, res) => {
 
   try {
     const newThought = await new Thought({ message, userName }).save();
-    res.status(201).json({ response: newThought, success: true });
+    res.status(201).json({ newThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
