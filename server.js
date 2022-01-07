@@ -42,7 +42,7 @@ app.use(express.json());
 // Start defining your routes here
 app.get("/", (req, res) => {
 	res.send({
-		"Welcome to 450 book reviews - by Linnéa. Full documentation on GitHub 👉  https://github.com/Skrosen/project-mongo-api/blob/master/Documentation.md":
+		"Welcome happy thoughts api - by Linnéa. Full documentation on GitHub 👉  https://github.com/Skrosen/project-happy-thoughts-api/blob/master/Documentation.md":
 			listEndpoints(app),
 	});
 });
