@@ -54,7 +54,7 @@ app.post('/thoughts', async (req, res) => {
   const { message } = req.body;
 
   try {
-    const newThought = await new Thought({ message }).save();
+    const newThought = await new Thought(req.body).save();
     await Thought.deleteOne({});
     res.status(201).json({ response: newThought, success: true });
   } catch (error) {
