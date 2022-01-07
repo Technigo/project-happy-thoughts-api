@@ -49,16 +49,17 @@ app.get('/thoughts', async (req, res) => {
   res.json(thoughts);
 });
 
-// Post thought message and deletes first entry in DB to not max out DB over time
+// Post thought message
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body;
 
   try {
-    const newThought = await new Thought(req.body).save();
-    await Thought.deleteOne({});
-    res.status(201).json({ response: newThought, success: true });
+    const thought = await new Thought(req.body).save();
+    res.status(200).json(thought);
   } catch (error) {
-    res.status(400).json({ response: error, success: false });
+    res
+      .status(400)
+      .json({ message: 'could not save thought', errors: error.errors });
   }
 });
 
