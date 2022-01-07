@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import mongoose, { Schema } from "mongoose";
 
+mongoose.set("useFindAndModify", false);
+
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
@@ -32,7 +34,7 @@ app.use(express.json());
 
 // ROUTES
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find();
+  const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20);
   res.json(thoughts);
 });
 
@@ -65,7 +67,13 @@ app.patch("/thoughts/:id/like", async (req, res) => {
         new: true,
       }
     );
-    res.status(200).json({ response: updatedThought, success: true });
+    if (!updatedThought) {
+      res
+        .status(400)
+        .json({ response: "Hearth not found. Opps!", success: false });
+    } else {
+      res.status(200).json({ response: updatedThought, success: true });
+    }
   } catch (err) {
     res.status(400).json({ response: err, success: false });
   }
