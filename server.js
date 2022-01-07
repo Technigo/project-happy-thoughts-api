@@ -51,13 +51,23 @@ app.get('/', (req, res) => {
 
 // getting all of the thoughts and sorting them
 app.get('/thoughts', async (req, res) => {
-  const { page, perPage } = req.query
-  // omvandlar string to number
-  const pageNumber = Number(page)
-  const perPageNumber = Number(perPage)
+  const { page = 1, limit = 20 } = req.query;
 
-  const thoughts = await Thought.find({}).sort({ createdAt: 'desc' }).skip((pageNumber - 1) * perPageNumber).limit(perPageNumber)
-  res.json(thoughts)
+  try {
+    const thoughts = await Thought.find({})
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .sort({ createdAt: 'desc' })
+      .exec();
+    const count = await Thought.countDocuments();
+    res.json({
+      thoughts,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page
+    })
+  } catch (err) {
+    res.status(400).json({ response: err, success: false });
+  }
 });
 
 // post the message
