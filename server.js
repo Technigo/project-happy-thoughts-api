@@ -6,17 +6,25 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-const Thought = mongoose.model("Thought", {
-    message: String,
+const ThoughtSchema = new mongoose.Schema({
+    message: {
+        type: String,
+        required: true,
+        minlength: 5,
+        maxlength: 140,
+        trim: true,
+    },
     createdAt: {
         type: Date,
-        default: () => new Date(),
+        default: () => new Date(), //or Date.now
     },
     hearts: {
         type: Number,
         default: 0,
     },
 });
+
+const Thought = mongoose.model("Thought", ThoughtSchema);
 
 // Defines the port the app will run on. Defaults to 8080, but can be
 // overridden when starting the server. For example:
@@ -34,15 +42,47 @@ app.get("/", (req, res) => {
     res.send("Hello world");
 });
 
-app.get("/thoughts", (req, res) => {
-    Thought.find().then((thoughts) => {
-        res.json(thoughts);
-    });});
+app.get("/thoughts", async (req, res) => {
+    const thoughts = await Thought.find()
+        .sort({ createdAt: "desc" })
+        .limit(20)
+        .exec();
+    res.json(thoughts);
+});
 
 app.post("/thoughts", async (req, res) => {
-    const thought = new Thought({message: req.body.message});
-    await thought.save()
-    res.json(thought)
+    try {
+        const thought = new Thought({ message: req.body.message });
+        await thought.save();
+        res.status(201).json({ response: thought, success: true });
+    } catch (err) {
+        res.status(400).json({
+            response: "error",
+            errors: err.errors,
+            success: false,
+        });
+    }
+});
+
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+    const { thoughtId } = req.params;
+
+    try {
+        const updatedThought = await Thought.findByIdAndUpdate(
+            thoughtId,
+            {
+                $inc: { hearts: 1 },
+            },
+            { new: true }
+        );
+        res.status(200).json({ response: updatedThought, success: true });
+    } catch (err) {
+        res.status(400).json({
+            response: "error",
+            errors: err.errors,
+            success: false,
+        });
+    }
 });
 
 // Start the server
