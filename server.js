@@ -53,7 +53,7 @@ app.get("/", (req, res) => {
 app.get("/thoughts", async (req, res) => {
   try {
     const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20);
-    res.status(201).json(thoughts);
+    res.json(thoughts);
   } catch (error) {
     res
       .status(404)
@@ -85,6 +85,40 @@ app.post("/thoughts/:thoughtId/hearts", async (req, res) => {
       { new: true }
     );
     res.status(200).json(updatedThought);
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
+});
+
+// Delete Thought by Id
+app.delete("/thoughts/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedThought = await Thought.findOneAndDelete({ _id: id });
+    if (deletedThought) {
+      res.status(200).json(deletedThought);
+    } else {
+      res.status(404).json({ response: "Thought not found", success: false });
+    }
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
+});
+
+// Patch thought message
+app.patch("/thoughts/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    if (updatedThought) {
+      res.json(updatedThought);
+    } else {
+      res.status(404).json({ response: "Thought not found", success: false });
+    }
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
