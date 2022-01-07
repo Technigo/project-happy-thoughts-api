@@ -52,38 +52,38 @@ app.get('/', (req, res) => {
 });
 
 app.get('/thoughts', async (req, res) => {
-  const {
-    sort,
-    page,
-    perPage,
-    pageNum = Number(page),
-    perPageNum = Number(perPage),
-    sortNum = Number(sort),
-  } = req.query; // how many we want to skip and how many we want per page, query params are ALWAYS strings, so we have to turn them into numbers
-
-  // version 1 - mongoose
-  const thoughts = await Thought.find({})
-    .sort({ createdAt: sortNum })
-    .skip((pageNum - 1) * perPageNum)
-    .limit(perPageNum);
-
-  // version 2 -mongo
-  // const thoughts = await Thought.aggregate([
-  //   {
-  //     $sort: {
-  //       createdAt: sortNum,
-  //     },
-  //   },
-  //   {
-  //     $skip: (pageNum - 1) * perPageNum,
-  //   },
-  //   {
-  //     $limit: perPageNum,
-  //   },
-  // ]);
-
-  res.status(200).json({ response: thoughts, success: true });
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20);
+  res.json(thoughts);
 });
+// const {
+//   sort,
+//   page,
+//   perPage,
+//   pageNum = Number(page),
+//   perPageNum = Number(perPage),
+//   sortNum = Number(sort),
+// } = req.query; // how many we want to skip and how many we want per page, query params are ALWAYS strings, so we have to turn them into numbers
+
+// version 1 - mongoose
+// const thoughts = await Thought.find({})
+//   .sort({ createdAt: sortNum })
+//   .skip((pageNum - 1) * perPageNum)
+//   .limit(perPageNum);
+
+// version 2 -mongo
+// const thoughts = await Thought.aggregate([
+//   {
+//     $sort: {
+//       createdAt: sortNum,
+//     },
+//   },
+//   {
+//     $skip: (pageNum - 1) * perPageNum,
+//   },
+//   {
+//     $limit: perPageNum,
+//   },
+// ]);
 
 // version 1 - async/await
 app.post('/thoughts', async (req, res) => {
