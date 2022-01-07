@@ -28,10 +28,7 @@ const ThoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model("Thought", ThoughtSchema);
 
-// Defines the port the app will run on. Defaults to 8080, but can be
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
+// Defines the port the app will run on.
 const port = process.env.PORT || 8080;
 const app = express();
 
@@ -47,6 +44,7 @@ app.get("/", (req, res) => {
 	});
 });
 
+// enpoint showing the latest 20 posts sorted in descending order
 app.get("/thoughts", async (req, res) => {
 	const thoughts = await Thought.find()
 		.sort({ createdAt: "desc" })
@@ -59,6 +57,7 @@ app.get("/thoughts", async (req, res) => {
 	}
 });
 
+//for adding new posts or thoughts to the database
 app.post("/thoughts", async (req, res) => {
 	const { messages } = req.body;
 	const thought = await new Thought({ messages });
@@ -70,10 +69,7 @@ app.post("/thoughts", async (req, res) => {
 	}
 });
 
-// might be using patch to update only one thing, likes, while other like message and createdAt remains the same
-// findOneAndUpdate()
-
-//using mongo operator to increase, $inc.  new is to give back the latest, an option
+//using mongo operator to increase, $inc.  new is used to give back the latest count
 app.post("/thoughts/:messageId/like", async (req, res) => {
 	const { messageId } = req.params;
 	try {

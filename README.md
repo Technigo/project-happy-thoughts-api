@@ -1,16 +1,16 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short
-and to the point.
+Created an API for existing frontend and replaced the old urls in the frontend
+project with this api. The api shows the last 20 posts to the database and keeps
+and shows count on the amount of likes on each post.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used
-to solve it. How did you plan? What technologies did you use? If you had more
-time, what would be next?
+For this project I used mongoose schema and model, mongo operator to increase
+the likes on click and give back the latest count to the user directly.
 
 ## View it live
 
-https://happy-thoughts-api-technigo.herokuapp.com/
+Backend: https://happy-thoughts-api-technigo.herokuapp.com/
+
+Frontend: https://linneawilhelmsson-happy-thoughts.netlify.app/
