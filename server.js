@@ -9,7 +9,7 @@ mongoose.Promise = Promise;
 
 // created schema to make code more reusable
 const ThoughtSchema = new mongoose.Schema({
-	message: {
+	messages: {
 		type: String,
 		required: true,
 		minlength: 5,
@@ -60,8 +60,8 @@ app.get("/thoughts", async (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
-	const { message } = req.body;
-	const thought = await new Thought({ message });
+	const { messages } = req.body;
+	const thought = await new Thought({ messages });
 	try {
 		const savedThought = await thought.save();
 		res.status(201).json({ response: savedThought, success: true });
