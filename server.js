@@ -37,7 +37,6 @@ const Thought = mongoose.model('Thought', {
   }
 })
 
-
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
 //
@@ -59,7 +58,6 @@ app.get('/thoughts', async (req,res) => {
   const allThoughts = await Thought.find().sort({createdAt:'desc'}).limit(20).exec();
   res.json(allThoughts)
 })
-
 
 //endpoint for the user to POST a thought
 app.post ('/thoughts', async (req,res) =>{
@@ -95,6 +93,42 @@ app.post('/thoughts/:thoughtId/like', async (req,res) => {
       } 
   } catch (err) {
     res.status(400).json({message:"Could not add that like to the database", error: err.errors})
+  }
+})
+
+// add patch endpoint to UPDATE a thought
+
+app.patch('/thoughts/:thoughtId', async (req,res) =>{
+  const { thoughtId } = req.params
+
+  try{
+    const updatedThought = await Thought.findByIdAndUpdate(
+      thoughtId,req.body, {new:true})
+      if (updatedThought) {
+        res.json(updatedThought)
+      } else {
+        res.status(404).json({message: "Could not find message" })
+      }
+  } catch (err) {
+    res.status(400).json({message: "invalid request", error: err.errors})
+  }
+
+})
+
+// add delete endpoint to delete a post
+app.delete('/thoughts/:thoughtId', async (req,res) => {
+
+  const { thoughtId } = req.params
+
+  try {
+    const deletedThought = await Thought.findByIdAndDelete(thoughtId)
+    if (deletedThought) {
+      res.json(deletedThought)
+    } else {
+      res.status(404).json({message: "Could not find message" })
+    }
+  } catch (err) {
+    res.status(400).json({message: "invalid request", error: err.errors})
   }
 })
 
