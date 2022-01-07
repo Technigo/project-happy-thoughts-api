@@ -58,16 +58,6 @@ app.get('/thoughts', async (req, res) => {
     .exec()
 
   res.status(200).json(thoughts) // 200 - ok
-
-  // const thoughts = await Thought.find()
-  //   .sort({ createdAt: 'desc' })
-  //   .limit(20)
-  //   .exec()
-  // if (thoughts.length > 0) {
-  //   res.status(200).json(thoughts) // 200 - ok
-  // } else {
-  //   res.status(404).json({ message: 'No posts yet' })
-  // }
 })
 
 // Create a post - with async await
