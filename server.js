@@ -35,7 +35,9 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Happy Thoughts API");
+  res.send(
+    "Happy Thoughts API. To get all the thoughts, please add /thoughts. Frontend project: https://myhappy-thoughts.netlify.app/"
+  );
 });
 
 // Get request
