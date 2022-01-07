@@ -27,7 +27,7 @@ const ThoughtSchema = new mongoose.Schema({
     default: 0,
   },
   createdAt: {
-    type: Number,
+    type: Date,
     default: () => Date.now(),
   },
 });
@@ -51,38 +51,8 @@ app.get('/endpoints', (req, res) => {
 
 // Start defining your routes here
 app.get('/thoughts', async (req, res) => {
-  // const {
-  //   sort,
-  //   page,
-  //   perPage,
-  //   sortNum = Number(sort),
-  //   pageNum = Number(page),
-  //   perPageNum = Number(perPage),
-  // } = req.query;
-
-  // v1 Mongoose
-  const thoughts = await Thought.find({})
-    .sort({ createdAt: 'desc' })
-    // .skip((pageNum - 1) * perPageNum)
-    .limit(20);
-
-  // v2 Mongo
-  // const members = await Member.aggregate([
-  //   {
-  //     $sort: {
-  //       createdAt: sortNum,
-  //     },
-  //   },
-
-  //   {
-  //     $skip: (pageNum - 1) * perPageNum,
-  //   },
-
-  //   {
-  //     $limit: perPageNum,
-  //   },
-  // ]);
-
+  // Mongoose version
+  const thoughts = await Thought.find({}).sort({ createdAt: 'desc' }).limit(20);
   res.status(200).json({ response: thoughts, success: true });
 });
 
@@ -98,39 +68,11 @@ app.post('/thoughts', async (req, res) => {
   }
 });
 
-// // v2 - promises
-// app.post('/members', (req, res) => {
-//   const { name, description } = req.body;
-
-//   new Member({ name, description })
-//     .save()
-//     .then((data) => {
-//       res.status(201).json({ response: data, success: true });
-//     })
-//     .catch((error) => {
-//       res.status(400).json({ response: error, success: false });
-//     });
-// });
-
-// // v3 - mongoose callback
-// app.post('/members', (req, res) => {
-//   const { name, description } = req.body;
-
-//   new Member({ name, description }).save((error, data) => {
-//     if (error) {
-//       res.status(400).json({ response: error, success: false });
-//     } else {
-//       res.status(201).json({ response: data, success: true });
-//     }
-//   });
-// });
-
 // increasing hearts/likes
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params;
   try {
     const updatedThought = await Thought.findByIdAndUpdate(
-      // Argument 1 - id
       thoughtId,
       {
         $inc: {
@@ -147,31 +89,29 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   }
 });
 
-// deleting a thought
-// app.delete('/thoughts/:id', async (req, res) => {
-//   const { id } = req.params;
+// deleting a thought - not implemented in frontend
+app.delete('/thoughts/:id', async (req, res) => {
+  const { id } = req.params;
 
-//   try {
-//     const deletedThought = await Thought.findOneAndDelete({ _id: id });
-//     if (deletedThought) {
-//       res.status(200).json({ response: deletedThought, success: true });
-//     } else {
-//       res
-//         .status(404)
-//         .json({ response: 'Happy thought not found', success: false });
-//     }
-//   } catch (error) {
-//     res.status(400).json({ response: error, success: false });
-//   }
-// });
+  try {
+    const deletedThought = await Thought.findOneAndDelete({ _id: id });
+    if (deletedThought) {
+      res.status(200).json({ response: deletedThought, success: true });
+    } else {
+      res
+        .status(404)
+        .json({ response: 'Happy thought not found', success: false });
+    }
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
+});
 
-// possibility to change a thought after it is posted
+// possibility to change a thought after it is posted - not implemented in frontend
 app.patch('/thoughts/:id', async (req, res) => {
   const { id } = req.params;
   const { message } = req.body;
 
-  // async
-  try {
     const updatedThought = await Thought.findOneAndUpdate(
       { _id: id },
       { message },
@@ -187,19 +127,6 @@ app.patch('/thoughts/:id', async (req, res) => {
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
-
-  // v2 promises
-  // Member.findOneAndUpdate({ _id: id }, { name }, { new: true })
-  //   .then((updatedMember) => {
-  //     if (updatedMember) {
-  //       res.status(200).json({ response: updatedMember, success: true });
-  //     } else {
-  //       res.status(404).json({ response: 'Member not found', success: false });
-  //     }
-  //   })
-  //   .catch((error) => {
-  //     res.status(400).json({ response: error, success: false });
-  //   });
 });
 
 // Start the server
