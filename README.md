@@ -1,12 +1,14 @@
 # Project Happy Thoughts API
 
-The assignment was to build a Restful API that allows users to post data.
+The assignment was to build a Restful API that allows users to post data in a previouse built project - Happy Thoughts.
 
 ## Technologies
 
 MongoDB, Mongoose, API, Express, JavaScript, Node.js
 
 ## Endpoints
+
+Please see Documentation.md for description of endpoints
 
 ### Routes:
 
@@ -18,8 +20,6 @@ POST (/thoughts/:id/like) - allows the user to like a message
 
 Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
 
-### Frontend:
+### Frontend: https://aspen-happy-thought.netlify.app/
 
-### Backend:
-
-### Github frontend:
+### Backend: https://ida-aspen-happy-thoughts.herokuapp.com/
