@@ -14,6 +14,10 @@ mongoose.Promise = Promise
 const port = process.env.PORT || 8080
 const app = express()
 
+// Add middlewares to enable cors and json body parsing
+app.use(cors())
+app.use(express.json())
+
 // Mongoose Schema for Thought model
 const ThoughtSchema = new mongoose.Schema({
   message: {
@@ -37,16 +41,15 @@ const ThoughtSchema = new mongoose.Schema({
 //Mongoose model with Schema
 const Thought = mongoose.model("Thought", ThoughtSchema)
 
-// Add middlewares to enable cors and json body parsing
-app.use(cors())
-app.use(express.json())
-
 // Start defining your routes here
-app.get("/", async (req, res) => {
+app.get("/thoughts", async (req, res) => {
   try {
     // Get 20 latest thoughts in descending order
-    const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20)
-    res.json(thoughts)
+    const thoughtsList = await Thought.find()
+      .sort({ createdAt: "desc" })
+      .limit(20)
+      .exec()
+    res.json(thoughtsList)
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
