@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import listEndpoints from "express-list-endpoints";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -33,7 +34,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("hello");
+  res.send(listEndpoints(app));
 });
 
 app.get("/thoughts", async (req, res) => {
@@ -46,12 +47,17 @@ app.get("/thoughts", async (req, res) => {
     perPageNum = Number(perPage),
   } = req.query;
 
-  const thoughts = await Thought.find({})
+  let thoughts = await Thought.find({})
     .sort({ createdAt: sortNum })
     .skip((pageNum - 1) * perPageNum)
     .limit(perPageNum);
 
-  res.status(200).json({ response: thoughts, success: true });
+  if (thoughts) {
+    thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20);
+    res.status(200).json({ response: thoughts, success: true });
+  } else {
+    res.status(404).json({ response: "Data not found", success: false });
+  }
 });
 
 app.post("/thoughts", async (req, res) => {
