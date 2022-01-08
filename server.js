@@ -63,7 +63,10 @@ app.post('/thoughts', async (req, res) => {
   const { message, name } = req.body; // thought and user name
 
   try {
-    const newThought = await new Thought({ message, name }).save();
+    const newThought = await new Thought({
+      message,
+      name: name || 'Anonymous'
+    }).save();
     res.status(201).json({ newThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
