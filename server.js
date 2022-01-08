@@ -28,7 +28,7 @@ const ThoughtSchema = mongoose.Schema({
 	},
 	createdAt: {
 		type: Date,
-		default: () => new Date(),
+		default: Date.now,
 	},
 });
 
@@ -41,11 +41,24 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-	res.send('Testing, testing');
+	res.send(
+		'Welcome to Beckys Happy Thought API! To see it live go to: https://britishswede-happy-thoughts.netlify.app/'
+	);
 });
 
 // Endpoint to return 20 thoughts
-app.get('/thoughts', (req, res) => {});
+app.get('/thoughts', async (req, res) => {
+	try {
+		const thoughtsList = await Thought.find({})
+			.sort({ createdAt: desc })
+			.limit(20);
+
+		res.status(200).json(thoughtsList);
+	} catch (error) {
+		// If above code is unsuccessful, status code = bad request:
+		res.status(400).json({ response: error, success: false });
+	}
+});
 
 // Endpoint to post new thought
 app.post('/thoughts', async (req, res) => {
@@ -53,14 +66,37 @@ app.post('/thoughts', async (req, res) => {
 
 	try {
 		const newThought = await new Thought({ message }).save();
+
+		//If successful, status code = successful:
 		res.status(201).json({ response: newThought, success: true });
+		console.log(newThought);
 	} catch (error) {
+		// If above code is unsuccessful, status code = bad request:
 		res.status(400).json({ response: error, success: false });
 	}
 });
 
-// Endpoint to post like
-app.post('/thoughts/:thoughtId/like', (req, res) => {});
+// Endpoint to like message
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+	const { thoughtId } = req.params;
+
+	try {
+		const addLike = await Thought.findByIdAndUpdate(
+			// ID of the message to be liked/updated. MANDATORY parameter, what ID the object has!
+			thoughtId,
+			// Increases hearts by 1. MANDATORY parameter, how to update the object!
+			{
+				$inc: { hearts: 1 },
+			},
+			// Returns the modified document instead of the original. OPTIONAL parameter!
+			{ new: true }
+		);
+		res.status(201).json({ response: addLike, success: true });
+	} catch (error) {
+		// If above code is unsuccessful, this happens:
+		res.status(400).json({ response: error, success: false });
+	}
+});
 
 // Start the server
 app.listen(port, () => {
