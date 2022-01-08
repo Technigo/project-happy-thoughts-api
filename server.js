@@ -71,12 +71,12 @@ app.post("/thoughts", async (req, res) => {
 });
 
 // patch request to update document
-app.patch("/thoughts/:id/hearts", async (req, res) => {
-  const { id } = req.params;
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
 
   try {
     const updatedHeart = await Thought.findByIdAndUpdate(
-      id,
+      thoughtId,
       {
         $inc: {
           hearts: 1,
