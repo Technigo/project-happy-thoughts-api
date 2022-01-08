@@ -23,7 +23,7 @@ const ThoughtSchema = new mongoose.Schema({
     maxlength: 140,
     trim: true, //to dublecheck white spaces in beginning and end
   },
-  hearts: {
+  like: {
     type: Number,
     default: 0,
   },
@@ -57,24 +57,27 @@ app.post("/thoughts", async (req, res) => {
   const { message } = req.body
 
   try {
-    await new Thought({ message }).save() //  const newThought = await new Thought ({ name, description }).save()
+    await newThought({ message }).save() //  const newThought = await new Thought ({ name, description }).save()
     res.status(201).json({ response: newThought, success: true })
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
 })
 
-// Post for adding hearts/likes
-app.post("/thoughts/:id/hearts", async (res, req) => {
+// Post for adding hearts/like
+app.post("/thoughts/:id/like", async (res, req) => {
   const { id } = req.params
   try {
-    const updatedHeart = await Thought.findByIdAndUpdate(
+    const updatedLike = await Thought.findByIdAndUpdate(
       id,
-      { $inc: { hearts: 1 } },
-      { new: true }
+      { $inc: { like: 1 } },
+      {
+        new: true,
+      }
     )
-    if (updatedHeart) {
-      res.status(200).json({ response: updatedHeart, success: true })
+
+    if (updatedLike) {
+      res.status(200).json({ response: updatedLike, success: true })
     } else {
       res.status(404).json({ response: "Not found", success: false })
     }
