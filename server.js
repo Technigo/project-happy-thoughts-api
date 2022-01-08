@@ -26,6 +26,9 @@ const ThoughtSchema = new mongoose.Schema({
     maxlength: 140,
     trim: true,
   },
+  author: {
+    type: String,
+  },
   heart: {
     type: Number,
     default: 0,
@@ -67,10 +70,10 @@ app.get("/thoughts", async (req, res) => {
 
 // endpoint to use to post new messages to the API
 app.post("/thoughts", async (req, res) => {
-  const { message } = req.body;
+  const { message, author } = req.body;
 
   try {
-    const newThought = await new Thought({ message }).save();
+    const newThought = await new Thought({ message, author }).save();
     res.status(201).json({ response: newThought, success: true });
   } catch (error) {
     res.status(400).json({
