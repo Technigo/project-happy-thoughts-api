@@ -29,6 +29,11 @@ const ThoughtSchema = new mongoose.Schema({
     type: String,
     default: "neutral",
   },
+  name: {
+    type: String,
+    default: 'Anonymous',
+    minlength: 3,
+  },
   hearts: {
     type: Number,
     default: 0,
@@ -54,10 +59,10 @@ app.get('/thoughts', async (req, res) => {
 });
 
 app.post('/thoughts', async (req, res) => {
-  const { message, typeOfMessage } = req.body;
+  const { message, typeOfMessage, name } = req.body;
 
   try {
-    const newThought = await new Thought({ message, typeOfMessage: typeOfMessage || 'neutral' }).save();
+    const newThought = await new Thought({ message, typeOfMessage: typeOfMessage || 'neutral', name: name || 'Anonymous' }).save();
     res.status(201).json({ response: newThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
