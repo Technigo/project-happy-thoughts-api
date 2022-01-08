@@ -30,6 +30,17 @@ const ThoughtSchema = new mongoose.Schema({
     type: Date,
     default: () => new Date(),
   },
+  tag: {
+    type: String,
+    required: true,
+    enum: ['Family', 'Pets', 'Work/School', 'Love', 'Food', 'Exercise'],
+  },
+  name: {
+    type: String,
+    trim: true,
+    required: true,
+    maxlength: 50,
+  },
 })
 
 const Thought = mongoose.model('Thought', ThoughtSchema)
@@ -54,10 +65,10 @@ app.get('/thoughts', async (req, res) => {
 
 //Create new thought
 app.post('/thoughts', async (req, res) => {
-  const { message } = req.body
+  const { message, tag, name } = req.body
 
   try {
-    const newThought = await new Thought({ message }).save()
+    const newThought = await new Thought({ message, tag, name }).save()
     res.status(201).json({ response: newThought, success: true })
   } catch (error) {
     res.status(400).json({ response: error, success: false })
