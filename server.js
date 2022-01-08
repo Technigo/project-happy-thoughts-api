@@ -1,7 +1,7 @@
 import express from "express"
 import cors from "cors"
 import mongoose from "mongoose"
-// import res from "express/lib/response"
+import listEndpoints from "express-list-endpoints"
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -33,26 +33,25 @@ const ThoughtSchema = new mongoose.Schema({
   },
 
   createdAt: {
-    type: Number,
-    default: Date.now, // type: Date  default: () => Date.now()  // same
+    // type: Number, default: Date.now, same
+    type: Date,
+    default: () => Date.now(),
   },
 })
 
 //Mongoose model with Schema
 const Thought = mongoose.model("Thought", ThoughtSchema)
 
-// Start defining your routes here
+// Lists all of the endpoints
+app.get("/", (req, res) => res.send(listEndpoints(app)))
+
+// Get 20 latest thoughts in descending order
 app.get("/thoughts", async (req, res) => {
-  try {
-    // Get 20 latest thoughts in descending order
-    const thoughtsList = await Thought.find()
-      .sort({ createdAt: "desc" })
-      .limit(20)
-      .exec()
-    res.json(thoughtsList)
-  } catch (error) {
-    res.status(400).json({ response: error, success: false })
-  }
+  const thoughtsList = await Thought.find()
+    .sort({ createdAt: "desc" })
+    .limit(20)
+    .exec()
+  res.status(200).json(thoughtsList)
 })
 
 //  async/await
@@ -68,7 +67,7 @@ app.post("/thoughts", async (req, res) => {
 })
 
 // Post for adding hearts/like
-app.post("/thoughts/:id/like", async (res, req) => {
+app.post("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params
   try {
     const updatedLike = await Thought.findByIdAndUpdate(
