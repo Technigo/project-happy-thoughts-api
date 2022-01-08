@@ -50,7 +50,7 @@ app.get('/endpoints', (req, res) => {
 
 // Get request to get a list of the 20 most recent thoughts
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find({}).sort({ createdAt: -1 }).limit(2)
+  const thoughts = await Thought.find({}).sort({ createdAt: -1 }).limit(20)
   res.status(200).json({ response: thoughts, success: true })
 })
 
@@ -84,6 +84,40 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     );
     if (updatedThought) {
       res.status(200).json({ response: updatedThought, success: true });
+    } else {
+      res.status(404).json({ response: 'No thought found with this id', success: false });
+    }
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
+});
+
+// Post request to delete thought based on id
+app.post('/thoughts/:thoughtId', async (req, res) => {
+  const { thoughtId } = req.params
+
+  try {
+    const deletedThought = await Thought.findOneAndDelete({ _id: thoughtId });
+    if (deletedThought) {
+      res.status(200).json({ response: deletedThought, success: true });
+    } else {
+      res.status(404).json({ response: 'No thought found with this id', success: false });
+    }
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
+});
+
+// Patch request to modify thought
+app.patch('/thoughts/:thoughtId', async (req, res) => {
+  const { thoughtId } = req.params;
+
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate(thoughtId, req.body, {
+      new: true,
+    });
+    if (updatedThought) {
+      res.json(updatedThought);
     } else {
       res.status(404).json({ response: 'No thought found with this id', success: false });
     }

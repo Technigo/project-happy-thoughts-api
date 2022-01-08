@@ -1,6 +1,6 @@
 # Project Happy Thoughts API
 
-An API built with Express and Mongodb that includes GET request endpoints to return data and POST endpoints to create data.
+An API built with Express and Mongodb that includes a GET request endpoint to return data, POST endpoints to create and delete data and a PATCH request endpoint to modify data.
 
 ## The problem
 
@@ -9,6 +9,9 @@ I created a Mongoose model that has properties for the message string, a heart p
  GET /thoughts: To list the 20 most recent thoughts
  POST /thoughts: To post a new thought to the API
  POST /thought/:thoughtId/like: To like a thought with that id
+ POST /thought/:thoughtId: To delete thought based on id
+ PATCH /thought/:thoughtId: To modify thought based on id
+
 
 ## View it live
 
