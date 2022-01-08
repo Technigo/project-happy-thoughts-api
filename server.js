@@ -43,6 +43,21 @@ app.get("/", (req, res) => {
   res.send("Hello world");
 });
 
+app.get("/thoughts", async (req, res) => {
+  try {
+    const allThoughts = await Thought.find()
+      .sort({ createdAt: "desc" })
+      .limit(20);
+    res.status(200).json(allThoughts);
+  } catch (error) {
+    res.status(404).json({
+      message: "Can not find thoughts",
+      errors: error.errors,
+      success: false,
+    });
+  }
+});
+
 // post request for creating new documents
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
@@ -60,9 +75,17 @@ app.patch("/thoughts/:id/hearts", async (req, res) => {
   const { id } = req.params;
 
   try {
-    const updatedHeart = await Thought.findByIdAndUpdate(id, {
-      $inc: { hearts: 1 },
-    });
+    const updatedHeart = await Thought.findByIdAndUpdate(
+      id,
+      {
+        $inc: {
+          hearts: 1,
+        },
+      },
+      {
+        new: true,
+      }
+    );
     res.status(200).json({ response: updatedHeart, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
