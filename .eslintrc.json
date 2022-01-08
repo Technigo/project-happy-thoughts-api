@@ -25,6 +25,7 @@
     "quotes": "off",
     "arrow-body-style": "off",
     "class-methods-use-this": "off",
+    "no-plusplus": "off",
     "brace-style": [
       "error",
       "1tbs",
@@ -32,11 +33,9 @@
         "allowSingleLine": true
       }
     ],
-    "comma-dangle": [
-      "error",
-      "never"
-    ],
+    "comma-dangle": "off",
     "consistent-return": "off",
+    "prefer-destructuring": "off",
     "curly": "error",
     "eol-last": "off",
     "import/extensions": "off",
