@@ -28,9 +28,9 @@ NOTE: The UI is based on Technigo's own design. The assignment was to reproduce 
 
 - The connection from the frontend to the backend took a while to figure out. This kept the app from deploying correctly. The reasons were the following:
   - Forgetting to declare `config vars` in Heroku.
-  - A naming inconsistency between the frontend (`hearts`) and the backend (`heart`).
+  - Naming inconsistency between the frontend (`hearts`) and the backend (`heart`).
 - Managing several inputs (message and user name) through a single handler was difficult. I was created a separated component for the user input at first. But then some classmates suggested simply adding it to the general form. This helped.
-- I still need to figure out how to reset the user name input at the same time.
+- Resetting both inputs upon submitting was also difficult. Inconsistent variable naming in the frontend was the reason for this one.
 
 ## View it live
 
