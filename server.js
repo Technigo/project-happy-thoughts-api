@@ -67,12 +67,12 @@ app.post("/thoughts", async (req, res) => {
 });
 
 // Post method for adding likes/hearts
-app.post("/thoughts/:thoughtId/hearts", async (req, res) => {
-  const { thoughtId } = req.params;
+app.post("/thoughts/:id/hearts", async (req, res) => {
+  const { id } = req.params;
 
   try {
     const updatedThought = await Thought.findByIdAndUpdate(
-      thoughtId,
+      id,
       {
         $inc: { hearts: 1 },
       },
