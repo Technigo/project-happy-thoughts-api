@@ -54,8 +54,7 @@ const thoughtSchema = new mongoose.Schema({
   },
   // possibility to add the author's name to the thought
   author: {
-    type: String,
-    maxlength: 50
+    type: String
   },
   // possibility to add a category to the thought
   category: {

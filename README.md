@@ -2,7 +2,7 @@
 
 In this project I am creating the backend of my own Twitter version, which is focussing on positiviy. It's called the "Happy thoughts API". I used Express and Mongodb to build an API which includes both GET request endpoints to return existing happy thoughts and POST endpoints to create data like new happy thoughts or increase likes on existing thoughts.
 
-The API will be communicating with a frontend I was building in an earlier project (https://nehrwein-happy-thoughts.netlify.app/).
+The API is communicating with a frontend I was building in an earlier project (https://nehrwein-happy-thoughts.netlify.app/).
 
 ## Description
 
