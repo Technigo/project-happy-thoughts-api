@@ -68,10 +68,11 @@ app.post("/thoughts", async (req, res) => {
 app.post("/thoughts/:id/hearts", async (res, req) => {
   const { id } = req.params
   try {
-    const updatedHeart = await Thought.findByIdAndUpdate(id, {
-      $inc: { hearts: 1 },
-    })
-
+    const updatedHeart = await Thought.findByIdAndUpdate(
+      id,
+      { $inc: { hearts: 1 } },
+      { new: true }
+    )
     if (updatedHeart) {
       res.status(200).json({ response: updatedHeart, success: true })
     } else {
