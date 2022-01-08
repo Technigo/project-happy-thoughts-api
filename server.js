@@ -71,7 +71,7 @@ app.post("/thoughts", async (req, res) => {
 });
 
 // patch request to update document
-app.post("/thoughts/:thoughtId/like", async (req, res) => {
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
 
   try {
