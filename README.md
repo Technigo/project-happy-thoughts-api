@@ -1,13 +1,22 @@
 # Project Happy Thoughts API
+I created my own database for the Happy Thoughts project I did as a frontend project during the TEcnigo's Bootcamp.
+I used MongoDB/Mongoose schema and Express.
 
-Replace this readme with your own information about your project.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+FEATURES: 
+- `GET /thoughts` endpoint returns 20 results, ordered by `createdAt` in descending order.
+- `POST /thoughts` endpoint is used to create a new thought, if the input was invalid and the API is returning errors, it sets the response status to `400` (bad request).
+- `POST /thoughts/:id/like"` endpoint is used to increase the number of likes
+- The endpoint to add hearts to a thought returns 'the thought not found' error if the thought was not found.
+- API validates user input and returns appropriate errors if the input is invalid.
 
-## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+
+
+TECH STACK: Nodejs, Express, Mongoose Library, Mongo DB Atlas and Heroku to deploy 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+backend: https://happy-thoughts-api-pde.herokuapp.com/ 
+
+frontend: https://happy-thoughts-pinar.netlify.app 
