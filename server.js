@@ -132,7 +132,7 @@ app.post("/thoughts/:thoughtsId/like", async (req, res) => {
 });
 
 // Endpoint for the frontend to delete a specific message
-app.delete("/thoughts/:thoughtId", async (req, res) => {
+app.delete("/thoughts/:thoughtId/delete", async (req, res) => {
   const { thoughtId } = req.params;
 
   try {

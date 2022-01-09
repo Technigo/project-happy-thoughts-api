@@ -1,13 +1,25 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+In this project, I have created an API with several endpoints for a previuos frontend project (Happy Thoughts project). Instead of using the API given from Technigo, I have created my own one.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Feautures:
 
-## The problem
+- GET request to get all thoughts:
+(https://happythoughts-project-api.herokuapp.com/thoughts)
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+- POST request to add new thoughts:
+(https://happythoughts-project-api.herokuapp.com/thoughts)
+
+- POST request to increase amount of likes:
+https://happythoughts-project-api.herokuapp.com/thoughts/:thoughtsId/like
+
+- DELETE request to errase messages:
+https://happythoughts-project-api.herokuapp.com/thoughts/:thoughtsId/delete
+
+I started by creating a model and a schema, to specify different validation for the properties. I created then the POST request to add new thoughts and increase the amount of likes. The GET request to display the thought is sorted by decreasing dates and has a limit of 20 thoughts. The POST requests have error handling.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Link to the frontend website: https://nifty-blackwell-f65e37.netlify.app/
+
+Visit my deployed API here: https://happythoughts-project-api.herokuapp.com/
