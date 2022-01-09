@@ -48,16 +48,11 @@ app.get('/', (req, res) => {
 
 // Endpoint to return 20 thoughts
 app.get('/thoughts', async (req, res) => {
-	try {
-		const thoughtsList = await Thought.find({})
-			.sort({ createdAt: 'desc' })
-			.limit(20);
+	const thoughtsList = await Thought.find()
+		.sort({ createdAt: 'desc' })
+		.limit(20);
 
-		res.status(200).json(thoughtsList);
-	} catch (error) {
-		// If above code is unsuccessful, status code = bad request:
-		res.status(400).json({ response: error, success: false });
-	}
+	res.status(200).json({ response: thoughtsList, success: true });
 });
 
 // Endpoint to post new thought
