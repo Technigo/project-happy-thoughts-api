@@ -39,12 +39,6 @@ const ThoughtSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-
-  name: {
-    type: String,
-    minlength: 3,
-    unique: true,
-  },
 })
 
 const Thought = mongoose.model('Thought', ThoughtSchema)
@@ -60,12 +54,19 @@ app.get('/', (req, res) => {
 
 // endpoint for users to fetch the most recent 20 thoughts
 app.get("/thoughts", async (req, res) => {
-  const allThoughts = await Thought.find()
-    .sort({ createdAt: "desc" })
-    .limit(20)
-    .exec()
-  res.json(allThoughts)
-});
+  try {
+    const allThoughts = await Thought.find()
+      .sort({ createdAt: "desc" })
+      .limit(20)
+    res.status(200).json(allThoughts)
+  } catch (error) {
+    res.status(404).json({
+      message: "Can not find thoughts",
+      errors: error.errors,
+      success: false,
+    })
+  }
+})
 
 app.post('/thoughts', async (req, res) => {
   const { message, name } = req.body
@@ -78,12 +79,12 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-app.post("/thoughts/:id/like", async (req, res) => {
-  const { id } = req.params
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params
 
   try {
     const likedThought = await Thought.findByIdAndUpdate(
-      id,
+      thoughtId,
       { $inc: { hearts: 1 } },
       { new: true }
     )
