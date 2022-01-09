@@ -44,7 +44,6 @@ const ThoughtSchema = new mongoose.Schema({
     type: String,
     minlength: 3,
     unique: true,
-    default: "Anonymous",
   },
 })
 
@@ -56,12 +55,44 @@ app.use(express.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Hello my dear people out there, this is my API to the happy thought project')
 })
 
-app.post('/thoughts', (req, res) => {
+app.post('/thoughts', async (req, res) => {
+  const { message, name } = req.body
 
+  try {
+    const newThought = await new Thought({ message, name }).save()
+    res.status(201).json({ response: newThought, success: true})
+  } catch (error) {
+    res.status(400).json({ response: error, success: false})
+  }
 })
+
+app.post("/thoughts/:id/like", async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const likedThought = await Thought.findByIdAndUpdate(
+      id,
+      { $inc: { hearts: 1 } },
+      { new: true }
+    )
+    if (likedThought) {
+      res.status(201).json(likedThought)
+    } else {
+      res.status(404).json({ message: "Not found!" })
+    }
+  } catch (err) {
+    res
+      .status(400)
+      .json({
+        message: "Could not add that like to the database",
+        error: err.errors,
+      })
+  }
+})
+
 // Start the server
 app.listen(port, () => {
   // eslint-disable-next-line
