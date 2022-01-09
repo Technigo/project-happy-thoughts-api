@@ -58,6 +58,15 @@ app.get('/', (req, res) => {
   res.send('Hello my dear people out there, this is my API to the happy thought project')
 })
 
+// endpoint for users to fetch the most recent 20 thoughts
+app.get("/thoughts", async (req, res) => {
+  const allThoughts = await Thought.find()
+    .sort({ createdAt: "desc" })
+    .limit(20)
+    .exec()
+  res.json(allThoughts)
+});
+
 app.post('/thoughts', async (req, res) => {
   const { message, name } = req.body
 
