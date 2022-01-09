@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import listEndpoints from 'express-list-endpoints';
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -21,7 +22,17 @@ const ThoughtSchema = new mongoose.Schema({
 		maxlength: 140,
 		trim: true,
 		required: true,
-		//enum:['Food thoughts','Project thoughts', 'Home thoughts','Travel thoughts']
+	},
+	categories: {
+		type: String,
+		enum: [
+			'Food thought',
+			'Project thought',
+			'Meditation thought',
+			'Travel thought',
+			'Other thought',
+		],
+		required: true,
 	},
 	hearts: {
 		type: Number,
@@ -30,6 +41,10 @@ const ThoughtSchema = new mongoose.Schema({
 	createdAt: {
 		type: Number,
 		default: () => Date.now(),
+	},
+	author: {
+		type: String,
+		default: 'Anonymous',
 	},
 });
 
@@ -45,6 +60,11 @@ app.get('/', (req, res) => {
 	res.send(
 		'Hello world, Welcome to Madelene Happy Thoughts API  - see this API live at 👉:https://mt-dotse-happy-thoughts.netlify.app/'
 	);
+});
+
+//Endpoint showing all the possible enpoints in the app
+app.get('/endpoints', (req, res) => {
+	res.send(listEndpoints(app));
 });
 
 //Endpoint to get the most recent 20 thoughts
@@ -64,12 +84,16 @@ app.get('/thoughts', async (req, res) => {
 	}
 });
 
-//Endpoint to post messages
+//Endpoint to post messages, categories, author
 // async/await form
 app.post('/thoughts', async (req, res) => {
-	const { message } = req.body;
+	const { message, categories, author } = req.body;
 	try {
-		const newThought = await new Thought({ message }).save();
+		const newThought = await new Thought({
+			message,
+			author,
+			categories: categories || 'neutral',
+		}).save();
 		//status (201) indicates success, more specific than (200)
 		res.status(201).json({ response: newThought, success: true });
 	} catch (error) {
