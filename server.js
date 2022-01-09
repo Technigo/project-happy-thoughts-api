@@ -50,7 +50,7 @@ app.get('/', (req, res) => {
 app.get('/thoughts', async (req, res) => {
 	try {
 		const thoughtsList = await Thought.find({})
-			.sort({ createdAt: desc })
+			.sort({ createdAt: 'desc' })
 			.limit(20);
 
 		res.status(200).json(thoughtsList);
@@ -69,7 +69,6 @@ app.post('/thoughts', async (req, res) => {
 
 		//If successful, status code = successful:
 		res.status(201).json({ response: newThought, success: true });
-		console.log(newThought);
 	} catch (error) {
 		// If above code is unsuccessful, status code = bad request:
 		res.status(400).json({ response: error, success: false });
