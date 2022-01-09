@@ -40,7 +40,9 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello world");
+  res.send(
+    "Hello world, welcome to this happy thoughts api made by Amanda Tilly. See it in action here: https://happythoughts-amandatilly.netlify.app/"
+  );
 });
 
 app.get("/thoughts", async (req, res) => {
@@ -66,7 +68,11 @@ app.post("/thoughts", async (req, res) => {
     const newThought = await new Thought({ message }).save();
     res.status(201).json({ response: newThought, success: true });
   } catch (error) {
-    res.status(400).json({ response: error, success: false });
+    res.status(400).json({
+      message: "Can not post message",
+      response: error,
+      success: false,
+    });
   }
 });
 
@@ -88,7 +94,11 @@ app.patch("/thoughts/:thoughtId/like", async (req, res) => {
     );
     res.status(200).json({ response: updatedHeart, success: true });
   } catch (error) {
-    res.status(400).json({ response: error, success: false });
+    res.status(400).json({
+      message: "Can not like thought",
+      response: error,
+      success: false,
+    });
   }
 });
 
