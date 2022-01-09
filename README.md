@@ -1,13 +1,13 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+I created a database for the Happy Thoughts project I did a few months ago using MongoDB/Mongoose and Express.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+This was the first time I made a database on my own. I used Mongoose schema and model. I used catch/error for the first time to show different status codes depending on the outcome.
+
+If I had more time I would have added the possibility to add a tag to the thought, and also the option to add a name.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://britishswede-happy-thought-api.herokuapp.com/
