@@ -4,7 +4,13 @@ This week the assignment was to use Express and Mongo DB to build an API that in
 
 ## Problem
 
-The fundamental idea is for this to be an API used for a previous frontend project called Happy Thoughts - a twitter like site focusing on positivity and friendliness where the user can post own thoughts, and read and like thoughts from others.
+The fundamental idea is for this to be an API, used for a previous frontend project called Happy Thoughts - a twitter like site focusing on positivity and friendliness where the user can post own thoughts, and read and like thoughts from others.
+
+Learning objectives:
+
+How to build a full API which includes handling of user input
+How to include error handling to return good validation errors
+How to build an API which works well with an existing frontend
 
 ## API Documentation
 
@@ -14,11 +20,6 @@ GET /thoughts - endpoint which returns a maximum of 20 thoughts, sorted by `crea
 
 POST /thoughts - endpoint to post new thoughts
 POST thoughts/:thoughtId/like - endpoint to add a heart/like
-
-##Tech
-
-
-
 
 ## View it live
 
