@@ -1,13 +1,23 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+In this project, I have used Express and MongoDB to build an API that includes both GET request endpoints to return data and POST endpoints to create data.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## Endpoints
 
-## The problem
+GET /
+Welcome page
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+GET /thoughts
+Returns 20 messages in the database, sorted to show the most recent messages first.
+
+POST /thoughts
+This endpoint expects a JSON body with the thought message, like this: { "message": "Express is great!" }. If the input is valid, the thought will be saved.
+→ Min length of 5 characters
+→ Max length of 140 characters
+
+PATCH /thoughts/:thoughtId/like
+Given a valid thought id in the URL, the API finds that thought, and updates its hearts property to add one heart. An error message will show when the id is invalid or no message is found with the provided id.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://amandatilly-happy-thoughts-api.herokuapp.com/
