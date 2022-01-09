@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import { findConfigUpwards } from "@babel/core/lib/config/files";
 
 // mongoURL is the address of my database in my local machine
 const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1/happyThoughts";
@@ -12,105 +13,140 @@ const port = process.env.PORT || 8080;
 const app = express();
 
 // Schema: part of the Model
-const MemberSchema = new mongoose.Schema({
-  name: {
+const ThoughtsSchema = new mongoose.Schema({
+  message: {
     type: String,
     required: true, //it requires a new memeber name, otherwise, mongo throws an error
     unique: true, // mongo double checks if that name already exists or not
-    enum: ["Jennie", "Matilda", "Karin", "Maksymilian"],
-  },
-  description: {
-    type: String,
     minlength: 5, //watch out lowercase
-    maxlength: 10,
+    maxlength: 140,
     trim: true, //deletes white spaces that we make by mistake
   },
-  score: {
+
+  hearts: {
     type: Number,
     default: 0,
   },
+
   createdAt: {
     type: Number,
-    default: () => Date.now(),
+    default: () => Date.now(), // or default: Date.now,
+    required: true,
   },
 });
 
-// Model
-const Member = mongoose.model("Member", MemberSchema);
+// A Model called Thought and the model must use the schema I created above called ThoughtSchema
+const Thought = mongoose.model("Thought", ThoughtsSchema);
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
 
+// ENDPOINTS:
+
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo! Here we go!");
+  res.send(
+    "Hello everyone! I am Fatima and this is my Happy Thoughts API! Making API's is cool!"
+  );
 });
 
+//  Endpoint for the frontend to get the most recent 20 thoughts which are saved into the database (by doing .save() we save it into the DB)
+app.get("/thoughts", async (req, res) => {
+  try {
+    const allThoughts = await Thought.find()
+      .sort({ createdAt: "desc" })
+      .limit(20);
+    res.status(200).json(allThoughts);
+  } catch (error) {
+    res.status(404).json({
+      response: error,
+      success: false,
+    });
+  }
+});
+
+// Endpoint for the frontend to post a message into the database
 // v1: post request using async await
-app.post("/members", async (req, res) => {
-  const { name, description } = req.body;
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body;
 
   try {
-    const newMember = await new Member({ name, description }).save();
-    res.status(201).json({ response: newMember, success: true });
+    const newThought = await new Thought({ message: message }).save();
+    res.status(201).json({ response: newThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
 });
 
 // v2: post request using promises
+// app.post('/thoughts', (req, res) => {
+// 	const { message} = req.body;
 
-// app.post('/members', (req, res) => {
-//   const { name, description } = req.body;
-
-//   new Member( { name, description }).save()
-
-//   .then(data => {
-//     res.status(201).json({ response: data, success: true });
-//   })
-//   .catch(error => {
-//     res.status(400).json({ response: error, success: false });
-//   })
+// 	new Thought({ message })
+// 		.save()
+// 		.then((data) => {
+// 			res.status(201).json({ response: data, success: true });
+// 		})
+// 		.catch((error) => {
+// 			res.status(400).json({ response: error, success: false });
+// 		});
 // });
 
-// v3: mongoose callback
-// app.post('/members', (req, res) => {
-//   const { name, description } = req.body;
+// v3: post request using mongoose callback
+// app.post('/thought', (req, res) => {
+// 	const { message  } = req.body;
 
-//   new Member({ name, description })
-//   .save((error, data) => {
+// 	new Thought({ message}).save((error, data) => {
+// 		if (error) {
+// 			res.status(400).json({ response: error, success: false });
+// 		} else {
+// 			res.status(201).json({ response: data, success: true });
+// 		}
+// 	});
+// });
 
-//     if (error) {
-//       res.status(400).json( { response: error, success: false });
-//     } else {
-//       res.status(201).json( { response: data, sucess: true });
-//     }
+// Enpoint for the frontend to increase (update) the hearts/likes
+app.post("/thoughts/:thoughtsId/like", async (req, res) => {
+  const { thoughtsId } = req.params;
 
-//   })
-// })
-
-// updating existing data (post or patch)
-app.post("/members/:id/score", async (req, res) => {
-  const { id } = req.params;
-  
   try {
-    const updatedMember = await Member.findByIdAndUpdate( //mongoose queries: findByIdAndUpdate: it saves internally so we don't need to save
-      id,
-      {
-        $inc: {
-          score: 1,
-        },
-      },
-
-      {
-        new: true,
-      }
+    const updatedHeart = await Thought.findByIdAndUpdate(
+      thoughtsId,
+      { $inc: { hearts: 1 } },
+      { new: true }
     );
 
-    res.status(200).json({ response: updatedMember, success: true });
+    if (updatedHeart) {
+      res.status(201).json({ response: updatedHeart, success: true });
+    } else {
+      res.status(404).json({ response: " ID not found!", success: false });
+    }
   } catch (error) {
-    res.status(400).json({ response: error, success: false });
+    res.status(400).json({
+      message: "Can not update the heart/like",
+      response: error,
+      success: false,
+    });
+  }
+});
+
+// Endpoint for the frontend to delete a specific message
+app.delete("/thoughts/:thoughtId", async (req, res) => {
+  const { thoughtId } = req.params;
+
+  try {
+    const deletedThought = await Thought.findByIdAndDelete(thoughtId);
+
+    if (deletedThought) {
+      res.status(200).json({ response: deletedThought, success: true });
+    } else {
+      res.status(404).json({ response: "Message not found!", success: false });
+    }
+  } catch (error) {
+    res
+      .status(400)
+      .json({ message: "invalid request", response: error, success: false });
   }
 });
 
