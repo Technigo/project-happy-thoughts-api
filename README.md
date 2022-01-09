@@ -1,13 +1,21 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Backend project making a custom database with MongoDB/Mongoose for connecting to previous Happy Thoughts project.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Connected my database at the start with the project and used postman and mongoDB compass for testing. Had to push to github all through development because my local database just kept on crashing, might be something with my mac m1. So there's alot of "test" commits in this project.
+Deployed to heroku and connected the new URL to https://github.com/dandeloid/project-happy-thoughts.
+
+Added endpoints with methods:
+
+GET - List messages limited to 20
+POST - Create thought messages
+POST - Adding likes/hearts for messages
+DELETE - Remove message
+PATCH - Change message
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+backend: https://happy-t-api.herokuapp.com/thoughts
+frontend: https://vibrant-poincare-2ba27b.netlify.app/
