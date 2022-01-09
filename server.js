@@ -59,7 +59,7 @@ app.post("/thoughts", async (req, res) => {
   const { message } = req.body
 
   try {
-    await newThought({ message }).save() //  const newThought = await new Thought ({ name, description }).save()
+    const newThought = await new Thought({ message }).save()
     res.status(201).json({ response: newThought, success: true })
   } catch (error) {
     res.status(400).json({ response: error, success: false })
@@ -89,21 +89,21 @@ app.post("/thoughts/:id/like", async (req, res) => {
 })
 
 // Delete Thought by Id
-app.delete("/thoughts/:id"),
-  async (req, res) => {
-    const { id } = req.params
+// app.delete("/thoughts/:id"),
+//   async (req, res) => {
+//     const { id } = req.params
 
-    try {
-      const deletedThought = await Thought.findOneAndDelete({ _id: id })
-      if (deletedThought) {
-        res.status(200).json({ response: deletedThought, success: true })
-      } else {
-        res.status(404).json({ response: "Thought not found", success: false })
-      }
-    } catch (error) {
-      res.status(400).json({ response: error, success: false })
-    }
-  }
+//     try {
+//       const deletedThought = await Thought.findOneAndDelete({ _id: id })
+//       if (deletedThought) {
+//         res.status(200).json({ response: deletedThought, success: true })
+//       } else {
+//         res.status(404).json({ response: "Thought not found", success: false })
+//       }
+//     } catch (error) {
+//       res.status(400).json({ response: error, success: false })
+//     }
+//   }
 
 // Start the server
 app.listen(port, () => {
