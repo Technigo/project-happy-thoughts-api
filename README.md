@@ -20,6 +20,6 @@ I started by creating a model and a schema, to specify different validation for 
 
 ## View it live
 
-Link to the frontend website: https://nifty-blackwell-f65e37.netlify.app/
+Link to the frontend website: https://my-happy-thoughts-place.netlify.app/
 
 Visit my deployed API here: https://happythoughts-project-api.herokuapp.com/
