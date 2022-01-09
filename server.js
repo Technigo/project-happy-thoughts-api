@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose, { Schema } from "mongoose";
 
+//This needs to be added to disable the warning when using findByIdAndUpdated
 mongoose.set("useFindAndModify", false);
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
