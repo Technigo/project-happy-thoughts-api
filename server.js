@@ -54,8 +54,6 @@ app.get('/thoughts', async (req, res) => {
     .skip((pageNum - 1) * perPageNum)
     .limit(perPageNum)
 
-  // when to use exec()???
-
   res.status(200).json({ response: thoughts, success: true })
 })
 
@@ -111,7 +109,6 @@ app.patch('/thoughts/:thoughtId', async (req, res) => {
       { _id: thoughtId },
       { message },
       { new: true },
-      // { useFindAndModify: false },
     )
     if (updatedThought) {
       res.status(200).json({ result: updatedThought, success: true })
