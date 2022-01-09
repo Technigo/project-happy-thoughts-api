@@ -23,17 +23,17 @@ const ThoughtSchema = new mongoose.Schema({
 		trim: true,
 		required: true,
 	},
-	categories: {
-		type: String,
-		enum: [
-			'Food thought',
-			'Project thought',
-			'Meditation thought',
-			'Travel thought',
-			'Other thought',
-		],
-		required: true,
-	},
+	// categories: {
+	// 	type: String,
+	// 	enum: [
+	// 		'Food thought',
+	// 		'Project thought',
+	// 		'Meditation thought',
+	// 		'Travel thought',
+	// 		'Other thought',
+	// 	],
+	// 	required: true,
+	// },
 	hearts: {
 		type: Number,
 		default: 0,
@@ -92,7 +92,6 @@ app.post('/thoughts', async (req, res) => {
 		const newThought = await new Thought({
 			message,
 			author,
-			categories: categories || 'neutral',
 		}).save();
 		//status (201) indicates success, more specific than (200)
 		res.status(201).json({ response: newThought, success: true });
