@@ -61,7 +61,7 @@ app.get("/thoughts", async (req, res) => {
     res.status(200).json(allThoughts)
   } catch (error) {
     res.status(404).json({
-      message: "Can not find thoughts",
+      message: "Cannot find thoughts",
       errors: error.errors,
       success: false,
     })
