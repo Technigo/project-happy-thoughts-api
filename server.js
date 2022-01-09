@@ -52,7 +52,7 @@ app.get('/thoughts', async (req, res) => {
 		.sort({ createdAt: 'desc' })
 		.limit(20);
 
-	res.status(200).json({ response: thoughtsList, success: true });
+	res.json(thoughtsList);
 });
 
 // Endpoint to post new thought
