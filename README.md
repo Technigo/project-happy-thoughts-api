@@ -23,6 +23,6 @@ The fundamental idea is for this to be an API, used for a previous frontend proj
 
 ## View it live
 
-* Link to API: https://project-happy-thoughts--api.herokuapp.com
-* Link to API endpoint of thoughts: https://project-happy-thoughts--api.herokuapp.com/endpoints
-* Link to fullstack project: https://my-happy-thought.netlify.app/
+* [Link to API](https://project-happy-thoughts--api.herokuapp.com)
+* [Link to API endpoint of thoughts](https://project-happy-thoughts--api.herokuapp.com/endpoints)
+* [Link to fullstack project](https://my-happy-thought.netlify.app/)
