@@ -9,14 +9,11 @@ FEATURES:
 - GET request to allow the user to retrive a maximum of 20 thoughts that has been sorted by createdAt and will show the most recent thoughts first.
 (https://happythoughts-project-api.herokuapp.com/thoughts)
 
-- POST request to allow the user to add new thoughts:
-(https://happythoughts-project-api.herokuapp.com/thoughts)
+- POST request to allow the user to add new thoughts: /thoughts
 
-- POST request to allow the user to increase the number of likes:
-https://happythoughts-project-api.herokuapp.com/thoughts/:thoughtsId/like
+- POST request to allow the user to increase the number of likes: /thoughts/:thoughtsId/like
 
-- DELETE request to allow the user to delete a message based on the given id:
-https://happythoughts-project-api.herokuapp.com/thoughts/:thoughtsId/delete
+- DELETE request to allow the user to delete a message based on the given id: /thoughts/:thoughtsId/delete
 
 TECH STACK:
 Node.js
