@@ -83,7 +83,7 @@ app.post('/thoughts/:thoughtID/like', async (req, res) => {
   }
 });
 
-app.delete('/thought/:id', async (req, res) => {
+app.delete('/thoughts/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const deleteThought = await Thought.findByIdAndDelete({ _id: id });
@@ -97,7 +97,7 @@ app.delete('/thought/:id', async (req, res) => {
   }
 });
 
-app.patch('/thought/:id', async (req, res) => {
+app.patch('/thoughts/:id', async (req, res) => {
   const { id } = req.params;
   const { message } = req.body;
 
