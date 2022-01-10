@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import listEndpoints from 'express-list-endpoints'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -47,6 +48,11 @@ app.use(cors())
 app.use(express.json())
 
 // Start defining your routes here
+app.get('/', (req, res) => {
+  res.send(listEndpoints(app))
+})
+
+
 app.get('/thoughts', async (req, res) => {
   try {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
@@ -56,7 +62,7 @@ app.get('/thoughts', async (req, res) => {
   })
   } catch (error) {
     res.status(400).json({
-      response: error.error,
+      response: error,
       success: false
     })
   }
