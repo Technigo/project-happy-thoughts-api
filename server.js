@@ -55,7 +55,33 @@ app.get('/', (req, res) => {
 
 app.get('/thoughts', async (req, res) => {
   try {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+  const { page, perPage, pageNum = +page, perPageNum = +perPage } = req.query
+
+
+  //v1 mongoose
+
+  const thoughts = await Thought.find()
+  .sort({ createdAt: 'desc' })
+  .skip((pageNum - 1) * perPageNum)
+  .limit(perPageNum)
+  .exec()
+
+  //v2 mongo
+  
+  // const thoughts = await Thought.aggregate([
+  //   {
+  //     $sort: {
+  //       createdAt: 1,
+  //     }
+  //   },
+  //   {
+  //     $skip: (pageNum -1) * perPageNum,
+  //   },
+  //   {
+  //     $limit: perPageNum,
+  //   }
+  // ])
+
   res.status(200).json({
     response: thoughts,
     success: true
@@ -68,13 +94,92 @@ app.get('/thoughts', async (req, res) => {
   }
 })
 
+// delete endpoint 
+
+app.delete('/thoughts/:id', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const deletedThought = await Thought.findOneAndDelete({ _id: id })
+    if (deletedThought) {
+      res.status(200).json({
+          response: deletedThought,
+          success: true 
+      })
+    } else {
+      res.status(404).json({
+        response: 'Thought not found!',
+        success: false
+      })
+    }
+  } catch (error) {
+    res.status(400).json({
+      response: error,
+      success: false
+    })
+  }
+})
+
+//edit thought endpoint
+
+app.patch('/thoughts/:id', async (req, res) => {
+  const { id } = req.params
+  const { name, message } = req.body
+
+  //v1 async await
+  try {
+    const updatedThought = await Thought.findOneAndUpdate({ _id: id }, { name, message }, { new: true })
+    if (updatedThought) {
+      res.status(200).json({
+        response: updatedThought,
+        success: true
+      })
+    } else {
+      res.status(404).json({
+        response: 'Thought not found!',
+        success: false
+       })
+      }
+    }
+    catch (error) {
+        res.status(400).json({ 
+          response: error, 
+          success: false
+         })
+  }
+  
+
+  //v2 promise
+
+  // Thought.findOneAndUpdate({ _id: id }, { name, message }, { new: true })
+  // .then(updatedThought => {
+  //   if (updatedThought) {
+  //   res.status(200).json({
+  //     response: updatedThought,
+  //     success: true
+  //   })
+  // } else {
+  //   res.status(404).json({
+  //     response: 'Thought not',
+  //     success: false
+  //   })
+  // }
+  // })
+  // .catch(error => {
+  //   res.status(400).json({ 
+  //     response: error, 
+  //     success: false
+  //    })
+  // })
+})
+
 // post endpoint (V1 async await)
 
 app.post('/thoughts', async (req, res) => {
-   const { message, category, name } = req.body
+   const { name, message, category } = req.body
 
   try {
-    const newThought = await new Thought({ message, category, name }).save()
+    const newThought = await new Thought({ name, message, category }).save()
     res.status(201).json({ 
       response: newThought, 
       success: true 
