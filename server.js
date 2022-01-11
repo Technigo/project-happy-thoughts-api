@@ -48,9 +48,14 @@ app.use(express.json())
 
 // Start defining your routes here
 app.get('/', async (req, res) => {
+  const { page, perPage, pageNum = +page, perPageNum = +perPage } = req.query //querys are always strings!
+
   try {
-    const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20)
-    res.json(thoughts)
+    const thoughts = await Thought.find({})
+      .sort({ createdAt: 'desc' })
+      .skip(pageNum - 1 * perPageNum) //page-1 makes it not skip first page
+      .limit(perPageNum)
+    res.status(200).json(thoughts)
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
