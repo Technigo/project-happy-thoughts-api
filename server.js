@@ -36,6 +36,7 @@ const ThoughtsSchema = new mongoose.Schema({
 
   author: {
     type: String,
+    minlength: 1,
     default: "Anonymous",
   }
 });
@@ -73,13 +74,13 @@ app.get("/thoughts", async (req, res) => {
   }
 });
 
-// Endpoint for the frontend to post a message into the database
+// Endpoint for the frontend to post a message plus the name of the author into the database
 // v1: post request using async await
 app.post("/thoughts", async (req, res) => {
   const { message, author } = req.body;
 
   try {
-    const newThought = await new Thought({ message: message, author }).save();
+    const newThought = await new Thought({ message: message, author: author|| "Anonymous",}).save();
     res.status(201).json({ response: newThought, success: true });
 
   } catch (error) {
