@@ -63,11 +63,19 @@ app.get("/", (req, res) => {
 
 // endpoint for users to fetch the most recent 20 thoughts
 app.get("/thoughts", async (req, res) => {
-  const allThoughts = await Thought.find()
-    .sort({ createdAt: "desc" })
-    .limit(20) // this sets the max message count at 20
-    .exec();
-  res.json(allThoughts);
+  try {
+    const allThoughts = await Thought.find()
+      .sort({ createdAt: "desc" })
+      .limit(20) // this sets the max message count at 20
+      .exec();
+    res.json(allThoughts);
+  } catch (err) {
+    res.status(404).json({
+      message: "Can not retrieve thoughts!",
+      error: err.errors,
+      success: false,
+    });
+  }
 });
 
 //endpoint for the user to POST a thought
@@ -82,14 +90,16 @@ app.post("/thoughts", async (req, res) => {
       message,
       name: name || "Anonymous",
     }).save();
-    res.status(201).json(savedThought); // 201 status code means somethng has been successfully created
+    res.status(201).json({
+      response: savedThought,
+      success: true,
+    }); // 201 status code means something has been successfully created
   } catch (err) {
-    res
-      .status(400)
-      .json({
-        message: "Could not save thought to the database",
-        error: err.errors,
-      });
+    res.status(400).json({
+      message: "Could not save thought to the database",
+      error: err.errors,
+      success: false,
+    });
   }
 });
 
@@ -104,17 +114,22 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
       { new: true }
     );
     if (likedThought) {
-      res.status(201).json(likedThought);
+      res.status(201).json({
+        response: likedThought,
+        success: true,
+      });
     } else {
-      res.status(404).json({ message: "Not found!" });
+      res.status(404).json({
+        message: "Not found!",
+        success: false,
+      });
     }
   } catch (err) {
-    res
-      .status(400)
-      .json({
-        message: "Could not add that like to the database",
-        error: err.errors,
-      });
+    res.status(400).json({
+      message: "Could not add that like to the database",
+      error: err.errors,
+      success: false,
+    });
   }
 });
 
@@ -130,12 +145,19 @@ app.patch("/thoughts/:thoughtId", async (req, res) => {
       { new: true }
     );
     if (updatedThought) {
-      res.json(updatedThought);
+      res.json({response: updatedThought, success: true});
     } else {
-      res.status(404).json({ message: "Could not find message" });
+      res.status(404).json({
+        message: "Could not find message",
+        success: false,
+      });
     }
   } catch (err) {
-    res.status(400).json({ message: "invalid request", error: err.errors });
+    res.status(400).json({
+      message: "invalid request",
+      error: err.errors,
+      success: false,
+    });
   }
 });
 
@@ -146,12 +168,12 @@ app.delete("/thoughts/:thoughtId", async (req, res) => {
   try {
     const deletedThought = await Thought.findByIdAndDelete(thoughtId);
     if (deletedThought) {
-      res.json(deletedThought);
+      res.json({response: deletedThought, success: true});
     } else {
-      res.status(404).json({ message: "Could not find message" });
+      res.status(404).json({ message: "Could not find message", success: false, });
     }
   } catch (err) {
-    res.status(400).json({ message: "invalid request", error: err.errors });
+    res.status(400).json({ message: "invalid request", error: err.errors, success: false, });
   }
 });
 
