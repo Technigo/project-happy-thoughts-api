@@ -33,6 +33,11 @@ const ThoughtsSchema = new mongoose.Schema({
     default: () => Date.now(), // or default: Date.now,
     required: true,
   },
+
+  author: {
+    type: String,
+    default: "Anonymous",
+  }
 });
 
 // A Model called Thought and the model must use the schema I created above called ThoughtSchema
@@ -42,22 +47,24 @@ const Thought = mongoose.model("Thought", ThoughtsSchema);
 app.use(cors());
 app.use(express.json());
 
-// ENDPOINTS:
 
-// Start defining your routes here
+// ------ ENDPOINTS SECTION ------
+
 app.get("/", (req, res) => {
   res.send(
-    "Hello everyone! I am Fatima and this is my Happy Thoughts API! Making API's is cool!"
+    "Hello everyone! I am Fatima and this is my Happy Thoughts API! Making API's is cool! -  see this API live at https://my-happy-thoughts-place.netlify.app/"
   );
 });
 
 //  Endpoint for the frontend to get the most recent 20 thoughts which are saved into the database (by doing .save() we save it into the DB)
 app.get("/thoughts", async (req, res) => {
+
   try {
     const allThoughts = await Thought.find()
       .sort({ createdAt: "desc" })
       .limit(20);
     res.status(200).json(allThoughts);
+
   } catch (error) {
     res.status(404).json({
       response: error,
@@ -69,11 +76,12 @@ app.get("/thoughts", async (req, res) => {
 // Endpoint for the frontend to post a message into the database
 // v1: post request using async await
 app.post("/thoughts", async (req, res) => {
-  const { message } = req.body;
+  const { message, author } = req.body;
 
   try {
-    const newThought = await new Thought({ message: message }).save();
+    const newThought = await new Thought({ message: message, author }).save();
     res.status(201).json({ response: newThought, success: true });
+
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
@@ -106,6 +114,7 @@ app.post("/thoughts", async (req, res) => {
 // 	});
 // });
 
+
 // Enpoint for the frontend to increase (update) the hearts/likes
 app.post("/thoughts/:thoughtsId/like", async (req, res) => {
   const { thoughtsId } = req.params;
@@ -119,9 +128,11 @@ app.post("/thoughts/:thoughtsId/like", async (req, res) => {
 
     if (updatedHeart) {
       res.status(201).json({ response: updatedHeart, success: true });
+
     } else {
       res.status(404).json({ response: " ID not found!", success: false });
     }
+
   } catch (error) {
     res.status(400).json({
       message: "Can not update the heart/like",
@@ -140,13 +151,13 @@ app.delete("/thoughts/:thoughtId/delete", async (req, res) => {
 
     if (deletedThought) {
       res.status(200).json({ response: deletedThought, success: true });
+
     } else {
       res.status(404).json({ response: "Message not found!", success: false });
     }
+
   } catch (error) {
-    res
-      .status(400)
-      .json({ message: "invalid request", response: error, success: false });
+    res.status(400).json({ message: "invalid request", response: error, success: false });
   }
 });
 
