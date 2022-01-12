@@ -20,7 +20,7 @@ const ThoughtSchema = new mongoose.Schema({
     required: true,
     minlength: 5,
     maxlength: 140,
-    trim: true,
+    trim: true, // remove spaces from both sides
   },
   hearts: {
     type: Number,

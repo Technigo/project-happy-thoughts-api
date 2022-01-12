@@ -1,13 +1,12 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Nice project to learn about backend and frontend
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Had some problems with the connection happy thoughts and happy-thoughts-api, but it was after I used copy page that it the problem was solved
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://happythoughts-api-aschwin.herokuapp.com/thoughts
+https://elegant-yonath-c87434.netlify.app/
