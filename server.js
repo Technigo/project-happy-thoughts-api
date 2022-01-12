@@ -42,7 +42,7 @@ app.use(express.json())
 app.get("/", (req, res) => {
   res.json({
     message:
-      "View all thoughts at http:",
+      "View all thoughts at https://kriss-happy-thoughts.netlify.app/",
   });
 });
 
