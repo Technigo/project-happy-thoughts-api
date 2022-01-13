@@ -109,7 +109,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     const updatedLike = await Thought.findByIdAndUpdate(
       // Argument 1 - id
       thoughtId,
-      // Argument 2 - properties to change 
+      // Argument 2 - properties to change. $inc increases the heart-property by the given value 1
       {
         $inc: {
           hearts: 1
