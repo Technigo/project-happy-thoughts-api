@@ -2,7 +2,7 @@
 
 API created to POST and GET thoughts for the Happy Thoughts application - https://myhappy-thoughts.netlify.app/
 
-## Feautures
+## Features
 
 - GET request to get all thoughts
 - POST request to add new thoughts
