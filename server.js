@@ -17,6 +17,7 @@ const app = express()
 const ThoughtSchema = new mongoose.Schema({
    name: {
     type: String,
+    required: false,
     minlength: 2,
     maxlength: 500,
    },
