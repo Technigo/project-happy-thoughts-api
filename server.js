@@ -55,16 +55,21 @@ app.get('/', (req, res) => {
 
 app.get('/thoughts', async (req, res) => {
   try {
-  const { page, perPage, pageNum = +page, perPageNum = +perPage } = req.query
+
+    const thoughts = await Thought.find()
+    .sort({ createdAt: "desc" })
+    .limit(20)
+    .exec()
+  // const { page, perPage, pageNum = +page, perPageNum = +perPage } = req.query
 
 
-  //v1 mongoose
+  //v1 mongoose PAGINATION
 
-  const thoughts = await Thought.find()
-  .sort({ createdAt: 'desc' })
-  .skip((pageNum - 1) * perPageNum)
-  .limit(perPageNum)
-  .exec()
+  // const thoughts = await Thought.find()
+  // .sort({ createdAt: 'desc' })
+  // .skip((pageNum - 1) * perPageNum)
+  // .limit(perPageNum)
+  // .exec()
 
   //v2 mongo
   
