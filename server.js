@@ -1,5 +1,5 @@
-import express from 'express'
 import cors from 'cors'
+import express from 'express'
 import mongoose from 'mongoose'
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
@@ -12,6 +12,15 @@ mongoose.Promise = Promise
 //   PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
+
+const MemberSchema = new mongoose.Schema({
+  name: String,
+  description: String,
+  score: Number,
+  createdAt: Date,
+})
+
+const Member = mongoose.Model('Member', MemberSchema)
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
