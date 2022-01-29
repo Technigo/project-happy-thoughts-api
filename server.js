@@ -14,10 +14,26 @@ const port = process.env.PORT || 8080
 const app = express()
 
 const MemberSchema = new mongoose.Schema({
-  name: String,
-  description: String,
-  score: Number,
-  createdAt: Date,
+  name: {
+    type: String,
+    required: true,
+    unique: true,
+    enum: ['Jennie', 'Matilda', 'Karin', 'Maksymilian']
+  },
+  description: {
+    type: String,
+    minlength: 5,
+    maxlength: 10,
+    trim: true,
+  },
+  score: {
+    type: Number,
+    default: 0,
+  },
+  createdAt: {
+    type: Number,
+    default: () => Date.now()
+  },
 })
 
 const Member = mongoose.Model('Member', MemberSchema)
