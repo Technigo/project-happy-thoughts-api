@@ -36,7 +36,7 @@ const MemberSchema = new mongoose.Schema({
   },
 })
 
-const Member = mongoose.Model('Member', MemberSchema)
+const Member = mongoose.model('Member', MemberSchema)
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
@@ -45,6 +45,17 @@ app.use(express.json())
 // Start defining your routes here
 app.get('/', (req, res) => {
   res.send('Hello world')
+})
+
+app.post('/members', async (req, res) => {
+  const { name, description } = req.body
+
+  try {
+    const newMember = await new Member({ name, description }).save()
+    res.status(201).json({ response: newMember, success: true })
+  } catch (error) {
+    res.status(400).json({ response: error, success: false })
+  }
 })
 
 // Start the server
