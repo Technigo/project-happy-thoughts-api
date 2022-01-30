@@ -46,29 +46,31 @@ app.use(express.json())
 app.get('/members', async (req, res) => {
 
   const {
+    sort,
     page,
     perPage,
+    sortNum = Number(sort),
     pageNum = Number(page),
-    perPageNum = Number(perPage)
+    perPageNum = Number(perPage),
   } = req.query
 
   try {
     const members = await Member.find({})
-      .sort({ description: 'asc' })
+      .sort({ description: sortNum })
       .skip((pageNum - 1 * perPageNum))
       .limit(perPageNum)
     // const members = await Member.aggregate([
     //   { 
     //     $sort: {
-    //       description: 1
-    //     }
+    //       createdAt: sortNum,
+    //     },
     //   },
     //   {
-    //     $skip: (pageNum - 1) * perPageNum
+    //     $skip: ((pageNum - 1) * perPageNum),
     //   },
     //   {
-    //     $limit: perPageNum
-    //   }
+    //     $limit: perPageNum,
+    //   },
     // ])
     res.status(200).json({ response: members, success: true })
   } catch (error) {
@@ -108,6 +110,22 @@ app.post('/members/:id/score', async (req, res) => {
     res.status(400).json({ response: error, success: false })
   }
 
+})
+
+app.delete('/members/:id', async (req, res) => {
+
+  const { id } = req.params
+
+  try {
+    const deletedMember = await Member.findOneAndDelete({ _id: id })
+    if (deletedMember) {
+      res.status(200).json({ response: deletedMember, success: true })
+    } else {
+      res.status(404).json({ response: 'Member not found', success: false })
+    }
+  } catch (error) {
+    res.status(400).json({ response: error, success: false })
+  }
 })
 
 // Start the server
