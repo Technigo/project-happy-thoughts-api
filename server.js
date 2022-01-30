@@ -18,7 +18,7 @@ const MemberSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    enum: ['Jennie', 'Matilda', 'Karin', 'Maksymilian']
+    enum: ['Jennie', 'Matilda', 'Karin', 'Maksymilian'],
   },
   description: {
     type: String,
@@ -48,6 +48,7 @@ app.get('/', (req, res) => {
 })
 
 app.post('/members', async (req, res) => {
+
   const { name, description } = req.body
 
   try {
@@ -56,6 +57,27 @@ app.post('/members', async (req, res) => {
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
+
+})
+
+app.post('/members/:id/score', async (req, res) => {
+  
+  const { id } = req.params
+
+  try {
+    const updatedMember = await Member.findByIdAndUpdate(id, { 
+      $inc: { 
+        score: 1
+      },
+    },
+    {
+      new: true
+    })
+    res.status(200).json({ response: updatedMember, success: true })
+  } catch (error) {
+    res.status(400).json({ response: error, success: false })
+  }
+
 })
 
 // Start the server
