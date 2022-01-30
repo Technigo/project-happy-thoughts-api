@@ -59,6 +59,7 @@ app.get('/members', async (req, res) => {
       .sort({ description: sortNum })
       .skip((pageNum - 1 * perPageNum))
       .limit(perPageNum)
+    // - - - MongoDB
     // const members = await Member.aggregate([
     //   { 
     //     $sort: {
@@ -126,6 +127,27 @@ app.delete('/members/:id', async (req, res) => {
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
+  
+})
+
+app.patch('/members/:id', (req, res) => {
+
+  const { id } = req.params
+  const { name } = req.body
+
+  // findOneAndUpdate: { find id }, { property to update }, { optional use }
+  Member.findOneAndUpdate({ _id: id }, { name }, { new: true })
+    .then(updatedMember => {
+      if (updatedMember) {
+        res.status(200).json({ response: updatedMember, success: true })
+      } else {
+        res.status(404).json({ response: 'Member not found', success: false })
+      }
+    })
+    .catch(error => {
+      res.status(400).json({ response: error, success: false })
+    })
+
 })
 
 // Start the server
