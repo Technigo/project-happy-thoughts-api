@@ -43,8 +43,15 @@ app.use(cors())
 app.use(express.json())
 
 // Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello world')
+app.get('/members', async (req, res) => {
+
+  try {
+    const members = await Member.find({}).sort({ description: 'asc' })
+    res.status(200).json({ response: members, success: true })
+  } catch (error) {
+    res.status(400).json({ response: error, success: false })
+  }
+
 })
 
 app.post('/members', async (req, res) => {
