@@ -45,8 +45,31 @@ app.use(express.json())
 // Start defining your routes here
 app.get('/members', async (req, res) => {
 
+  const {
+    page,
+    perPage,
+    pageNum = Number(page),
+    perPageNum = Number(perPage)
+  } = req.query
+
   try {
-    const members = await Member.find({}).sort({ description: 'asc' })
+    const members = await Member.find({})
+      .sort({ description: 'asc' })
+      .skip((pageNum - 1 * perPageNum))
+      .limit(perPageNum)
+    // const members = await Member.aggregate([
+    //   { 
+    //     $sort: {
+    //       description: 1
+    //     }
+    //   },
+    //   {
+    //     $skip: (pageNum - 1) * perPageNum
+    //   },
+    //   {
+    //     $limit: perPageNum
+    //   }
+    // ])
     res.status(200).json({ response: members, success: true })
   } catch (error) {
     res.status(400).json({ response: error, success: false })
