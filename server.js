@@ -36,6 +36,13 @@ app.use(cors());
 app.use(express.json());
 
 // Start defining your routes here
+
+app.get('/', async (req, res) => {
+  res.send(
+    'welcome to the API to spread happy thoughts. For detailed documentation visit: '
+  );
+});
+
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find()
     .sort({
