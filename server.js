@@ -2,7 +2,9 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
+const mongoUrl =
+  process.env.MONGO_URL ||
+  "mongodb+srv://NinaAlejandra:7bdbxw2r593surzy@cluster0-gooeb.mongodb.net/happyThoughts?retryWrites=true&w=majority";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
