@@ -1,6 +1,6 @@
 # Project Happy Thoughts API
 
-In this project I used a previously created frontend (happy thoughts) but connected it to a API that I made myself.
+In this project I used a previously created frontend (happy thoughts) but connected it to a database that I made myself.
 
 ## The problem
 
