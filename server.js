@@ -17,7 +17,6 @@ const app = express()
 const ThoughtSchema = new mongoose.Schema({
    name: {
     type: String,
-    // minlength: 2,
     maxlength: 500,
    },
    message: {
@@ -60,32 +59,6 @@ app.get('/thoughts', async (req, res) => {
     .sort({ createdAt: "desc" })
     .limit(20)
     .exec()
-  // const { page, perPage, pageNum = +page, perPageNum = +perPage } = req.query
-
-
-  //v1 mongoose PAGINATION
-
-  // const thoughts = await Thought.find()
-  // .sort({ createdAt: 'desc' })
-  // .skip((pageNum - 1) * perPageNum)
-  // .limit(perPageNum)
-  // .exec()
-
-  //v2 mongo
-  
-  // const thoughts = await Thought.aggregate([
-  //   {
-  //     $sort: {
-  //       createdAt: 1,
-  //     }
-  //   },
-  //   {
-  //     $skip: (pageNum -1) * perPageNum,
-  //   },
-  //   {
-  //     $limit: perPageNum,
-  //   }
-  // ])
 
   res.status(200).json({
     response: thoughts,
@@ -152,30 +125,6 @@ app.patch('/thoughts/:id', async (req, res) => {
           success: false
          })
   }
-  
-
-  //v2 promise
-
-  // Thought.findOneAndUpdate({ _id: id }, { name, message }, { new: true })
-  // .then(updatedThought => {
-  //   if (updatedThought) {
-  //   res.status(200).json({
-  //     response: updatedThought,
-  //     success: true
-  //   })
-  // } else {
-  //   res.status(404).json({
-  //     response: 'Thought not',
-  //     success: false
-  //   })
-  // }
-  // })
-  // .catch(error => {
-  //   res.status(400).json({ 
-  //     response: error, 
-  //     success: false
-  //    })
-  // })
 })
 
 // post endpoint (V1 async await)
@@ -196,42 +145,6 @@ app.post('/thoughts', async (req, res) => {
     })
   }
 })
-
-// post endpoint (V2 promises)
-
-// app.post('/members', (req, res) => {
-//   const { name, description } = req.body
-
-//   new Member ({ name, description }).save()
-//   .then(data => {
-//     res.status(201).json({ 
-//       response: data, 
-//       success: true })
-//     .catch(error => {
-//       res.status(400).json({ 
-//         response: error, 
-//         response: false })
-//     })
-//   })
-// })
-
-// v3 mongoose callback
-
-// app.post('/members', (req, res) => {
-//   const { name, description } = req.body
-
-//   new Member({ name, description })
-//   .save((error, data) => {
-//     if (error) {
-//       res.status(400).json({ 
-//        response: error, 
-//        response: false })
-//     } else {
-//       res.status(201).json({ 
-//       response: data, 
-//       success: true })
-//     }
-//   })
 
 app.post('/thoughts/:id/likes', async (req, res) => {
   const { id } = req.params
