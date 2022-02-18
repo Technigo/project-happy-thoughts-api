@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 const mongoUrl =
   process.env.MONGO_URL ||
-  "mongodb+srv://NinaAlejandra:sRG9FFlF0rWDr6Wm@cluster0.6qmgj.mongodb.net/happythoughts?retryWrites=true&w=majority";
+  "mongodb+srv://nini:xtOdkZULCSOCks7Y@cluster0.6qmgj.mongodb.net/happyThoughtsApi?retryWrites=true&w=majority";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
