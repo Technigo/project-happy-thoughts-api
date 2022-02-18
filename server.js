@@ -104,7 +104,6 @@ app.patch('/thoughts/:id', async (req, res) => {
   const { id } = req.params
   const { name, message } = req.body
 
-  //v1 async await
   try {
     const updatedThought = await Thought.findOneAndUpdate({ _id: id }, { name, message }, { new: true })
     if (updatedThought) {
@@ -127,7 +126,7 @@ app.patch('/thoughts/:id', async (req, res) => {
   }
 })
 
-// post endpoint (V1 async await)
+// post endpoint
 
 app.post('/thoughts', async (req, res) => {
    const { name, message, category } = req.body
