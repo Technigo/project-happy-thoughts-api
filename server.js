@@ -13,20 +13,14 @@ mongoose.Promise = Promise
 const port = process.env.PORT || 8080
 const app = express()
 
-const MemberSchema = new mongoose.Schema({
+const ThoughtSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
-    enum: ['Jennie', 'Matilda', 'Karin', 'Maksymilian'],
-  },
-  description: {
-    type: String,
     minlength: 5,
-    maxlength: 10,
-    trim: true,
+    maxlength: 140,
   },
-  score: {
+  hearts: {
     type: Number,
     default: 0,
   },
@@ -36,118 +30,72 @@ const MemberSchema = new mongoose.Schema({
   },
 })
 
-const Member = mongoose.model('Member', MemberSchema)
+const Thought = mongoose.model('Thought', ThoughtSchema)
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(express.json())
 
 // Start defining your routes here
-app.get('/members', async (req, res) => {
-
-  const {
-    sort,
-    page,
-    perPage,
-    sortNum = Number(sort),
-    pageNum = Number(page),
-    perPageNum = Number(perPage),
-  } = req.query
+app.get('/thoughts', async (req, res) => {
 
   try {
-    const members = await Member.find({})
-      .sort({ description: sortNum })
-      .skip((pageNum - 1 * perPageNum))
-      .limit(perPageNum)
-    // - - - MongoDB
-    // const members = await Member.aggregate([
-    //   { 
-    //     $sort: {
-    //       createdAt: sortNum,
-    //     },
-    //   },
-    //   {
-    //     $skip: ((pageNum - 1) * perPageNum),
-    //   },
-    //   {
-    //     $limit: perPageNum,
-    //   },
-    // ])
-    res.status(200).json({ response: members, success: true })
+    const thoughtList = await Thought.find({})
+      .sort({ createdAt: 'desc' })
+      .limit(20)
+    res.status(200).json(thoughtList)
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
-
 })
 
-app.post('/members', async (req, res) => {
+app.post('/thoughts', async (req, res) => {
 
-  const { name, description } = req.body
+  const { message } = req.body
 
   try {
-    const newMember = await new Member({ name, description }).save()
-    res.status(201).json({ response: newMember, success: true })
+    const newThought = await new Thought({ message }).save()
+    res.status(201).json({ response: newThought, success: true })
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
-
 })
 
-app.post('/members/:id/score', async (req, res) => {
+app.post('/members/:thoughtId/like', async (req, res) => {
   
-  const { id } = req.params
+  const { thoughtsId } = req.params
 
   try {
-    const updatedMember = await Member.findByIdAndUpdate(id, { 
+    const updatedLike = await Thought.findByIdAndUpdate(thoughtId, { 
       $inc: { 
-        score: 1
+        like: 1
       },
     },
     {
       new: true
     })
-    res.status(200).json({ response: updatedMember, success: true })
+    res.status(200).json({ response: updatedLike, success: true })
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
 
 })
 
-app.delete('/members/:id', async (req, res) => {
+app.delete('/members/:thoughtId', async (req, res) => {
 
-  const { id } = req.params
+  const { thoughtId } = req.params
 
   try {
-    const deletedMember = await Member.findOneAndDelete({ _id: id })
-    if (deletedMember) {
-      res.status(200).json({ response: deletedMember, success: true })
+    const deletedThought = await Thought.findOneAndDelete(thoughtId)
+    if (deletedThought) {
+      res.status(200).json({ response: deletedThought, success: true })
     } else {
-      res.status(404).json({ response: 'Member not found', success: false })
+      res.status(404).json({ response: 'Message not found', success: false })
     }
   } catch (error) {
     res.status(400).json({ response: error, success: false })
   }
   
-})
-
-app.patch('/members/:id', (req, res) => {
-
-  const { id } = req.params
-  const { name } = req.body
-
-  // findOneAndUpdate: { find id }, { property to update }, { optional use }
-  Member.findOneAndUpdate({ _id: id }, { name }, { new: true })
-    .then(updatedMember => {
-      if (updatedMember) {
-        res.status(200).json({ response: updatedMember, success: true })
-      } else {
-        res.status(404).json({ response: 'Member not found', success: false })
-      }
-    })
-    .catch(error => {
-      res.status(400).json({ response: error, success: false })
-    })
-
 })
 
 // Start the server
