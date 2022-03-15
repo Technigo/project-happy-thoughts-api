@@ -13,7 +13,7 @@ FEATURES:
 
 - POST request to allow the user to increase the number of likes: /thoughts/:thoughtsId/like
 
-- DELETE request to allow the user to delete a message based on the given id: /thoughts/:thoughtsId/delete
+- DELETE request to allow the user to delete messages based on the given id: /thoughts/:thoughtsId/delete
 
 TECH STACK:
 Node.js

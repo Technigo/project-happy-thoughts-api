@@ -16,11 +16,10 @@ const app = express();
 const ThoughtsSchema = new mongoose.Schema({
   message: {
     type: String,
-    required: true, //it requires a new memeber name, otherwise, mongo throws an error
-    unique: true, // mongo double checks if that name already exists or not
+    required: true, 
     minlength: 5, //watch out lowercase
-    maxlength: 140,
-    trim: true, //deletes white spaces that we make by mistake
+    maxlength: 40,
+    trim: true, //deletes white spaces that user by mistake
   },
 
   hearts: {
@@ -49,7 +48,7 @@ app.use(cors());
 app.use(express.json());
 
 
-// ------ ENDPOINTS SECTION ------
+// --------------------- ENDPOINTS ----------------//
 
 app.get("/", (req, res) => {
   res.send(
@@ -57,7 +56,7 @@ app.get("/", (req, res) => {
   );
 });
 
-//  Endpoint for the frontend to get the most recent 20 thoughts which are saved into the database (by doing .save() we save it into the DB)
+// 1- Endpoint for the frontend to get the most recent 20 thoughts which are saved into the database 
 app.get("/thoughts", async (req, res) => {
 
   try {
@@ -74,7 +73,7 @@ app.get("/thoughts", async (req, res) => {
   }
 });
 
-// Endpoint for the frontend to post a message plus the name of the author into the database
+// 2- Endpoint for the frontend to post a message plus the name of the author into the database
 // v1: post request using async await
 app.post("/thoughts", async (req, res) => {
   const { message, author } = req.body;
@@ -116,7 +115,7 @@ app.post("/thoughts", async (req, res) => {
 // });
 
 
-// Enpoint for the frontend to increase (update) the hearts/likes
+// 3- Enpoint for the frontend to increase (update) the hearts/likes
 app.post("/thoughts/:thoughtsId/like", async (req, res) => {
   const { thoughtsId } = req.params;
 
@@ -143,7 +142,7 @@ app.post("/thoughts/:thoughtsId/like", async (req, res) => {
   }
 });
 
-// Endpoint for the frontend to delete a specific message
+// 4- Endpoint for the frontend to delete a specific message
 app.delete("/thoughts/:thoughtId/delete", async (req, res) => {
   const { thoughtId } = req.params;
 
