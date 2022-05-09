@@ -21,7 +21,7 @@ router.post('/', (req, res) => {
         res.status(200).json(data)
     })
     .catch(err => {
-        res.json(500).json({message: "There is an unknown issue for posting a thought. Please try again", errors: err.errors})
+        res.json(400).json({message: "Please try again", errors: err.errors})
     })
 })
 
