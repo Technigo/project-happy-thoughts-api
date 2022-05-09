@@ -1,13 +1,21 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Hello! Welcome to the happy-thoughts API. The data is stored in Mongo DB and is being pulled from there.
 
-## The problem
+Get methods: 
+**/thoughts/** Users can use the following endpoints to see all thoughts
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+**/thoughts/:thoughtId** Users can view a specific thought using a specific _id.
 
-## View it live
+Post methods:
+**/thoughts/** Users can use a post method in this endpoint to add more thoughts.
+**/thoughts/:thoughtId/like** Users can use a post method in this endpoint to add likes.
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+
+## View the api
+
+https://happy-thoughts-api-rawi.herokuapp.com/
+
+## View the api in frontend 
+https://illustrious-frangipane-e38a00.netlify.app/
