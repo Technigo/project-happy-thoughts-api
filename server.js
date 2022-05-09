@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser"
-
+import thoughts from "./routes/thoughts"
 import listEndpoints from "express-list-endpoints"
 
 import mongoose from "mongoose";
@@ -17,20 +17,16 @@ mongoose.Promise = Promise;
 const port = process.env.PORT || 8080;
 const app = express();
 
-// Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json())
+app.use('/thoughts', thoughts)
 
-const thoughtsRoute = require('./routes/thoughts')
-app.use('/thoughts', thoughtsRoute)
 
-// Start defining your routes here
 app.get("/", (req, res) => {
   res.send(listEndpoints(app));
 });
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
