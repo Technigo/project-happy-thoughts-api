@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser"
 
+import listEndpoints from "express-list-endpoints"
+
 import mongoose from "mongoose";
 import dotenv from 'dotenv'
 dotenv.config()
@@ -25,7 +27,7 @@ app.use('/thoughts', thoughtsRoute)
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("This is all thoughts");
+  res.send(listEndpoints(app));
 });
 
 // Start the server
