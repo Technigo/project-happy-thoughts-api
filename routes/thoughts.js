@@ -25,14 +25,24 @@ router.post('/', (req, res) => {
     })
 })
 
+//Get thoughts by id
+
+router.get('/:thoughtId', async (req, res) => {
+  try {
+      const thought = await Thought.findById(req.params.thoughtId)
+      res.json(thought)
+  } catch (err) {
+      res.json({message: err})
+  }
+})
+
 //https://happy-thoughts-technigo.herokuapp.com/thoughts/THOUGHT_ID/like
 
-router.post('/thoughts/:thoughtId/like', async (req, res) => {
+router.post('/:thoughtId/like', async (req, res) => {
     try {
       const likedThought = await Thought.findByIdAndUpdate(
-        { _id: req.params.thoughtId },
-        { $inc: { hearts: 1 } },
-        { new: true }
+        { _id: req.params.thoughtId},
+        { $inc: { hearts: 1 } }
       )
       res.status(200).json(likedThought)
     } catch (err) {
@@ -43,22 +53,22 @@ router.post('/thoughts/:thoughtId/like', async (req, res) => {
 
 //Update and delete
 
-//   router.delete('/:postId', async (req, res) => {
+//   router.delete('/:thoughtId', async (req, res) => {
 //     try {
-//        const removedPost = await Post.remove({_id: req.params.postId})
-//        res.json(removedPost)
+//        const removedThought = await Thought.remove({_id: req.params.thoughtId})
+//        res.json(removedThought)
 //      } catch (err) {
 //          res.json({message: err})
 //      }
 //  })
  
-//  router.patch('/:postId', async (req, res) => {
+//  router.patch('/:thoughtId', async (req, res) => {
 //      try {
-//          const updatedPost = await Post.updateOne(
-//              {_id: req.params.postId}, 
-//              {$set: {title: req.body.title}}
+//          const updatedThought = await Thought.updateOne(
+//              {_id: req.params.thoughtId}, 
+//              {$set: {message: req.body.message}}
 //              )
-//              res.json(updatedPost)
+//              res.json(updatedThought)
 //      } catch (err) {
 //          res.json({message: err})
 //      }
