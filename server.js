@@ -48,7 +48,7 @@ app.get("/", (req, res) => {
 })
 
 app.get("/thoughts", async (req, res) => {
-  const testing = await Thought.find().sort({createdAt: "desc"}).limit(20).exec()
+  const testing = await Thought.find().sort({ createdAt: "desc" }).limit(20).exec()
   res.status(200).json(testing)
 })
 
@@ -61,13 +61,20 @@ app.post("/thoughts", async (req, res) => {
     res.status(201).json(thought)
 
   } catch (err) {
-    res.status(400).json({ errorMessage: "Could not save thought", error: err.errors })
+    res.status(400).json({ message: "Could not save thought", error: err.errors })
   }
 })
 
-// app.post("/thoughts/:thoughtId/like", async (req, res) => {
-// //  code here
-// })
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const thoughtId = req.params.thoughtId
+
+  try {
+    const likedThought = await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
+    res.status(201).json(likedThought)
+  } catch (err) {
+    res.status(400).json({ message: "Could not find this thought", error: err.errors })
+  }
+})
 
 app.get("/endpoints", (req, res) => {
   res.send(allEndpoints(app))
