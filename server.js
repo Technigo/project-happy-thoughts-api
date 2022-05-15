@@ -7,13 +7,9 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-tho
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
 
-// Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(express.json())
 
@@ -28,9 +24,9 @@ app.use((req, res, next) => {
 const Thought = mongoose.model("Thought", {
   message: {
     type: String,
-    required: true,
-    minLength: [5, "Minimum is 5, you entered '{VALUE}'"],
-    maxLength: [140, "Maximum is 140, you entered '{VALUE}'"]
+    required: [true, "A message is required."],
+    minLength: [5, "The message must have min 5 characters, you typed '{VALUE}'."],
+    maxLength: [140, "The message must have max 140 characters, you typed '{VALUE}'."]
   },
   hearts: {
     type: Number,
@@ -42,14 +38,19 @@ const Thought = mongoose.model("Thought", {
   },
   username: {
     type: String,
-    default: "Anonymous",
-    maxLength: 15
+    maxLength: [15, "The username must have max 15 characters, you typed '{VALUE}'"],
+    default: "anonymous"
   }
 })
 
-// Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!")
+  res.send(
+    {
+      "Welcome": "Happy Thoughts 2022 - API!",
+      "All endpoints are listed here": "/endpoints",
+      "See API live in week 11's project": "https://happy-thoughts2022.netlify.app/"
+    }
+  )
 })
 
 app.get("/thoughts", async (req, res) => {
@@ -62,7 +63,7 @@ app.post("/thoughts", async (req, res) => {
   try {
     // const thought = new Thought({ message, hearts })
     // await thought.save()
-    const thought = await new Thought({ message, username: username || "Anonymous" }).save()
+    const thought = await new Thought({ message, username: username || "anonymous" }).save()
     res.status(201).json(thought)
 
   } catch (err) {
