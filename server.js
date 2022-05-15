@@ -1,6 +1,7 @@
 import express from "express"
 import cors from "cors"
 import mongoose from "mongoose"
+import allEndpoints from "express-list-endpoints"
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts-api"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -15,6 +16,14 @@ const app = express()
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(express.json())
+
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: "Service unavailable" })
+  }
+})
 
 const Thought = mongoose.model("Thought", {
   message: {
@@ -56,6 +65,13 @@ app.post("/thoughts", async (req, res) => {
   }
 })
 
+// app.post("/thoughts/:thoughtId/like", async (req, res) => {
+// //  code here
+// })
+
+app.get("/endpoints", (req, res) => {
+  res.send(allEndpoints(app))
+})
 
 // Start the server
 app.listen(port, () => {
