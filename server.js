@@ -43,6 +43,12 @@ const Thought = mongoose.model("Thought", {
   }
 })
 
+  const deleteDatabase = async () => {
+    await Thought.deleteMany()
+  }
+  deleteDatabase()
+
+
 app.get("/", (req, res) => {
   res.send(
     {
