@@ -54,8 +54,17 @@ app.get("/", (req, res) => {
 })
 
 app.get("/thoughts", async (req, res) => {
-  const testing = await Thought.find().sort({ createdAt: "desc" }).limit(20).exec()
-  res.status(200).json(testing)
+  try {
+    const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20).exec()
+    res.status(200).json(thoughts)
+  } catch (err) {
+    res.status(404).json({
+      success: false,
+      status_code: 404,
+      message: "Could not fetch thoughts.",
+      error: err.errors
+    })
+  }
 })
 
 app.post("/thoughts", async (req, res) => {
