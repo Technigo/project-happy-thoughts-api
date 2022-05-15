@@ -39,6 +39,10 @@ const Thought = mongoose.model("Thought", {
   createdAt: {
     type: Date,
     default: () => new Date()
+  },
+  username: {
+    type: String,
+    default: "Anonymous"
   }
 })
 
@@ -53,11 +57,11 @@ app.get("/thoughts", async (req, res) => {
 })
 
 app.post("/thoughts", async (req, res) => {
-  const { message } = req.body
+  const { message, username } = req.body
   try {
     // const thought = new Thought({ message, hearts })
     // await thought.save()
-    const thought = await new Thought({ message }).save()
+    const thought = await new Thought({ message, username }).save()
     res.status(201).json(thought)
 
   } catch (err) {
