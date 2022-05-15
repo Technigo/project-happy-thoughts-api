@@ -46,7 +46,7 @@ const Thought = mongoose.model("Thought", {
 app.get("/", (req, res) => {
   res.send(
     {
-      "Welcome": "Happy Thoughts 2022 - API!",
+      "Welcome!": "Happy Thoughts by Nadia - API",
       "All endpoints are listed here": "/endpoints",
       "Happy Thoughts project has been updated, see API live": "https://happy-thoughts2022.netlify.app/"
     }
