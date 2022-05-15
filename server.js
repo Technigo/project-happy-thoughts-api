@@ -42,7 +42,8 @@ const Thought = mongoose.model("Thought", {
   },
   username: {
     type: String,
-    default: "Anonymous"
+    default: "Anonymous",
+    maxLength: 15
   }
 })
 
@@ -61,7 +62,7 @@ app.post("/thoughts", async (req, res) => {
   try {
     // const thought = new Thought({ message, hearts })
     // await thought.save()
-    const thought = await new Thought({ message, username }).save()
+    const thought = await new Thought({ message, username: username || "Anonymous" }).save()
     res.status(201).json(thought)
 
   } catch (err) {
