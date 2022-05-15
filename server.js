@@ -25,8 +25,8 @@ const Thought = mongoose.model("Thought", {
   message: {
     type: String,
     required: [true, "A message is required."],
-    minLength: [5, "The message must have min 5 characters, you typed '{VALUE}'."],
-    maxLength: [140, "The message must have max 140 characters, you typed '{VALUE}'."]
+    minLength: [5, "The message must have min 5 characters and '{VALUE}' was typed."],
+    maxLength: [140, "The message must have max 140 characters and '{VALUE}' was typed."]
   },
   hearts: {
     type: Number,
@@ -38,7 +38,7 @@ const Thought = mongoose.model("Thought", {
   },
   username: {
     type: String,
-    maxLength: [15, "The username must have max 15 characters, you typed '{VALUE}'"],
+    maxLength: [15, "The username must have max 15 characters and '{VALUE}' was typed."],
     default: "anonymous"
   }
 })
@@ -48,7 +48,7 @@ app.get("/", (req, res) => {
     {
       "Welcome": "Happy Thoughts 2022 - API!",
       "All endpoints are listed here": "/endpoints",
-      "See API live in week 11's project": "https://happy-thoughts2022.netlify.app/"
+      "Happy Thoughts project has been updated, see API live": "https://happy-thoughts2022.netlify.app/"
     }
   )
 })
@@ -60,25 +60,33 @@ app.get("/thoughts", async (req, res) => {
 
 app.post("/thoughts", async (req, res) => {
   const { message, username } = req.body
+
   try {
-    // const thought = new Thought({ message, hearts })
-    // await thought.save()
     const thought = await new Thought({ message, username: username || "anonymous" }).save()
     res.status(201).json(thought)
-
   } catch (err) {
-    res.status(400).json({ message: "Could not save thought", error: err.errors })
+    res.status(400).json({
+      success: false,
+      status_code: 400,
+      message: "Bad request, could not save this new thought.",
+      error: err.errors
+    })
   }
 })
 
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
-  const thoughtId = req.params.thoughtId
+  const { thoughtId } = req.params
 
   try {
     const likedThought = await Thought.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
     res.status(201).json(likedThought)
   } catch (err) {
-    res.status(400).json({ message: "Could not find this thought", error: err.errors })
+    res.status(400).json({
+      success: false,
+      status_code: 400,
+      message: "Bad request, could not find and update this thought.",
+      error: err.errors
+    })
   }
 })
 
