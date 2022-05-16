@@ -16,6 +16,26 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const HappyThoughtsSchema = new mongoose.Schema({
+  message: {
+    type: String, 
+    required: true, 
+    minlength: 5,
+    maxlength: 140, 
+    trim: true
+  },
+  hearts: {
+    type: Number,
+    default: 0
+  },
+  createdAt: {
+    type: Date, 
+    default: () => new Date()
+  }
+})
+
+const HappyThoughts = mongoose.model("HappyThoughts", HappyThoughtsSchema)
+
 // Start defining your routes here
 app.get("/", (req, res) => {
   res.send("Hello Technigo!");
