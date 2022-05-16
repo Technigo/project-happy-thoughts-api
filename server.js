@@ -30,7 +30,7 @@ const ThoughtSchema = new mongoose.Schema({
   },
 })
 
-const Thought = mongoose.Model("Thought", ThoughtSchema)
+const Thought = mongoose.model("Thought", ThoughtSchema)
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
@@ -39,6 +39,16 @@ app.use(express.json())
 // Start defining your routes here
 app.get("/", (req, res) => {
   res.send("Hi! This is the API for Lovisas Happy Thoughts.")
+})
+
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body
+  try {
+    const newThougt = await new Thought({ message }).save()
+    res.status(201).json({ response: newThougt, success: true })
+  } catch (error) {
+    res.status(400).json({ response: error, success: false })
+  }
 })
 
 // Start the server
