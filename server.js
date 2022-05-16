@@ -26,7 +26,8 @@ const ThoughtSchema = new mongoose.Schema({
     type: String,
     required: [true, "A message is required."],
     minLength: [5, "The message must have min 5 characters and '{VALUE}' was typed."],
-    maxLength: [140, "The message must have max 140 characters and '{VALUE}' was typed."]
+    maxLength: [140, "The message must have max 140 characters and '{VALUE}' was typed."],
+    trim: true
   },
   hearts: {
     type: Number,
@@ -39,7 +40,8 @@ const ThoughtSchema = new mongoose.Schema({
   username: {
     type: String,
     maxLength: [15, "The username must have max 15 characters and '{VALUE}' was typed."],
-    default: "anonymous"
+    default: "anonymous",
+    trim: true
   }
 })
 
