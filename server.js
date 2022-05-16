@@ -21,12 +21,13 @@ app.use((req, res, next) => {
   }
 })
 
-const Thought = mongoose.model("Thought", {
+const ThoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     required: [true, "A message is required."],
     minLength: [5, "The message must have min 5 characters and '{VALUE}' was typed."],
-    maxLength: [140, "The message must have max 140 characters and '{VALUE}' was typed."]
+    maxLength: [140, "The message must have max 140 characters and '{VALUE}' was typed."],
+    trim: true
   },
   hearts: {
     type: Number,
@@ -43,6 +44,8 @@ const Thought = mongoose.model("Thought", {
   }
 })
 
+const Thought = mongoose.model("Thought", ThoughtSchema)
+
 app.get("/", (req, res) => {
   res.send(
     {
@@ -58,10 +61,10 @@ app.get("/thoughts", async (req, res) => {
     const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20).exec()
     res.status(200).json(thoughts)
   } catch (err) {
-    res.status(404).json({
+    res.status(400).json({
       success: false,
-      status_code: 404,
-      message: "Could not fetch thoughts.",
+      status_code: 400,
+      message: "Bad request, could not fetch thoughts.",
       error: err.errors
     })
   }
@@ -71,8 +74,8 @@ app.post("/thoughts", async (req, res) => {
   const { message, username } = req.body
 
   try {
-    const thought = await new Thought({ message, username: username || "anonymous" }).save()
-    res.status(201).json(thought)
+    const newThought = await new Thought({ message, username: username || "anonymous" }).save()
+    res.status(201).json(newThought)
   } catch (err) {
     res.status(400).json({
       success: false,
