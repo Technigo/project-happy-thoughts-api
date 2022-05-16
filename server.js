@@ -42,19 +42,27 @@ app.get("/", (req, res) => {
   res.send("Change this to routes later!");
 });
 
-app.get("/thoughts", (req, res) => {
-  res.send("thoughts");
-
-  const newThought = new Thought({ message: "hey from newthought" }).save();
+app.get("/thoughts",  async (req, res) => {
+  const addedThoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
+  res.json(addedThoughts);
 });
 
-app.post("/thoughts", (req, res) => {
+app.post("/thoughts", async (req, res) => {
+  const { message, heart } = req.body;
+  
+  const newThought = new Thought({ message, heart });
 
+  try {
+    const savedThought = await newThought.save();
+    res.status(201).json(savedThought);
+  } catch(err) {
+    res.status(400).json({message: 'Could not save to database', error: err.errors});
+  }
 })
 
-app.post("thoughts/:thoughtId/like", (req, res) => {
+// app.post("thoughts/:thoughtId/like", (req, res) => {
 
-})
+// })
 
 // Start the server
 app.listen(port, () => {
