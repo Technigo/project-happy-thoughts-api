@@ -7,13 +7,13 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
 
-const Task = mongoose.model('Task', {
-  text: {
+const Thought = mongoose.model('Thought', {
+  message: {
     type: String,
     required: true,
     minlength: 5
   },
-  complete: {
+  heart: {
     type: Boolean,
     default: false
   },
@@ -39,41 +39,41 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
-// ----------------------/GET TASKS-------------------------- //
-app.get('/tasks', async (req, res) => {
-  const tasks = await Task.find().sort({createdAt: 'desc'}).limit(20).exec()
-  res.json(tasks)
+// ----------------------/GET THOUGHT-------------------------- //
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
+  res.json(thoughts)
 })
 
 
 // ----------------------/POST TASKS------------------------ //
-app.post('/tasks', async (req, res) => {
+app.post('/thoughts', async (req, res) => {
   // Retrieve the information sent by the client to our API endpoint
-  const {text, complete} = req.body
+  const { message } = req.body
 
-  // Use our mongoose model to create the database entry
-  const task = new Task({text, complete})
+  // // Use our mongoose model to create the database entry
+  const thought = new Thought({ message })
 
   try {
     // Success case
-    const savedTask = await task.save()
-    res.status(201).json(savedTask)
+    const savedThought = await task.save()
+    res.status(201).json(savedThought)
   } catch (err) {
     res.status(400).json({message: 'Could not save task to the database', error: err.errors})
   }
 })
 
 // ----------------------/UPDATE SCORE------------------------ //
-app.post("/tasks/:id/score", async (req, res) => {
-  const { id } = req.params
+// app.post("/tasks/:id/score", async (req, res) => {
+//   const { id } = req.params
 
-  try {
-    const memberToUpdate = await TechnigoMember.findByIdAndUpdate(id, {$inc: {score: 1}})
-    res.status(200).json({response: `Member ${memberToUpdate.name} has been updated`, success: true})
-  } catch (error) {
-    res.status(400).json({response: error, success: false})
-  }
-})
+//   try {
+//     const memberToUpdate = await TechnigoMember.findByIdAndUpdate(id, {$inc: {score: 1}})
+//     res.status(200).json({response: `Member ${memberToUpdate.name} has been updated`, success: true})
+//   } catch (error) {
+//     res.status(400).json({response: error, success: false})
+//   }
+// })
 
 // ----------------------/START SERVER------------------------ //
 app.listen(port, () => {
