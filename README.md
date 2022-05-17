@@ -1,12 +1,17 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+In this week's project, we used Express and MongoDB to build an API that included both GET request endpoints to return data and POST endpoints to create data.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+In a previous week we built project Happy Thoughts, a frontend in React which uses an API we created to store thoughts.
+It an version of Twitter, but focused on positivity and friendliness.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+The API needed to work like the API we used in the frontend happy thoughts project.
+I created a Schema in mongoose for the messages, likes/hearts and the time it was written and put it in a model.
+It needed a get request endpoint to return a maximum of 20 thoughts, sorted by createdAt to show the most recent thoughts first.
+A post request endpoint with a json body including the thought message, validating it and save the thought message and its id.
+It also needed a post request endpoint to be able to like the posts.
 
 ## View it live
 
