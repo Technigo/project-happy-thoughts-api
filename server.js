@@ -40,9 +40,9 @@ const Thought = mongoose.model('Thought', ThoughtSchema);
 app.get('/', (req, res) => {
   res.send({
     'Hello!': "This is Sofie's Happy Thoughts API.",
-    'See all endpoints here': '/endpoints',
-    'And here you can watch the API live':
+    'Here you can watch the API live':
       'https://graceful-lily-1fde84.netlify.app/',
+    'And see all endpoints here': '/endpoints',
   });
 });
 
