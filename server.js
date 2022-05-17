@@ -36,6 +36,10 @@ app.get('/endpoints', (req, res) => {
   res.send(allEndpoints(app))
 })
 
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const thoughtId = req.params.thoughtId
+})
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
