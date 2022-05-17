@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
+
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts-api";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
@@ -79,21 +80,23 @@ app.post("/thoughts/:id/like", async (req, res) => {
 
 app.get("/thoughts", async (req, res) => {
   // const { id, name } = req.query;
-  const thoughts = await HappyThought.find();
+  // const thoughts = await HappyThought.find();
   // console.log(thoughts);
   // res.status(200).json("hej")
 
-  // try {
-  //   const thoughts = await HappyThought.find().sort({ createdAt: "desc" }).limit(20).exec()
-  //   res.status(200).json(thoughts)
-  // } catch (err) {
-  //   res.status(400).json({
-  //     success: false,
-  //     status_code: 400,
-  //     message: "Bad request, could not fetch thoughts.",
-  //     error: err.errors
-  //   })
-  // }
+  try {
+    let thoughts = await (await HappyThought.find().sort()).reverse().splice(0, 20);
+    
+    res.status(200).json({
+      response: thoughts,
+      success: true
+    })
+  } catch (err) {
+    res.status(400).json({
+      response: "Could not fetch thoughts",
+      success: false
+    })
+  }
 
   // if (id) {
 	// 	authors = authors.filter(item => item._id.toString() === id);
@@ -105,11 +108,11 @@ app.get("/thoughts", async (req, res) => {
   //   )
   // };
 
-  if (thoughts) {
-    res.json(thoughts);
-  } else {
-    res.status(404).json({ error: "No happy thoughts found" })
-  } 
+  // if (thoughts) {
+  //   res.json(thoughts);
+  // } else {
+  //   res.status(404).json({ error: "No happy thoughts found" })
+  // } 
 });
 
 
