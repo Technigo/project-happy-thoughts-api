@@ -1,0 +1,1 @@
+export const happyThoughts = "HappyThoughts";

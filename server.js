@@ -1,27 +1,73 @@
 import express from "express";
 import cors from "cors";
-import mongoose from "mongoose";
+import listEndpoints from "express-list-endpoints";
+import startDB from "./database/database.js";
+import { dbErrorHandler } from "./middleware/dbErrorHandler.js";
+import HappyThought from "./database/happtThoughts.js";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.Promise = Promise;
-
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
 
-// Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+app.use(dbErrorHandler);
 
-// Start defining your routes here
+//Router setup
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  const landing = {
+    about: "Welcome to My Happy Thought API😻",
+    APIs: listEndpoints(app),
+  };
+  res.send(landing);
 });
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+app.get("/thoughts", async (req, res) => {
+  try {
+    let data = await HappyThought.find().limit(20).sort({ createdAt: "desc" });
+    if (!data.length) {
+      return res.status(404).json({ error: "No result found" });
+    }
+    return res.status(200).json([...data]);
+  } catch (err) {
+    return res.status(400).json({ error: err.toString() });
+  }
 });
+
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body;
+  const happyThought = new HappyThought({ message });
+
+  try {
+    //success
+    const savedHappyThought = await happyThought.save();
+    res.status(201).json(savedHappyThought);
+  } catch (err) {
+    //error
+    res.status(400).json({
+      message: "Could not save happy thought to the database",
+      error: err.errors,
+    });
+  }
+});
+
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const thoughtID = req.params.thoughtId;
+  try {
+    const updated = await HappyThought.findOneAndUpdate(
+      { _id: thoughtID },
+      { $inc: { hearts: 1 } },
+      { new: true }
+    );
+    res.status(201).json(updated);
+  } catch (err) {
+    return res
+      .status(400)
+      .json({ error: `Cannot find happy thought by id: ${thoughtID}` });
+  }
+});
+
+startDB().then(
+  app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+  })
+);
