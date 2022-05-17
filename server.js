@@ -31,7 +31,7 @@ const thoughtSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: () => Date.now()
   }
 });
 
@@ -44,7 +44,7 @@ app.get("/", (req, res) => {
 
 app.get("/thoughts",  async (req, res) => {
   const addedThoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
-  res.json(addedThoughts);
+  res.status(200).json(addedThoughts);
 });
 
 app.post("/thoughts", async (req, res) => {
@@ -60,9 +60,19 @@ app.post("/thoughts", async (req, res) => {
   }
 })
 
-// app.post("thoughts/:thoughtId/like", (req, res) => {
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
 
-// })
+  try {
+    const thoughtById = await Thought.findByIdAndUpdate(thoughtId, {$inc: {heart: 1}}, {new: true});
+    res.status(200).json(thoughtById);
+  } catch(err) {
+    res.status(400).json({
+      success: false,
+      error: 'Id not found'
+    })
+  }
+})
 
 // Start the server
 app.listen(port, () => {
