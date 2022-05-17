@@ -23,8 +23,9 @@ app.use(express.json());
 const HappyThoughtSchema = new mongoose.Schema({
   message: {
     type: String,
-    minlength: 4,
-    maxlength: 30,  
+    required: true,
+    minlength: 5,
+    maxlength: 140,  
     trim: true
   },
   hearts: {
