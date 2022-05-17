@@ -1,26 +1,33 @@
-import express from "express";
-import cors from "cors";
-import mongoose from "mongoose";
-import allEndpoints from "express-list-endpoints";
+import express from "express"
+import cors from "cors"
+import mongoose from "mongoose"
+import allEndpoints from "express-list-endpoints"
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts-api";
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.Promise = Promise;
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts-api"
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.Promise = Promise
 
-const port = process.env.PORT || 8080;
-const app = express();
+const port = process.env.PORT || 8080
+const app = express()
 
-app.use(cors());
-app.use(express.json());
+app.use(cors())
+app.use(express.json())
+
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: "Service unavailable" })
+  }
+})
 
 const ThoughtSchema = new mongoose.Schema({
   message: {
-    // the most important property is type
     type: String,
     required: true,
     minlength: 5,
     maxlength: 140,
-    // trim deletes whitespace from beginning and end of a string
+    // The trim property deletes whitespace in the beginning and end of a string
     trim: true
   },
   hearts: {
@@ -35,7 +42,7 @@ const ThoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model("Thought", ThoughtSchema)
 
-///// Routes starting here
+///// ROUTES starting here
 app.get("/", (req, res) => {
   res.send(
     {
@@ -43,8 +50,8 @@ app.get("/", (req, res) => {
       "Find the available endpoints here": "/endpoints",
       "Updated Happy Thoughts Project can be found here": "https://the-happy-thoughts-project.netlify.app"
     }
-  );
-});
+  )
+})
 
 app.get("/endpoints", (req, res) => {
   res.send(allEndpoints(app))
@@ -64,7 +71,7 @@ app.get("/thoughts", async (req, res) => {
       error: error.errors
     })
   }
-});
+})
 
 ///// POSTING a new thought to the database
 app.post("/thoughts", async (req, res) => {
@@ -86,7 +93,7 @@ app.post("/thoughts", async (req, res) => {
       error: error.errors
     })
   }
-});
+})
 
 ///// FINDING and UPDATING (liking) a thought 
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
@@ -111,5 +118,5 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+  console.log(`Server running on http://localhost:${port}`)
+})
