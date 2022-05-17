@@ -3,8 +3,6 @@ import cors from "cors";
 import mongoose from "mongoose";
 import { type } from "express/lib/response";
 
-// import listEndpoints from "express-list-endpoints";
-
 const mongoUrl =
   process.env.MONGO_URL || "mongodb://localhost/happyThoughts-api";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -50,7 +48,6 @@ app.use((req, res, next) => {
 });
 
 // Start defining your routes here
-// add the get thoughts <-------
 app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
@@ -76,30 +73,6 @@ app.post("/thoughts", async (req, res) => {
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
-
-  // promises version
-  // app.post("/thoughts", (req, res) => {
-  //   const { message } = req.body;
-
-  //   new newThought({message}).save()
-  //     .then(data => {
-  //       res.status(201).json({response: data, success: true})
-  //     })
-  //     .catch(error => {
-  //       res.status(400).json({ response: error, success: false})
-  //     })
-
-  // mongoose callback
-  // app.post("/thoughts", (req, res) => {
-  // const { message } = req.body;
-
-  // new newThought({message}).save((error, data) => {
-  //   if (error) {
-  //     res.status(400).json({ response: error, success: false})
-  //   } else {
-  //     res.status(201).json({response: data, success: true})
-  //   }
-  // })
 });
 
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
