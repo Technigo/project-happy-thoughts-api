@@ -32,9 +32,8 @@ const ThoughtCollection = new mongoose.Collection({
   },
 })
 
-// Start defining your routes here
-app.get('/', (req, res) => {
-  res.send('Hello Technigo!')
+app.get('/endpoints', (req, res) => {
+  res.send(allEndpoints(app))
 })
 
 // Start the server
