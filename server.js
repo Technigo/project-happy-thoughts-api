@@ -85,7 +85,7 @@ app.get("/thoughts", async (req, res) => {
   // res.status(200).json("hej")
 
   try {
-    let thoughts = await (await HappyThought.find().sort()).reverse().splice(0, 20);
+    let thoughts = await (await HappyThought.find().sort({ createdAt: "desc" })).splice(0, 20);
     
     res.status(200).json({
       response: thoughts,
