@@ -25,7 +25,7 @@ const thoughtSchema = new Schema({
     minLength: 5,
     maxLength: 140
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -48,9 +48,9 @@ app.get("/thoughts",  async (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
-  const { message, heart } = req.body;
+  const { message } = req.body;
   
-  const newThought = new Thought({ message, heart });
+  const newThought = new Thought({ message });
 
   try {
     const savedThought = await newThought.save();
@@ -64,7 +64,7 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
 
   try {
-    const thoughtById = await Thought.findByIdAndUpdate(thoughtId, {$inc: {heart: 1}}, {new: true});
+    const thoughtById = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}}, {new: true});
     res.status(200).json(thoughtById);
   } catch(err) {
     res.status(400).json({
