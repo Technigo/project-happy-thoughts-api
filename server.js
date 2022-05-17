@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import { type } from "express/lib/response";
+import listEndpoints from "express-list-endpoints";
 
 const mongoUrl =
   process.env.MONGO_URL || "mongodb://localhost/happyThoughts-api";
@@ -49,7 +50,7 @@ app.use((req, res, next) => {
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send(listEndpoints(app));
 });
 
 app.get("/thoughts", async (req, res) => {
