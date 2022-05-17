@@ -55,6 +55,18 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
+app.get("/thoughts", async (req, res) => {
+  try {
+    const thoughts = await new HappyThought.find()
+      .sort({ createdAt: "desc" })
+      .limit(20)
+      .exec();
+    res.status(201).json({ response: thoughts, success: true });
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
+});
+
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
 
@@ -91,11 +103,11 @@ app.post("/thoughts", async (req, res) => {
 });
 
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
-  const { id } = req.params;
+  const { thoughtId } = req.params;
 
   try {
     const updateThought = await HappyThought.findByIdAndUpdate(
-      id,
+      thoughtId,
       {
         $inc: { heart: 1 },
       },
