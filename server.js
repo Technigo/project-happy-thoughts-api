@@ -17,11 +17,13 @@ app.use(cors());
 app.use(express.json());
 /////////////////////
 
+
+
 const HappyThoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     minlength: 4,
-    maxlength: 30, 
+    maxlength: 30,  
     trim: true
   },
   hearts: {
@@ -65,7 +67,7 @@ app.post("/thoughts", async (req, res) => {
 });
 
 
-app.post("/thoughts/:id/hearts", async (req, res) => {
+app.post("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
   try {
     const thoughtToUpdate = await HappyThought.findByIdAndUpdate(id, {$inc: {hearts: 1}});
