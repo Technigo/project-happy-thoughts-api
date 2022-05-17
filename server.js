@@ -120,9 +120,69 @@ app.post('/members/:id/score', async (req, res) => {
 	}
 });
 
-// Start defining your routes here
-app.get('/', (req, res) => {
-	res.send('Hello Technigo!');
+//Start of routes
+app.get('/members', async (req, res) => {
+	const {
+		page,
+		perPage,
+		pageNum = Number(page),
+		perPageNum = Number(perPage),
+	} = req.query;
+
+	// V1 Mongoose
+	// const members = await TechnigoMember.find({})
+	// 	.sort({ createdAt: 1 })
+	// 	.skip((pageNum - 1) * perPageNum)
+	// 	.limit(perPageNum);
+
+	// V2 Mongo
+	const members = await TechnigoMemberSchema.aggregate([
+		{
+			$sort: {
+				createdAt: 1,
+			},
+		},
+		{
+			$skip: (pageNum - 1) * perPageNum,
+		},
+		{
+			$limit: perPageNum,
+		},
+	]);
+
+	res.status(200).json({ response: members, success: true });
+});
+
+app.delete('/members/:id', async (req, res) => {
+	const { id } = req.params;
+
+	try {
+		const deletedMember = await TechnigoMember.deleteOne({ _id: id });
+		if (deletedMember) {
+			res.status(200).json({ response: deletedMember, success: false });
+		} else {
+			res.status(404).json({ response: 'Member not found', success: false });
+		}
+	} catch (error) {
+		res.status(400).json({ response: error, success: false });
+	}
+});
+
+app.patch('/members/:id', (req, res) => {
+	const { id } = req.params;
+	const { name } = req.body;
+
+	TechnigoMember.findOneAndUpdate({ _id: id }, { name: name }, { new: true })
+		.then((updatedMember) => {
+			if (updatedMember) {
+				res.status(200).json({ response: updatedMember, success: true });
+			} else {
+				res.status(404).json({ response: 'Member not found', success: false });
+			}
+		})
+		.catch((error) => {
+			res.status(400).json({ response: error, success: false });
+		});
 });
 
 // Start the server
