@@ -16,7 +16,8 @@
     "express": "^4.17.3",
     "express-list-endpoints": "^6.0.0",
     "mongoose": "^6.3.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",

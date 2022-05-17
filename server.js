@@ -57,6 +57,7 @@ app.get('/thoughts', async (req, res) => {
 })
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body
+
   try {
     const newThought = await new Thought({ message }).save()
     res.status(200).json({ respone: newThought, success: true })
@@ -64,6 +65,20 @@ app.post('/thoughts', async (req, res) => {
     res.status(400).json({ respone: error, success: false })
   }
 })
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      { $inc: { hearts: 1 } },
+      { new: true },
+    )
+    res.status(200).json({ respone: updatedThought, success: true })
+  } catch (error) {
+    res.status(400).json({ respone: error, success: false })
+  }
+})
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
