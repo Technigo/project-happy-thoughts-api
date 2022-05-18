@@ -48,9 +48,9 @@ app.get("/", (req, res) => {
 });
 
 
-// ----------------------/GET THOUGHT-------------------------- //
+// ----------------------/GET THOUGHTS-------------------------- //
 app.get('/thoughts', async (req, res) => {
-  const { page, perPage } = req.query
+  // const { page, perPage } = req.query
 
   try {
     const allThoughts = await HappyThoughts.find({}).sort({createdAt: 'desc'}).limit(20)
@@ -61,32 +61,14 @@ app.get('/thoughts', async (req, res) => {
    }
 })
 
-// ----------------------/DELETE A THOUGHT-------------------------- //
-app.delete('/thoughts/:id', async (req, res) => {
-  const { id } = req.params
-  
-  try {
-    const deleted = await HappyThoughts.findOneAndDelete({_id: id})
-    if(deleted) {
-      res.status(200).json({response: deleted, success: true})
-    } else {
-      res.status(404).json({response: 'Not found', success: false})
-    }
-  } catch (error) {
-    res.status(400).json({response: error, success: false})
-  }
-})
-
-
 // ----------------------/UPDATE LIKE ON HEART---------------------- //
-app.patch("/thoughts/:id/heart", async (req, res) => {
+app.post("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params
-  const { updatedHeart } = req.body
 
   try {
-    const messageToUpdate = await HappyThoughts.findByIdAndUpdate({_id: id}, {message: messageToUpdate})
+    const thoughtToLike = await HappyThoughts.findByIdAndUpdate(id, { $inc: { heart: 1 } })
 
-    res.status(200).json({response: messageToUpdate, success: true}) 
+    res.status(201).json(thoughtToLike) 
   } catch (error) {
     res.status(400).json({response: error, success: false})
   }
@@ -96,7 +78,7 @@ app.patch("/thoughts/:id/heart", async (req, res) => {
 // ----------------------/POST THOUGHT------------------------ //
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body
-
+  console.log(req.body)
   try {
     const newMessage = await new HappyThoughts({message: message}).save()
 
