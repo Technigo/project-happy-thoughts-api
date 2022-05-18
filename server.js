@@ -37,7 +37,7 @@ const ThoughtSchema = new mongoose.Schema({
   },
   createAt: {
     type: Date,
-    default: () => new Date(),
+    default: ()=> new Date()
   },
 })
 
