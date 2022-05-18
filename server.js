@@ -78,11 +78,11 @@ app.post("/thoughts", async (req, res) => {
     });
   }
 });
-app.post("thoughts/:thougtsID/like", async (req, res) => {
-  const { thoughtID } = req.params;
+app.post("thoughts/:thougtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
 
   try {
-    const likedThought = await HappyThoughts.findByIdAndUpdate(thoughtID, {
+    const likedThought = await HappyThoughts.findByIdAndUpdate(thoughtId, {
       $inc: { hearts: 1 },
     });
     res.status(200).json(likedThought);
