@@ -13,6 +13,7 @@ const Thought = mongoose.model('Thought', {
     required: true,
     minlength: 5,
     maxlength: 140,
+    trim: true,
   },
   like: {
     type: Number,
@@ -36,29 +37,35 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send(listEndpoints(app));
+  res.send({
+    'Happy thoughts api - Vanessa Hajek. See frontend here: https://happy-thoughts-van.netlify.app/':
+      listEndpoints(app),
+  });
 });
 
+// showing latest 20 thoughts
 app.get('/happy-thoughts', async (req, res) => {
   const thought = await Thought.find()
     .sort({ createdAt: 'desc' })
     .limit(20)
     .exec();
-  res.status(201).json(thought);
+  res.status(200).json(thought);
 });
 
+// adding a thought to the database
 app.post('/happy-thoughts', async (req, res) => {
-  const { message, clicks } = req.body;
+  const { message } = req.body;
 
-  const thought = new Thought({ message, clicks });
+  const thought = await new Thought({ message });
 
   try {
     const savedThought = await thought.save();
-    res.status(200).json(savedThought);
+    res.status(201).json({ response: savedThought, success: true });
   } catch (err) {
     res.status(400).json({
       message: 'Could not save your happy thought to the Database ',
-      error: err.errors,
+      response: error,
+      success: false,
     });
   }
 });
