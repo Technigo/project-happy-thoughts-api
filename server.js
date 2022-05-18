@@ -35,7 +35,7 @@ const ThoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model('Thought', ThoughtSchema)
 
-// Add middlewares to enable cors and json body parsing
+// ADD MIDDLEWARE
 app.use(cors())
 app.use(express.json())
 
