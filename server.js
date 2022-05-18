@@ -84,6 +84,7 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
     });
   } catch (err) {
     res.status(400).json({
+      message: "Could not find post",
       success: false,
       error: err.errors
     });
