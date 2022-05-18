@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
+
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
@@ -16,24 +17,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-//Testing, difference between schema and model?
-//Schema
-const TechnigoMemberSchema = new mongoose.Schema({
-  name: {
-    //most important one
+
+const HappyThoughtsSchema = new mongoose.Schema({
+  message: {
     type: String,
     required: true,
-    unique: true,
-    enum: ["Karin", "Petra", "Matilda","Poya", "Daniel"]
-  }, 
-  description: {
-    type: String,
-    minlength: 4,
-    maxlength: 30,
+    minlength: 5,
+    maxlength: 140,
     // deletes whitespace from beginning and the end of a string
     trim: true
-  },
-  Score: {
+  }, 
+  hearts: {
     type: Number,
     default: 0
   },
@@ -43,26 +37,64 @@ const TechnigoMemberSchema = new mongoose.Schema({
   } 
 })
 
-//model
-const TechnigoMember = mongoose.model("TechnigoMember", TechnigoMemberSchema)
 
-// POST request
-app.post("/members", async(req, res)=> {
-  const { name, description } = req.body
-  console.log(req.body)
-  try {
-    const newMember = await new TechnigoMember({ name: name, description: description}).save()
-    res.status(200).json({response: newMember, sucess: true})
-  } catch(error) {
+const HappyThoughts = mongoose.model("HappyThoughts", HappyThoughtsSchema)
 
-    res.status(400).json({response: error, sucess: false})
-  }
-})
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send("Happy Thoughts!");
 });
+
+app.get("/thougths", async (req,res) => {
+  try {
+    const thoughts = await HappyThoughts.find({}).sort({createdAt: "desc"})
+    res.status(200).json(thoughts)
+  } catch(error) {
+    res.status(400).json({
+      message: "Could not get thoughts", 
+      error: err.errors,
+      success: false
+    })
+  }
+})
+
+// POST request
+app.post("/thoughts", async (req, res)=> {
+  const { message } = req.body
+  try {
+    const newHappyThought = await new HappyThoughts({message}).save()
+    res.status(200).json(newHappyThought)
+  } catch(err) {
+    res.status(400).json({
+      message: "Could not save the Happy Thought", 
+      error: err.errors,
+      success: false
+    })
+  }
+})
+
+
+/// POST request with promises
+
+app.post("/thoughts/:thoughtId/like", async(req, res)=> {
+  const { thoughtId } = req.params
+
+  try {
+    const likedThought = await HappyThoughts.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}})
+    res.status(200).json(likedThought)
+  } catch(err) {
+    res.status(400).json({
+      message: "Could not find and update this post",
+      error: err.errors, 
+      success: false
+    })
+  }
+})
+
+//It limits the amount of members on each page and then removes the ones already displayed on the page before
+
+
 
 // Start the server
 app.listen(port, () => {
