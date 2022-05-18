@@ -46,22 +46,38 @@ const TechnigoMemberSchema = new mongoose.Schema({
 
 const TechnigoMember = mongoose.model("TechnigoMember", TechnigoMemberSchema)
 
-app.post("/members", async (req, res) => {
+// app.post("/members", async (req, res) => {
+//   const { name, description } = req.body
+//   console.log(req.body)
+//   //why save new member to a var? RESTful:send back the data we create, we are not only sending back name & descr
+//   //but whole object, so the id is sent back, and if we want member details need only send id
+//   try {
+//     const newMember = await new TechnigoMember({name: name, description: description}).save()
+
+//   res.status(201).json({response: newMember, success: true})
+
+//   } catch (error) {
+//     res.status(400).json({response: error, success: false})
+
+//   }
+
+// })
+
+//POST with promises
+app.post("/members", (req, res) => {
+
   const { name, description } = req.body
   console.log(req.body)
-  //why save new member to a var? RESTful:send back the data we create, we are not only sending back name & descr
-  //but whole object, so the id is sent back, and if we want member details need only send id
-  try {
-    const newMember = await new TechnigoMember({name: name, description: description}).save()
 
-  res.status(201).json({response: newMember, success: true})
+  new TechnigoMember({name: name, description: description}).save()
+  .then(data => {
+  res.status(201).json({response: data, success: true})
 
-  } catch (error) {
+  }).catch(error => {
     res.status(400).json({response: error, success: false})
+  })
+  })
 
-  }
-
-})
 
 // Start defining your routes here
 app.get("/", (req, res) => {
