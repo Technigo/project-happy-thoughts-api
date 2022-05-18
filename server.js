@@ -41,7 +41,7 @@ app.use(express.json())
 
 // ROUTES
 app.get('/', (req, res) => {
-  res.send('Hello world! This is an API for posting happy thoughts')
+  res.send('Tjaba, this is my API for my frontend app, see it here "https://tiopunkter.netlify.app"')
 })
 
 // ENDPOIJNT SHOWS 20 LATEST MSG's
