@@ -44,7 +44,7 @@ const HappyThoughts = mongoose.model("HappyThoughts", HappyThoughtsSchema)
 // Start defining your routes here
 app.get("/", (req, res) => {
   const Landing = {
-    welcome: "Happy Thoughts-API made by Terese",
+    Welcome: "Happy Thoughts-API made by Terese",
     View:  "Happy Thoughts project has been updated, see API live: https://happy-thoughts-messages.netlify.app",
     Routes: [
       "All endpoints are listed here: /thoughts",
@@ -54,7 +54,7 @@ app.get("/", (req, res) => {
 });
 
 
-app.get("/thougths", async (req,res) => {
+app.get("/thoughts", async (req,res) => {
   try {
     const thoughts = await HappyThoughts.find({}).sort({createdAt: "desc"})
     res.status(200).json(thoughts)
