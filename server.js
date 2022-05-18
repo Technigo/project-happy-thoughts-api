@@ -151,11 +151,17 @@ app.get("/ex/:name", async (req, res) => {
       .exec();
     res.status(200).json({ success: true, data: texts });
   } catch (err) {
-    res.status(400).json({
+    res.status(200).json({
       success: false,
       status_code: 400,
       message: "Bad request, could not fetch thoughts.",
       error: err.errors,
+      data: [
+        { message: "Person not found" },
+        { likes: 0 },
+        { ex: "???" },
+        { createdAt: new Date() },
+      ],
     });
   }
 });
