@@ -6,30 +6,29 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
 const port = process.env.PORT || 8090;
 const app = express();
 
-// Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
 
-//can create this for properties always present on the page
+//schema differs : only has properties, create those that are always present on the page
+// model has functions like findbyID, save
 const TechnigoMemberSchema = new mongoose.Schema({
   name: {
+    //type is most imortant and always needed
     type: String,
     required: true,
+    //not three Daniels
     unique: true,
-    //only accepted names
+    //only accepted names, can be used for tags also like admin rights
     enum:["Karin", "Petra", "Matilda", "Poya", "Daniel"]
   },
   description: {
     type: String,
     minlength: 4,
     maxlength: 30,
-    //delets blankspace fro beginning and end of string
+    //delets blankspace from beginning, and end of string
     trim: true
   },
   score: {
@@ -46,6 +45,7 @@ const TechnigoMemberSchema = new mongoose.Schema({
 
 const TechnigoMember = mongoose.model("TechnigoMember", TechnigoMemberSchema)
 // async await is the most used of the three POST requests
+//happy thought message
 app.post("/members", async (req, res) => {
   const { name, description } = req.body
   console.log(req.body)
@@ -60,7 +60,21 @@ app.post("/members", async (req, res) => {
     res.status(400).json({response: error, success: false})
 
   }
+})
 
+//POST - creating (can be used for all)
+//PUT - replace all object
+//PATCH - replace property in object
+
+//happy thought like +1
+app.post("/members/:id/score", async (req, res) => {
+  const { id } = req.params
+try {
+  const memberToUpdate = await TechnigoMember.findByIdAndUpdate(id, {$inc: {score: 1}})
+  res.status(200).json({response: `Member ${memberToUpdate.name} has been updated`, success: true})
+} catch (error) {
+res.status(400).json({response: error, success: false})
+}
 })
 
 //POST with promises, second most used
