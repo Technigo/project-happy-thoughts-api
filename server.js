@@ -141,17 +141,18 @@ app.get("/mostliked", async (req, res) => {
   }
 });
 
-// SEARCH FOR EX TEXTS BY NAME
+// SEARCH FOR EX TEXTS BY NAME - LIMIT TO 20 TEXTS - THIS ISN'T WORKING
 app.get("/ex/:name", async (req, res) => {
-  const { exName } = req.params;
+  const exName = req.params.name.toLowerCase();
+  console.log(exName);
   try {
-    const texts = await Text.find({ ex: exName.toLowerCase() })
-      .sort({ likes: "desc" })
-      .limit(20)
-      .exec();
+    const texts = await Text.find({ ex: exName });
+    console.log(texts);
+    // .sort({ likes: "desc" })
+    // .limit(20);
     res.status(200).json({ success: true, data: texts });
   } catch (err) {
-    res.status(200).json({
+    res.status(400).json({
       success: false,
       status_code: 400,
       message: "Bad request, could not fetch thoughts.",
