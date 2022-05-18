@@ -36,10 +36,38 @@ const HappyThoughtsSchema = new mongoose.Schema({
 
 const HappyThoughts = mongoose.model("HappyThoughts", HappyThoughtsSchema)
 
-// Start defining your routes here
+// Add the endpoints here later on
 app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
+
+app.get("/thoughts", async (req,res) => {
+  try {
+    const thoughts = await HappyThoughts.find()
+    res.status(200).json(thoughts)
+  } catch (err) {
+    res.status(400).json({
+      message: "Could not get thoughts",
+      error: err.errors,
+      success: false
+    })
+  }
+})
+
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body
+
+  try {
+    const newHappyThought = await new HappyThoughts({message}).save()
+    res.status(200).json(newHappyThought)
+  } catch (err) {
+    res.status(400).json({
+      message: "Could not save the Happy Thought",
+      error: err.errors, 
+      success: false
+    })
+  }
+})
 
 // Start the server
 app.listen(port, () => {
