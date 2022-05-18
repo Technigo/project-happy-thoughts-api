@@ -37,8 +37,18 @@ const HappyThoughtsSchema = new mongoose.Schema({
 const HappyThoughts = mongoose.model("HappyThoughts", HappyThoughtsSchema);
 
 // Start defining your routes here
+
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  const Landing = {
+    Welcome: "Happy Thoughts - API",
+    View: "Happy Thoughts project has been updated, see API live https://happy-thougts.netlify.app/",
+    Routes: [
+      {
+        "All endpoints are listed here": "/thoughts",
+      },
+    ],
+  };
+  res.send(Landing);
 });
 
 app.get("/thoughts", async (req, res) => {
