@@ -16,6 +16,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({
+      error: "Service unavailable"
+    })
+  }
+})
+
 const HappyThoughtsSchema = new mongoose.Schema({
   message: {
     type: String, 
@@ -43,7 +53,7 @@ app.get("/", (req, res) => {
 
 app.get("/thoughts", async (req,res) => {
   try {
-    const thoughts = await HappyThoughts.find().sort({createdAt: "desc"})
+    const thoughts = await HappyThoughts.find().sort({createdAt: -1}).limit(20).exec()
     res.status(200).json(thoughts)
   } catch (err) {
     res.status(400).json({
@@ -64,6 +74,22 @@ app.post("/thoughts", async (req, res) => {
     res.status(400).json({
       message: "Could not save the Happy Thought",
       error: err.errors, 
+      success: false
+    })
+  }
+})
+
+app.post("/thoughts/:thoughtsId/like", async (req, res) => {
+  //does not require a JSON body
+  const { thoughtId } = req.params
+
+  try {
+    const likedThought = await HappyThoughts.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}})
+    res.status(200).json(likedThought)
+  } catch (err) {
+    res.status(400).json({
+      message: "Could not find and update this post",
+      error: err.errors,
       success: false
     })
   }
