@@ -42,7 +42,7 @@ const HappyThoughtSchema = new mongoose.Schema({
 		maxlength: [140, 'The message must be less than 140 characters'],
 		trim: true,
 	},
-	likes: {
+	hearts: {
 		type: Number,
 		default: 0,
 	},
