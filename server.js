@@ -99,7 +99,7 @@ const HappyThoughtsSchema = new mongoose.Schema({
     type: Date,
     // Anonymous function for the function to run for every new POST and not only when the application starts
     default: () => new Date()
-  } 
+  }
 })
 
 const HappyThoughts = mongoose.model('HappyThoughts', HappyThoughtsSchema)
@@ -111,11 +111,11 @@ app.get("/", (req, res) => {
 });
 
 app.get('/thoughts', async (req,res) => {
-  const {page, perPage} = req.query
+  // const {page, perPage} = req.query
 
   try {
-    const allThoughts = await HappyThoughts.find({}).sort({createdAt: -1}) 
-    .skip((page -1 ) * perPage).limit(perPage)                      ///.limit(20).exec()
+    const allThoughts = await HappyThoughts.find({}).sort({createdAt: 'desc'}).limit(20) 
+    // .skip((page -1 ) * perPage).limit(perPage)    
     res.status(200).json(allThoughts)
   }catch (error) {
     res.status(400).json({response: error, success: false})
