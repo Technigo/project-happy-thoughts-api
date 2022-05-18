@@ -43,7 +43,7 @@ app.get("/", (req, res) => {
 
 app.get("/thoughts", async (req,res) => {
   try {
-    const thoughts = await HappyThoughts.find()
+    const thoughts = await HappyThoughts.find().sort({createdAt: "desc"})
     res.status(200).json(thoughts)
   } catch (err) {
     res.status(400).json({
