@@ -14,7 +14,7 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 140,
   },
-  clicks: {
+  like: {
     type: Number,
     default: 0,
   },
@@ -60,6 +60,21 @@ app.post('/happy-thoughts', async (req, res) => {
       message: 'Could not save your happy thought to the Database ',
       error: err.errors,
     });
+  }
+});
+
+app.post('/happy-thoughts/:id/like', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const likeToUpdate = await Thought.findByIdAndUpdate(id, {
+      $inc: { like: 1 },
+    });
+    res.status(200).json({
+      response: `Like ${likeToUpdate.message} has been updated`,
+      success: true,
+    });
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
   }
 });
 
