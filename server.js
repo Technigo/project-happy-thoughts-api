@@ -1,6 +1,7 @@
 import express from "express"
 import cors from "cors"
 import mongoose from "mongoose"
+//import allEndpoints from "express-list-endpoints"
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -11,6 +12,14 @@ mongoose.Promise = Promise
 // PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
+
+// app.use((req, res, next) => {
+//   if (mongoose.connection.readyState === 1) {
+//     next()
+//   } else {
+//     res.status(400).json({ response: error, success: false })
+//   }
+// })
 
 const ThoughtSchema = new mongoose.Schema({
   message: {
@@ -41,6 +50,21 @@ app.get("/", (req, res) => {
   res.send("Hi! This is the API for Lovisas Happy Thoughts.")
 })
 
+app.get("/thoughts", async (req, res) => {
+  try {
+    const thoughts = await Thought.find()
+      .sort({ createdAt: "desc" })
+      .limit(20)
+      .exec()
+    res.status(200).json(thoughts)
+  } catch (error) {
+    res.status(400).json({
+      response: error,
+      success: false,
+    })
+  }
+})
+
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body
   try {
@@ -51,11 +75,11 @@ app.post("/thoughts", async (req, res) => {
   }
 })
 
-app.post("/thoughts/:id/hearts", async (req, res) => {
-  const { id } = req.params
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params
   try {
     const updatedThought = await Thought.findByIdAndUpdate(
-      id,
+      thoughtId,
       {
         $inc: {
           hearts: 1,
@@ -70,6 +94,10 @@ app.post("/thoughts/:id/hearts", async (req, res) => {
     res.status(400).json({ response: error, success: false })
   }
 })
+
+// app.get("/endpoints", (req, res) => {
+//   res.send(allEndpoints(app))
+// })
 
 // Start the server
 app.listen(port, () => {
