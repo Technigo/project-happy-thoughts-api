@@ -26,7 +26,7 @@ const ThoughtSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: () => new Date()
-  },
+  }
 })
 
 const Thought = mongoose.model('Thought', ThoughtSchema)
@@ -35,18 +35,18 @@ const Thought = mongoose.model('Thought', ThoughtSchema)
 app.use(cors())
 app.use(express.json())
 
-// Start defining your routes here
-// app.get('/thoughts', async (req, res) => {
+//Start defining your routes here
+app.get('/thoughts', async (req, res) => {
 
-//   try {
-//     const thoughtList = await Thought.find({})
-//       .sort({ createdAt: 'desc' })
-//       .limit(20)
-//     res.status(200).json(thoughtList)
-//   } catch (error) {
-//     res.status(400).json({ response: error, success: false })
-//   }
-// })
+  try {
+    const thoughtList = await Thought.find({})
+      .sort({ createdAt: 'desc' })
+      .limit(20)
+    res.status(200).json(thoughtList)
+  } catch (error) {
+    res.status(400).json({ response: error, success: false })
+  }
+})
 
 app.post('/thoughts', async (req, res) => {
 
@@ -68,8 +68,8 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     const updatedLike = await Thought.findByIdAndUpdate(thoughtId, { 
 
         $inc: { 
-          like: 1
-        },
+          hearts: 1
+        }
     },
     {
       new: true
@@ -81,22 +81,22 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
 
 })
 
-// app.delete('/thoughts/:thoughtId', async (req, res) => {
+app.delete('/thoughts/:thoughtId', async (req, res) => {
 
-//   const { thoughtId } = req.params
+  const { thoughtId } = req.params
 
-//   try {
-//     const deletedThought = await Thought.findOneAndDelete(thoughtId)
-//     if (deletedThought) {
-//       res.status(200).json({ response: deletedThought, success: true })
-//     } else {
-//       res.status(404).json({ response: 'Message not found', success: false })
-//     }
-//   } catch (error) {
-//     res.status(400).json({ response: error, success: false })
-//   }
+  try {
+    const deletedThought = await Thought.findOneAndDelete(thoughtId)
+    if (deletedThought) {
+      res.status(200).json({ response: deletedThought, success: true })
+    } else {
+      res.status(404).json({ response: 'Message not found', success: false })
+    }
+  } catch (error) {
+    res.status(400).json({ response: error, success: false })
+  }
   
-// })
+})
 
 
 // Start the server
