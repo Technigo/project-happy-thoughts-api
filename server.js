@@ -18,19 +18,20 @@ app.use(express.json());
 
 //Schema allows us to reuse code
 //We can combine a schema for certain propertys that shall remain together with properties that shall vary
+//enum will add the only acceptable names to be able to pass to the name property
+//trim deletes whitespace from beginning and end of string - not in between
+//new Date needs to have anonymus function in order not to execute when page loads
 const TechnigoMemberSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
     unique: true,
-    //enum will add the only acceptable names to be able to pass to the name property
     enum:["Karin", "Petra", "Matilda", "Poya", "Daniel"]
   },
   description: {
     type: String,
     minlength: 4,
     maxlength: 30,
-    //deletes whitespace from beginning and end of string - not in between
     trim: true
   },
   score: {
@@ -39,7 +40,6 @@ const TechnigoMemberSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    //anonymus function in order not to execute new Date function at once 
     default: () => new Date()
   }
 });
@@ -49,7 +49,6 @@ const TechnigoMember = mongoose.model("TechnigoMember", TechnigoMemberSchema);
 
 //POST request with async await - version 1
 app.post("/members", async (req, res) => {
- 
   const { name, description } = req.body;
   console.log(req.body);
   try {
@@ -87,11 +86,47 @@ app.post("/members/:id/score", async (req, res) => {
   }
 });
 
+app.get("/members", async (req, res) => {
+  //Mongoose version
+  const {page, perPage} = req.query;
+  try {
+  const members = await TechnigoMember.find({}).sort({createdAt: -1})
+    .skip((page -1) * perPage).limit(perPage)
+  res.status(200).json({success: true, response: members});
+  } catch (error) {
+    res.status(400).json({success: false, response: error});
+  }
+  
+  //Mongo version
+  // const { page, perPage, numPage = +page, numPerPage = +perPage } = req.query;
+  // try {
+  // const members = await TechnigoMember.aggregate([
+  //   {
+  //     $sort: {
+  //       createdAt: -1
+  //     }
+  //   },
+  //   {
+  //     $skip: (numPage -1) * numPerPage
+  //   },
+  //   {
+  //     $limit: numPerPage
+  //   }
+  // ]);
+  // res.status(200).json({success: true, response: members});
+  // } catch (error) {
+  //   res.status(400).json({success: false, response: error});
+  // }
+});
+
 // Start defining your routes here
 app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
+// app.delete("member/:id", async (req, res) => {
+//   const deleted = TechnigoMember.deleteOne
+// })
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
