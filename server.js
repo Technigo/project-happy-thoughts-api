@@ -43,8 +43,16 @@ const HappyThoughts = mongoose.model("HappyThoughts", HappyThoughtsSchema)
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Happy Thoughts!");
+  const Landing = {
+    welcome: "Happy Thoughts-API made by Terese",
+    View:  "Happy Thoughts project has been updated, see API live: https://happy-thoughts-messages.netlify.app",
+    Routes: [
+      "All endpoints are listed here: /thoughts",
+    ] 
+  };
+  res.send(Landing);
 });
+
 
 app.get("/thougths", async (req,res) => {
   try {
@@ -59,7 +67,7 @@ app.get("/thougths", async (req,res) => {
   }
 })
 
-// POST request
+
 app.post("/thoughts", async (req, res)=> {
   const { message } = req.body
   try {
@@ -75,8 +83,6 @@ app.post("/thoughts", async (req, res)=> {
 })
 
 
-/// POST request with promises
-
 app.post("/thoughts/:thoughtId/like", async(req, res)=> {
   const { thoughtId } = req.params
 
@@ -91,9 +97,6 @@ app.post("/thoughts/:thoughtId/like", async(req, res)=> {
     })
   }
 })
-
-//It limits the amount of members on each page and then removes the ones already displayed on the page before
-
 
 
 // Start the server
