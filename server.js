@@ -39,18 +39,17 @@ const Thought = mongoose.model('Thought', ThoughtSchema)
 app.use(cors())
 app.use(express.json())
 
-// Start defining your routes here
+// ROUTES
 app.get('/', (req, res) => {
   res.send('Hello world! This is an API for posting happy thoughts')
 })
 
-// This endpoint returns a maximum of 20 thoughts, sorted by createdAt to show the most recent thoughts first
+// ENDPOIJNT SHOWS 20 LATEST MSG
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
   res.status(200).json(thoughts)
 })
 
-// This endpoint expects a JSON body with the thought message
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body
 
@@ -62,21 +61,18 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-// This endpoint updates the heart/amount of likes by 1
+// UPDATES LIKES
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
 
   try {
   const updatedHearts = await Thought.findByIdAndUpdate(
-    // Argument 1 - id
     thoughtId, 
-    // Argument 2 - properties to change
     { 
       $inc: { 
         hearts: 1
       }
     },
-    // Argument 3 - options (not mandatory)
     {
       new: true
     }
