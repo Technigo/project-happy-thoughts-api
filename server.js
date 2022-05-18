@@ -17,6 +17,14 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+// app.use((req, res, next) => {
+// 	if (mongoose.connection.readyState === 1) {
+// 		next()
+// 	} else {
+// 		res.status(503).json({ error: 'Service unavailable', success: false })
+// 	}
+// })
+
 app.use((req, res, next) => {
 	if (mongoose.connection.readyState === 1) {
 		next()
@@ -30,8 +38,8 @@ const HappyThoughtSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 		unique: true,
-		minlength: 5,
-		maxlength: 140,
+		minlength: [5, 'The message must be at least 5 characters'],
+		maxlength: [140, 'The message must be less than 140 characters'],
 		trim: true,
 	},
 	likes: {
@@ -53,7 +61,8 @@ app.get('/', (req, res) => {
 
 app.get('/thoughts', async (req, res) => {
 	try {
-		const Thoughts = await HappyThought.find()
+		const Thoughts = await HappyThought.find({}).sort({ createdAt: 'desc' }).limit(10).exec()
+
 		res.status(200).json(Thoughts)
 	} catch (error) {
 		res.status(400).json({
@@ -75,7 +84,7 @@ app.post('/thoughts', async (req, res) => {
 })
 
 //POST -> creates, PUT -> replace, PATCH -> update
-app.post('/thoughts/:id/likes', async (req, res) => {
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
 	const { id } = req.params
 	try {
 		const thoughtToUpdate = await HappyThought.findByIdAndUpdate(id, { $inc: { likes: 1 } })
