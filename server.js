@@ -70,11 +70,11 @@ app.post('/happy-thoughts', async (req, res) => {
   }
 });
 
-app.post('/happy-thoughts/:id/like', async (req, res) => {
-  const { id } = req.params;
+app.post('/happy-thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params;
   try {
     const likeToUpdate = await Thought.findByIdAndUpdate(
-      id,
+      thoughtId,
       {
         $inc: { like: 1 },
       },
