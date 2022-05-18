@@ -44,7 +44,7 @@ app.get('/', (req, res) => {
   res.send('Hello world! This is an API for posting happy thoughts')
 })
 
-// ENDPOIJNT SHOWS 20 LATEST MSG
+// ENDPOIJNT SHOWS 20 LATEST MSG's
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
   res.status(200).json(thoughts)
