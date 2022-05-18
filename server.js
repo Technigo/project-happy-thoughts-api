@@ -76,7 +76,7 @@ app.get("/texts", async (req, res) => {
   try {
     const texts = await Text.find()
       .sort({ createdAt: "desc" })
-      .limit(20)
+      .limit(40)
       .exec();
     res.status(200).json({ success: true, data: texts });
   } catch (err) {
