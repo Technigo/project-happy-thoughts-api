@@ -111,10 +111,48 @@ app.get("/", (req, res) => {
 });
 
 app.get('/thoughts', async (req,res) => {
+  const {page, perPage} = req.query
 
-  const allThoughts = await HappyThoughts.find({}).sort({createdAt: 'desc'}).limit(20).exec()
-  res.status(200).json(allThoughts)
+  try {
+    const allThoughts = await HappyThoughts.find({}).sort({createdAt: -1}) 
+    .skip((page -1 ) * perPage).limit(perPage)                      ///.limit(20).exec()
+    res.status(200).json(allThoughts)
+  }catch (error) {
+    res.status(400).json({response: error, success: false})
+  }
   
+})
+
+app.delete('/thoughts/:id', async (req, res) => {
+  const { id } = req.params
+  
+  try {
+    const deleted = await HappyThoughts.findOneAndDelete({_id: id})
+    if(deleted) {
+      res.status(200).json({response: deleted, success: true})
+    } else {
+      res.status(404).json({response: 'Not found', success: false})
+    }
+  } catch (error) {
+    res.status(400).json({response: error, success: false})
+  }
+})
+
+app.patch('/thoughts/:id', async (req,res) => {
+  const { id } = req.params
+  const{ updatedMessage } = req.body
+
+  try {
+    const messageToUpdate = await HappyThoughts.findByIdAndUpdate({_id: id}, {message: updatedMessage})
+    if(messageToUpdate) {
+      res.status(200).json({response: messageToUpdate, success: true})
+    } else {
+      res.status(404).json({response: 'Not found', success: false}) 
+    } 
+  } catch (error) {
+    res.status(400).json({response: error, success: false})
+  }
+
 })
 
 
@@ -131,10 +169,10 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-app.post('thoughts/:id/heart', async (req, res) => {
+app.post('/thoughts/:id/heart', async (req, res) => {
   const { id } = req.params
   try {
-    const heartToUpdate = await HappyThoughts.findByIdAndUpdate(id, {$inc: {score: 1}})
+    const heartToUpdate = await HappyThoughts.findByIdAndUpdate(id, {$inc: {heart: 1}})
     res.status(200).json({response: 'You have liked this message', success: true})
   } catch (error) {
     res.status(400).json({response: error, success: false})
