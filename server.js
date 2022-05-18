@@ -27,6 +27,7 @@ const ThoughtSchema = new mongoose.Schema({
   },
   hearts: {
     type: Number,
+    default: 0,
   },
   createdAt: {
     type: Date,
@@ -50,6 +51,23 @@ app.get('/endpoints', (req, res) => {
   res.send(allEndpoints(app));
 });
 
+app.get('/thoughts', async (req, res) => {
+  try {
+    const thoughts = await Thought.find()
+      .sort({ createdAt: 'desc' })
+      .limit(20)
+      .exec();
+    res.status(200).json(thoughts);
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      status_code: 400,
+      message: 'Sorry! Could not find any thoughts.',
+      error: err.errors,
+    });
+  }
+});
+
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body;
   try {
@@ -60,6 +78,23 @@ app.post('/thoughts', async (req, res) => {
       success: false,
       status_code: 400,
       message: 'Sorry! Could not save your thought.',
+      error: err.errors,
+    });
+  }
+});
+
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params;
+  try {
+    const thoughtToLike = await Thought.findByIdAndUpdate(thoughtId, {
+      $inc: { hearts: 1 },
+    });
+    res.status(201).json(thoughtToLike);
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      status_code: 400,
+      message: 'Sorry! Could not like this thought.',
       error: err.errors,
     });
   }
