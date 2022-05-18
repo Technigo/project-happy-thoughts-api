@@ -66,9 +66,13 @@ app.post('/happy-thoughts', async (req, res) => {
 app.post('/happy-thoughts/:id/like', async (req, res) => {
   const { id } = req.params;
   try {
-    const likeToUpdate = await Thought.findByIdAndUpdate(id, {
-      $inc: { like: 1 },
-    });
+    const likeToUpdate = await Thought.findByIdAndUpdate(
+      id,
+      {
+        $inc: { like: 1 },
+      },
+      { new: true }
+    );
     res.status(200).json({
       response: `Like ${likeToUpdate.message} has been updated`,
       success: true,
