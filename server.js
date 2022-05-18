@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts-api";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -32,7 +35,13 @@ const ThoughtsSchema = new mongoose.Schema({
 const thought = mongoose.model("thought", ThoughtsSchema);
 
 app.get("/", (req, res) => {
-  res.send("Happy thougts api");
+  const Main = {
+    About:
+      "Api for Happy Thoughts project.",
+    Frontend:
+      "https://sofiaringstedthappythoughts.netlify.app/"
+  };
+  res.send(Main);
 });
 
 app.get("/thoughts", async (req, res) => {
