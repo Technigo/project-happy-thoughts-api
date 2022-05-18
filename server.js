@@ -1,4 +1,4 @@
-import express, { application } from "express";
+import express, { application, json } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
@@ -11,7 +11,8 @@ const Thought = mongoose.model('Thought', {
   message: {
     type: String,
     required: true,
-    minlength: 5
+    minlength: 5,
+    maxlength: 140
   },
   heart: {
     type: Boolean,
@@ -39,14 +40,44 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
+
+
 // ----------------------/GET THOUGHT-------------------------- //
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
-  res.json(thoughts)
+
+  const { page, perPage } = req.query
+
+  try {
+    const thoughts = await Thought.find({}).sort({createdAt: -1})
+    .skip((page - 1 * perPage)).limit(perPage)
+
+    res.status(200).json({success: true, response: thoughts})
+   } catch (error) {
+    res.status(400).json({success: false, response: error})
+   }
+
 })
 
 
-// ----------------------/POST TASKS------------------------ //
+
+// ----------------------/UPDATE LIKE ON HEART---------------------- //
+app.patch("/thoughts/:id", async (req, res) => {
+  const { id } = req.params
+  const { updatedLike } = req.body
+
+  try {
+    const thoughtToLike = await Thought.findByIdAndUpdate({_id: id}), {heart = updatedLike}
+
+    if (thoughtToLike) {
+    res.status(200).json({success: true, response: deleted}) 
+  }
+  } catch (error) {
+    res.status(400).json({success: false, response: error})
+  }
+})
+
+
+// ----------------------/POST THOUGHT------------------------ //
 app.post('/thoughts', async (req, res) => {
   // Retrieve the information sent by the client to our API endpoint
   const { message } = req.body
@@ -56,24 +87,14 @@ app.post('/thoughts', async (req, res) => {
 
   try {
     // Success case
-    const savedThought = await task.save()
+    const savedThought = await thought.save()
     res.status(201).json(savedThought)
   } catch (err) {
-    res.status(400).json({message: 'Could not save task to the database', error: err.errors})
+    res.status(400).json({message: 'Could not save thought to the database', error: err.errors})
   }
 })
 
-// ----------------------/UPDATE SCORE------------------------ //
-// app.post("/tasks/:id/score", async (req, res) => {
-//   const { id } = req.params
 
-//   try {
-//     const memberToUpdate = await TechnigoMember.findByIdAndUpdate(id, {$inc: {score: 1}})
-//     res.status(200).json({response: `Member ${memberToUpdate.name} has been updated`, success: true})
-//   } catch (error) {
-//     res.status(400).json({response: error, success: false})
-//   }
-// })
 
 // ----------------------/START SERVER------------------------ //
 app.listen(port, () => {
