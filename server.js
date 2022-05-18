@@ -39,7 +39,7 @@ const Thought = mongoose.model('Thought', thoughtSchema);
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Change this to routes later!");
+  res.send("[GET]: /thoughts [POST]: /thoughts [POST]: /thoughts/:thoughtId/like");
 });
 
 app.get("/thoughts",  async (req, res) => {
