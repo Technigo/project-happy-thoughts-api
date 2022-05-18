@@ -3,10 +3,12 @@ import mongoose from "mongoose";
 const ThoughtsSchema = mongoose.Schema({
   message: {
     type: String,
+    required: true,
     minlength: 5,
-    maxlength: 140
+    maxlength: 140,
+    trim: true
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
