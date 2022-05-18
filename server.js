@@ -48,7 +48,24 @@ const HappyThoughts = mongoose.model("HappyThoughts", HappyThoughtsSchema)
 
 // Add the endpoints here later on
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  const endpoints = {
+    Welcome: "Happy Thoughts API made by Emma, Technigo Frontend Bootcamp",
+    Routes: [
+      {
+        "path": "/",
+        "methods": "GET"
+      },
+      {
+        "path": "/thoughts",
+        "methods": ["GET", "POST"]
+      },
+      {
+        "path": "/thoughts/:thoughtId/like",
+        "methods": "POST"
+      }
+    ]
+  }
+  res.send(endpoints);
 });
 
 app.get("/thoughts", async (req,res) => {
