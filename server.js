@@ -48,10 +48,10 @@ app.get("/thoughts", async (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
-  const { message } = req.body;
+  const { message, hearts } = req.body;
 
   try {
-    const newThought = await new thought({ message }).save();
+    const newThought = await new thought({ message, hearts }).save();
     res.status(200).json({
       response: newThought, 
       success: true
