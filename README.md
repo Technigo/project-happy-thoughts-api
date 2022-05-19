@@ -1,13 +1,15 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+The project for this week was to use Express and MongoDB to build an API for a previous frontend project Happy Thoughts. The API have endpoints for both GET- and POST request. 
 
 ## The problem
+For this project we got a lot of help in both how to structure and what the endpoints should contain since we already did a frontend for this project in week 11 (Happy Thoughts). The purpose was to add the new API url in that project with the one created this week. 
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Here you can view the deployed project: https://emmashappythoughts.herokuapp.com/
+
+Here is the updates on week 11's project: 
+-Netlify https://haappythoughts.netlify.app/
+-Repository https://github.com/EmmaaBerg/project-happy-thoughts

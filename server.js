@@ -49,8 +49,9 @@ const HappyThoughts = mongoose.model("HappyThoughts", HappyThoughtsSchema)
 // Add the endpoints here later on
 app.get("/", (req, res) => {
   const endpoints = {
-    Welcome: "Happy Thoughts API made by Emma, Technigo Frontend Bootcamp",
-    Routes: [
+    "Welcome": "Happy Thoughts API made by Emma",
+    "Happy Thoughts project can be seen here": "https://haappythoughts.netlify.app/",
+    "Routes": [
       {
         "path": "/",
         "methods": "GET"
