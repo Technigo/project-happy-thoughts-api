@@ -42,8 +42,10 @@ const Thought = mongoose.model("Thought", ThoughtSchema)
 
 //Routes
 app.get("/", (req, res) => {
-  res.send("Hello Happy Thoughts! https://cute-hummingbird-6688bb.netlify.app/");
-  res.send(listEndpoints(app))
+  res.send({ 
+    "Hello Happy Thoughts! https://cute-hummingbird-6688bb.netlify.app/":
+    listEndpoints(app)
+  })
 })
 
 //show thoughts
