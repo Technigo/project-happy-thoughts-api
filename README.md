@@ -15,5 +15,6 @@ its hearts property to add one heart.
 ## Hosted
 
 Frontend hosted on Netlify: https://happy-thoughts-frontend.netlify.app/
+
 Backend hosted on Heroku: https://happy-thoughts-mern.herokuapp.com/
 
