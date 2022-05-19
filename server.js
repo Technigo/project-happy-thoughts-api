@@ -99,6 +99,10 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   }
 })
 
+app.get('/endpoints', (req, res) => {
+  res.send(allEndpoints(app))
+})
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
