@@ -11,5 +11,7 @@ For this project we got a lot of help in both how to structure and what the endp
 Here you can view the deployed project: https://emmashappythoughts.herokuapp.com/
 
 Here is the updates on week 11's project: 
--Netlify https://haappythoughts.netlify.app/
--Repository https://github.com/EmmaaBerg/project-happy-thoughts
+
+Netlify https://haappythoughts.netlify.app/
+
+Repository https://github.com/EmmaaBerg/project-happy-thoughts
