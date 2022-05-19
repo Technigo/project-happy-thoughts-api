@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import getEndpoints from "express-list-endpoints";
 
 const mongoUrl =
   process.env.MONGO_URL || "mongodb://localhost/project-mongoApi";
@@ -37,6 +38,11 @@ const HappyThoughtSchema = new mongoose.Schema({
   },
 });
 
+// Start defining your routes here
+app.get("/", (req, res) => {
+  res.send(getEndpoints(app));
+});
+
 const HappyThought = mongoose.model("HappyThought", HappyThoughtSchema);
 
 app.get("/thoughts", async (req, res) => {
@@ -49,15 +55,6 @@ app.get("/thoughts", async (req, res) => {
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
-
-  // const thoughts = await HappyThought.find();
-  //   .sort({ thoughts: thoughts, createdAt: "desc" })
-  //   .limit(20)
-  //   .exec();
-  // res.status(200).json(thoughts);
-
-  // const tasks = await Task.find().sort({ createdAt: "desc" }).limit(20).exec();
-  // res.json(tasks);
 });
 
 app.post("/thoughts", async (req, res) => {
@@ -86,11 +83,6 @@ app.post("/thoughts/:id/like", async (req, res) => {
   } catch (error) {
     res.status(400).json({ respons: error, success: false });
   }
-});
-
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
 });
 
 // Start the server
