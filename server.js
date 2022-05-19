@@ -12,6 +12,26 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+const HappyThoughtSchema = new mongoose.Schema({
+  message: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 140
+  },
+  hearts: {
+    type: Number,
+    default: 0,
+    //should not be assigned to new thought so not an anonomus function
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+    //should not be assigned to new thought so not an anonomus function
+  }
+})
+
 //schema differs : only has properties, create those that are always present on the page
 // model has functions like findbyID, save
 const TechnigoMemberSchema = new mongoose.Schema({
@@ -44,6 +64,9 @@ const TechnigoMemberSchema = new mongoose.Schema({
 })
 
 const TechnigoMember = mongoose.model("TechnigoMember", TechnigoMemberSchema)
+
+const HappyThought = mongoose.model("HappyThought", HappyThoughtSchema)
+
 // async await is the most used of the three POST requests
 //happy thought message
 app.post("/members", async (req, res) => {
