@@ -96,11 +96,11 @@ app.post("/thoughts", async (req, res) => {
   }
 })
 
-app.post("/thoughts/:thoughtId/like", async (req, res) => {
-  const { thoughtId } = req.params
+app.post("/thoughts/:thougtId/like", async (req, res) => {
+  const { thougtId } = req.params
 
   try {
-    const likedThought = await HappyThoughts.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}})
+    const likedThought = await HappyThoughts.findByIdAndUpdate(thougtId, {$inc: {hearts: 1}})
     res.status(200).json(likedThought)
   } catch (err) {
     res.status(400).json({
