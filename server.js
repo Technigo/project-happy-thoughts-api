@@ -67,6 +67,24 @@ const TechnigoMember = mongoose.model("TechnigoMember", TechnigoMemberSchema)
 
 const HappyThought = mongoose.model("HappyThought", HappyThoughtSchema)
 
+app.get("/thoughts", async (req, res) => {
+  const thoughts = await HappyThought.find().sort({createdAt: 'desc'}).limit(20).exec()
+  res.json(thoughts)
+})
+
+app.post("/thoughts", async (req, res) => {
+  const { message, hearts } = req.body
+  
+  try {
+  const thought = await new HappyThought({message: message, hearts: hearts}).save()
+  res.status(201).json({response: thought, success: true})
+  
+  } catch(error) {
+    res.status(400).json({response: error, success: false})
+  }
+})
+
+
 // async await is the most used of the three POST requests
 //happy thought message
 app.post("/members", async (req, res) => {
