@@ -28,7 +28,7 @@ const ThoughtSchema = new mongoose.Schema({
   },
   createdAt: {
     typ: Date,
-    default: () => new Date(),
+    // default: () => new Date(),
   },
 })
 
@@ -92,7 +92,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
 })
 
 app.get('/endpoints', (req, res) => {
-  res.send(allEndpoints(app))
+  res.send(listEndpoints(app))
 })
 
 // Start the server
