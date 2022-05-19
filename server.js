@@ -8,7 +8,7 @@ const mongoUrl =
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 8090
 const app = express()
 
 app.use(cors())
@@ -27,8 +27,8 @@ const ThoughtSchema = new mongoose.Schema({
     default: 0,
   },
   createdAt: {
-    typ: Date,
-    // default: () => new Date(),
+    type: Date,
+    default: () => new Date(),
   },
 })
 
@@ -60,9 +60,9 @@ app.post('/thoughts', async (req, res) => {
 
   try {
     const newThought = await new Thought({
-      message,
+      message: message,
     }).save()
-    res.status(201).json(newThought)
+    res.status(200).json({ response: newThought, success: true })
   } catch (err) {
     res.status(400).json({
       success: false,
@@ -80,7 +80,10 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     const thoughtToLike = await Thought.findByIdAndUpdate(thoughtId, {
       $inc: { hearts: 1 },
     })
-    res.status(201).json(thoughtToLike)
+    res.status(200).json({
+      response: `Like ${thoughtToLike.message} has been updated`,
+      success: true,
+    })
   } catch (err) {
     res.status(400).json({
       success: false,
@@ -89,10 +92,6 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
       error: err.errors,
     })
   }
-})
-
-app.get('/endpoints', (req, res) => {
-  res.send(listEndpoints(app))
 })
 
 // Start the server
