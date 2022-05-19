@@ -4,8 +4,8 @@ This project is a new version of an earlier project: https://github.com/Marianne
 
 ## The challenge
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+This was a good opportunity to practice MongoDB, Atlas and Postman.
 
 ## View it live
+https://marianneshappy-thoughts.netlify.app 
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.

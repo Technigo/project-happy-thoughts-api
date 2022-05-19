@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import { MemoryRouter } from 'react-router-dom';
 
 const mongoUrl =
 	process.env.MONGO_URL || 'mongodb://localhost/project-mongo-wk19';
@@ -18,171 +17,89 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-//From Daniel live 16/5
-
-const TechnigoMemberSchema = new mongoose.Schema({
-	name: {
-		//Most important
+const ThoughtsSchema = new mongoose.Schema({
+	message: {
 		type: String,
 		required: true,
-		unique: true,
-		enum: [
-			'Lovisa',
-			'Marianne',
-			'Emma',
-			'Suki',
-			'Anki',
-			'Tiina',
-			'Kristiina',
-			'Dorothea',
-			'Mimmi',
-		],
-	},
-	description: {
-		type: String,
 		minlength: 5,
 		maxlength: 140,
-		//deletes whitespace from beginning and end of string
 		trim: true,
 	},
-	score: {
+	hearts: {
 		type: Number,
 		default: 0,
 	},
 	createdAt: {
-		type: Number,
-		default: Date.now,
+		type: Date,
+		default: () => new Date(),
 	},
 });
 
-{
-	/* <Button onClick={handleClick()} />; */
-}
-
-const TechnigoMember = mongoose.model('TechnigoMember', TechnigoMemberSchema);
-
-//POST requests v1 INDUSTRY STANDARD
-app.post('/members', async (req, res) => {
-	const { name, description } = req.body;
-	try {
-		const newMember = await new TechnigoMember({
-			name: name,
-			description: description,
-		}).save();
-		res.status(200).json({ response: newMember, success: true });
-	} catch (error) {
-		res.status(400).json({ response: error, success: false });
-	}
-});
-
-//POST v2 w promises
-// app.post('/members', (req, res) => {
-// 	const { name, description } = req.body;
-// 	console.log(req.body);
-
-// 	new TechnigoMember({ name: name, description: description })
-// 		.save()
-// 		.then((data) => {
-// 			res.status(201).json({ response: data, success: true });
-// 		})
-// 		.catch((error) => {
-// 			res.status(400).json({ response: error, success: false });
-// 		});
-// });
-
-// POST v 3 kommer inte funka utan att kommentera ut V1 2. Mongoose specific
-// app.post('/members', (req, res) => {
-// 	const { name, description } = req.body;
-// 	new TechnigoMember({ name: name, description: description }).save(
-// 		(error, data) => {
-// 			if (error) {
-// 				res.status(400).json({ response: error, success: false });
-// 			} else {
-// 				res.status(201).json({ response: data, success: true });
-// 			}
-// 		}
-// 	);
-// });
-
-// POST -> creating
-// PUT -> replaces
-// PATCH -> changes
-
-app.post('/members/:id/score', async (req, res) => {
-	const { id } = req.params;
-	try {
-		const memberToUpdate = await TechnigoMember.findByIdAndUpdate(id, {
-			$inc: { score: 1 },
-		});
-		res.status(200).json({ response: memberToUpdate, success: true });
-	} catch (error) {
-		res.status(400).json({ response: error, success: false });
-	}
-});
+const thought = mongoose.model('thought', ThoughtsSchema);
 
 //Start of routes
-app.get('/members', async (req, res) => {
-	const {
-		page,
-		perPage,
-		pageNum = Number(page),
-		perPageNum = Number(perPage),
-	} = req.query;
-
-	// V1 Mongoose
-	// const members = await TechnigoMember.find({})
-	// 	.sort({ createdAt: 1 })
-	// 	.skip((pageNum - 1) * perPageNum)
-	// 	.limit(perPageNum);
-
-	// V2 Mongo
-	const members = await TechnigoMemberSchema.aggregate([
-		{
-			$sort: {
-				createdAt: 1,
-			},
-		},
-		{
-			$skip: (pageNum - 1) * perPageNum,
-		},
-		{
-			$limit: perPageNum,
-		},
-	]);
-
-	res.status(200).json({ response: members, success: true });
+app.get('/', (req, res) => {
+	const Main = {
+		About: 'API Happy Thoughts project.',
+		Frontend: 'https://marianneshappy-thoughts.netlify.app/',
+	};
+	res.send(Main);
 });
 
-app.delete('/members/:id', async (req, res) => {
-	const { id } = req.params;
-
+//Gets thoughts
+app.get('/thoughts', async (req, res) => {
 	try {
-		const deletedMember = await TechnigoMember.deleteOne({ _id: id });
-		if (deletedMember) {
-			res.status(200).json({ response: deletedMember, success: false });
-		} else {
-			res.status(404).json({ response: 'Member not found', success: false });
-		}
+		const thoughts = await thought
+			.find()
+			.sort({ createdAt: 'desc' })
+			.limit(20)
+			.exec();
+		res.status(200).json(thoughts);
 	} catch (error) {
-		res.status(400).json({ response: error, success: false });
+		res.status(400).json({
+			success: false,
+			response: error,
+		});
 	}
 });
 
-app.patch('/members/:id', (req, res) => {
-	const { id } = req.params;
-	const { name } = req.body;
+//POST new thought
+app.post('/thoughts', async (req, res) => {
+	const { message } = req.body;
 
-	TechnigoMember.findOneAndUpdate({ _id: id }, { name: name }, { new: true })
-		.then((updatedMember) => {
-			if (updatedMember) {
-				res.status(200).json({ response: updatedMember, success: true });
-			} else {
-				res.status(404).json({ response: 'Member not found', success: false });
-			}
-		})
-		.catch((error) => {
-			res.status(400).json({ response: error, success: false });
+	try {
+		const newThought = await new thought({ message }).save();
+		res.status(200).json({
+			response: newThought,
+			success: true,
 		});
+	} catch (error) {
+		res.status(400).json({
+			success: false,
+			response: error,
+		});
+	}
+});
+
+//Updates number of likes on heart
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+	const { thoughtId } = req.params;
+
+	try {
+		const thoughtToLike = await thought.findByIdAndUpdate(thoughtId, {
+			$inc: { hearts: 1 },
+		});
+		res.status(200).json({
+			response: thoughtToLike,
+			success: true,
+		});
+	} catch (error) {
+		res.status(400).json({
+			message: 'Could not find post',
+			success: false,
+			response: error,
+		});
+	}
 });
 
 // Start the server
