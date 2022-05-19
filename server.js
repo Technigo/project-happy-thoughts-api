@@ -3,7 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 
 const mongoUrl =
-  process.env.MONGO_URL || "mongodb://localhost/project-mongoMongo";
+  process.env.MONGO_URL || "mongodb://localhost/project-mongoApi";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -18,14 +18,14 @@ app.use(cors());
 app.use(express.json());
 
 const HappyThoughtSchema = new mongoose.Schema({
-  message: {
+  thought: {
     type: String,
     required: true,
     minlength: 5,
     maxlength: 140,
     trim: true,
   },
-  likes: {
+  like: {
     type: Number,
     default: 0,
   },
@@ -39,27 +39,48 @@ const HappyThoughtSchema = new mongoose.Schema({
 
 const HappyThought = mongoose.model("HappyThought", HappyThoughtSchema);
 
-app.post("/message", async (req, res) => {
-  const { message } = req.body;
+app.get("/thoughts", async (req, res) => {
+  try {
+    const thoughts = await HappyThought.find()
+      .sort({ thoughts: thoughts, createdAt: "desc" })
+      .limit(20)
+      .exec();
+    res.status(200).json({ response: thoughts, success: true });
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
+
+  // const thoughts = await HappyThought.find();
+  //   .sort({ thoughts: thoughts, createdAt: "desc" })
+  //   .limit(20)
+  //   .exec();
+  // res.status(200).json(thoughts);
+
+  // const tasks = await Task.find().sort({ createdAt: "desc" }).limit(20).exec();
+  // res.json(tasks);
+});
+
+app.post("/thoughts", async (req, res) => {
+  const { thought } = req.body;
 
   try {
-    const newMessage = await new HappyThought({
-      message: message,
+    const newThought = await new HappyThought({
+      thought: thought,
     }).save();
-    res.status(200).json({ response: newMessage, success: true });
+    res.status(200).json({ response: newThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
   }
 });
 
-app.post("/message/:id/likes", async (req, res) => {
+app.post("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
   try {
-    const messageToUpdate = await HappyThought.findByIdAndUpdate(id, {
-      $inc: { likes: 1 },
+    const thoughtToUpdate = await HappyThought.findByIdAndUpdate(id, {
+      $inc: { like: 1 },
     });
     res.status(200).json({
-      respons: `Message '${messageToUpdate.message}' has been updated`,
+      respons: `Message '${thoughtToUpdate.thought}' has been updated`,
       success: true,
     });
   } catch (error) {
