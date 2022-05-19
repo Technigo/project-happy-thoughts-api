@@ -10,9 +10,9 @@ const App = () => {
 
   const fetchThoughts = () => {
     setLoading(true)
-    fetch("https://happy-thoughts-technigo.herokuapp.com/thoughts")
+    fetch("https://happy-thoughts-mern.herokuapp.com/thoughts")
       .then(res => res.json())
-      .then(thoughts => setThoughts(thoughts))
+      .then(thoughts => setThoughts(thoughts.thoughts))
       .catch(error => console.error("error:", error))
       .finally(() => setLoading(false))
   }

@@ -17,7 +17,7 @@ const ThoughtForm = ({ setThoughts }) => {
   const handleFormSubmit = (event) => {
     event.preventDefault();
 
-    fetch("https://happy-thoughts-technigo.herokuapp.com/thoughts", {
+    fetch("https://happy-thoughts-mern.herokuapp.com/thoughts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: newThought })
