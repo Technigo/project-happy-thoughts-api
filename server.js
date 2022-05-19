@@ -12,10 +12,6 @@ mongoose.Promise = Promise;
 const port = process.env.PORT || 8080;
 const app = express();
 
-// Add middlewares to enable cors and json body parsing
-app.use(cors());
-app.use(express.json());
-///////////
 
 const ThoughtSchema = new mongoose.Schema({
   message: {
@@ -37,6 +33,13 @@ const ThoughtSchema = new mongoose.Schema({
 })
 
 const Thought = mongoose.model("Thought", ThoughtSchema)
+
+
+// Add middlewares to enable cors and json body parsing
+app.use(cors());
+app.use(express.json());
+///////////
+
 
 
 
