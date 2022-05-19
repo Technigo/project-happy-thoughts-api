@@ -95,6 +95,15 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
   }
 });
 
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next();
+  } else {
+    res.status(503).json({
+      error: "Service unavailable",
+    });
+  }
+});
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
