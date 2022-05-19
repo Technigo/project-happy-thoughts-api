@@ -13,6 +13,8 @@ connectDB();
 const PORT = process.env.PORT || 8080;
 const app = express();
 
+app.set('json spaces', 2);
+
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
@@ -31,9 +33,14 @@ app.use((req, res, next) => {
 app.use("/thoughts", thoughtsRoute);
 
 app.get("/", (req, res) => {
-  res.send("Happy Thoughts MERN Stack Project");
+  res.json({ 
+    Welcome: "Happy Thoughts MERN Stack Project",
+    GET: "/thoughts",
+    post: "/thoughts",
+    POST: "/thoughts/:id/like",
+    Frontend: "https://happy-thoughts-frontend.netlify.app/",
+    Backend: "https://happy-thoughts-mern.herokuapp.com/"
+  });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+app.listen(PORT);
