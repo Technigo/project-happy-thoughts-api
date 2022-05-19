@@ -25,7 +25,9 @@ const ThoughtSchema = new mongoose.Schema({
   },
   hearts: {
     type: Number,
+    minimum: 0,
     default: 0,
+    exclusiveMinimum: false
   },
   message: {
     type: String,
@@ -58,23 +60,38 @@ app.post('/thought', async (req, res) => {
  
     const { name, message, tags } = req.body
 
+    try {
+
       const newThought = new Thought({ name: name, message: message, tags: tags});
      
       await newThought.save()
-        .then(data => {
-          res.status(201).json({ response: data, success:true })
-        })
-        .catch (error => {
+
+      res.status(201).json({ response: data, success:true })
+    } 
+    catch (error) {
           res.status(400).json({ res: error, success: false })
-         })
+    }
  
 })
 
 // GET all thoughts
 app.get("/thoughts", async (req,res) => {
-    const thoughts = await Thought.find();
+  const thoughts = await Thought.find();
    res.status(200).json(thoughts)
 
+})
+
+// Increase number of likes / hearts
+app.post('/thoughts/:id/hearts', async (req, res) => {
+ 
+  const { id } = req.params;
+  
+  try { 
+    const updateThought = await Thought.findByIdAndUpdate(id, { $inc: { hearts: 1 } });
+    res.json(updateThought)
+  } catch (error) {
+    res.status(400).json({res: error})
+  }
 })
 
 // Start the server
