@@ -52,6 +52,28 @@ app.get('/thoughts', async (req, res) => {
   }
 });
 
+app.get('/thoughts/:thoughtId', async (req, res) => {
+  try {
+    const fetchId = await Thought.findOne({_id: req.params.thoughtId});
+    if(fetchId) {
+      res.status(200).json({
+        data: fetchId,
+        success: true,
+      })
+    } else {
+      res.status(404).json({
+        error: 'bookID not found',
+        success: false,
+      })
+    }
+  } catch (err) {
+    res.status(400).json({
+      error: 'Invalid bookID',
+      success: false,
+    })
+  }
+})
+
 //V2 Mongo with query
 // const { page, perPage, numPage = +page, numPerPage = +perPage } = req.query;
 // try {
