@@ -19,7 +19,7 @@ app.use(cors());
 app.use(express.json());
 
 const HappyThoughtSchema = new mongoose.Schema({
-  thought: {
+  message: {
     type: String,
     required: true,
     minlength: 5,
@@ -32,9 +32,9 @@ const HappyThoughtSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    // anonumys function calls date every time a post is created
-    // default: () => new Date(),
-    default: Date.now,
+    //anonumys function calls date every time a post is created
+    default: () => new Date(),
+    // default: Date.now,
   },
 });
 
@@ -58,11 +58,11 @@ app.get("/thoughts", async (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
-  const { thought } = req.body;
+  const { message } = req.body;
 
   try {
     const newThought = await new HappyThought({
-      thought: thought,
+      message: message,
     }).save();
     res.status(200).json({ response: newThought, success: true });
   } catch (error) {
@@ -77,7 +77,7 @@ app.post("/thoughts/:id/like", async (req, res) => {
       $inc: { like: 1 },
     });
     res.status(200).json({
-      respons: `Message '${thoughtToUpdate.thought}' has been updated`,
+      respons: `Message '${thoughtToUpdate.message}' has been updated`,
       success: true,
     });
   } catch (error) {
