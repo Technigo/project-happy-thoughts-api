@@ -96,9 +96,10 @@ const HappyThoughtsSchema = new mongoose.Schema({
   },
   
   createdAt: {
-    type: Date,
+    type: String,                                    // Date,
     // Anonymous function for the function to run for every new POST and not only when the application starts
-    default: () => new Date()
+    default: () => new Date(Date.now()).toLocaleString("sv-SE", {
+      timeZone: "Europe/Stockholm",})
   }
 })
 
