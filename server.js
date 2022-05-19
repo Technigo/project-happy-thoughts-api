@@ -55,7 +55,7 @@ app.get("/thoughts", async (req, res) => {
   } catch (err) {
     res.status(400).json({
       success: false,
-      response: "Bad request, couldnot fetch thoughts, try again!.",
+      response: "Bad request, couldnot fetch thoughts.",
     });
   }
 });
