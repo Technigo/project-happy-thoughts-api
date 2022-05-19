@@ -15,15 +15,15 @@ mongoose.Promise = Promise;
 const port = process.env.PORT || 8080;
 const app = express();
 
-const HappyThoughtSchema = new mongoose.Schema({
+const ThoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     required: true,
-    minlength: 5,
-    maxlength: 140,
+    minlength: [5, "The message must be at least 5 characters"],
+    maxlength: [140, "The message must be less than 140 characters"],
     trim: true,
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0,
   },
@@ -35,7 +35,7 @@ const HappyThoughtSchema = new mongoose.Schema({
   },
 });
 
-const HappyThought = mongoose.model("HappyThought", HappyThoughtSchema);
+const Thought = mongoose.model("Thought", ThoughtSchema);
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
@@ -55,7 +55,7 @@ app.get("/", (req, res) => {
 
 app.get("/thoughts", async (req, res) => {
   try {
-    const thoughts = await new HappyThought.find()
+    const thoughts = await new Thought.find()
       .sort({ createdAt: "desc" })
       .limit(20)
       .exec();
@@ -69,7 +69,7 @@ app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
 
   try {
-    const newThought = await new HappyThought({ message }).save();
+    const newThought = await new Thought({ message }).save();
     res.status(201).json({ response: newThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
@@ -80,10 +80,10 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
 
   try {
-    const updateThought = await HappyThought.findByIdAndUpdate(
+    const updateThought = await Thought.findByIdAndUpdate(
       thoughtId,
       {
-        $inc: { heart: 1 },
+        $inc: { hearts: 1 },
       },
       {
         //options, to update directly
