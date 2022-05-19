@@ -16,6 +16,43 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const ThoughtSchema = new mongoose.Schema({
+message: {
+  type: String, 
+  required: true,
+  minlength: 5,
+  maxlength: 140
+},
+hearts: {
+  type: Number, 
+  default:0
+},
+createdAt: {
+  type: Date,
+  default: ()=> new Date()
+}
+});
+
+const thought = mongoose.model("thought", ThoughtSchema);
+
+app.post("/thoughts", async (req, res) =>{
+  const { message } = req.body;
+
+  try {
+    const newThought = await new thought({ message }).save();
+    res.status(200).json({
+      response: newThought,
+      success: true
+    });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      error: err.errors
+    });
+  }
+});
+
+
 // Start defining your routes here
 app.get("/", (req, res) => {
   res.send("Hello Technigo!");
