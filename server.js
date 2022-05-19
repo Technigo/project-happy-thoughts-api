@@ -70,10 +70,10 @@ app.get('/thoughts', async (req, res) => {
 })
 
 app.post('/thoughts', async (req, res) => {
-	const { message, likes } = req.body
+	const { message, hearts } = req.body
 	console.log(req.body)
 	try {
-		const newThought = await new HappyThought({ message: message, likes: likes }).save()
+		const newThought = await new HappyThought({ message: message, hearts: hearts }).save()
 		res.status(201).json({ response: newThought, success: true })
 	} catch (error) {
 		res.status(400).json({ response: error, success: false })
