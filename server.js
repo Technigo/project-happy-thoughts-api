@@ -68,7 +68,7 @@ app.get("/", (req, res) => {
   res.send(endpoints);
 });
 
-app.get("/thoughts", async (req,res) => {
+app.get("/thoughts", async (req, res) => {
   try {
     const thoughts = await HappyThoughts.find().sort({createdAt: -1}).limit(20).exec()
     res.status(200).json(thoughts)
@@ -96,8 +96,7 @@ app.post("/thoughts", async (req, res) => {
   }
 })
 
-app.post("/thoughts/:thoughtsId/like", async (req, res) => {
-  //does not require a JSON body
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params
 
   try {
