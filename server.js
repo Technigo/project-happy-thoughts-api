@@ -23,12 +23,14 @@ const HappyThoughtSchema = new mongoose.Schema({
   hearts: {
     type: Number,
     default: 0,
-    //should not be assigned to new thought so not an anonomus function
+    min: 0,
+    max: 0 
+    //should not be assignable but ignore and post 0 anyway
   },
   createdAt: {
     type: Date,
     default: Date.now
-    //should not be assigned to new thought so not an anonomus function
+    //should not be assignable
   }
 })
 
@@ -73,10 +75,10 @@ app.get("/thoughts", async (req, res) => {
 })
 
 app.post("/thoughts", async (req, res) => {
-  const { message, hearts } = req.body
-  
+  const { message } = req.body
+
   try {
-  const thought = await new HappyThought({message: message, hearts: hearts}).save()
+  const thought = await new HappyThought({message: message }).save()
   res.status(201).json({response: thought, success: true})
   
   } catch(error) {
