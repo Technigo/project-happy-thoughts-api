@@ -12,12 +12,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const ThoughtsSchema = new mongoose.Schema({
+const ThoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     required: true,
     minlength: 5,
     maxlength: 140,
+    trim: true,
   },
   hearts: {
     type: Number,
@@ -29,13 +30,14 @@ const ThoughtsSchema = new mongoose.Schema({
   },
 });
 
-const thought = mongoose.model("thought", ThoughtsSchema);
+const thought = mongoose.model("thought", ThoughtSchema);
 
 // Start defining your routes here
 app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
+//Get thoughts, answer is limited to 20 results, ordered by time in descending order.
 app.get("/thoughts", async (req, res) => {
   try {
     const thoughts = await thought
@@ -44,14 +46,15 @@ app.get("/thoughts", async (req, res) => {
       .limit(20)
       .exec();
     res.status(200).json(thoughts);
-  } catch (err) {
+  } catch (error) {
     res.status(400).json({
       success: false,
-      error: err.errors,
+      error: error,
     });
   }
 });
 
+// Send a new thought
 app.post("/thoughts", async (res, req) => {
   const { message } = req.body;
   try {
@@ -64,6 +67,26 @@ app.post("/thoughts", async (res, req) => {
     res.status(400).json({
       response: error,
       success: false,
+    });
+  }
+});
+
+//Add likes to a message
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+
+  try {
+    const thoughtToLike = await thought.findByIdAndUpdate(thoughtId, {
+      $inc: { hearts: 1 },
+    });
+    res.status(200).json({
+      response: `This message ${thoughtToLike.message} has new likes`,
+      success: true,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error,
     });
   }
 });
