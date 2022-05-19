@@ -3,10 +3,12 @@ import React from "react";
 import HeartIcon from "./partials/HeartIcon";
 import TimeStamp from "./partials/TimeStamp";
 
-const ThoughtCards = ({ thought, handleLikes, id }) => {
+import { herokuUrl } from "urls";
+
+const ThoughtCards = ({ thought, handleLikes, id, username }) => {
 
   const handleLikesClick = () => {
-    fetch(`https://happy-thoughts-mern.herokuapp.com/thoughts/${id}/like`, {
+    fetch(`${herokuUrl}/${id}/like`, {
       method: "POST",
       headers: { "Content-Type": "application/json" }
     }).then(() => handleLikes(id))
@@ -15,6 +17,7 @@ const ThoughtCards = ({ thought, handleLikes, id }) => {
   return (
     <>
       <p className="thought-messages">{thought.message}</p>
+      {username !== "anonymous" && <p>- {username}</p>}
       <div className="button-wrapper">
         <div>
           <button
@@ -22,7 +25,7 @@ const ThoughtCards = ({ thought, handleLikes, id }) => {
             className={(thought.hearts === 0 ? "heart-button" : "heart-button red-heart-button")}>
             <HeartIcon classname={"heart-icon"} />
           </button>
-          <p className="likes">x {thought.hearts}</p>
+          {thought.hearts > 0 && <p className="likes">x {thought.hearts}</p>}
         </div>
         <TimeStamp createdAt={thought.createdAt} />
       </div>

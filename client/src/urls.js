@@ -1,0 +1,1 @@
+export const herokuUrl = "https://happy-thoughts-mern.herokuapp.com/thoughts";

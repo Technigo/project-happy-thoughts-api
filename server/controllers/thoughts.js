@@ -19,7 +19,7 @@ export const addThought = async (req, res) => {
   
   try {
     const newThought = await new thoughts({ message: message, username: username || "anonymous" }).save();
-    
+
     res.status(201).json(newThought);
   } catch (error) {
     res.status(409).json({ message: "Could not save thought", error: error.errors });
@@ -30,7 +30,7 @@ export const addLikes = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const addNewLikes = await thoughts.findByIdAndUpdate(id, { $inc: { hearts: 1 }});
+    const addNewLikes = await thoughts.findByIdAndUpdate(id, { $inc: { hearts: 1 } }, { new: true } );
 
     res.status(201).json(addNewLikes);
   } catch (error) {
