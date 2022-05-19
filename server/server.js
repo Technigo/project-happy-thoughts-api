@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 app.use("/thoughts", thoughtsRoute);
 
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send("Happy Thoughts MERN Stack Project");
 });
 
 app.listen(PORT, () => {
