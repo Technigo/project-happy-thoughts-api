@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;500;700&display=swap');
+
+body {
+  margin: 0;
+  font-weight: 500;
+  font-family: 'Roboto Slab', serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  border: none;
+}
+
+h1 {
+  color: white;
+  font-size: 30px;
+  text-shadow: black 2px 5px;
+}
+
+h2 {
+  text-align: center;
+}
+
+ul {
+  padding-left: 5px;
+  margin-bottom: 30px;
+}
+
+li {
+  list-style: none;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #216986;
+}
+
+.loader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 50px;
+}
+
+.cards {
+  margin-bottom: 30px;
+  padding: 15px;
+  width: 250px;
+  height: auto;
+  -moz-box-shadow: 7px 8px 1px 0px black;
+  -webkit-box-shadow: 7px 8px 1px 0px black;
+  box-shadow: 7px 8px 1px 0px black;
+  background-color: white;
+}
+
+.cards::first-letter, 
+li::first-letter {
+  text-transform: capitalize;
+}
+
+textarea {
+  font-family: 'Roboto Slab', serif;
+  font-weight: 500;
+  resize: none;
+  min-height: 50px;
+  margin: 10px 0 15px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  background-color: #dfdfdf;
+}
+
+.form button {
+  font-family: 'Roboto Slab', serif;
+  font-weight: 500;
+  background-color: #fdaead;
+  padding: 10px 0;
+  width: 120px;
+  border-radius: 25px;
+}
+
+.heart-button {
+  background-color: #eaeaea;
+  width: 40px;
+  height: 40px;
+  font-size: 17px;
+  border-radius: 50px;
+}
+
+.red-heart-button {
+  background-color: #fdaead;
+}
+
+.heart-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.thought-cards p {
+  overflow-wrap: break-word;
+}
+
+.thought-messages {
+  margin-bottom: 25px;
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button-wrapper button {
+  color: black;
+}
+
+.timestamp {
+  color: #adadad;
+}
+
+.likes {
+  margin-left: 10px;
+  color: #adadad;
+  display: inline-flex;
+}
+
+.message-length {
+  margin-right: 15px;
+}
+
+.red-message-length {
+  margin-right: 15px;
+  color: #f21e1e;
+}
+
+.error-message {
+  color: #f21e1e;
+  overflow-wrap: break-word;
+}
+
+@media (min-width: 375px) {
+  .cards {
+    width: 300px;
+  }
+
+  .form button {
+    width: 200px;
+  }
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: 34px;
+  }
+
+  .form span {
+    font-size: 17px;
+  }
+
+  .cards {
+    border: 2px solid black;
+    width: 475px;
+  }
+}
