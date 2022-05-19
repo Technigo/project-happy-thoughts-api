@@ -16,10 +16,89 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const ThoughtSchema = new mongoose.Schema({
+  message: {
+    type: String,
+    required: true,
+    minLength: 5,
+    maxLength: 140,
+    trim: true,
+  },
+  like: {
+    type: Number,
+    default: 0,
+  },
+
+  createdAt: {
+    type: Date,
+    default: () => new Date(),
+  },
+});
+
+const Thought = mongoose.model("Thought", ThoughtSchema);
+
 // Start defining your routes here
 app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
+
+//To show thoughts
+app.get("/thoughts", async (req, res) => {
+  try {
+    const thoughts = await Thought.find()
+      .sort()({ createdAt: "desc" })
+      .limit(20)
+      .exec();
+    res.status(201).json(thoughts);
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
+});
+
+//To add a thought
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body;
+
+  try {
+    const newThought = await new Thought({ message: message }).save();
+    res.status(201).json({ response: newThought, sucess: true });
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
+});
+
+//To add like
+app.post("/thoughts/:id/like", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const likeUpdate = await Thought.findByIdAndUpdate(id, {
+      $inc: { like: 1 },
+    });
+    res.status(200).json(likeUpdate);
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
+});
+
+//POST request v1
+// app.post("/members", async (req, res) => {
+//   const { name, description } = req.body;
+
+//   try {
+//     const newMember = await new TechnigoMember({
+//       name: name,
+//       description: description,
+//     }).save();
+
+//     res.status(201).json({ response: newMember, success: true });
+//   } catch (error) {
+//     res.status(400).json({ response: error, success: false });
+//   }
+// });
+
+// POST- creating
+// PUT - replacing
+// Patch- changes
 
 // Start the server
 app.listen(port, () => {
