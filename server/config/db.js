@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
-const CONNECTION_URL = process.env.MONGO_URL || "mongodb://localhost/thoughts";
+const mongoUrl = process.env.CONNECTION_URL || "mongodb://localhost/thoughts";
 
 const connectDB = () => {
   try {
-    mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+    mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
   } catch (error) {
     console.error(`Error: ${error.message}`)
     process.exit(1)

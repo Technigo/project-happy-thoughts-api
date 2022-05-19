@@ -15,9 +15,14 @@ const ThoughtsSchema = mongoose.Schema({
   createdAt: {
     type: Date,
     default: () => new Date()
+  },
+  username: {
+    type: String,
+    default: "anonymous",
+    trim: true
   }
 });
 
-const thoughts = mongoose.model("Thoughts", ThoughtsSchema); 
+const thoughts = mongoose.model("Thoughts", ThoughtsSchema);
 
-module.exports = thoughts;
+export default thoughts;

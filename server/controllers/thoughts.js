@@ -1,6 +1,6 @@
-import thoughts from "../models/thoughts.js";
+import thoughts from "../models/thoughts.js"
 
-const getThoughts = async (req, res) => {
+export const getThoughts = async (req, res) => {
   try {
     const allThoughts = await thoughts
       .find()
@@ -8,16 +8,16 @@ const getThoughts = async (req, res) => {
       .limit(20)
       .exec();
 
-    res.status(200).json({ success: true, allThoughts });
+    res.status(200).json({ success: true, thoughts: allThoughts });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
 };
 
-const addThought = async (req, res) => {
-  const message = req.body;
+export const addThought = async (req, res) => {
+  const { message, username }  = req.body;
 
-  const newThought = await new thoughts({ message }).save();
+  const newThought = await new thoughts({ message, username: username || "anonymous" }).save();
 
   try {
     res.status(201).json(newThought);
@@ -26,7 +26,7 @@ const addThought = async (req, res) => {
   }
 };
 
-const addLikes = async (req, res) => {
+export const addLikes = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -36,10 +36,4 @@ const addLikes = async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: "Could not update thought" })
   }
-};
-
-module.exports = {
-  getThoughts,
-  addThought,
-  addLikes
 };

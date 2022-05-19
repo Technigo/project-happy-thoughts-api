@@ -1,12 +1,12 @@
 import express from "express";
 
-import thoughts from "../controllers/thoughts.js";
+import { getThoughts, addThought, addLikes } from "../controllers/thoughts.js"
 
 const router = express.Router();
 
-router.get("/", thoughts.getThoughts);
-router.post("/", thoughts.addThought);
+router.get("/", getThoughts);
+router.post("/", addThought);
 
-router.post("/:id/like", thoughts.addLikes);
+router.post("/:id/like", addLikes);
 
-module.exports = router;
+export default router;
