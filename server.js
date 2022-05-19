@@ -13,7 +13,6 @@ const Thought = mongoose.model('Thought', {
     required: true,
     minlength: 5,
     maxlength: 140,
-    trim: true,
   },
   like: {
     type: Number,
@@ -45,19 +44,21 @@ app.get('/', (req, res) => {
 
 // showing latest 20 thoughts
 app.get('/happy-thoughts', async (req, res) => {
-  const thought = await Thought.find()
-    .sort({ createdAt: 'desc' })
-    .limit(20)
-    .exec();
-  res.status(200).json(thought);
+  try {
+    const thought = await Thought.find()
+      .sort({ createdAt: 'desc' })
+      .limit(20)
+      .exec();
+    res.status(200).json(thought);
+  } catch (error) {
+    res.status(400).json({ success: false, response: error });
+  }
 });
 
 // adding a thought to the database
 app.post('/happy-thoughts', async (req, res) => {
   const { message } = req.body;
-
   const thought = await new Thought({ message });
-
   try {
     const savedThought = await thought.save();
     res.status(201).json({ response: savedThought, success: true });
@@ -93,3 +94,5 @@ app.post('/happy-thoughts/:thoughtId/like', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
+
+// https://happy-thoughts-projectapi.herokuapp.com/
