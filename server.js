@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import { type } from "express/lib/response";
 import listEndpoints from "express-list-endpoints";
 
 const mongoUrl =
@@ -55,7 +54,7 @@ app.get("/", (req, res) => {
 
 app.get("/thoughts", async (req, res) => {
   try {
-    const thoughts = await new Thought.find()
+    const thoughts = await Thought.find()
       .sort({ createdAt: "desc" })
       .limit(20)
       .exec();
