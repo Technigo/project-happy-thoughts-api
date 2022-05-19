@@ -91,7 +91,7 @@ catch (error) {
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("can I get a oooooh yes?");
+  res.send("Happy Thoughts API");
 });
 
 
