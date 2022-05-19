@@ -86,6 +86,18 @@ app.post("/thoughts", async (req, res) => {
   }
 })
 
+app.post("thoughts/:thoughtId/like", async (req, res) => {
+  const { id } = req.params
+
+  try {
+  const likesToUpdate = await HappyThought.findByIdAndUpdate(id, {$inc: {hearts: 1}})
+  res.status(200).json({response: `Like ${likesToUpdate.hearts} has been updated`, success: true})
+
+} catch(error) {
+  res.status(400).json({response: error, success: false})
+}
+})
+
 
 // async await is the most used of the three POST requests
 //happy thought message
