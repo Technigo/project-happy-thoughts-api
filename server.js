@@ -71,7 +71,7 @@ app.get('/thoughts', async (req, res) => {
 
 app.post('/thoughts', async (req, res) => {
 	const { message } = req.body
-	console.log(req.body)
+
 	try {
 		const newThought = await new HappyThought({ message: message }).save()
 		res.status(201).json({ response: newThought, success: true })
@@ -81,9 +81,10 @@ app.post('/thoughts', async (req, res) => {
 })
 
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
-	const { id } = req.params
+	const { thoughtId } = req.params
+
 	try {
-		const thoughtToUpdate = await HappyThought.findByIdAndUpdate(id, { $inc: { hearts: 1 } })
+		const thoughtToUpdate = await HappyThought.findByIdAndUpdate(thoughtId, { $inc: { hearts: 1 } })
 		res.status(201).json({ response: `${thoughtToUpdate.message} has one more like`, success: true })
 	} catch (error) {
 		res.status(400).json({ response: error, success: false })
