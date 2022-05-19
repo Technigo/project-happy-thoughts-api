@@ -23,54 +23,10 @@ const ThoughtSchema = new mongoose.Schema({
     default: ()=> new Date()
   },
 });
-
+// Below is a model called Thought which uses the schema above.
 const Thought = mongoose.model('Thought', ThoughtSchema); 
 
-///////////////////////////////////////////////////////
 
-// const TechnigoMemberSchema = new mongoose.Schema({
-//   name: {
-//     type: String,
-//     required: true,
-//     unique: true,
-//     enum: ['Karin', 'Petra', 'Matilda', 'Poya', 'Daniel']
-//   },
-//   description: {
-//     type: String,
-//     minlength: 4,
-//     maxlength: 30,
-//     trim: true
-//   },
-//   score: {
-//     type: Number,
-//     defualt: 0
-//   },
-//   createdAt: {
-//     type: Date,
-//     default: ()=> new Date()
-//   }
-// });
-
-// const TechnigoMember = mongoose.model('TechnigoMember', TechnigoMemberSchema);
-
-///POST request
-// app.post('/members', async (req, res) => {
-//   const { name, description } = req.body;
-//   console.log(req.body);
-//   try {
-//     const newMember = await new TechnigoMember({name: name, description: description}).save()
-//     res.status(201).json({response: newMember, success: true})
-//   } catch (error) {
-//     res.status(400).json({response: error, success: false});
-//   }
-// });
-
-////////////////////////////////////////////////////////
-
-
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
 
@@ -83,40 +39,41 @@ app.get("/", (req, res) => {
   res.send("Hello! This is the backend-part of a previous project called Happy Thoughts.");
 });
 
-app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find()
-    .sort({createdAt: 'desc'})
-    .limit(20).exec();
-
-    try {
-      res.status(200).json({
-        data: thoughts,
-        success: true
-      });
-    } catch (error) {
-      res.status(400).json({
-        response: 'Could not return message',
-        success: false});
-    }
-    
+app.get('/thoughts', async (req, res) => { 
+//V1 Mongoose 
+  const { page, perPage } = req.query;
+  try {
+    const thoughts = await Thought.find({})
+    .sort({createdAt: -1})
+    .skip((page -1) * perPage).limit(perPage);
+    res.status(200).json({success: true, response: thoughts});
+  } catch (error) {
+    res.status(400).json({success: false, response: error});
+  }
 });
 
-////////// POST request for code along ////////////////////
-// app.post('/tasks', async (req, res) => {
-// //Retrieve the information sent by the client to our API endpoint
-//   const { text, complete } = req.body;
+//V2 Mongo with query
+// const { page, perPage, numPage = +page, numPerPage = +perPage } = req.query;
+// try {
+//   const thoughts = await Thought.aggregate([
+//     {
+//       $sort: {
+//         createdAt: -1
+//       }
+//     },
+//     {
+//       $skip: ( numPage - 1) * numPerPage
+//     },
+//     {
+//       $limit: numPerPage
+//     }
+//   ]);
 
-// //use our mongoose.model to create the database entry
-//   const task = new Thought({text, complete});
-
-//   try {
-//     const savedTask = await task.save();
-//     res.status(201).json(savedTask)
-//   } catch (error) {
-//     res.status(400).json({response: error, success: false})
-//   }
-// })
-//////////////////////////////
+//   res.status(200).json({success: true, response: thoughts});
+// } catch (error) {
+//   res.status(400).json({success: false, response: error});
+// }
+// });
 
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body;
@@ -125,7 +82,8 @@ app.post('/thoughts', async (req, res) => {
     const newThought = await new Thought({ message: message}).save()
     res.status(201).json({
       response: newThought,
-      success: true});
+      success: true
+    });
   } catch (error) { 
     res.status(400).json({
       response: 'Could not save message',
@@ -133,7 +91,6 @@ app.post('/thoughts', async (req, res) => {
     });
   }
 });
-
 
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { id } = req.params;
@@ -147,6 +104,46 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     res.status(400).json({
       response: error,
       success: false});
+  }
+});
+
+app.delete("/thoughts/:id", async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const deleted = await Thought.findOneAndDelete({_id: id});
+    if (deleted) {
+      res.status(200).json({success:true, response: deleted});
+    } else {
+      res.status(404).json({success: false, response: "Not Found"});
+    }
+  } catch (error) {
+    res.status(400).json({success: false, response: error});
+  }
+});
+
+app.patch("/thoughts/:id", async (req, res) => {
+  const { id } = req.params;
+  const { updatedThought} = req.body;
+
+  try {
+    const updatedMessage = await Thought.findByIdAndUpdate({_id: id}, {message: updatedThought})
+    if (updatedMessage) {
+      res.status(200).json({
+        success: true, 
+        response: updatedMessage
+      });
+    } else {
+      res.status(404).json({
+        success: false, 
+        response: "Not found"
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      response: error
+    });
   }
 });
 
