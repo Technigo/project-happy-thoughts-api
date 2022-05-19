@@ -17,16 +17,38 @@ app.use(cors());
 app.use(express.json());
 
 // Data model
-const Thought = mongoose.model('Thought', {
-  hearts: Number,
-  message: String,
+const ThoughtSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    unique: true,
+    required: false
+  },
+  hearts: {
+    type: Number,
+    default: 0,
+  },
+  message: {
+    type: String,
+    minlength: 5, 
+    maxlength: 140,
+    trim: true,
+    required: true
+  },
+  tags: {
+    type: String,
+    enum: ['Food', 'Dating', 'Project', 'Friends', 'Random']
+  },
   createdAt: {
     type: Date,
+    //Add a anonymous function before new Date to return the date when the thought is created
+    // Without the anonymous function, it will only return the date the application is created
     default: () => new Date()
   }
 })
 
-// Start defining your routes here
+const Thought = mongoose.model( 'Thought', ThoughtSchema )
+
+// Main routes here
 app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
@@ -34,11 +56,18 @@ app.get("/", (req, res) => {
 // POST new thought
 app.post('/thought', async (req, res) => {
  
-    const newThought = new Thought({ message: req.body.message, hearts: 0 });
-    await newThought.save();
- 
-    res.status(200).json(newThought)
+    const { name, message, tags } = req.body
 
+      const newThought = new Thought({ name: name, message: message, tags: tags});
+     
+      await newThought.save()
+        .then(data => {
+          res.status(201).json({ response: data, success:true })
+        })
+        .catch (error => {
+          res.status(400).json({ res: error, success: false })
+         })
+ 
 })
 
 // GET all thoughts
