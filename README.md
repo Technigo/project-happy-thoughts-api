@@ -8,5 +8,5 @@ It was tricky to update hearts' count by POST request. Found out MongoDB provide
 
 ## View it live
 
-Client : https://technigo-happythoughts-2022.netlify.app/
+Client : https://technigo-happythoughts-2022.netlify.app/ </br>
 Server : https://express-deployment-2022.herokuapp.com/thoughts
