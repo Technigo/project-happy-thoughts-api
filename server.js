@@ -46,7 +46,7 @@ app.get("/", (req, res) => {
 
 app.get("/thoughts", async (req, res) => {
   try {
-    const thoughts = await thought.find().sort({ createdAt: "desc" }).limit(20).exec();
+    const thoughts = await thought.find().sort({ createdAt: "desc" }).limit(20)
     res.status(200).json(thoughts);
   } catch (err) {
     res.status(400).json({
