@@ -31,10 +31,11 @@ const HappyThoughtSchema = new mongoose.Schema({
     default: 0,
   },
   createdAt: {
-    type: Date,
-    //anonumys function calls date every time a post is created
-    default: () => new Date(),
-    // default: Date.now,
+    type: String,
+    default: () =>
+      new Date(Date.now()).toLocaleString("sv-SE", {
+        timeZone: "Europe/Stockholm",
+      }),
   },
 });
 
