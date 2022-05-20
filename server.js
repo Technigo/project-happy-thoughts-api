@@ -33,9 +33,10 @@ const HappyThoughtsSchema = new mongoose.Schema({
     default: false
   },
   createdAt: {
-    type: Date,
+    type: String,
     // Anonymous function to add new date. Simliar to event listeners, every time user creates a thought we call it again
-    default: () => new Date()
+    default: () => new Date(Date.now()).toLocaleString('sv-SE', {
+      timeZone: 'Europe/Stockholm'})
   }
 })
 
