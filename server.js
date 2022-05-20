@@ -41,6 +41,18 @@ const ThoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model('Thought', ThoughtSchema);
 
+// Start defining your routes here
+app.get("/", (req, res) => {
+  res.send("Happy thoughts!");
+});
+
+app.get("/thoughts", (req, res) => {
+
+  const thoughts = await Thought.find().sort({createdAt:'desc'}).limit(20).exec();
+  res.json(thoughts);
+  
+});
+
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body;
 
@@ -79,18 +91,6 @@ try {
   })
 }
 
-});
-
-app.get("/thoughts", (req, res) => {
-
-  const thoughts = await Thought.find().sort({createdAt:'desc'}).limit(20).exec();
-  res.json(thoughts);
-  
-});
-
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
 });
 
 // Start the server
