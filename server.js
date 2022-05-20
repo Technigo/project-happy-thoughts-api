@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import res from "express/lib/response";
 
 dotenv.config ()
 
@@ -47,11 +48,18 @@ app.get("/", (req, res) => {
 });
 
 app.get("/thoughts", (req, res) => {
-
+  try {
   const thoughts = await Thought.find().sort({createdAt:'desc'}).limit(20).exec();
-  res.json(thoughts);
-  
+  res.status(200).json(thoughts);
+
+} catch(error) {
+    res.status(400).json({
+    message:'Please try again',
+    error: err.errors,
+    });
+  }
 });
+      
 
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body;
