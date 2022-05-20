@@ -22,9 +22,7 @@ const HappyThoughtSchema = new mongoose.Schema({
   },
   hearts: {
     type: Number,
-    default: 0,
-    min: 0,
-    max: 0 
+    default: 0 
     //should not be assignable but ignore and post 0 anyway
   },
   createdAt: {
@@ -78,20 +76,20 @@ app.post("/thoughts", async (req, res) => {
   const { message } = req.body
 
   try {
-  const thought = await new HappyThought({message: message }).save()
-  res.status(201).json({response: thought, success: true})
+  const newThought = await new HappyThought({message: message }).save()
+  res.status(201).json({response: newThought, success: true})
   
   } catch(error) {
     res.status(400).json({response: error, success: false})
   }
 })
 
-app.post("thoughts/:thoughtId/like", async (req, res) => {
-  const { id } = req.params
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params
 
   try {
-  const likesToUpdate = await HappyThought.findByIdAndUpdate(id, {$inc: {hearts: 1}})
-  res.status(200).json({response: `Like ${likesToUpdate.hearts} has been updated`, success: true})
+  const likesToUpdate = await HappyThought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}})
+  res.status(200).json({response: likesToUpdate, success: true})
 
 } catch(error) {
   res.status(400).json({response: error, success: false})
