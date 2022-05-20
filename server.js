@@ -90,7 +90,7 @@ const HappyThoughtsSchema = new mongoose.Schema({
     trim: true
   }, 
 
-  heart: {
+  hearts: {
     type: Number,
     default: 0,
   },
@@ -170,10 +170,10 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-app.post('/thoughts/:id/heart', async (req, res) => {
+app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params
   try {
-    const heartToUpdate = await HappyThoughts.findByIdAndUpdate(id, {$inc: {heart: 1}})
+    const heartToUpdate = await HappyThoughts.findByIdAndUpdate(id, {$inc: {hearts: 1}})
     res.status(200).json({response: 'You have liked this message', success: true})
   } catch (error) {
     res.status(400).json({response: error, success: false})
