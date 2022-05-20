@@ -25,9 +25,7 @@ const ThoughtSchema = new mongoose.Schema({
   },
   hearts: {
     type: Number,
-    minimum: 0,
     default: 0,
-    exclusiveMinimum: false
   },
   message: {
     type: String,
@@ -36,10 +34,7 @@ const ThoughtSchema = new mongoose.Schema({
     trim: true,
     required: true
   },
-  tags: {
-    type: String,
-    enum: ['Food', 'Dating', 'Project', 'Friends', 'Random']
-  },
+
   createdAt: {
     type: Date,
     //Add a anonymous function before new Date to return the date when the thought is created
@@ -56,28 +51,33 @@ app.get("/", (req, res) => {
 });
 
 // POST new thought
-app.post('/thought', async (req, res) => {
+app.post('/thoughts', async (req, res) => {
  
-    const { name, message, tags } = req.body
+    const { name, message } = req.body;
 
     try {
 
-      const newThought = new Thought({ name: name, message: message, tags: tags});
-     
-      await newThought.save()
+      const newThought = new Thought({ name: name, message: message });
 
-      res.status(201).json({ response: data, success:true })
+      await newThought.save()
+  
+      res.status(201).json({ res: newThought, success:true })
     } 
-    catch (error) {
-          res.status(400).json({ res: error, success: false })
+    catch(error) { 
+      res.status(400).json({ res: error, success:false })
     }
+
+   
  
 })
 
 // GET all thoughts
 app.get("/thoughts", async (req,res) => {
-  const thoughts = await Thought.find();
-   res.status(200).json(thoughts)
+  const thoughts = await Thought.find({ })
+    .sort({ createdAt: -1 })
+    .limit(20)
+
+   res.status(200).json({ response: thoughts, success: true })
 
 })
 
