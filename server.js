@@ -32,8 +32,12 @@ const HappyThoughtSchema = new mongoose.Schema({
 
 const HappyThought = mongoose.model("HappyThought", HappyThoughtSchema);
 
-app.get("/", (req, res) => {
-  res.send("Hello and welcome to Happy thoughts!");
+app.get('/', (req, res) => {
+  res.send({
+    'Hello': "and welcome to the Happy Thoughts API.",
+    'All thoughts': '/thoughts',
+    'Project live': 'https://happy-thoughts-joanna.netlify.app/'
+  });
 });
 
 app.get('/thoughts', async (req, res) => {
@@ -53,7 +57,7 @@ app.post('/thoughts', async (req, res) => {
     } catch(err) {
       res.status(400).json({
         response: err,
-        message: 'Could not save the thought', 
+        message: 'Could not save the Happy Thought', 
         errors: err.errors,
         success: false,
         status: 400
