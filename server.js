@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import res from "express/lib/response";
 
 dotenv.config ()
 
@@ -38,16 +37,21 @@ const ThoughtSchema = new mongoose.Schema({
     type: Date,
     default: ()=> new Date()
   },
-})
-
-const Thought = mongoose.model('Thought', ThoughtSchema);
-
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Happy thoughts!");
 });
 
-app.get("/thoughts", (req, res) => {
+const thought = mongoose.model('Thought', ThoughtSchema);
+
+// Start defining your routes here
+app.get('/', (req, res) => {
+  const main = {
+  Welcome: 'Happy thoughts api',
+};
+  res.send(main);
+  });
+
+
+
+app.get('/thoughts', (req, res) => {
   try {
   const thoughts = await Thought.find().sort({createdAt:'desc'}).limit(20).exec();
   res.status(200).json(thoughts);
@@ -60,7 +64,6 @@ app.get("/thoughts", (req, res) => {
   }
 });
       
-
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body;
 
@@ -76,18 +79,17 @@ app.post('/thoughts', async (req, res) => {
       error: err.errors,
       sucess:false,
 
-    })
+    });
  }
 });
 
- app.post("/thoughts/:thoughtId/like", async (req, res) => {
+ app.post('/thoughts/:thoughtId/like', async (req, res) => {
    const { thoughtId } = req.params;
 
 try {
   const newMessage = await new Message.findByIdAndUpdate(thoughtId, {
     $inc: { hearts: 1 },
   })
-
   res.status(200).json(newMessage);
    
 } catch(error) {
@@ -96,7 +98,7 @@ try {
     error: err.errors,
     sucess:false,
 
-  })
+  });
 }
 
 });
