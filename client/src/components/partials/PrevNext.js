@@ -1,13 +1,13 @@
 import React from "react";
 
-const PrevNext = ({ skip, setSkip, thoughts, fetchThoughts }) => {
-  const handleNextClick = () => {
-    setSkip(skip + 20);
+const PrevNext = ({ skip, setSkip, thoughts, fetchThoughts}) => {
+  const handlePrevClick = () => {
+    setSkip(skip - 20);
     fetchThoughts();
   };
 
-  const handlePrevClick = () => {
-    setSkip(skip - 20);
+  const handleNextClick = () => {
+    setSkip(skip + 20);
     fetchThoughts();
   };
 

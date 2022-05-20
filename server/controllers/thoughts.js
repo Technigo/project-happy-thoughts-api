@@ -11,7 +11,7 @@ export const getThoughts = async (req, res) => {
         }
       },
       {
-        $skip: ((skip - 1) * limit) || 0
+        $skip: +skip || 0
       },
       {
         $limit: +limit || 20

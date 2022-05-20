@@ -25,7 +25,7 @@ const Thoughts = ({ loading, setLoading }) => {
   }
 
   useEffect(() => {
-    fetchThoughts()
+    fetchThoughts();
   }, [skip]);
 
   const handleFormSubmit = (event) => {
@@ -105,7 +105,12 @@ const Thoughts = ({ loading, setLoading }) => {
           />
         </article>
       ))}
-      <PrevNext setSkip={setSkip} skip={skip} thoughts={thoughts} fetchThoughts={fetchThoughts} /> 
+      <PrevNext
+        skip={skip} 
+        setSkip={setSkip} 
+        thoughts={thoughts}
+        fetchThoughts={fetchThoughts}
+      /> 
     </main>
   );
 };
