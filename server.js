@@ -51,7 +51,6 @@ app.get("/", (req, res) => {
 
 // ----------------------/GET THOUGHTS-------------------------- //
 app.get('/thoughts', async (req, res) => {
-  // const { page, perPage } = req.query
 
   try {
     const allThoughts = await HappyThoughts.find({}).sort({createdAt: 'desc'}).limit(20)
