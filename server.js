@@ -17,12 +17,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const ThoughtsSchema = new mongoose.Schema({
+const ThoughtSchema = new mongoose.Schema({
 	message: {
 		type: String,
 		required: true,
-		minlength: 5,
-		maxlength: 140,
+		unique: true,
+		minlength: [5, 'The message must be at least 5 characters'],
+		maxlength: [140, 'The message must be less than 140 characters'],
+		trim: true,
 	},
 	hearts: {
 		type: Number,
@@ -30,13 +32,13 @@ const ThoughtsSchema = new mongoose.Schema({
 	},
 	createdAt: {
 		type: Date,
-		default: Date.now,
+		default: () => new Date(),
 	},
 });
 
-const thought = mongoose.model('thought', ThoughtsSchema);
+const Thought = mongoose.model('Thought', ThoughtSchema);
 
-// Start defining your routes here
+// List all endpoints
 app.get('/', (req, res) => {
 	res.send(listEndpoints(app));
 });
@@ -44,16 +46,15 @@ app.get('/', (req, res) => {
 // Get 20 most recent thoughts
 app.get('/thoughts', async (req, res) => {
 	try {
-		const thoughts = await thought
-			.find()
+		const Thoughts = await Thought.find({})
 			.sort({ createdAt: 'desc' })
 			.limit(20)
 			.exec();
-		res.status(200).json(thoughts);
-	} catch (err) {
+		res.status(200).json(Thoughts);
+	} catch (error) {
 		res.status(400).json({
-			sucess: false,
-			error: err.errors,
+			success: false,
+			error: 'Bad Request',
 		});
 	}
 });
@@ -61,8 +62,9 @@ app.get('/thoughts', async (req, res) => {
 // POST new thought
 app.post('/thoughts', async (req, res) => {
 	const { message } = req.body;
+
 	try {
-		const newThought = await new HappyThought({ message: message }).save();
+		const newThought = await new Thought({ message: message }).save();
 		res.status(201).json({ response: newThought, success: true });
 	} catch (error) {
 		res.status(400).json({ response: error, success: false });
@@ -73,11 +75,11 @@ app.post('/thoughts', async (req, res) => {
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
 	const { thoughtId } = req.params;
 	try {
-		const thoughtToUpdate = await HappyThought.findByIdAndUpdate(thoughtId, {
+		const likeUpdate = await Thought.findByIdAndUpdate(thoughtId, {
 			$inc: { hearts: 1 },
 		});
 		res.status(201).json({
-			response: `${thoughtToUpdate.message} has one more like`,
+			response: likeUpdate.message,
 			success: true,
 		});
 	} catch (error) {
