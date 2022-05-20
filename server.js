@@ -47,7 +47,7 @@ const Thought = mongoose.model( 'Thought', ThoughtSchema )
 
 // Main routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send("Welcome to my happy thought");
 });
 
 // POST new thought
