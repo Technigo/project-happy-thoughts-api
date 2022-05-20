@@ -12,13 +12,13 @@ mongoose.Promise = Promise;
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
 // PORT=9000 npm start
-const port = process.env.PORT || 8080;
+
+const port = process.env.PORT || 5000;
 const app = express();
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
-
 
 const ThoughtSchema = new mongoose.Schema({
   message: {
@@ -42,7 +42,7 @@ const ThoughtSchema = new mongoose.Schema({
 const Thought = mongoose.model('Thought', ThoughtSchema);
 
 
-app.post("/thougths", async (req, res) => {
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
 
   const { message } = req.body;
  try {
@@ -54,15 +54,19 @@ app.post("/thougths", async (req, res) => {
   })
   } catch(error) {
     res.status(400).json({
-      response: error,
+      message: 'Please try again!',
+      error: err.errors,
       sucess:false,
 
     })
-
  }
-
-
 });
+
+
+// app.post("/thoughts/:thoughtId/like", async (req, res) => {
+//   const { thoughtId}
+
+
 
 // Start defining your routes here
 app.get("/", (req, res) => {
