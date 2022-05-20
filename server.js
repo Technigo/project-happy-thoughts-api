@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import listEndpoints from "express-list-endpoints";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -34,7 +35,7 @@ const thought = mongoose.model("thought", ThoughtSchema);
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send(listEndpoints(app));
 });
 
 //Get thoughts, answer is limited to 20 results, ordered by time in descending order.
@@ -54,7 +55,7 @@ app.get("/thoughts", async (req, res) => {
   }
 });
 
-// Send a new thought
+// Send a new thought.
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
   try {
