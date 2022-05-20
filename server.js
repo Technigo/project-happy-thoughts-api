@@ -57,9 +57,9 @@ app.get("/thoughts", async (req, res) => {
       .sort({ createdAt: "desc" })
       .limit(20)
       .exec();
-    res.status(201).json({ response: thoughts, success: true });
+    res.status(201).json(thoughts);
   } catch (error) {
-    res.status(400).json({ response: error, success: false });
+    res.status(400).json({ error: error, success: false });
   }
 });
 
