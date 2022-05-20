@@ -60,30 +60,28 @@ app.get('/thoughts', async (req, res) => {
 
 // POST new thought
 app.post('/thoughts', async (req, res) => {
+	const { message } = req.body;
 	try {
-		const newThought = await new ThoughtsSchema(req.body).save();
-		res.status(200).json(newThought);
-	} catch (err) {
-		res.status(400).json({
-			message: 'Error',
-			errors: err.errors,
-		});
+		const newThought = await new HappyThought({ message: message }).save();
+		res.status(201).json({ response: newThought, success: true });
+	} catch (error) {
+		res.status(400).json({ response: error, success: false });
 	}
 });
 
 // POST likes on thought id
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
+	const { thoughtId } = req.params;
 	try {
-		await Thought.updateLike(
-			{ _id: req.params.thoughtId },
-			{ $inc: { hearts: 1 } }
-		);
-		res.status(200).json();
-	} catch (err) {
-		res.status(400).json({
-			message: 'Error! Unable to like this thought: thought not found.',
-			errors: err.errors,
+		const thoughtToUpdate = await HappyThought.findByIdAndUpdate(thoughtId, {
+			$inc: { hearts: 1 },
 		});
+		res.status(201).json({
+			response: `${thoughtToUpdate.message} has one more like`,
+			success: true,
+		});
+	} catch (error) {
+		res.status(400).json({ response: error, success: false });
 	}
 });
 
