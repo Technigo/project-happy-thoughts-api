@@ -72,7 +72,7 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
-//Add likes to a message
+//Add likes to a message.
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
 
