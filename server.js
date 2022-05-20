@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import listEndpoints from "express-list-endpoints";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -38,17 +39,18 @@ const ThoughtSchema = new mongoose.Schema({
 //Mongoose model allows of to use the methods like findings
 const Thought = mongoose.model("Thought", ThoughtSchema);
 
-// Start defining your routes here
+//Routes
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send(listEndpoints(app));
 });
 
 app.get("/thoughts", async (req, res) => {
   const {page, perPage} = req.query;
   try {
-  const thoughts = await Thought.find({}).sort({createdAt: -1})
-    .skip((page -1) * perPage).limit(perPage)
-  res.status(200).json({success: true, response: thoughts});
+    const thoughts = await Thought.find({}).sort({createdAt: -1})
+    .limit(20)
+    .exec();
+    res.status(200).json({success: true, response: thoughts});
   } catch (error) {
     res.status(400).json({success: false, response: error});
   }
@@ -60,10 +62,8 @@ app.post("/thoughts", async (req, res) => {
   console.log(req.body);
   try {
     const newThought =  await new Thought({message: message}).save();
-
     res.status(201).json({response: newThought, success: true});
   } catch(error) {
-
     res.status(400).json({response: error, success: false});
   }
 });
@@ -73,7 +73,7 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
   try {
     //score updated first after the find is made therfor not visible in response
     const thoughtToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}});
-    res.status(200).json({response: `Thought ${thoughtToUpdate.message} has been updated`, success: true});
+    res.status(200).json({response: `Thought like ${thoughtToUpdate.message} has been increased`, success: true});
   } catch (error) {
     res.status(400).json({response: error, success: false});
   }
