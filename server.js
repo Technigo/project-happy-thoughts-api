@@ -27,7 +27,7 @@ const ThoughtSchema = new mongoose.Schema({
     default: 0,
   },
   createdAt: {
-    type: String,
+    type: Date,
     default: () =>
       new Date(Date.now()).toLocaleString('sv-SE', {
         timeZone: 'Europe/Stockholm',
@@ -43,10 +43,7 @@ app.get('/', (req, res) => {
 
 app.get('/thoughts', async (req, res) => {
   try {
-    const thoughts = await Thought.find()
-      .sort({ createdAt: 'desc' })
-      .limit(20)
-      .exec()
+    const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20)
     res.status(200).json(thoughts)
   } catch (err) {
     res.status(400).json({
