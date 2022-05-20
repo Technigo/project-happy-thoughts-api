@@ -39,11 +39,12 @@ li {
   background-color: #216986;
 }
 
-.loaderContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.loader-container {
+  text-align: center;
+  background-color: white;
+}
+
+.loader-wrapper {
   padding-top: 50px;
 }
 
@@ -54,7 +55,7 @@ li {
   width: 80px;
   height: 80px;
   animation: spin 1s linear infinite;
-  margin-top: 50px;
+  margin: 50px auto 0 auto;
 }
 
 @keyframes spin {
@@ -94,6 +95,10 @@ textarea {
   display: flex;
   flex-direction: column;
   background-color: #dfdfdf;
+}
+
+.author-input {
+  margin-top: 8px;
 }
 
 .form button {
@@ -163,6 +168,23 @@ textarea {
 .error-message {
   color: #f21e1e;
   overflow-wrap: break-word;
+}
+
+.prevnext-buttons {
+  display: flex;
+  margin: 30px;
+  justify-content: center;
+}
+
+.prev-btn {
+  margin-right: 35px;
+}
+
+.btn {
+  font-size: 25px;
+  font-weight: 900;
+  border-radius: 50%;
+  padding: 6px 14px;
 }
 
 @media (min-width: 375px) {

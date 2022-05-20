@@ -32,6 +32,7 @@ const ThoughtForm = ({
       <input
         type="text"
         id="thoughtAuthor"
+        className="author-input"
         value={username}
         onChange={handleUser}
         placeholder="Enter your name or post anonymously..."

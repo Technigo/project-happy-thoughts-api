@@ -3,20 +3,21 @@ import React, { useState, useEffect } from "react";
 import ThoughtForm from "./ThoughtForm";
 import ThoughtCards from "./ThoughtCards";
 import Spinner from "./partials/Spinner";
+import PrevNext from "./partials/PrevNext";
 
 import { herokuUrl } from "urls";
 
-const Thoughts = () => {
+const Thoughts = ({ loading, setLoading }) => {
   const [username, setUsername] = useState("");
   const [thoughts, setThoughts] = useState([]);
   const [newThought, setNewThought] = useState("");
-  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState({})
   const [error, setError] = useState(false);
+  const [skip, setSkip] = useState(0);
 
   const fetchThoughts = () => {
     setLoading(true)
-    fetch(herokuUrl)
+    fetch(`${herokuUrl}?skip=${skip}`)
       .then(res => res.json())
       .then(thoughts => setThoughts(thoughts.thoughts))
       .catch(error => console.error("error:", error))
@@ -25,7 +26,7 @@ const Thoughts = () => {
 
   useEffect(() => {
     fetchThoughts()
-  }, []);
+  }, [skip]);
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
@@ -63,7 +64,6 @@ const Thoughts = () => {
 
   const handleUser = (event) => {
     setUsername(event.target.value);
-    console.log(username);
   };
 
   const handleLikes = (id) => {
@@ -78,7 +78,7 @@ const Thoughts = () => {
 
   if (loading) {
     return (
-      <div className="loaderContainer">Loading happy thoughts
+      <div className="loader-wrapper">Loading happy thoughts
         <Spinner />
       </div>
     );
@@ -105,6 +105,7 @@ const Thoughts = () => {
           />
         </article>
       ))}
+      <PrevNext setSkip={setSkip} skip={skip} thoughts={thoughts} fetchThoughts={fetchThoughts} /> 
     </main>
   );
 };

@@ -17,7 +17,7 @@ const ThoughtCards = ({ thought, handleLikes, id, username }) => {
   return (
     <>
       <p className="thought-messages">{thought.message}</p>
-      {username !== "anonymous" && <p>- {username}</p>}
+      {username !== "Anonymous" && <p>- {username}</p>}
       <div className="button-wrapper">
         <div>
           <button

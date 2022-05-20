@@ -1,6 +1,6 @@
 import express from "express";
 
-import { getThoughts, addThought, addLikes } from "../controllers/thoughts.js"
+import { getThoughts, addThought, addLikes } from "../controllers/thoughts.js";
 
 const router = express.Router();
 
