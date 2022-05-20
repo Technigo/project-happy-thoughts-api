@@ -45,7 +45,7 @@ const HappyThoughts = mongoose.model("HappyThoughts", HappyThoughtsSchema)
 app.get("/", (req, res) => {
   const Landing = {
     Welcome: "Happy Thoughts-API made by Terese",
-    View:  "Happy Thoughts project has been updated, see API live: https://happy-thoughts-messages.netlify.app",
+    "Happy Thoughts project has been updated, see API live": "https://happy-thoughts-messages.netlify.app",
     Routes: [
       "All endpoints are listed here: /thoughts",
     ] 
