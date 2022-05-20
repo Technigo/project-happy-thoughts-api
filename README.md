@@ -10,13 +10,17 @@ Some learing goals for this week included:
 These are my endpoints used in frontend: 
 
 app.get: /thoughts (will return array of user post)
+<br>
 app.post: /thoughts (for saving and sending data to API)
+<br>
 app.post: /thoughts/:thoughtId/like (find thought by ID, and update its hearts property to add one like.)
 
 Other endpoints in backend but not used in frontend:
 
 app.get: /thoughts/:thoughtId
+<br>
 app.delete: /thoughts/:id (find thought by ID and delete it)
+<br>
 app.patch: /thoughts/:id (find thought by ID to update property)
 
 ## The problem
