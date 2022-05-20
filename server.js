@@ -42,7 +42,6 @@ const ThoughtSchema = new mongoose.Schema({
 const Thought = mongoose.model('Thought', ThoughtSchema);
 
 app.post('/thoughts', async (req, res) => {
-
   const { message } = req.body;
 
  try {
@@ -61,9 +60,26 @@ app.post('/thoughts', async (req, res) => {
  }
 });
 
+ app.post("/thoughts/:thoughtId/like", async (req, res) => {
+   const { thoughtId } = req.params;
 
-//  app.post("/thoughts/:thoughtId/like", async (req, res) => {
-//    const { thoughtId}
+try {
+  const newMessage = await new Message.findByIdAndUpdate(thoughtId, {
+    $inc: { hearts: 1 },
+  })
+
+  res.status(200).json(newMessage);
+   
+} catch(error) {
+  res.status(400).json({
+    message: 'Please try again!',
+    error: err.errors,
+    sucess:false,
+
+  })
+}
+
+});
 
 app.get("/thoughts", (req, res) => {
 
