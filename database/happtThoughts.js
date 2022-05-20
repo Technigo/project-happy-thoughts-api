@@ -1,21 +1,21 @@
 import mongoose from "mongoose";
 import { happyThoughts } from "./modelNames.js";
 
-const happySchema = new mongoose.Schema(
-  {
-    message: {
-      type: String,
-      required: true,
-      minLength: 5,
-      maxLength: 140,
-    },
-    hearts: {
-      type: Number,
-      default: 0,
-    },
+const happySchema = new mongoose.Schema({
+  message: {
+    type: String,
+    required: true,
+    minLength: 5,
+    maxLength: 140,
   },
-  { timestamps: true }
-);
+  hearts: {
+    type: Number,
+    default: 0,
+  },
+  createdAt: {
+    type: String,
+  },
+});
 
 const HappyThought = mongoose.model(happyThoughts, happySchema);
 

@@ -35,7 +35,10 @@ app.get("/thoughts", async (req, res) => {
 
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
-  const happyThought = new HappyThought({ message });
+  const createdAt = new Date(Date.now()).toLocaleString("sv-SE", {
+    timeZone: "Europe/Stockholm",
+  });
+  const happyThought = new HappyThought({ message, createdAt });
 
   try {
     //success
