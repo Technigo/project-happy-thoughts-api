@@ -35,15 +35,14 @@ const HappyThoughtsSchema = new mongoose.Schema({
     // Trim (boolean) deletes whitespace, but only from the beginning to the end of description string
     trim: true
   },
-  heart: {
-    type: Boolean,
+  hearts: {
+    type: Number,
     default: false
   },
   createdAt: {
-    type: String,
+    type: Date,
     // Anonymous function to add new date. Simliar to event listeners, every time user creates a thought we call it again
-    default: () => new Date(Date.now()).toLocaleString('sv-SE', {
-      timeZone: 'Europe/Stockholm'})
+    default: () => new Date()
   }
 })
 
@@ -73,7 +72,7 @@ app.post("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params
 
   try {
-    const thoughtToLike = await HappyThoughts.findByIdAndUpdate(id, { $inc: { heart: 1 } })
+    const thoughtToLike = await HappyThoughts.findByIdAndUpdate(id, { $inc: { hearts: 1 } })
 
     res.status(201).json(thoughtToLike) 
   } catch (error) {
