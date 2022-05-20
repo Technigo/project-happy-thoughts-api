@@ -4,7 +4,7 @@ This week is about digging deeper into Redux, and going through things such as a
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I had a problem with the timestamp and Date now, but discussed it with my team members + wrote question on StackOverflow and solved it.
 
 ## View it live
 
