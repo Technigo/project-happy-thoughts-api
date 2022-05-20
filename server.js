@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 
 dotenv.config()
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts-backend";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -32,14 +32,13 @@ const thoughtSchema = new Schema({
 
 const Thought = mongoose.model('Thought', thoughtSchema);
 
-new Thought({ message: "Ullabella" }).save();
-
 const port = process.env.PORT || 8080;
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+// Error message if it's not possible to connect to the database
 app.use((req, res, next) => {
   if (mongoose.connection.readyState === 1) {
     next()
@@ -48,25 +47,17 @@ app.use((req, res, next) => {
   }
 })
 
-// Update documentation
-
+// API documentation
 app.get("/", (req, res) => {
   const documentation = {
-    "About": "This is the Happy Thoughts API",
-    "Routes": [
-      {
-        "/": "Documentation",
-        "/endpoints": "All endpoints",
-        "/thoughts": "Get the 20 latest thoughts",
-        "/thoughts": "Add new thought",
-        "/thoughts/:thoughtId/like": "Like a thought",
-      }
-    ]
+    "About": "Welcome to Jessicas Happy Thoughts API",
+    "You can find all available endpoints here": "/endpoints",
+    "Frontend project": "https://jessicas-happy-thoughts-project.netlify.app"
   }
-
   res.send(documentation);
 });
 
+// Get thoughts
 app.get('/thoughts', async (req, res) => {
   try {
     const thoughts = await Thought.find()
@@ -82,6 +73,7 @@ app.get('/thoughts', async (req, res) => {
 
 })
 
+// Post your own thought
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body;
 
@@ -90,13 +82,13 @@ app.post('/thoughts', async (req, res) => {
     res.status(201).json(thoughtToAdd);
   } catch (err) {
     res.status(400).json({
-      message: 'Could not save thought',
+      message: 'Could not save the thought',
       errors: err.errors
     })
   }
 })
 
-
+// Like a thought
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
 
@@ -105,15 +97,16 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
       thoughtId,
       { $inc: { hearts: 1 } }
     );
-    res.status(200).json(likedThought)
+    res.status(201).json(likedThought)
   } catch (err) {
     res.status(400).json({
-      message: 'Bad request. Could not find thought with requested id.',
+      message: 'Bad request. Could not find any thought with this id',
       errors: err.errors
     })
   }
 })
 
+// Get all available endpoints
 app.get('/endpoints', (req, res) => {
   res.send(allEndpoints(app));
 });
