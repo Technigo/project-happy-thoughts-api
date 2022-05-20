@@ -47,6 +47,11 @@ const TechnigoMemberSchema = new mongoose.Schema({
 //Mongoose model allows of to use the methods like findings
 const TechnigoMember = mongoose.model("TechnigoMember", TechnigoMemberSchema);
 
+// Start defining your routes here
+app.get("/", (req, res) => {
+  res.send("Hello Technigo!");
+});
+
 //POST request with async await - version 1
 app.post("/members", async (req, res) => {
   const { name, description } = req.body;
@@ -119,10 +124,37 @@ app.get("/members", async (req, res) => {
   // }
 });
 
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+app.delete("/members/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    // const deleted = await TechnigoMember.deleteOne({_id: id});
+    const deleted = await TechnigoMember.findOneAndDelete({_id: id});
+    if(deleted) {
+    res.status(200).json({success: true, response: deleted});
+    } else {
+      res.status(404).json({success: false, response: "Not found"});
+    }
+  } catch (error) {
+    res.status(400).json({success: false, response: error});
+  }
+})
+
+app.patch("/members/:id", async (req, res) => {
+  const { id } = req.params;
+  const { updatedName } = req.body;
+
+  try {
+    const memberToUpdate = await TechnigoMember.findByIdAndUpdate({_id: id}, {name: updatedName});
+    if (memberToUpdate) {
+      res.status(200).json({success: true, response: memberToUpdate});
+    } else {
+      res.status(404).json({success: false, response: "Not found"});
+    }
+  } catch (error) {
+    res.status(400).json({success: false, response: error});
+  }
 });
+
 
 // app.delete("member/:id", async (req, res) => {
 //   const deleted = TechnigoMember.deleteOne
