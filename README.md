@@ -1,12 +1,10 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This week we were tasked to build an API that includes GET request endpoints to return data and POST endpoints to create data
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+There weren't any big problems this week, the lectures covered basically everything we needed to know and we just had to tweak it a bit to make it work for our project. I think the biggest problem/concern is to deploy it correctly.
 
 ## View it live
 

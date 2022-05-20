@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import listEndpoints from "express-list-endpoints";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -37,9 +38,9 @@ const ThoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model("Thought", ThoughtSchema);
 
-// Start defining your routes here
+// Routes
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send(listEndpoints(app));
 });
 
 //To show thoughts
@@ -79,26 +80,6 @@ app.post("/thoughts/:id/like", async (req, res) => {
     res.status(400).json({ response: error, success: false });
   }
 });
-
-//POST request v1
-// app.post("/members", async (req, res) => {
-//   const { name, description } = req.body;
-
-//   try {
-//     const newMember = await new TechnigoMember({
-//       name: name,
-//       description: description,
-//     }).save();
-
-//     res.status(201).json({ response: newMember, success: true });
-//   } catch (error) {
-//     res.status(400).json({ response: error, success: false });
-//   }
-// });
-
-// POST- creating
-// PUT - replacing
-// Patch- changes
 
 // Start the server
 app.listen(port, () => {
