@@ -35,11 +35,22 @@ app.use("/thoughts", thoughtsRoute);
 app.get("/", (req, res) => {
   res.json({ 
     Welcome: "Happy Thoughts MERN Stack Project",
-    GET: "/thoughts",
-    post: "/thoughts",
-    POST: "/thoughts/:id/like",
     Frontend: "https://happy-thoughts-frontend.netlify.app/",
-    Backend: "https://happy-thoughts-mern.herokuapp.com/"
+    Backend: "https://happy-thoughts-mern.herokuapp.com/",
+    "Routes": [
+      {
+        "path": "/",
+        "method": "GET"
+      },
+      {
+        "path": "/thoughts",
+        "methods": ["GET", "POST"]
+      },
+      {
+        "path": "/thoughts/:thoughtId/like",
+        "method": "POST"
+      }
+    ]
   });
 });
 

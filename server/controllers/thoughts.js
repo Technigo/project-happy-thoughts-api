@@ -1,17 +1,26 @@
 import thoughts from "../models/thoughts.js";
 
 export const getThoughts = async (req, res) => {
-  try {
-    const allThoughts = await thoughts
-      .find()
-      .sort({ createdAt: "desc" })
-      .limit(20)
-      .exec();
+  const { skip, limit } = req.query;
 
-    res.status(200).json({ success: true, thoughts: allThoughts });
+  try {
+    const allThoughts = await thoughts.aggregate([
+      {
+        $sort: {
+          createdAt: -1
+        }
+      },
+      {
+        $skip: +skip || 0
+      },
+      {
+        $limit: +limit || 20
+      }
+    ])
+    res.json({ success: true, thoughts: allThoughts })
   } catch (error) {
-    res.status(404).json({ message: error.message });
-  };
+    res.status(404).json({ success: false, message: error.message });
+  }
 };
 
 export const addThought = async (req, res) => {
