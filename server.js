@@ -35,13 +35,17 @@ const ThoughtSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  createAt: {
-    type: String,
-    default: () =>
-      new Date(Date.now()).toLocaleString('sv-SE', {
-        timeZone: 'Europe/Stockholm',
-      }),
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
+  // createAt: {
+  //   type: String,
+  //   default: () =>
+  //     new Date(Date.now()).toLocaleString('sv-SE', {
+  //       timeZone: 'Europe/Stockholm',
+  //     }),
+  // },
 })
 
 const Thought = mongoose.model('Thought', ThoughtSchema)
