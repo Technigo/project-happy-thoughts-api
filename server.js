@@ -36,8 +36,11 @@ const ThoughtSchema = new mongoose.Schema({
     default: 0,
   },
   createAt: {
-    type: Date,
-    default: ()=> new Date()
+    type: String,
+    default: () =>
+      new Date(Date.now()).toLocaleString('sv-SE', {
+        timeZone: 'Europe/Stockholm',
+      }),
   },
 })
 
