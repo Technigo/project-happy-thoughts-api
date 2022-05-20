@@ -55,8 +55,8 @@ app.get("/thoughts", async (req, res) => {
 });
 
 // Send a new thought
-app.post("/thoughts", async (res, req) => {
-  const message = req.body;
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body;
   try {
     const newThought = await new thought({ message: message }).save();
     res.status(201).json({
