@@ -27,8 +27,8 @@ const ThoughtSchema = new mongoose.Schema({
     default: 0,
   },
   createdAt: {
-    type: String,
-    default: () => new Date().toLocaleTimeString('se-SE'),
+    type: Date,
+    default: Date.now,
   },
 })
 
