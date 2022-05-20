@@ -14,28 +14,6 @@ mongoose.Promise = Promise;
 const port = process.env.PORT || 8080;
 const app = express();
 
-const ThoughtSchema = new mongoose.Schema({
-  message: {
-    type: String,
-    required: true,
-    minlength: [5, "The message must be at least 5 characters"],
-    maxlength: [140, "The message must be less than 140 characters"],
-    trim: true,
-  },
-  hearts: {
-    type: Number,
-    default: 0,
-  },
-  createdAt: {
-    type: Date,
-    default: () => new Date(),
-    // type: Number,
-    // default: Date.now,
-  },
-});
-
-const Thought = mongoose.model("Thought", ThoughtSchema);
-
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
@@ -47,6 +25,27 @@ app.use((req, res, next) => {
   }
 });
 
+const ThoughtSchema = new mongoose.Schema({
+  message: {
+    type: String,
+    required: true,
+    unique: true,
+    minlength: [5, "The message must be at least 5 characters"],
+    maxlength: [140, "The message must be less than 140 characters"],
+    trim: true,
+  },
+  hearts: {
+    type: Number,
+    default: 0,
+  },
+  createdAt: {
+    type: Date,
+    default: () => new Date(),
+  },
+});
+
+const Thought = mongoose.model("Thought", ThoughtSchema);
+
 // Start defining your routes here
 app.get("/", (req, res) => {
   res.send(listEndpoints(app));
@@ -54,7 +53,7 @@ app.get("/", (req, res) => {
 
 app.get("/thoughts", async (req, res) => {
   try {
-    const thoughts = await Thought.find()
+    const thoughts = await Thought.find({})
       .sort({ createdAt: "desc" })
       .limit(20)
       .exec();
@@ -68,7 +67,7 @@ app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
 
   try {
-    const newThought = await new Thought({ message }).save();
+    const newThought = await new Thought({ message: message }).save();
     res.status(201).json({ response: newThought, success: true });
   } catch (error) {
     res.status(400).json({ response: error, success: false });
