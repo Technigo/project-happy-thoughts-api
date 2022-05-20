@@ -36,7 +36,7 @@ const HappyThoughtsSchema = new mongoose.Schema({
     trim: true
   },
   heart: {
-    type: Boolean,
+    type: Number,
     default: false
   },
   createdAt: {
