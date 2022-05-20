@@ -13,11 +13,12 @@ const Thoughts = ({ loading, setLoading }) => {
   const [newThought, setNewThought] = useState("");
   const [errorMessage, setErrorMessage] = useState({})
   const [error, setError] = useState(false);
+  const [limit, setLimit] = useState(20);
   const [skip, setSkip] = useState(0);
 
   const fetchThoughts = () => {
     setLoading(true)
-    fetch(`${herokuUrl}?skip=${skip}`)
+    fetch(`${herokuUrl}?limit=${limit}&skip=${skip}`)
       .then(res => res.json())
       .then(thoughts => setThoughts(thoughts.thoughts))
       .catch(error => console.error("error:", error))
@@ -25,8 +26,8 @@ const Thoughts = ({ loading, setLoading }) => {
   }
 
   useEffect(() => {
-    fetchThoughts();
-  }, [skip]);
+    fetchThoughts(skip, limit);
+  }, [skip, limit]);
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
@@ -76,6 +77,14 @@ const Thoughts = ({ loading, setLoading }) => {
     setThoughts(updatedLikes);
   };
 
+  const nextPage = () => {
+    setSkip(skip + limit)
+  };
+
+  const previousPage = () => {
+    setSkip(skip - limit)
+  };
+
   if (loading) {
     return (
       <div className="loader-wrapper">Loading happy thoughts
@@ -107,9 +116,9 @@ const Thoughts = ({ loading, setLoading }) => {
       ))}
       <PrevNext
         skip={skip} 
-        setSkip={setSkip} 
         thoughts={thoughts}
-        fetchThoughts={fetchThoughts}
+        nextPage={nextPage}
+        previousPage={previousPage}
       /> 
     </main>
   );
