@@ -45,8 +45,20 @@ app.get("/", (req, res) => {
 });
 
 app.get('/thoughts', async (req,res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc'}).limit(20).exec()
-  res.json(thoughts)
+const {page, perPage} = req.query
+
+try {
+   const thoughts = await Thought.find().sort({ 
+    createdAt: 'desc'
+  })
+  .skip((page -1 ) * perPage).limit(perPage)
+  .exec()
+
+  res.status(200).json({success: true, response: thoughts})
+  
+} catch (error) {
+  res.status(400).json({success: false, response: error})
+}
 })
 
 app.post('/thoughts', async (req, res) => {
@@ -72,7 +84,7 @@ res.status(400).json({
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId, } = req.params
   try{
-    const thoughtLiked = Thought.findByIdAndUpdate(thoughtId,
+    const thoughtLiked = Thought.findByIdAndUpdate(thoughtId, 
        {$inc: {hearts: 1}})
     res.status(200).json({
       response: `This happy thought ${thoughtLiked.message} got liked!`,
@@ -85,6 +97,11 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
       })
   }
 })
+
+// app.get('/thoughts', async (req, res) => {
+//   const thoughts = await Thought.find({})
+//   res.status(200).json({success: true, response: thoughts})
+// })
 
 // Start the server
 app.listen(port, () => {
