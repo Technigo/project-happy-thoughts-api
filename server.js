@@ -28,9 +28,8 @@ hearts: {
   default:0
 },
 createdAt: {
-  type: String,
-  default: () => new Date(Date.now()).toLocaleString("sv-SE", {
-  timeZone: "Europe/Stockholm",})
+  type: Date,
+  default: ()=> new Date(),
 },
 });
 
