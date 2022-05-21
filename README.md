@@ -1,13 +1,12 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+The assignment this week was to create my own database and endpoints for a previous Frontend project called Happy Thoughts.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I have used Node.js, MongoDB and Heroku. I started with looking up what endpoints I needed and what information was in the original data for Happy Thoughts. If I had more time I would have added more features in the Frontend using, delete and patch from the backend. 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Backend: https://project-happy-thoughts-api-app.herokuapp.com/
+Frontend: https://jocular-trifle-d608b4.netlify.app/
