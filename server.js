@@ -42,7 +42,7 @@ const thought = mongoose.model("thought", ThoughtSchema);
 app.get('/', (req, res) => {
 res.send({
   'Welcome': "You have reached the API for Happy Thoughts",
-  'To get all Happy Thoughts': '/thoughts'
+  'To get all Happy Thoughts': "/thoughts"
 });
 });
 
@@ -52,6 +52,7 @@ app.get('/thoughts', async (req, res) => {
   const thoughts = await thought.find().sort({createdAt: 'desc'}).limit(20).exec();res.json(thoughts);
 });
 
+//POST A HAPPY THOUGHT
 
 app.post("/thoughts", async (req, res) =>{
   const { message } = req.body;
@@ -70,6 +71,8 @@ app.post("/thoughts", async (req, res) =>{
   }
 });
 
+//SEARCH FOR SPECIFIC HAPPY THOUGHT
+
 app.post("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
   
@@ -86,12 +89,6 @@ app.post("/thoughts/:id/like", async (req, res) => {
       error: err.errors
     });
   }
-});
-
-
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
 });
 
 // Start the server
