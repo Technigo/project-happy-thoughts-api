@@ -1,0 +1,205 @@
+[{
+  "_id": {
+    "$oid": "6286a5b0209efc1bf58a7bc0"
+  },
+  "message": "hejdå",
+  "hearts": 0,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1652991408980"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6286a5bb209efc1bf58a7bc2"
+  },
+  "message": "jenny fiskaare",
+  "hearts": 0,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1652991419772"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6286aa1b209efc1bf58a7bc4"
+  },
+  "message": "gott och blandat",
+  "hearts": 0,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1652992539359"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6286b38df60b3aab27be1402"
+  },
+  "message": "gott och blandat",
+  "hearts": 0,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1652994957500"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6286b52447250ea37004a761"
+  },
+  "message": "gott och blandat",
+  "hearts": 0,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1652995364349"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6286b52e47250ea37004a763"
+  },
+  "message": "hejdååå",
+  "hearts": 3,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1652995374842"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6288b03a3096301e026f78b7"
+  },
+  "message": "hej jenny",
+  "hearts": 0,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1653125178248"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6288b222ad5ea2f8960f40ba"
+  },
+  "message": "Sverigetid",
+  "hearts": 0,
+  "createdAt": "2022-05-21 11:32:50",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6288b275698b38233780649c"
+  },
+  "message": "Sverigetid",
+  "hearts": 0,
+  "createdAt": "2022-05-21 11:35:35",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6288b28e698b3823378064a0"
+  },
+  "message": "Sverigetid",
+  "hearts": 0,
+  "createdAt": "2022-05-21 11:35:35",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6288b290698b3823378064a2"
+  },
+  "message": "Sverigetid",
+  "hearts": 0,
+  "createdAt": "2022-05-21 11:35:35",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6288b29b698b3823378064a4"
+  },
+  "message": "blågrön",
+  "hearts": 0,
+  "createdAt": "2022-05-21 11:35:35",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6288b3bf34287c19d8c2975c"
+  },
+  "message": "blågrön",
+  "hearts": 0,
+  "createdAt": "2022-05-21 11:40:52",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6288b3cc34287c19d8c2975e"
+  },
+  "message": "testar...",
+  "hearts": 0,
+  "createdAt": "2022-05-21 11:40:52",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6288b44a93fd8be2a720620a"
+  },
+  "message": "testar...igen",
+  "hearts": 0,
+  "createdAt": "2022-05-21 11:42:40",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6288b59f213d870915067fe6"
+  },
+  "message": "AGAIN AND AGAIN",
+  "hearts": 0,
+  "createdAt": "2022-05-21 11:48:46",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6288b5c4213d870915067fe9"
+  },
+  "message": "111111",
+  "hearts": 0,
+  "createdAt": "2022-05-21 11:48:46",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6288b5cc213d870915067feb"
+  },
+  "message": "11122",
+  "hearts": 0,
+  "createdAt": "2022-05-21 11:48:46",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6288b5d0213d870915067fed"
+  },
+  "message": "11133",
+  "hearts": 0,
+  "createdAt": "2022-05-21 11:48:46",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6288b5d5213d870915067fef"
+  },
+  "message": "11144",
+  "hearts": 0,
+  "createdAt": "2022-05-21 11:48:46",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6288b5da213d870915067ff1"
+  },
+  "message": "11155",
+  "hearts": 1,
+  "createdAt": "2022-05-21 11:48:46",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6288d6449b8e9788696d1474"
+  },
+  "message": "jenny testar",
+  "hearts": 0,
+  "createdAt": "2022-05-21 14:01:40",
+  "__v": 0
+}]
