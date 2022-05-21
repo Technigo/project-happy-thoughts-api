@@ -44,6 +44,8 @@ res.send({
   'Welcome': "You have reached the API for Happy Thoughts",
   'To GET and POST Happy Thoughts': "/thoughts",
   "POST like on specific Happy Thought": "/thoughts/:thoughtID/like",
+  "Frontend": "https://jenny-fiskaare-happy-thoughts.netlify.app/",
+  
 
 });
 });
