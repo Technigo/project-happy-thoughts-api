@@ -37,7 +37,7 @@ createdAt: {
 
 const thought = mongoose.model("thought", ThoughtSchema);
 
-//API DOCUMENTATION
+//API DOCUMENTATION TEXT
 app.get('/', (req, res) => {
 res.send({
   'Welcome': "You have reached the API for Happy Thoughts",
