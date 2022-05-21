@@ -33,7 +33,7 @@ likes:{
 createdAt:{ 
   type: Date,
   default:()=>new Date()
-}
+},
 })
 
 const HappyThought= mongoose.model("HappyThought", HappyThoughtSchema);
