@@ -21,11 +21,12 @@ message: {
   type: String, 
   required: true,
   minlength: 5,
-  maxlength: 140
+  maxlength: 140, 
+  trim: true,
 },
 hearts: {
   type: Number, 
-  default:0
+  default:0,
 },
 createdAt: {
   type: Date,
@@ -33,24 +34,30 @@ createdAt: {
 },
 });
 
+//MONGOOSE MODEL
+
 const thought = mongoose.model("thought", ThoughtSchema);
 
 //API DOCUMENTATION TEXT
 app.get('/', (req, res) => {
 res.send({
   'Welcome': "You have reached the API for Happy Thoughts",
-  'To get all Happy Thoughts': "/thoughts"
+  'To GET and POST Happy Thoughts': "/thoughts",
+  "POST like on specific Happy Thought": "/thoughts/:thoughtID/like",
+
 });
 });
 
 //GET ALL HAPPY THOUGHTS (MAXIMUM 20)
-
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await thought.find().sort({createdAt: 'desc'}).limit(20).exec();res.json(thoughts);
+  const thoughts = await thought.find()
+  .sort({createdAt: 'desc'})
+  .limit(20)
+  .exec();
+  res.json(thoughts);
 });
 
 //POST A HAPPY THOUGHT
-
 app.post("/thoughts", async (req, res) =>{
   const { message } = req.body;
 
@@ -60,21 +67,22 @@ app.post("/thoughts", async (req, res) =>{
       response: newThought,
       success: true
     });
+
   } catch (err) {
     res.status(400).json({
+      message: "Not able to post",
       success: false,
       error: err.errors
     });
   }
 });
 
-//SEARCH FOR SPECIFIC HAPPY THOUGHT
-
-app.post("/thoughts/:id/like", async (req, res) => {
-  const { id } = req.params;
+//SEARCH FOR SPECIFIC HAPPY THOUGHT AND ADD LIKE
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
   
   try {
-    const updateHearts = await thought.findByIdAndUpdate(id, { $inc: { hearts: 1 } })
+    const updateHearts = await thought.findByIdAndUpdate(thoughtId, { $inc: { hearts: 1 } })
     res.status(200).json({
       response: updateHearts,
       success: true
