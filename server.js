@@ -48,7 +48,7 @@ res.send({
 });
 });
 
-//GET ALL HAPPY THOUGHTS (MAXIMUM 20)
+//GET ALL HAPPY THOUGHTS (MAXIMUM 20).
 app.get('/thoughts', async (req, res) => {
   const thoughts = await thought.find()
   .sort({createdAt: 'desc'})
