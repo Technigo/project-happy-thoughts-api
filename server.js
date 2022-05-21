@@ -35,6 +35,16 @@ createdAt: {
 
 const thought = mongoose.model("thought", ThoughtSchema);
 
+//API DOCUMENTATION
+
+app.get('/', (req, res) => {
+res.send({
+  'Welcome': "You have reached the API for Happy Thoughts",
+  'To get all Happy Thoughts': '/happythoughts'
+});
+});
+
+
 app.post("/thoughts", async (req, res) =>{
   const { message } = req.body;
 
@@ -46,6 +56,24 @@ app.post("/thoughts", async (req, res) =>{
     });
   } catch (err) {
     res.status(400).json({
+      success: false,
+      error: err.errors
+    });
+  }
+});
+
+app.post("/thoughts/:id/like", async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const updateHearts = await thought.findByIdAndUpdate(id, { $inc: { hearts: 1 } })
+    res.status(200).json({
+      response: updateHearts,
+      success: true
+    });
+  } catch (err) {
+    res.status(400).json({
+      message: "No post with that ID is available",
       success: false,
       error: err.errors
     });
