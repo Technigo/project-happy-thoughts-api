@@ -53,7 +53,7 @@ app.get('/thoughts', async (req, res) => {
 } catch(error) {
     res.status(400).json({
     message:'Please try again',
-    error: err.errors,
+    error: error.errors,
     });
   }
 });
@@ -68,7 +68,7 @@ app.post('/thoughts', async (req, res) => {
   } catch(error) {
     res.status(400).json({
       message: 'Please try again!',
-      error: err.errors,
+      error: error.errors,
       sucess:false,
 
     });
@@ -85,7 +85,7 @@ try {
 } catch(error) {
   res.status(400).json({
     message: 'Please try again!',
-    error: err.errors,
+    error: error.errors,
     sucess:false,
 
   });
