@@ -28,9 +28,11 @@ hearts: {
   default:0
 },
 createdAt: {
-  type: Date,
-  default: ()=> new Date()
-}
+  type: String,
+  default: new Date(Date.now()).toLocaleString("sv-SE", {
+    timeZone: "Europe/Stockholm",
+  }),
+},
 });
 
 const thought = mongoose.model("thought", ThoughtSchema);
