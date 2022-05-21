@@ -19,6 +19,13 @@ const app = express();
 //   },
 // });
 
+// // Post req Codealong with Damien
+// app.post("/happy", async (req, res) => {
+//   const note = new Note(req.body);
+//   await note.save();
+//   res.json(note);
+// });
+
 // Codealong Lice Session with Daniel:
 ////////////////////////////////////////
 // Mongoose schema:
@@ -67,17 +74,8 @@ app.get("/", (req, res) => {
   res.send(listEndpoints(app));
 });
 
-// Start defining your routes here
-
-// // Post req Codealong with Damien
-// app.post("/happy", async (req, res) => {
-//   const note = new Note(req.body);
-//   await note.save();
-//   res.json(note);
-// });
-
 // Post req codealong with Daniel
-
+//////////////////////////////////
 //Get all thoughts in descending order, maximum of 20
 app.get("/thoughts", async (req, res) => {
   const thoughts = await Thought.find()
