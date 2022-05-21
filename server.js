@@ -46,20 +46,20 @@ const ThoughtSchema = new mongoose.Schema({
     default: 0,
   },
   createdAt: {
-    type: Date,
-    default: () => new Date(),
-  },
-  tag: {
     type: String,
-    required: true,
-    enum: ["Hobby", "Relationships", "Work", "Self care", "Food", "Nature"],
   },
-  name: {
-    type: String,
-    trim: true,
-    required: true,
-    maxlength: 50,
-  },
+  // Red level (to complete on the front end if I have time later)
+  // tag: {
+  //   type: String,
+  //   required: true,
+  //   enum: ["Hobby", "Relationships", "Work", "Self care", "Food", "Nature"],
+  // },
+  // name: {
+  //   type: String,
+  //   trim: true,
+  //   required: true,
+  //   maxlength: 50,
+  // },
 });
 
 // Mongoose model:
@@ -88,8 +88,11 @@ app.get("/thoughts", async (req, res) => {
 // Post a new thought
 // We have three paramaters as default value, so we will need to take those in
 app.post("/thoughts", async (req, res) => {
-  const { message, tag, name } = req.body;
-
+  const { message } = req.body;
+  const createdAt = new Date(Date.now()).toLocaleString("sv-SE", {
+    timeZone: "Europe/Stockholm",
+  });
+  const happyThought = new HappyThought({ message, createdAt });
   try {
     const newThought = await new Thought({ message, tag, name }).save();
     res.status(201).json({ response: newThought, success: true });
