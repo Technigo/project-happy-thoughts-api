@@ -2,11 +2,11 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts-api";
+const mongoUrl = process.env.MONGO_URL || "mongodb+srv://jennyfiskaare91:Pdt9DmWgXQl3vrNh@cluster0.xr7q9.mongodb.net/happyThoughts?retryWrites=true&w=majority";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-// Defines the port the app will run on. Defaults to 8080, but can be overridden 
+// Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
 // PORT=9000 npm start
 const port = process.env.PORT || 8080;
@@ -38,7 +38,6 @@ createdAt: {
 const thought = mongoose.model("thought", ThoughtSchema);
 
 //API DOCUMENTATION
-
 app.get('/', (req, res) => {
 res.send({
   'Welcome': "You have reached the API for Happy Thoughts",
