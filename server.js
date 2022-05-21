@@ -47,6 +47,7 @@ const ThoughtSchema = new mongoose.Schema({
   },
   createdAt: {
     type: String,
+    default: () => new Date(),
   },
 });
 
