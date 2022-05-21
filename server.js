@@ -40,8 +40,14 @@ const thought = mongoose.model("thought", ThoughtSchema);
 app.get('/', (req, res) => {
 res.send({
   'Welcome': "You have reached the API for Happy Thoughts",
-  'To get all Happy Thoughts': '/happythoughts'
+  'To get all Happy Thoughts': '/thoughts'
 });
+});
+
+//GET ALL HAPPY THOUGHTS (MAXIMUM 20)
+
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await thought.find().sort({createdAt: 'desc'}).limit(20).exec();res.json(thoughts);
 });
 
 
