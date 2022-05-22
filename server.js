@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import listEndpoints from "express-list-endpoints";
 
 dotenv.config()
 
@@ -39,11 +40,9 @@ const thought = mongoose.model('thought', ThoughtSchema);
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  const main = {
-  Welcome: 'Happy thoughts api',
-};
-  res.send(main);
-  });
+  res.send(listEndpoints(app));
+});
+  
 
 app.get('/thoughts', async (req, res) => {
   try {
