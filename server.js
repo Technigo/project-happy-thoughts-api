@@ -57,18 +57,6 @@ app.get("/thoughts", async (req, res) => {
   }
 });
 
-// app.get("/thoughts", async (req, res) => {
-//   try {
-//     const thoughts = await Thought.find({})
-//       .sort()({ createdAt: "desc" })
-//       .limit(20)
-//       .exec();
-//     res.status(201).json(thoughts);
-//   } catch (error) {
-//     res.status(400).json({ response: error, success: false });
-//   }
-// });
-
 //To add a thought
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
