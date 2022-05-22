@@ -61,12 +61,16 @@ app.get("/thoughts", async (req, res) => {
 });
 //POST request
 app.post("/thoughts", async (req, res) => {
-  const { name, message } = req.body;
-
+  const { message } = req.body;
+  const createdAt = new Date(
+    new Date(Date.now()).toLocaleString("sv-SE", {
+      timeZone: "Europe/Stockholm",
+    })
+  );
   try {
     const newThoughts = await new Thoughts({
       message,
-      name: "unknown",
+      createdAt,
     }).save();
     res.status(201).json({ response: newThoughts, success: true });
   } catch (error) {
