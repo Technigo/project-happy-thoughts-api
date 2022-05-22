@@ -13,14 +13,22 @@ const ThoughtSchema = new mongoose.Schema({
     required: true,
     minlength: 5,
     maxlength: 140,
+    trim: true,
   },
   like: {
     type: Number,
     default: 0,
   },
+  // createdAt: {
+  //   type: Date,
+  //   default: () => new Date().toLocaleTimeString('ko-KR'),
+  // },
   createdAt: {
-    type: Date,
-    default: () => new Date(),
+    type: String,
+    default: () =>
+      new Date(Date.now()).toLocaleString('sv-SE', {
+        timeZone: 'Europe/Stockholm',
+      }),
   },
 });
 
@@ -51,7 +59,7 @@ app.get('/happy-thoughts', async (req, res) => {
       .sort({ createdAt: 'desc' })
       .limit(20)
       .exec();
-    res.status(200).json(thought);
+    res.status(200).json({ response: thought, success: true });
   } catch (error) {
     res.status(400).json({ success: false, response: error });
   }
