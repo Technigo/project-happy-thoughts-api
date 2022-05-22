@@ -3,7 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import listEndpoints from "express-list-endpoints";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts-api";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -48,10 +48,10 @@ app.get("/", (req, res) => {
 // Get all messages/thoughts
 
 app.get('/thoughts', async (req,res) => {
-const {page, perPage} = req.query
 
 try {
-   const thoughts = await Thought.find().sort({ 
+   const thoughts = await Thought.find()
+   .sort({ 
     createdAt: 'desc'
   })
   .limit(20)
@@ -111,7 +111,6 @@ app.delete('/thoughts/:thoughtId', async (req, res) => {
   const { id } = req.params
 
   try {
-  // const deletedThought = Thought.deleteOne({_id: id})
   const deletedThought = await Thought.findOneAndDelete({_id: id})
   res.status(200).json({success: true, response: deletedThought})
   } catch (error)  {
@@ -120,10 +119,6 @@ app.delete('/thoughts/:thoughtId', async (req, res) => {
    
 })
 
-// app.get('/thoughts', async (req, res) => {
-//   const thoughts = await Thought.find({})
-//   res.status(200).json({success: true, response: thoughts})
-// })
 
 // Start the server
 app.listen(port, () => {
