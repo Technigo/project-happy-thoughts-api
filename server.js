@@ -46,15 +46,28 @@ app.get("/", (req, res) => {
 //To show thoughts
 app.get("/thoughts", async (req, res) => {
   try {
-    const thoughts = await Thought.find()
-      .sort()({ createdAt: "desc" })
+    const thoughts = await Thought.find({})
+      .sort({ createdAt: -1 })
       .limit(20)
       .exec();
-    res.status(201).json(thoughts);
+
+    res.status(200).json({ success: true, response: thoughts });
   } catch (error) {
-    res.status(400).json({ response: error, success: false });
+    res.status(400).json({ success: false, response: error });
   }
 });
+
+// app.get("/thoughts", async (req, res) => {
+//   try {
+//     const thoughts = await Thought.find({})
+//       .sort()({ createdAt: "desc" })
+//       .limit(20)
+//       .exec();
+//     res.status(201).json(thoughts);
+//   } catch (error) {
+//     res.status(400).json({ response: error, success: false });
+//   }
+// });
 
 //To add a thought
 app.post("/thoughts", async (req, res) => {
