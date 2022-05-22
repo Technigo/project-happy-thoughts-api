@@ -23,147 +23,62 @@ const HappyThoughtSchema = new mongoose.Schema({
   hearts: {
     type: Number,
     default: 0 
-    //should not be assignable but ignore and post 0 anyway
   },
   createdAt: {
     type: Date,
     default: Date.now
-    //should not be assignable
   }
 })
-
-//schema differs : only has properties, create those that are always present on the page
-// model has functions like findbyID, save
-const TechnigoMemberSchema = new mongoose.Schema({
-  name: {
-    //type is most imortant and always needed
-    type: String,
-    required: true,
-    //not three Daniels
-    unique: true,
-    //only accepted names, can be used for tags also like admin rights
-    enum:["Karin", "Petra", "Matilda", "Poya", "Daniel"]
-  },
-  description: {
-    type: String,
-    minlength: 4,
-    maxlength: 30,
-    //delets blankspace from beginning, and end of string
-    trim: true
-  },
-  score: {
-    type: Number,
-    default: 0
-  },
-  createdAt: {
-    type: Date,
-    //need to be anonymous function, otherwise would only be excecuted once
-    // now called every time new member is created
-    default: ()=> new Date()
-  }
-})
-
-const TechnigoMember = mongoose.model("TechnigoMember", TechnigoMemberSchema)
 
 const HappyThought = mongoose.model("HappyThought", HappyThoughtSchema)
 
+//landing page
+app.get("/", (req, res) => {
+ 
+  const landingPage = {
+    Hello: 
+    "here is an api with three endpoints for the previous Happy Thoughts project",
+    Routes: [{
+      "/thoughts": "(GET request) Get the 20 most recent happy thoughts, sorted in descending order",
+      "/thoughts": "(POST request) Post a new happy thought",
+      "/thoughts/:thoughtId/like": "(POST request) finds a happy thought from the ID and updates it with one like",
+    }]
+  }
+  res.send(landingPage)
+  })
+
+//get 20 most recent happy thoughts, sorted in descending order
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await HappyThought.find().sort({createdAt: 'desc'}).limit(20).exec()
+  const thoughts = await HappyThought.find().sort({ createdAt: 'desc' }).limit(20).exec()
   res.json(thoughts)
 })
 
+//post a new happy thought
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body
 
   try {
-  const newThought = await new HappyThought({message: message }).save()
-  res.status(201).json({response: newThought, success: true})
-  
-  } catch(error) {
-    res.status(400).json({response: error, success: false})
+    const newThought = await new HappyThought({ message: message }).save()
+    res.status(201).json({ response: newThought, success: true })
+
+  } catch (error) {
+    res.status(400).json({ response: error, success: false })
   }
 })
 
+//like a posted thought
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params
 
   try {
-  const likesToUpdate = await HappyThought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}})
-  res.status(200).json({response: likesToUpdate, success: true})
-
-} catch(error) {
-  res.status(400).json({response: error, success: false})
-}
-})
-
-
-// async await is the most used of the three POST requests
-//happy thought message
-app.post("/members", async (req, res) => {
-  const { name, description } = req.body
-  console.log(req.body)
-  //why save new member to a var? RESTful:send back the data we create, we are not only sending back name & descr
-  //but whole object, so the id is sent back, and if we want member details need only send id
-  try {
-    const newMember = await new TechnigoMember({name: name, description: description}).save()
-
-  res.status(201).json({response: newMember, success: true})
+    const likesToUpdate = await HappyThought.findByIdAndUpdate(thoughtId, { $inc: { hearts: 1 } })
+    res.status(200).json({ response: likesToUpdate, success: true })
 
   } catch (error) {
-    res.status(400).json({response: error, success: false})
-
+    res.status(400).json({ response: error, success: false })
   }
 })
 
-//POST - creating (can be used for all)
-//PUT - replace all object
-//PATCH - replace property in object
-
-//happy thought like +1
-app.post("/members/:id/score", async (req, res) => {
-  const { id } = req.params
-try {
-  const memberToUpdate = await TechnigoMember.findByIdAndUpdate(id, {$inc: {score: 1}})
-  res.status(200).json({response: `Member ${memberToUpdate.name} has been updated`, success: true})
-} catch (error) {
-res.status(400).json({response: error, success: false})
-}
-})
-
-//POST with promises, second most used
-// app.post("/members", (req, res) => {
-
-//   const { name, description } = req.body
-//   console.log(req.body)
-
-//   new TechnigoMember({name: name, description: description}).save()
-//   .then(data => {
-//   res.status(201).json({response: data, success: true})
-
-//   }).catch(error => {
-//     res.status(400).json({response: error, success: false})
-//   })
-//   })
-
-  //mogoose specific, can't be used otherwise
-// app.post("/members", (req, res) => {
-
-//   const { name, description } = req.body  
-
-//   new TechnigoMember({name: name, description: description}).save((error, data) => {
-//     if (error) {
-//       res.status(400).json({response: error, success: false})
-//     } else {
-//       res.status(201).json({response: data, success: true})
-//       }
-//     })
-//   })
-  
-
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
-});
 
 // Start the server
 app.listen(port, () => {
