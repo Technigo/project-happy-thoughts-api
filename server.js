@@ -48,7 +48,7 @@ app.get("/", (req, res) => {
     Routes: [
       {
         "/thoughts": "Get the thoughts added",
-        "/thoughts/:thoughtId/like": "Indicates likes added to each thought",
+        "/thoughts/:thoughtId/like": "Updates likes added to each thought",
       },
     ],
   };
