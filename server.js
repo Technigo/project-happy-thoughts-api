@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import listEndpoints from "express-list-endpoints";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts-api";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -41,8 +42,10 @@ const Thought = mongoose.model('Thought', ThoughtSchema)
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send(listEndpoints(app));
 });
+
+// Get all messages/thoughts
 
 app.get('/thoughts', async (req,res) => {
 const {page, perPage} = req.query
@@ -51,15 +54,17 @@ try {
    const thoughts = await Thought.find().sort({ 
     createdAt: 'desc'
   })
-  .skip((page -1 ) * perPage).limit(perPage)
+  .limit(20)
   .exec()
 
   res.status(200).json({success: true, response: thoughts})
-  
+
 } catch (error) {
   res.status(400).json({success: false, response: error})
 }
 })
+
+//Post a new thought
 
 app.post('/thoughts', async (req, res) => {
 
@@ -81,6 +86,8 @@ res.status(400).json({
 }
 })
 
+//add likes to a thought
+
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId, } = req.params
   try{
@@ -96,6 +103,21 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
        success: false
       })
   }
+})
+
+//delete a sent thought
+
+app.delete('/thoughts/:thoughtId', async (req, res) => {
+  const { id } = req.params
+
+  try {
+  // const deletedThought = Thought.deleteOne({_id: id})
+  const deletedThought = await Thought.findOneAndDelete({_id: id})
+  res.status(200).json({success: true, response: deletedThought})
+  } catch (error)  {
+    res.status(400).json({success: false, response: error})
+  }
+   
 })
 
 // app.get('/thoughts', async (req, res) => {
