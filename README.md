@@ -1,13 +1,9 @@
 # Project Happy Thoughts API
-
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This assignment was to build an API with 3 endpoints using Mongoose schema for validations and return error message if criterias not met. One endpoint to post a thought, one endpoint to display maximum 20 thoughts per page using pagination and finally one endpoint to update likes for particular thought with findByIdAndUpdate. Then apply this API to our HAPPY THOUGHTS frontend repository.
 
 ## The problem
-
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+The backend API went rather smooth, but I had some trouble when trying to implement the API to my frontend. I googled and looked into stackoverflow as I first thought it was a failure in connection between MongoDB and Heroku. Redeploying several times to Heroku. Then at last I looked into a classmates code and I did realize that my data for displaying the list in my frontend was missing .response.
 
 ## View it live
-
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Backend - https://api-thoughts-happy.herokuapp.com/
+Frontend - https://clinquant-figolla-2cfc28.netlify.app/
