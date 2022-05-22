@@ -43,7 +43,16 @@ const ThoughtSchema = new mongoose.Schema({
 const Thoughts = mongoose.model("Thoughts", ThoughtSchema);
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Welcome to Happy Thoughts API");
+  const WelcomePage = {
+    Hello: "Welcome to Happy Thoughts API",
+    Routes: [
+      {
+        "/thoughts": "Get the thoughts added",
+        "/thoughts/:thoughtId/like": "Indicates likes added to each thought",
+      },
+    ],
+  };
+  res.send(WelcomePage);
 });
 app.get("/thoughts", async (req, res) => {
   try {
