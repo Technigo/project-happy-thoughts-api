@@ -1,13 +1,17 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+In this project I created a happy thoughts API which uses both GET endpoints to return data and POST endpoints to create data.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+The happy thoughts API has three endpoints.
+The endpoint "/thoughts" is used for both returning data (GET method for retrieving happy thoughts as a sorted feed) and posting new data into the API (POST method for posting a new happy thought).
+The endpoint "/thoughts/:thoughtId/like" is used for liking a specific happy thought and it utilizes the POST method to update the amount of likes and the mongoose findByIdAndUpdate() method to find the correct thought in which the like will be aimed for.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Link to the deployed project:
+https://happy-thoughts-api-tiiliu.herokuapp.com/
+
+In the end I connected the API to a front-end application which I had created previously. Here's a link to that one too:
+https://happy-thoughts-happy.netlify.app/
