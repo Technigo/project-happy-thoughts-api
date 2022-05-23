@@ -17,7 +17,6 @@ const NewThoughtSchema = new mongoose.Schema({
 
   message: {
     type: String,
-    required: true,
     minlength: 5,
     maxlength: 140,
     trim: true
@@ -35,7 +34,7 @@ const NewThoughtSchema = new mongoose.Schema({
 
 })
 
-const NewThougth = mongoose.model('NewThought', NewThoughtSchema)
+const NewThought = mongoose.model('NewThought', NewThoughtSchema)
 
 
 
@@ -48,23 +47,45 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
+
+//Post a new thought
+
 app.post('/thoughts', async (req, res) => {
 
   const { message, hearts, createdAt } = req.body
 
   try {
 
-    const thought = await new NewThougth({ message, hearts, createdAt }).save()
+    const thought = await new NewThought({ message, hearts, createdAt }).save()
     res.status(201).json({ response: thought, success: true })
 
   } catch (error) {
-
     res.status(400).json({ response: error, success: false })
   }
 
 
   console.log(req.body);
 })
+
+
+//add a like
+
+app.post('thoughts/:thoughtId/count', async (req, res) => {
+  
+  const { thoughtId } = req.params
+
+  try {
+    const updatedCount = await NewThought.findByIdAndUpdate(thoughtId, { 
+      $inc: { hearts: 1 },
+     })
+    res.status(200).json(updatedCount)
+
+  } catch (err) {
+    res.status(400).json({ message: "missing", error: err.errors, success: false })
+  }
+
+})
+
 
 
 // Start the server
