@@ -89,7 +89,7 @@ res.status(400).json({
 //add likes to a thought
 
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
-  const { thoughtId, } = req.params
+  const { thoughtId } = req.params
   try{
     const thoughtLiked = Thought.findByIdAndUpdate(thoughtId, 
        {$inc: {hearts: 1}})
@@ -108,10 +108,10 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
 //delete a sent thought
 
 app.delete('/thoughts/:thoughtId', async (req, res) => {
-  const { id } = req.params
+  const { _id } = req.params
 
   try {
-  const deletedThought = await Thought.findOneAndDelete({_id: id})
+  const deletedThought = await Thought.findOneAndDelete({_id: _id})
   res.status(200).json({success: true, response: deletedThought})
   } catch (error)  {
     res.status(400).json({success: false, response: error})
