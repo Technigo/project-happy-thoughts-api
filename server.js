@@ -22,6 +22,7 @@ app.use(express.json());
 const ThoughtSchema = new mongoose.Schema({
   message: {
     type: String,
+    required: true,
     minlength: 5,
     maxlength: 140,
     trim: true
