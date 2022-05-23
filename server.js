@@ -35,7 +35,7 @@ const NewThoughtSchema = new mongoose.Schema({
 
 })
 
-const NewThougth = mongoose.Model('NewThought', NewThoughtSchema)
+const NewThougth = mongoose.model('NewThought', NewThoughtSchema)
 
 
 
@@ -47,6 +47,25 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
+
+app.post('/thoughts', async (req, res) => {
+
+  const { message, hearts, createdAt } = req.body
+
+  try {
+
+    const thought = await new NewThougth({ message, hearts, createdAt }).save()
+    res.status(201).json({ response: thought, success: true })
+
+  } catch (error) {
+
+    res.status(400).json({ response: error, success: false })
+  }
+
+
+  console.log(req.body);
+})
+
 
 // Start the server
 app.listen(port, () => {
