@@ -70,7 +70,7 @@ app.post('/thoughts', async (req, res) => {
 
 //add a like
 
-app.post('thoughts/:thoughtId/count', async (req, res) => {
+app.post('/thoughts/:thoughtId/count', async (req, res) => {
   
   const { thoughtId } = req.params
 
