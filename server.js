@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -11,6 +11,33 @@ mongoose.Promise = Promise;
 // PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
+
+
+const NewThoughtSchema = new mongoose.Schema({
+
+  message: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 140,
+    trim: true
+  },
+
+  hearts: {
+    type: Number,
+    default: 0
+  },
+
+  createdAt: {
+    type: Date,
+    default: () => Date.now()
+  }
+
+})
+
+const NewThougth = mongoose.Model('NewThought', NewThoughtSchema)
+
+
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
