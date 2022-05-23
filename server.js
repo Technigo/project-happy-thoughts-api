@@ -19,17 +19,17 @@ const ThoughtSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  // createdAt: {
-  //   type: Date,
-  //   default: () => new Date(),
-  // },
   createdAt: {
-    type: String,
-    default: () =>
-      new Date(Date.now()).toLocaleString('sv-SE', {
-        timeZone: 'Europe/Stockholm',
-      }),
+    type: Date,
+    default: () => new Date(),
   },
+  // createdAt: {
+  //   type: String,
+  //   default: () =>
+  //     new Date(Date.now()).toLocaleString('sv-SE', {
+  //       timeZone: 'Europe/Stockholm',
+  //     }),
+  // },
 });
 
 const Thought = mongoose.model('Thought', ThoughtSchema);
