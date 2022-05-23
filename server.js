@@ -19,7 +19,8 @@ const NewThoughtSchema = new mongoose.Schema({
     type: String,
     minlength: 5,
     maxlength: 140,
-    trim: true
+    trim: true,
+    required: true
   },
 
   hearts: {
@@ -47,6 +48,18 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
+app.get("/thoughts", async (req, res) => {
+try {
+  const listOfThoughts = await NewThought.find().sort({ createdAt: "desc" })
+  res.json(listOfThoughts.slice(0, 20))
+
+} catch (error) {
+
+  res.status(400).json({ Message: "Failed to load", error: error.errors, success: false })
+
+}
+
+})
 
 //Post a new thought
 
@@ -70,14 +83,23 @@ app.post('/thoughts', async (req, res) => {
 
 //add a like
 
-app.post('/thoughts/:thoughtId/count', async (req, res) => {
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
   
   const { thoughtId } = req.params
 
   try {
-    const updatedCount = await NewThought.findByIdAndUpdate(thoughtId, { 
-      $inc: { hearts: 1 },
-     })
+    const updatedCount = await NewThought.findByIdAndUpdate(
+      thoughtId, 
+      { 
+      $inc: { 
+        hearts: 1
+       }, 
+      },
+      {
+        new: true
+      }
+
+     )
     res.status(200).json(updatedCount)
 
   } catch (err) {
