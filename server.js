@@ -19,17 +19,17 @@ const ThoughtSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  createdAt: {
-    type: Date,
-    default: () => new Date(),
-  },
   // createdAt: {
-  //   type: String,
-  //   default: () =>
-  //     new Date(Date.now()).toLocaleString('sv-SE', {
-  //       timeZone: 'Europe/Stockholm',
-  //     }),
+  //   type: Date,
+  //   default: () => new Date(),
   // },
+  createdAt: {
+    type: String,
+    default: () =>
+      new Date(Date.now()).toLocaleString('sv-SE', {
+        timeZone: 'Europe/Stockholm',
+      }),
+  },
 });
 
 const Thought = mongoose.model('Thought', ThoughtSchema);
@@ -68,7 +68,6 @@ app.get('/happy-thoughts', async (req, res) => {
 // adding a thought to the database
 app.post('/happy-thoughts', async (req, res) => {
   const { message } = req.body;
-  // const thought = await new Thought({ message });
   try {
     const savedThought = await new Thought({ message: message }).save();
     res.status(201).json({ response: savedThought, success: true });
@@ -100,5 +99,3 @@ app.post('/happy-thoughts/:thoughtId/like', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
-
-// https://happy-thoughts-projectapi.herokuapp.com/
