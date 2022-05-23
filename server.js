@@ -52,11 +52,11 @@ app.get("/", (req, res) => {
 
 app.post('/thoughts', async (req, res) => {
 
-  const { message, hearts, createdAt } = req.body
+  const { message } = req.body
 
   try {
 
-    const thought = await new NewThought({ message, hearts, createdAt }).save()
+    const thought = await new NewThought({ message }).save()
     res.status(201).json({ response: thought, success: true })
 
   } catch (error) {
