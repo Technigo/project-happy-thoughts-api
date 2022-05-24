@@ -122,6 +122,24 @@ app.delete("/members/:id", async (req, res) => {
 
 });
 
+app.patch("/members/:id", async (req, res) => {
+  const { id } = req.params;
+  const { updatedName } = req.body;
+
+  try {
+    const memberToUpdate = await TechnigoMember.findByIdAndUpdate({_id: id}, {name: updatedName});
+    if(memberToUpdate) {
+      res.status(200).json({success: true, response: memberToUpdate});
+    } else {
+      res.status(404).json({success: false, response: "member not found"});
+    }
+  } catch (error) {
+    res.status(400).json({success: false, response: error});
+  }
+
+});
+
+
 
 // Start defining your routes here
 app.get("/", (req, res) => {
