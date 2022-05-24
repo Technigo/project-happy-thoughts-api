@@ -13,8 +13,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-//mongoose schema
 
+//mongoose schema
 const ThoughtSchema = new mongoose.Schema({
 
   message: {
@@ -33,6 +33,7 @@ const ThoughtSchema = new mongoose.Schema({
     default: () => new Date()
   }
 });
+
 
 //thought model
 const Thought = mongoose.model("Thought", ThoughtSchema);
@@ -65,27 +66,29 @@ app.post("/thoughts", async (req, res) => {
   
   try {
     const newThought = await new Thought({message: message}).save()
-    
     res.status(201).json({response: newThought, success: true});
   } catch(error) {
     res.status(400).json({response: "could not post thought", success: false});
   }
+
 });
 
 
 //likes
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId} = req.params;
+  
   try {
     const likeToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}});
     res.status(200).json({response: `Thought ${likeToUpdate.hearts} has gotten a like`, success: true});
   } catch (error) {
     res.status(400).json({response: "could not like thought", success: false});
   }
+
 });
 
 
-//delete
+//delete - saving this for future changes to the app
 app.delete("/thoughts/:id", async (req, res) => {
   const { id } = req.params;
   
@@ -122,73 +125,7 @@ app.patch("/thoughts/:id", async (req, res) => {
 });
 
 
-
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
-
-
-
-
-
-
-
-
-
-//other versions
-
-
-//Mongo GET
-// app.get("/members", async (req, res) => {
-//   const { page, perPage, } = req.query;
-
-//   try {
-//     const members = await TechnigoMember.aggregate([
-//       {
-//         $sort: {
-//           createdAt: -1
-//         }
-//       },
-//       {
-//         $skip: (numPage - 1) * perPage
-//       },
-//       {
-//         $limit: numPerPage
-//       }
-//     ]);
-
-//     res.status(200).json({success: true, response: members});
-//   } catch (error) {
-//     res.status(400).json({success: false, response: error});
-//   }
-// });
-
-//POST request version two with promises
-// app.post("/members", (req, res) => {
-  
-//     const { name, description } = req.body;
-    
-//       new TechnigoMember({name: name, description: description}).save()
-//         .then(data => {
-//           res.status(201).json({response: data, success: true});
-//         }).catch(error => {
-//           res.status(400).json({response: error, success: false});
-//         });
-        
-//   });
-
-  //POST request version three
-  // app.post("/members", async (req, res) => {
-  
-  //     const { name, description } = req.body;
-      
-  //     new TechnigoMember({name: name, description: description}).save((error, data) => {
-  //       if (error) {
-  //         res.status(400).json({response: error, success: false});
-  //       } else {
-  //         res.status(201).json({response: data, success: true});
-  //       }
-  //     });
-    
-  // });
