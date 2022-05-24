@@ -13,20 +13,23 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const TechnigoMemberSchema = new mongoose.Schema({
-  name: {
+//mongoose schema
+
+const ThoughtSchema = new mongoose.Schema({
+  // name: {
+  //   type: String,
+  //   required: true,
+  //   unique: true,
+  //   enum: ["Karin", "Petra", "Matilda", "Poya", "Daniel"]
+  // },
+  message: {
     type: String,
-    required: true,
-    unique: true,
-    enum: ["Karin", "Petra", "Matilda", "Poya", "Daniel"]
+    minlength: 5,
+    maxlength: 140,
+    required: true
+    // trim: true,
   },
-  description: {
-    type: String,
-    minlength: 4,
-    maxlength: 30,
-    trim: true
-  },
-  score: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -37,16 +40,16 @@ const TechnigoMemberSchema = new mongoose.Schema({
 });
 
  
-const TechnigoMember = mongoose.model("TechnigoMember", TechnigoMemberSchema);
+const Thought = mongoose.model("Thought", ThoughtSchema);
 
 //POST request 
-app.post("/members", async (req, res) => {
-  const { name, description } = req.body;
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body;
   
   try {
-    const newMember = await new TechnigoMember({name: name, description: description}).save()
+    const newThought = await new Thought({message: message}).save()
     
-    res.status(201).json({response: newMember, success: true});
+    res.status(201).json({response: newThought, success: true});
   } catch(error) {
     res.status(400).json({response: error, success: false});
   }
@@ -54,30 +57,92 @@ app.post("/members", async (req, res) => {
 
 
 //SCORE ==> LIKE
-app.post("/members/:id/score", async (req, res) => {
-  const { id } = req.params;
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { hearts } = req.params;
   try {
-    const memberToUpdate = await TechnigoMember.findByIdAndUpdate(id, {$inc: {score: 1}});
-    res.status(200).json({response: `Member ${memberToUpdate.name} has been updated`, success: true});
+    const thoughtToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {score: 1}});
+    res.status(200).json({response: `Thought ${thoughtToUpdate.hearts} has gotten a like`, success: true});
   } catch (error) {
     res.status(400).json({response: error, success: false});
   }
 });
 
 //Mongoose GET
-app.get("/members", async (req, res) => {
+app.get("/thoughts", async (req, res) => {
   const { page, perPage } = req.query;
 
   try {
-    const members = await TechnigoMember.find({}).sort({createdAt: -1})
+    const thoughts = await Thought.find({}).sort({createdAt: -1})
       .skip((page - 1) * perPage).limit(perPage);
-    res.status(200).json({success: true, response: members});
+    res.status(200).json({success: true, response: thoughts});
 
   } catch (error) {
     res.status(400).json({success: false, response: error});
   }
 
 });
+
+
+
+//delete
+
+app.delete("/thoughts/:id", async (req, res) => {
+  const { id } = req.params;
+  
+  try{
+    const deleted = await Thought.findOneAndDelete({_id: id});
+    if(deleted) {
+      res.status(200).json({success: true, response: deleted});
+    } else {
+      res.status(404).json({success: false, response: "thought not found"});
+    }
+  } catch (error) {
+    res.status(400).json({success: false, response: error});
+  }
+
+});
+
+//update
+
+app.patch("/thoughts/:id", async (req, res) => {
+  const { id } = req.params;
+  const { updatedThought } = req.body;
+
+  try {
+    const ThoughtToUpdate = await Thought.findByIdAndUpdate({_id: id}, {hearts: updatedThought});
+    if(ThoughtToUpdate) {
+      res.status(200).json({success: true, response: ThoughtToUpdate});
+    } else {
+      res.status(404).json({success: false, response: "thought not found"});
+    }
+  } catch (error) {
+    res.status(400).json({success: false, response: error});
+  }
+
+});
+
+
+
+// Start defining your routes here
+app.get("/", (req, res) => {
+  res.send("Happy Tweets!");
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
+
+
+
+
+
+
+
+
+
+//other versions
+
 
 //Mongo GET
 // app.get("/members", async (req, res) => {
@@ -103,54 +168,6 @@ app.get("/members", async (req, res) => {
 //     res.status(400).json({success: false, response: error});
 //   }
 // });
-
-//delete
-
-app.delete("/members/:id", async (req, res) => {
-  const { id } = req.params;
-  
-  try{
-    const deleted = await TechnigoMember.findOneAndDelete({_id: id});
-    if(deleted) {
-      res.status(200).json({success: true, response: deleted});
-    } else {
-      res.status(404).json({success: false, response: "member not found"});
-    }
-  } catch (error) {
-    res.status(400).json({success: false, response: error});
-  }
-
-});
-
-app.patch("/members/:id", async (req, res) => {
-  const { id } = req.params;
-  const { updatedName } = req.body;
-
-  try {
-    const memberToUpdate = await TechnigoMember.findByIdAndUpdate({_id: id}, {name: updatedName});
-    if(memberToUpdate) {
-      res.status(200).json({success: true, response: memberToUpdate});
-    } else {
-      res.status(404).json({success: false, response: "member not found"});
-    }
-  } catch (error) {
-    res.status(400).json({success: false, response: error});
-  }
-
-});
-
-
-
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
-});
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
-
 
 //POST request version two with promises
 // app.post("/members", (req, res) => {
