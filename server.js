@@ -39,8 +39,30 @@ const ThoughtSchema = new mongoose.Schema({
   }
 });
 
- 
+//thought model
 const Thought = mongoose.model("Thought", ThoughtSchema);
+
+
+//landing page
+app.get("/", (req, res) => {
+  res.send("This is the API for Happy Tweets!");
+});
+
+
+//Mongoose GET request
+app.get("/thoughts", async (req, res) => {
+  const { page } = req.query;
+
+  try {
+    const thoughts = await Thought.find({}).sort({createdAt: -1})
+      .skip((page - 1) * 20).limit(20);
+    res.status(200).json({success: true, response: thoughts});
+  } catch (error) {
+    res.status(400).json({success: false, response: error});
+  }
+
+});
+
 
 //POST request 
 app.post("/thoughts", async (req, res) => {
@@ -51,36 +73,22 @@ app.post("/thoughts", async (req, res) => {
     
     res.status(201).json({response: newThought, success: true});
   } catch(error) {
-    res.status(400).json({response: error, success: false});
+    res.status(400).json({response: "could not post thought", success: false});
   }
 });
 
 
 //SCORE ==> LIKE
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
-  const { hearts } = req.params;
+  const { thoughtId} = req.params;
   try {
-    const thoughtToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {score: 1}});
-    res.status(200).json({response: `Thought ${thoughtToUpdate.hearts} has gotten a like`, success: true});
+    const likeToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}});
+    res.status(200).json({response: `Thought ${likeToUpdate.hearts} has gotten a like`, success: true});
   } catch (error) {
-    res.status(400).json({response: error, success: false});
+    res.status(400).json({response: "could not like thought", success: false});
   }
 });
 
-//Mongoose GET
-app.get("/thoughts", async (req, res) => {
-  const { page, perPage } = req.query;
-
-  try {
-    const thoughts = await Thought.find({}).sort({createdAt: -1})
-      .skip((page - 1) * perPage).limit(perPage);
-    res.status(200).json({success: true, response: thoughts});
-
-  } catch (error) {
-    res.status(400).json({success: false, response: error});
-  }
-
-});
 
 
 
@@ -97,7 +105,7 @@ app.delete("/thoughts/:id", async (req, res) => {
       res.status(404).json({success: false, response: "thought not found"});
     }
   } catch (error) {
-    res.status(400).json({success: false, response: error});
+    res.status(400).json({success: false, response: "could not delete thought"});
   }
 
 });
@@ -122,11 +130,6 @@ app.patch("/thoughts/:id", async (req, res) => {
 });
 
 
-
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Happy Tweets!");
-});
 
 // Start the server
 app.listen(port, () => {
