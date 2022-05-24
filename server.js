@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-tweet";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -16,18 +16,13 @@ app.use(express.json());
 //mongoose schema
 
 const ThoughtSchema = new mongoose.Schema({
-  // name: {
-  //   type: String,
-  //   required: true,
-  //   unique: true,
-  //   enum: ["Karin", "Petra", "Matilda", "Poya", "Daniel"]
-  // },
+
   message: {
     type: String,
     minlength: 5,
     maxlength: 140,
-    required: true
-    // trim: true,
+    required: true,
+    trim: true
   },
   hearts: {
     type: Number,
@@ -78,7 +73,7 @@ app.post("/thoughts", async (req, res) => {
 });
 
 
-//SCORE ==> LIKE
+//likes
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId} = req.params;
   try {
@@ -90,10 +85,7 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
 });
 
 
-
-
 //delete
-
 app.delete("/thoughts/:id", async (req, res) => {
   const { id } = req.params;
   
@@ -110,8 +102,8 @@ app.delete("/thoughts/:id", async (req, res) => {
 
 });
 
-//update
 
+//update
 app.patch("/thoughts/:id", async (req, res) => {
   const { id } = req.params;
   const { updatedThought } = req.body;
