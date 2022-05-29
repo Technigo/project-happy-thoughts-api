@@ -77,23 +77,7 @@ app.get('/thoughts', async (req, res) => {
     }
   })
 
-  // v2 - Mongo
-  // const members = await Member.aggregate([
-  //   {
-  //     $sort: {
-  //       createdAt: 1
-  //     }
-  //   },
-  //   {
-  //     $skip: (pageNum - 1) * perPage
-  //   },
-  //   {
-  //     $limit: perPageNum,
-  //   },
-  // ]);
-
- 
-
+  
 // v1 - async await
 app.post("/members", async (req, res) => {
   const { name, description } = req.body;
@@ -105,34 +89,6 @@ app.post("/members", async (req, res) => {
     res.status(400).json({ response: error, success: false });
   }
 });
-
-// v2 - promises
-// app.post("/members", (req, res) => {
-//   const { name, description } = req.body
-
-//   new Member({ name, description }).save()
-//   .then(data => {
-//     res.status(201).json({response: data, success: true });
-//   })
-//   .catch(error => {
-//     res.status(400).json({response: error, success: false});
-//   })
-// });
-
-// v3 - mongoose callback
-// app.post("/members", (req, res) => {
-//   const { name, description } = req.body;
-
-//   new Member({ name, description }).save((error, data) => {
-//     if (error) {
-//       res.status(400).json({response: error, success: false});
-//     }
-//     else {
-//       res.status(201).json({response: data, success: true });
-//     }
-//   })
-
-// });
 
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body;
