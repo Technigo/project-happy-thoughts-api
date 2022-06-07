@@ -14,8 +14,8 @@ API using MongoDB and express hosted on heroku.
 
 ## View it live
 
-api
-https://project-happythoughts-api.herokuapp.com/
+repo for api
+https://github.com/amandatange/project-happy-thoughts-api
 
 frontend
 https://all-the-thoughts.netlify.app
