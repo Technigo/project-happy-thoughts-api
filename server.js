@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import listEndpoints from "express-list-endpoints"
+
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -45,13 +47,13 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send(listEndpoints(app));
 });
 
 app.get("/thoughts", async (req, res) => {
 try {
   const listOfThoughts = await NewThought.find().sort({ createdAt: "desc" })
-  res.json(listOfThoughts.slice(0, 20))
+  res.status(200).json(listOfThoughts.slice(0, 20))
 
 } catch (error) {
 
@@ -100,7 +102,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
       }
 
      )
-    res.status(200).json(updatedCount)
+    res.status(201).json(updatedCount)
 
   } catch (err) {
     res.status(400).json({ message: "missing", error: err.errors, success: false })
