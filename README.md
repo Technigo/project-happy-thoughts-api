@@ -1,13 +1,16 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+An api build in node.js with POST and GET request for an already excisting Frontend project
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+First I watched some videos about POST and GET request, started with a code along and started to build the API. I hade some struggles with deploying it but manage to solve it to start from begging and created a new url at Google cloud. 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Backend: 
+https://project-happy-thoughts-api-icpo5wm3kq-uc.a.run.app/
+
+Frontend: 
+
+
