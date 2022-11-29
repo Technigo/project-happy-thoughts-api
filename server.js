@@ -41,7 +41,7 @@ const ThoughtSchema = new mongoose.Schema({
 const Thought = mongoose.model('Thought', ThoughtSchema)
 
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find()
+  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
   res.status(200).json(thoughts)
 });
 
