@@ -60,8 +60,7 @@ app.get("/", (req, res) => {
 app.get("/thoughts", async (req, res) => {
 
   try {
-    const thoughts = await thoughtList.find().sort({creadedAt: 'desc'}).limit(20)
-    /* .exec() */
+    const thoughts = await thoughtList.find().sort({creadedAt: 'desc'}).limit(20).exec()
     res.status(200).json(thoughts)
 
   } catch (error) {
@@ -75,8 +74,8 @@ app.post("/thoughts", async(req, res) => {
   const { message } = req.body
 
   try {
-    const newThought = await new thoughtList({ message: message }).save()
-    res.status(200).json({
+    const newThought = await new thoughtList({ message }).save()
+    res.status(201).json({
       response: newThought,
       success: true,
     })
@@ -90,7 +89,7 @@ app.post("/thoughts", async(req, res) => {
 
 })
 
-app.post("/thoughts/:thoughtId/like", async (req, res) => {
+app.post("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params
 
    try{
