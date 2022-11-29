@@ -21,10 +21,6 @@ app.get("/", (req, res) => {
   res.send('hey you! you are looking great today')
 });
 
-app.get("/thoughts", async (req, res) => {
-  const thoughts = await thoughts.find()
-});
-
 const ThoughtSchema = new mongoose.Schema({
   message: {
     type: String,
@@ -43,6 +39,12 @@ const ThoughtSchema = new mongoose.Schema({
 })
 
 const Thought = mongoose.model('Thought', ThoughtSchema)
+
+app.get("/thoughts", async (req, res) => {
+  const thoughts = await Thought.find()
+  res.status(200).json({success: true, response: thoughts})
+});
+
 
 app.post ('/thoughts', async (req, res) => {
   const {message} = req.body
