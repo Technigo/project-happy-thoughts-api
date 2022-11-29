@@ -78,7 +78,7 @@ app.post("/thoughts", async(req, res) => {
     const newThought = await new thought({ message: message }).save()
     res.status(200).json({
       response: newThought,
-      success: true
+      success: true,
     })
   } catch(err) {
     res.status(400).json({
