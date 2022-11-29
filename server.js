@@ -44,7 +44,7 @@ const HappyThoughts = new mongoose.Schema({
   },
 })
 
-const thought = mongoose.model("thought", HappyThoughts)
+const thoughtList = mongoose.model("thoughtList", HappyThoughts)
 
 // Start defining your routes here
 app.get("/", (req, res) => {
@@ -60,7 +60,7 @@ app.get("/", (req, res) => {
 app.get("/thoughts", async (req, res) => {
 
   try {
-    const thoughts = await thought.find().sort({creadedAt: 'desc'}).limit(20)
+    const thoughts = await thoughtList.find().sort({creadedAt: 'desc'}).limit(20)
     /* .exec() */
     res.status(200).json(thoughts)
 
@@ -75,7 +75,7 @@ app.post("/thoughts", async(req, res) => {
   const { message } = req.body
 
   try {
-    const newThought = await new thought({ message: message }).save()
+    const newThought = await new thoughtList({ message: message }).save()
     res.status(200).json({
       response: newThought,
       success: true,
@@ -94,9 +94,9 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { id } = req.params
 
    try{
-    const updateLikes = await thought.findByIdAndUpdate(id, { $inc: { hearts: 1 } })
+    const updateLikes = await thoughtList.findByIdAndUpdate(id, { $inc: { hearts: 1 } })
     res.status(201).json({
-      response: " Liked the message", 
+      response: updateLikes, 
       success: true
     })
    } catch(err) {
