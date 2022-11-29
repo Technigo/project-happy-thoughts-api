@@ -7,7 +7,7 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
 const MessageSchema = mongoose.Schema({
-  text: {
+  message: {
     type: String,
     required: true,
     minlength: 5,
@@ -60,10 +60,10 @@ app.get('/messages', async (req, res) => {
 
 app.post('/messages', async (req, res) => {
   // retrieve information sent by client to our API endpoint
-  const { text,createdAt } = req.body;
+  const { message,createdAt } = req.body;
     console.log(req.body);
   try {
-    const savedMessage = await new Message({text: text, createdAt: createdAt}).save()
+    const savedMessage = await new Message({message: message, createdAt: createdAt}).save()
     res.status(201).json({success: true, response: savedMessage});
   }catch (err){
     res.status(400).json({success: false, message: 'Could not save thought to database', error:err.errors });
@@ -74,7 +74,7 @@ app.patch("/messages/:id/hearts", async (req, res) => {
   const { id } = req.params;
   try {
    const updateHearts = await Message.findByIdAndUpdate(id, {$inc: {hearts: 1}});
-   res.status(200).json({success: true, response: `Thought ${updateHearts.text} has updated likes`});
+   res.status(200).json({success: true, response: `Thought ${updateHearts.message} has updated likes`});
   } catch (error) {
    res.status(400).json({success: false, response: error});
   }
