@@ -42,7 +42,7 @@ const Thought = mongoose.model('Thought', ThoughtSchema)
 
 app.get("/thoughts", async (req, res) => {
   const thoughts = await Thought.find()
-  res.status(200).json({success: true, response: thoughts})
+  res.status(200).json(thoughts)
 });
 
 
