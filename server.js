@@ -1,4 +1,4 @@
-import express from "express";
+import express, { response } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
@@ -16,10 +16,47 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+
+const Thoughts = mongoose.model("Thoughts", {
+  message: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 140, 
+    trim: true
+  },
+  hearts: {
+    type: Number,
+   default: 0
+  },
+  createdAt: {
+    type: Date,
+    default: () => new Date()
+  },
 });
+
+// const Thoughts = mongoose.model("Thoughts", ThoughtsSchema);
+
+app.get("/", (req, res) => {
+  res.send("Cicci testar!");
+});
+
+app.get("/thoughts", async (req, res) => {
+  const thoughts = await Thoughts.find().sort({createdAt: "desc"}).limit(20).exec();
+  res.json(thoughts);
+})
+
+app.post("/thoughts", async(req, res) => {
+  const {message} = req.body;
+  const thought = new Thoughts({message})
+  try{
+    const savedThought = await thought.save();
+    res.status(200).json(savedThought)
+  } catch (error) {
+    res.status(400).json({message: "Could not execute", error: error.errors})
+  }
+})
+
 
 // Start the server
 app.listen(port, () => {
