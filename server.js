@@ -6,19 +6,20 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/my-happy-project"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-const Task = mongoose.model('Task', {
-  text: {
+const Thoughts = mongoose.model('Thought', {
+  message: {
     type: String,
     required: true,
-    minlength: 5
+    minlength: 5,
+    maxlength: 140
   },
-  complete: {
-    type: Boolean,
-    default: false
+  heart: {
+    type: Number,
+    default: 0
   }, 
   createdAt: {
     type: Date,
-    default: Date.now
+    default: () => new Date()
   }
 })
 
@@ -32,30 +33,56 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+//Daniel
+
+
 // Start defining your routes here
 app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
-app.get("/tasks", async (req, res) => {
-  const tasks = await Task.find().sort({createdAt: 'desc'}).limit(20).exec();
-  res.json(tasks);
+app.get("/thoughts", async (req, res) => {
+  const thought = await Thoughts.find().sort({createdAt: 'desc'}).limit(20).exec();
+  res.json(thought);
 });
 
-app.post("/tasks", async (req, res) => {
+app.post("/thoughts", async (req, res) => {
   // retrieve info sent by clients to our API endpoint
-  const {text, complete} = req.body;
+  const {message, heart} = req.body;
   // use mongoose model to create the database entry
-  const task = new Task({text, complete})
+  const newTask = new Thoughts({message, heart})
   try{
-    const savedTask = await task.save();
-    res.status(201).json(savedTask);
+    const savedThoughts = await newTask.save();
+    res.status(201).json(savedThoughts);
   }catch (err){
-    res.status(400).json({message:'cannot save task', errors: err.errors})
+    res.status(400).json({message:'cannot post thoughts', errors: err.errors})
   }
 });
+
+app.post("/thoughts/:id/heart", async (req,res) => {
+  const { id } = req.params;
+  try{
+    const heartsUpdate = await Thoughts.findByIdAndUpdate(id, {$inc: {heart: 1}});
+    res.status(200).json({success: true, response: `Heart ${heartsUpdate.message} has their heart updated`});
+  } catch (error) {
+    res.status(400).json({success: false, response: error});
+  }
+})
 
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
+
+
+/* 
+app.patch("/members/:id/score", async (req, res) => {
+   const { id } = req.params;
+   try {
+    const memberToUpdate = await TechnigoMember.findByIdAndUpdate(id, {$inc: {score: 1}});
+    res.status(200).json({success: true, response: `Member ${memberToUpdate.name} has their score updated`});
+   } catch (error) {
+    res.status(400).json({success: false, response: error});
+   }
+});
+*/
