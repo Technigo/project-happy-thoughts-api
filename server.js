@@ -16,12 +16,21 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use((req, res, next) => {
+  if(mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: "Service unavailable "})
+  }
+})
+
 const HappyThoughts = new mongoose.Schema({
   message:{
     type: String, 
     required: true,
     minLength: 5, 
     maxLength: 140,
+      // Deletes whitespace from beginning and end of a string (but no spaces between words)
     trim: true, 
   },
   hearts: {
@@ -30,7 +39,8 @@ const HappyThoughts = new mongoose.Schema({
   },
   creadedAt: {
     type: Date, 
-    default: () => new Date(),
+    default: () => new Date(Date.now()).toLocaleString("sv-SE", {
+      timeZone: "Europe/Stockholm",})
   },
 })
 
@@ -48,11 +58,16 @@ app.get("/", (req, res) => {
 
 // All happy thoughts MAX 20 
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await thought.find()
-  .sort({creadedAt: 'desc'})
-  .limit(20)
-  .exec()
-  res.json(thoughts)
+
+  try {
+    const thoughts = await thought.find().sort({creadedAt: 'desc'}).limit(20)
+    /* .exec() */
+    res.status(200).json(thoughts)
+
+  } catch (error) {
+    res.status(400).json({ response: error, success: false })
+  }
+
 })
 
 // Post a happy thought
@@ -60,7 +75,7 @@ app.post("/thoughts", async(req, res) => {
   const { message } = req.body
 
   try {
-    const newThought = await new thought({ message }).save()
+    const newThought = await new thought({ message: message }).save()
     res.status(200).json({
       response: newThought,
       success: true
@@ -76,12 +91,12 @@ app.post("/thoughts", async(req, res) => {
 })
 
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
-  const { thoughtId } = req.params
+  const { id } = req.params
 
    try{
-    const updateLikes = await thought.findByIdAndUpdate(thoughtId, { $inc: { hearts: 1 } })
-    res.status(200).json({
-      response: updateLikes,
+    const updateLikes = await thought.findByIdAndUpdate(id, { $inc: { hearts: 1 } })
+    res.status(201).json({
+      response: " Liked the message", 
       success: true
     })
    } catch(err) {
