@@ -6,12 +6,13 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/my-happy-project"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-const Thoughts = mongoose.model('Thought', {
+/* const Thoughts = mongoose.model('Thought', {
   message: {
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 140
+    maxlength: 140,
+    trim: true
   },
   heart: {
     type: Number,
@@ -21,7 +22,29 @@ const Thoughts = mongoose.model('Thought', {
     type: Date,
     default: () => new Date()
   }
+}) */
+//Daniel
+const ThoughtsSchema = new mongoose.Schema({
+  message: {
+    type: String,
+    required: true,
+    // new name will have to be different
+    unique: true,
+    minlength: 5,
+    maxlength: 140,
+    trim: true
+  },
+  heart: {
+    type: Number,
+    default: 0
+  },
+  createdAt: {
+    type: Date,
+    default: () => new Date()
+  }
 })
+
+const Thought = mongoose.model("Thought", ThoughtsSchema);
 
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
@@ -33,36 +56,35 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-//Daniel
 
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send("Happy Thoughts!");
 });
 
 app.get("/thoughts", async (req, res) => {
-  const thought = await Thoughts.find().sort({createdAt: 'desc'}).limit(20).exec();
-  res.json(thought);
+  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
+  res.json(thoughts);
 });
 
 app.post("/thoughts", async (req, res) => {
   // retrieve info sent by clients to our API endpoint
-  const {message, heart} = req.body;
+  const {message, createdAt} = req.body;
   // use mongoose model to create the database entry
-  const newTask = new Thoughts({message, heart})
+  // const newTask = new Thought({message, createdAt})
   try{
-    const savedThoughts = await newTask.save();
-    res.status(201).json(savedThoughts);
+    const newThought = await new Thought({message: message, createdAt: createdAt}).save();
+    res.status(201).json({success: true, response: newThought});
   }catch (err){
-    res.status(400).json({message:'cannot post thoughts', errors: err.errors})
+    res.status(400).json({success: false, message:'cannot post thoughts', errors: err.errors})
   }
 });
 
-app.post("/thoughts/:id/heart", async (req,res) => {
+app.post("/thoughts/:id/hearts", async (req,res) => {
   const { id } = req.params;
   try{
-    const heartsUpdate = await Thoughts.findByIdAndUpdate(id, {$inc: {heart: 1}});
+    const heartsUpdate = await Thought.findByIdAndUpdate(id, {$inc: {heart: 1}});
     res.status(200).json({success: true, response: `Heart ${heartsUpdate.message} has their heart updated`});
   } catch (error) {
     res.status(400).json({success: false, response: error});
