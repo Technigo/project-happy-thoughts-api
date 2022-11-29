@@ -17,6 +17,10 @@ app.use(cors());
 app.use(express.json());
 
 // Start defining your routes here
+app.get("/", (req, res) => {
+  res.send('hey you! you are looking great today')
+});
+
 app.get("/thoughts", async (req, res) => {
   const thoughts = await thoughts.find()
 });
