@@ -39,8 +39,7 @@ const HappyThoughts = new mongoose.Schema({
   },
   creadedAt: {
     type: Date, 
-    default: () => new Date(Date.now()).toLocaleString("sv-SE", {
-      timeZone: "Europe/Stockholm",})
+    default: () => new Date()
   },
 })
 
