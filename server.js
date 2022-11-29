@@ -6,11 +6,19 @@ const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/project-mongo';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-const Note = mongoose.model('Note', {
-	text: String,
-	createdAt: {
+const Post = mongoose.model('Post', {
+	text: {
+		type: String,
+		required: true,
+		minlength: 5,
+	},
+	complete: {
+		type: Boolean,
+		default: false,
+	},
+	createAt: {
 		type: Date,
-		default: () => new Date(),
+		default: Date.now,
 	},
 });
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
@@ -25,14 +33,28 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-	res.send('Hello Technigo!');
+	res.send('hello world');
 });
 
-app.post('/notes', async (req, res) => {
-	console.log(req.body);
-	req.send('test');
+app.get('/posts', async (req, res) => {
+	const posts = await Post.find().sort({ createAt: 'desc' }).limit(20).exec();
+	res.status(200).json(posts);
 });
 
+app.post('/posts', async (req, res) => {
+	//retrieve info sent by the client to API end point, then use mongoose model to create the database entree
+	const { text, complete } = req.body;
+	const post = new Post({ text, complete });
+	try {
+		const savedPost = await post.save(); // post is the new Post model, calling it on the new model
+		res.status(201).json(savedPost);
+	} catch (err) {
+		res.status(400).json({
+			message: 'Could not save post to the database',
+			error: err.errors,
+		});
+	}
+});
 // Start the server
 app.listen(port, () => {
 	console.log(`Server running on http://localhost:${port}`);
