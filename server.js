@@ -2,25 +2,29 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-Happy-thoughts-api";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-const Task =mongoose.model('Task', {
-  text: {
+const ThoughtSchema = new mongoose.Schema({
+ message: {
     type: String,
     required: true,
-    minlength:1
+    unique: true,
+    minlength:1,
+    trim: true
   },
-  complete: {
-    type: Boolean,
-    default: false
+  hearth: {
+    type: Number,
+    default: 0
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: () => new Date()
   }
 })
+
+const Thought = mongoose.model("Thought", ThoughtSchema);
 
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
@@ -37,21 +41,31 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
-app.get("/tasks", async (req, res) => {
-  const tasks = await Task.find().sort({createdAt: 'desc'}).limit(25).exec();
-  res.json(tasks);
+app.get("/thoughts", async (req, res) => {
+  const thought = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
+  res.json(thought);
 })
 
-app.post("/tasks", async (req, res) => {
-  const {text, complete} = req.body;
-  const task = new Task({text, complete});
+app.post("/thoughts", async (req, res) => {
+  const {message, createdAt} = req.body;
 
   try {
-    const savedTask = await task.save()
-    res.status(201).json(savedTask);
-  }catch (err){
-    res.status(400).json({message: 'Could not save task to database', error:err.errors });
+    const newThought = await new Thought({message: message, createdAt: createdAt}).save();
+    res.status(201).json({success: true, response: newThought});
+  }catch (error){
+    res.status(400).json({success: false, response: error});
   }
+});
+
+// we want to updated the like
+app.patch("/thoughts/:id/hearth", async (req, res) => {
+const { id } = req.params; // *deconstucting*
+try {
+  const hearthToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearth: 1}}) // ***when in doubt use this :) for this week  (according to Daniel)    !!!!!!!!!
+  res.status(200).json({success: true, response: `Thought ${hearthToUpdate.name} has their likes updated`})
+} catch (error) {
+  res.status(400).json({success: false, response: error})
+}
 })
 
 
