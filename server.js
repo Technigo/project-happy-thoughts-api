@@ -81,7 +81,7 @@ app.post("/thoughts", async (req, res) => {
 // ENDPOINT 3: LIKEING THOUGHTS
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
-
+  
   try {
     const likedThought = await Thought.findByIdAndUpdate(thoughtId, {
       $inc: { hearts: 1 },
