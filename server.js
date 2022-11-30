@@ -58,18 +58,18 @@ app.get("/thoughts", async (req, res) => {
 //Post request
 app.post("/thoughts", async (req, res) => {
   // Message which created by users
-  const { message, hearts } = req.body;
-
+  const { description } = req.body;
   // our Mongoose createing database according to users message
-  const thought = new Thought({ message, hearts });
+  const thought = new Thought({ message: description });
   try {
     const savedThought = await thought.save();
     res.status(200).json({ response: savedThought, success: true });
   } catch (error) {
+    console.log(error)
     res.status(400)
       .json({
         message: "Could not save message",
-        error: err.errors,
+        error: error.error,
         success: false,
       });
   }
@@ -78,8 +78,10 @@ app.post("/thoughts", async (req, res) => {
 //update
 app.patch('/thoughts/:id', async(req, res)=>{
   const {id} = req.params;
+     console.log(req.body);
   try{
-    const updateThoughts= await Thought.findByIdAndUpdate({_id, id}, {hearts:updateThoughts});
+    const updateThoughts= await Thought.findByIdAndUpdate({_id: id}, {message:req.body.description});
+ console.log(updateThoughts)
     if(updateThoughts){
       res.status(200).json({success:true, response:updateThoughts});
     }
@@ -89,10 +91,35 @@ app.patch('/thoughts/:id', async(req, res)=>{
     }
     
   }catch(error){
+    console.log(error);
      res.status(400).json({success: false, response: error});
 
   }
 
+})
+
+// Endpoint increase heart Number
+
+
+app.patch('/thoughts/:id/like',async (req, res)=>{
+  try{
+   const { id } = req.params;
+   const addHearts = await Thought.findById({ _id: id });
+  const updateThoughts = await Thought.findByIdAndUpdate(
+    { _id: id },
+    { hearts: addHearts.hearts + 1 }
+  );
+  console.log(updateThoughts);
+  if (updateThoughts) {
+    res.status(200).json({ success: true, response: updateThoughts });
+  } else {
+    res.status(404).json({ success: false, response: "Thought Not Found" });
+  }
+
+  }
+  catch(error){
+
+  }
 })
 
 // Start the server
