@@ -29,7 +29,7 @@ const ThoughtSchema = new mongoose.Schema({
     //removes unnecessary whitespaces
     trim: true,
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0,
   },
@@ -60,11 +60,11 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
-app.post("/thoughts/:thoughtsId/like", async (req, res) => {
+app.post("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
   try {
     const heartToUpdate = await Thought.findByIdAndUpdate(id, {
-      $inc: { heart: 1 },
+      $inc: { hearts: 1 },
     });
     res.status(200).json({
       success: true,
