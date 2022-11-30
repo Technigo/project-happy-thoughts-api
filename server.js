@@ -2,9 +2,29 @@ import express, { response } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts-api";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
+
+const ThoughtSchema = new mongoose.Schema({
+  message: {
+    type: String,
+    required: true,
+    minlength: 6,
+    maxlength: 140,
+    trim: true
+  },
+  heart: {
+    type: Number,
+    default: 0
+  },
+  createdAt: {
+    type: Date,
+    default: () => new Date()
+  }
+})
+
+const Thought = mongoose.model("Thought", ThoughtSchema)
 
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
@@ -18,10 +38,45 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send({
+    Message: "Welcome to my Happy Thoughts API",
+    Routes: [{
+      "/thoughts": "Send a GET request to see all thoughts, or POST request to create a new Happy Thought"
+    }]
+  });
 });
+
+app.get("/thoughts", async (req, res) => {
+  try {
+    const thoughtList = await Thought.find().sort({createdAt: "desc"}).limit(20).exec();
+    res.status(200).json(thoughtList);
+  } catch (error) {
+    res.status(400).json({success: false, response: error})
+  }
+});
+
+app.post("/thoughts", async (req, res) => {
+  const {message} = req.body;
+  try {
+    const newThought = await new Thought({message: message}).save();
+    res.status(201).json({success: true, response: newThought})
+  }catch (err){
+    res.status(400).json({success: false, response: "Could not save message to the Database", error: err.errors})
+  }
+})
+
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+   const { thoughtId } = req.params;
+   try {
+    const thoughtToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}});
+    res.status(200).json({success: true, response: `Thought ${thoughtToUpdate.id} has their likes updated`});
+   } catch (error) {
+    res.status(400).json({success: false, response: "Thought id not found", error: error});
+   }
+});
+
 ////////////////
-const TechnigoMemberSchema = new mongoose.Schema({
+/* const TechnigoMemberSchema = new mongoose.Schema({
   name: {
     // most important one
     type: String,
@@ -56,7 +111,7 @@ const TechnigoMemberSchema = new mongoose.Schema({
   }
 });
 
-const TechnigoMember = mongoose.model("TechnigoMember", TechnigoMemberSchema);
+const TechnigoMember = mongoose.model("TechnigoMember", TechnigoMemberSchema); */
 
 // V1
 // app.post("/members", async (req, res) => {
@@ -73,15 +128,15 @@ const TechnigoMember = mongoose.model("TechnigoMember", TechnigoMemberSchema);
 
 
 // V2 POST with promises
-app.post("/members", (req, res) => {
-  const {name, description} = req.body;
-    const newMember = new TechnigoMember({name: name, description: description}).save()
-      .then(data => {
-        res.status(201).json({success: true, response: data});
-    }).catch(error => {
-        res.status(400).json({success: false, response: error});
-    });
-});
+// app.post("/members", (req, res) => {
+//  const {name, description} = req.body;
+//  const newMember = new TechnigoMember({name: name, description: description}).save()
+//    .then(data => {
+//    res.status(201).json({success: true, response: data});
+//  }).catch(error => {
+//  res.status(400).json({success: false, response: error});
+//  });
+//});
 
 // V3 POST mongoose syntax
 // app.post("/members", (req, res) => {
@@ -98,7 +153,7 @@ app.post("/members", (req, res) => {
 // POST => create stuff
 // PUT => replace in DB -> one PErson switch with another
 // PATCH => change/modify stuff
-app.patch("/members/:id/score", async (req, res) => {
+/* app.patch("/members/:id/score", async (req, res) => {
    const { id } = req.params;
    try {
     const memberToUpdate = await TechnigoMember.findByIdAndUpdate(id, {$inc: {score: 1}});
@@ -106,7 +161,7 @@ app.patch("/members/:id/score", async (req, res) => {
    } catch (error) {
     res.status(400).json({success: false, response: error});
    }
-});
+}); */
 ///////////////
 // Start the server
 app.listen(port, () => {
