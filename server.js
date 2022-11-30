@@ -87,7 +87,7 @@ app.patch("/thoughts/:id/heart", async (req, res) => {
     const heartsUpdate = await Thought.findByIdAndUpdate(id, {$inc: {heart: 1}});
     res.status(200).json({success: true, response: `Heart ${heartsUpdate.message} has their heart updated`});
   } catch (error) {
-    res.status(400).json({success: false, message:'cannot post likes'});
+    res.status(400).json({success: false, response: error});
   }
 })
 
