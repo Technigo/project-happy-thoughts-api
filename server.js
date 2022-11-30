@@ -9,16 +9,24 @@ const mongoUrl = process.env.MONGO_URL || `mongodb+srv://spacecake:${process.env
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
+/* if(process.env.RESET_DB) {
+  console.log("Resetting database!")
+  const resetDataBase = async () => {
+    await Thought.deleteMany();
+    thoughtsData.forEach(singleThought => {
+      const newGlobe = new Thought(singleThought)
+      newGlobe.save();
+    }) 
+  }
+  resetDataBase();
+}  */
+
 const port = process.env.PORT || 8080;
 const app = express();
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
-});
 
 const ThoughtSchema = new mongoose.Schema({ // vad var skillnaden på schema och model?
   text: {
@@ -30,7 +38,7 @@ const ThoughtSchema = new mongoose.Schema({ // vad var skillnaden på schema och
   },
   like: {
     type: Number,
-    default: 0 // det går att skapa en ny och skriva in likes i JSON - ska inte gå
+    default: 0 
   },
   createdAt: {
     type: Date,
@@ -38,9 +46,20 @@ const ThoughtSchema = new mongoose.Schema({ // vad var skillnaden på schema och
   }
 });
 
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: 'Service unavailable' })
+  }
+})
+
 const Thought = mongoose.model("Thought", ThoughtSchema);
 
 // Start defining your routes here
+app.get("/", (req, res) => {
+  res.send("Hello Technigo!");
+});
 
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
@@ -48,9 +67,9 @@ app.get('/thoughts', async (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
-  const { text, like, createdAt } = req.body;
+  const { text/* , like, createdAt */ } = req.body;
   try {
-    const newThought = await new Thought({text: text, like: like, createdAt: createdAt}).save();
+    const newThought = await new Thought({text: text/* , like: like, createdAt: createdAt */}).save();
     res.status(201).json({success: true, response: newThought});
   } catch (error) {
     res.status(400).json({success: false, response: error, message: 'could not save thought to the database' })
@@ -61,9 +80,13 @@ app.patch("/thoughts/:id/likes", async (req, res) => {
   const { id } = req.params;
   try {
    const thoughtToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {like: 1}});
-   res.status(200).json({success: true, response: `Thought ${thoughtToUpdate.text} has their likes updated`});
+   if (thoughtToUpdate) {
+   res.status(200).json({success: true, response: `Thought ${thoughtToUpdate.text} has been like'ed`});
+  } else {
+    res.status(404).json({success: false, error: 'Thought not found'})
+  }
   } catch (error) {
-   res.status(400).json({success: false, response: error});
+   res.status(400).json({success: false, error: 'Invalid request' });
   }
 });
 
