@@ -56,13 +56,12 @@ app.get("/thoughts", async (req, res) => {
 
 // Add the new thoguhts to the feed. 
 app.post("/thoughts", async (req, res) => {
-  const {name, description} = req.body; 
-  console.log(req.body);
+  const {message} = req.body;
   try {
     const newThought = await new Thought({message: message}).save();
-    res.status(201).json({sucess: true, response: newThought});
-  } catch (error) {
-    res.status(400).json({sucess: false, response: error});
+    res.status(201).json({success: true, response: newThought})
+  } catch(error) {
+    res.status(400).json({success: false, response: error})
   }
 });
 
