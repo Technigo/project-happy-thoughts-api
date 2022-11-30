@@ -1,13 +1,17 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+This week, I learnt about allowing user to POST data to my API and then use that data to save new objects in my Mongo database.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Some things I learnt within API:
+methods: POST, GET, PATCH
+
+Also use useful error message to help backend developer to understand what went wrong. And last but not least, to connect backend work with frontend work.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I tackled the problem by looking at the code throughly. There was a bit of problem to connect the frontend & backend but it was not really a code problem but rather memory problem. Since the happy thought project was done some time ago, I forgot that API key & object are important to connect with the backend. However, everything was solved by being very meticulous with the process. 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Backend: https://project-happy-thoughts-api-thr246hagq-lz.a.run.app/
+Frontend: https://yourhappiness.netlify.app/ 
