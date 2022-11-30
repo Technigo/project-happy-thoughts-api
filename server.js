@@ -14,7 +14,10 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send({
-    Welcome: "Happy Thoughts API"
+    Welcome: "Happy Thoughts API",
+    Routes: [{
+      "/thoughts": "Happy thought feed!"
+    }]
   });
 });
 
@@ -23,9 +26,8 @@ const ThoughtSchema = new mongoose.Schema ({
   message: {
     type: String, 
     required: true,  
-    unique: true,
     minlength: 4,
-    maxlength: 30,
+    maxlength: 140,
     trim: true,
     },
   hearts: {
@@ -43,9 +45,9 @@ const Thought = mongoose.model("Thought", ThoughtSchema)
 // Show thoguhts already posted 
 app.get("/thoughts", async (req, res) => {
   try {
-    const thoughts = await Thought.find({})
+    const thoughts = await Thought.find()
       .sort({ createdAt: -1 }).limit(20).exec()
-    res.status(200).json({ success: true, response: thoughts });
+    res.status(200).json(thoughts);
   } catch (error) {
     res.status(400).json({ success: false, response: "Error, couldn't load thoughts"  });
   }
