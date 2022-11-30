@@ -67,20 +67,22 @@ app.get('/thoughts', async (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
-  const { text/* , like, createdAt */ } = req.body;
   try {
-    const newThought = await new Thought({text: text/* , like: like, createdAt: createdAt */}).save();
+    const newThought = await new Thought(req.body).save();
     res.status(201).json({success: true, response: newThought});
   } catch (error) {
     res.status(400).json({success: false, response: error, message: 'could not save thought to the database' })
   }
 });
 
-app.patch("/thoughts/:id/likes", async (req, res) => {
+/* const newThought = await new Thought({text: text , like: like, createdAt: createdAt }).save();
+const { text, like, createdAt } = req.body; */
+
+app.post("/thoughts/:id/likes", async (req, res) => {
   const { id } = req.params;
   try {
-   const thoughtToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {like: 1}});
-   if (thoughtToUpdate) {
+   const thoughtToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {like: 1}}, {new: true});
+    if (thoughtToUpdate) {
    res.status(200).json({success: true, response: `Thought ${thoughtToUpdate.text} has been like'ed`});
   } else {
     res.status(404).json({success: false, error: 'Thought not found'})
