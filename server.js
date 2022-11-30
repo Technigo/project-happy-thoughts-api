@@ -19,87 +19,51 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
-});
-
-const TechnigoMemberSchema = new mongoose.Schema({
-  name: {
+// Start here
+const Thought = mongoose.model('Thought', {
+  message: {
     type: String,
     required: true,
-    unique: true,
-    enum: ["Matilda", "Poya", "Petra", "Hanna", "Daniel", "Sandra"] //restricts to those allowed values
+    minlength: 5,
+    maxlength: 140
   },
-  description: {
-    type: String,
-    minlength: 3,
-    maxlength: 30,
-    trim: true, //removes unnecessary whitespaces
-  },
-  score: {
-    type: Number,
-    default: 0 //initial value is used if no other value is specified
+  heart: {
+    type: Boolean,
+    default: 0,
   },
   createdAt: {
-    type: Date,
-    default: () => new Date()
+   type: Date,
+   default: () => new Date()
   }
 });
 
-const TechnigoMember =  mongoose.model("TechnigoMember",TechnigoMemberSchema)
+// Start defining your routes here
+app.get("/", (req, res) => {
+  res.send("Hello Van 3!");
+});
 
-// VERSION 1
-app.post("/members", async (req, res) => {
-  const { name, description } = req.body
-  console.log(req.body)
-  try {
-    const newMember = await new TechnigoMember({ name: name, description: description}).save();
-    res.status(201).json({success: true, response: newMember }) //201 = created
-  } catch(error) {
-    res.status(400).json({success: false, response: error})
-  }
+// The post request - to read from database
+app.get('/thoughts', async (req, res) =>{
+  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
+  res.json(thoughts);
 })
 
-// VERSION 2 POST
-app.post("/members", (req, res) => {
-  const { name, description } = req.body
-    const newMember = new TechnigoMember({ name: name, description: description}).save()
-    .then(data => {    
-      res.status(201).json({success: true, response: data});
-    }).catch(error => {
-      res.status(400).json({success: false, response: error});
-    })
-})
+// To add items to the database
+app.post('/thoughts', async(req, res) =>{
+  // Collect the information sent by the client to our API 
+  const {message, heart} = req.body;
 
-
-
-// VERSION 3 mongoose syntax
-app.post("/members", (req, res) => {
-  const { name, description } = req.body
-
-    const newMember = new TechnigoMember({ name: name, description: description}).save((error, data) => {
-      if(error) {
-        res.status(400).json({success: false, response: error});
-      } else {
-        res.status(201).json({success: true, response: newMember});
-      }
-    })
-})
-
-//GET => send items to the clients
-//POST => create stuff
-//PUT => replacing something in the database -> one person switch with another 
-//PATCH => change/modify individual stuff
-app.patch("/members/:id/score", async (req, res) => {
-  const { id } = req.params;
+  // Use our mongoose model to create the database entry - to save
+  const thought = new Thought({message, heart})
   try{
-  const memberToUpdate = await TechnigoMember.findByIdAndUpdate(id, {$inc: {score: 1}})
-  res.status(200).json({success: true, response:`Member ${memberToUpdate.name} has their score updated`})
-  } catch (error) {
-    res.status(400).json({success: false, response: error});
+    const savedThought = await thought.save();
+  res.status(201).json(savedThought);
+  }catch(err){
+    res.status(400).json({message: 'Could not save thought to the database', errors: err.errors});
   }
 })
+
+// app.post(thoughts/:thoughtId/like) //for likes
 
 // Start the server
 app.listen(port, () => {
