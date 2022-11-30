@@ -34,7 +34,7 @@ const TechnigoMemberSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    minlength: 5,
+    minlength: 6,
     maxlength: 30,
     // trim: removes unnecessary whitespaces
     trim: true
@@ -55,18 +55,54 @@ const TechnigoMemberSchema = new mongoose.Schema({
 
 const TechnigoMember = mongoose.model("TechnigoMember", TechnigoMemberSchema);
 
-app.post("/members", async (req, res) => {
+// V1 most universal
+// app.post("/members", async (req, res) => {
+//   const {name, description} = req.body;
+//   console.log(req.body);
+//   try {
+//     const newMember = await new TechnigoMember({name: name, description: description}).save();
+//     res.status(201).json({success: true, response: newMember});
+//   } catch(error) {
+//     res.status(400).json({success: false, response: error});
+//   }
+// });
+
+// V2 POST with promises
+app.post("/members", (req, res) => {
   const {name, description} = req.body;
-  console.log(req.body);
+    const newMember = new TechnigoMember({name: name, description: description}).save()
+    .then(data => {
+        res.status(201).json({success: true, response: data});
+    }).catch(error => {
+      res.status(400).json({success: false, response: error});
+    });
+});
+
+// V3 POST mongoose syntax
+// app.post("/members", (req, res) => {
+//   const {name, description} = req.body;
+//     const newMember = new TechnigoMember({name: name, description: description}).save((error, data) => {
+//       if(error) {
+//         res.status(400).json({success: false, response: error});
+//       } else {
+//         res.status(201).json({success: true, response: data});
+//       }
+//     });
+// });
+
+// POST => create stuff
+// PUT => replace in DB -> one person switch woth another person
+// PATCH => change/modify stuff
+
+app.patch("/members/:id/score", async (req, res) => {
+  const { id } = req.params;
   try {
-    const newMember = await new TechnigoMember({name: name, description: description}).save();
-    res.status(201).json({success: true, response: newMember})
-  } catch(error) {
+    const memberToUpdate = await TechnigoMember.findByIdAndUpdate(id, {$inc: {score: 1}});
+    res.status(200).json({success: true, response: `Member ${memberToUpdate.name} has their score updated`});
+  } catch (error) {
     res.status(400).json({success: false, response: error});
   }
 });
-
-
 
 ////////////////////////
 // Start the server
