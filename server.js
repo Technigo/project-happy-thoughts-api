@@ -29,7 +29,7 @@ const ThoughtsSchema = new mongoose.Schema({
     type: String,
     required: true,
     // new name will have to be different
-    unique: true,
+    // unique: true,
     minlength: 5,
     maxlength: 140,
     trim: true
@@ -74,17 +74,17 @@ app.post("/thoughts", async (req, res) => {
   // use mongoose model to create the database entry
   // const newTask = new Thought({message, createdAt})
   try{
-    const newThought = await new Thought({message: message, createdAt: createdAt}).save();
-    res.status(201).json({success: true, response: newThought});
+    const savedThought = await new Thought({message: message, createdAt: createdAt}).save();
+    res.status(201).json({success: true, response: savedThought});
   }catch (err){
     res.status(400).json({success: false, message:'cannot post thoughts', errors: err.errors})
   }
 });
 
-app.patch("/thoughts/:_id/hearts", async (req,res) => {
-  const { _id } = req.params;
+app.patch("/thoughts/:id/hearts", async (req,res) => {
+  const { id } = req.params;
   try{
-    const heartsUpdate = await Thought.findByIdAndUpdate(_id, {$inc: {heart: 1}});
+    const heartsUpdate = await Thought.findByIdAndUpdate(id, {$inc: {heart: 1}});
     res.status(200).json({success: true, response: `Heart ${heartsUpdate.message} has their heart updated`});
   } catch (error) {
     res.status(400).json({success: false, response: error});
