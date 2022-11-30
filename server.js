@@ -94,7 +94,7 @@ app.post("/thoughts", async(req, res) => {
 // PUT => replacing something in db
 // PATCH => change/modify stuff
 
-app.patch("/thoughts/:id/likes", async(req, res) => {
+app.patch("/thoughts/:id/like", async(req, res) => {
   const { id } = req.params;
   try {
     const thoughtToUpdate = await TechnigoMember.findByIdAndUpdate(id, {$inc: {heart: 1}});
