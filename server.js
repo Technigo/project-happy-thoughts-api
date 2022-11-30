@@ -46,6 +46,21 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
+app.get("/messages", async (req, res) => {
+  try {
+    const messages = await Message.find({});
+    res.status(201).json({
+      success: true, 
+      response: messages
+    });
+  } catch(error) {
+    res.status(400).json({
+      success: false,
+      response: error
+    });
+  }
+})
+
 app.post("/messages", async (req, res) => {
   const {message} = req.body;
   try {
