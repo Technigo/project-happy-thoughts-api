@@ -2,7 +2,8 @@ import express, { json } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl =
+  process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -22,7 +23,7 @@ app.get("/", (req, res) => {
 });
 
 /////////////////////////
-const TechnigoMemberSchema = new mongoose.Schema({
+const HappyThoughtSchema = new mongoose.Schema({
   name: {
     // Most important ine
     type: String,
@@ -40,7 +41,7 @@ const TechnigoMemberSchema = new mongoose.Schema({
     // Removes unneccessary whitespaces
     trim: true,
   },
-  score: {
+  hearts: {
     type: Number,
     // Initial value if none other is specified
     default: 0,
@@ -57,20 +58,35 @@ const TechnigoMemberSchema = new mongoose.Schema({
   },
 });
 
-const TechnigoMember = mongoose.model("TechnigoMember", TechnigoMemberSchema);
+const HappyThought = mongoose.model("HappyThought", HappyThoughtSchema);
+
+app.get("/thoughts", async (req, res) => {
+  try {
+    const allThoughts = await HappyThought.find({});
+    res.status(201).json({
+      success: true,
+      response: allThoughts,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      response: error,
+    });
+  }
+});
 
 // Version 1
-// app.post("/members", async (req, res) => {
+// app.post("/thoughts", async (req, res) => {
 //   const { name, description } = req.body;
 //   console.log(req.body);
 //   try {
-//     const newMember = await new TechnigoMember({
+//     const newThought = await new HappyThought({
 //       name: name,
 //       description: description,
 //     }).save();
 //     res.status(201).json({
 //       success: true,
-//       response: newMember,
+//       response: newThought,
 //     });
 //   } catch (error) {
 //     res.status(400).json({
@@ -81,10 +97,10 @@ const TechnigoMember = mongoose.model("TechnigoMember", TechnigoMemberSchema);
 // });
 
 //Version 2 POST with promises
-app.post("/members", (req, res) => {
+app.post("/thoughts", (req, res) => {
   const { name, description } = req.body;
 
-  const newMember = new TechnigoMember({ name: name, description: description })
+  const newThought = new HappyThought({ name: name, description: description })
     .save()
     .then((data) => {
       res.status(201).json({ success: true, response: data });
@@ -95,10 +111,10 @@ app.post("/members", (req, res) => {
 });
 
 // Version 3 POST mongoose sytnax
-// app.post("/members", (req, res) => {
+// app.post("/thoughts", (req, res) => {
 //   const { name, description } = req.body;
 
-//   const newMember = new TechnigoMember({
+//   const newThought = new HappyThought({
 //     name: name,
 //     description: description,
 //   }).save((error, data) => {
@@ -116,21 +132,21 @@ app.post("/members", (req, res) => {
 //   });
 // });
 
-// Update score <3
+// Update hearts <3
 // POST => create stuff, put thing into the database
 // GET => get info
 // PUT => replace in DB -> one person switch with another
 // PATCH => change/modify in DB
 
-app.patch("/members/:id/score", async (req, res) => {
+app.patch("/thoughts/:id/hearts", async (req, res) => {
   const { id } = req.params;
-  const memberToUpdate = await TechnigoMember.findByIdAndUpdate(id, {
-    $inc: { score: 1 },
+  const thoughtToUpdate = await HappyThought.findByIdAndUpdate(id, {
+    $inc: { hearts: 1 },
   });
   try {
     res.status(200).json({
       success: true,
-      response: `Member ${memberToUpdate.name} has their score updated`,
+      response: `Thought ${thoughtToUpdate.name} has their hearts updated`,
     });
   } catch (error) {
     res.status(400).json({
