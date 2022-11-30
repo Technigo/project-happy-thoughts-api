@@ -18,7 +18,7 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send("Happy Thoughts API");
 });
 
 const ThoughtSchema = new mongoose.Schema({
@@ -28,7 +28,6 @@ const ThoughtSchema = new mongoose.Schema({
     maxlength: 140,
     trim: true,
     required: true,
-    default: "Could not save thought"
   },
   hearts: {
     type: Number,
@@ -44,13 +43,11 @@ const Thought = mongoose.model("Thought", ThoughtSchema);
 
 app.get("/thoughts", async(req, res) => {
   try {
-    // return 20 thoughts max, sorted by createdAt to show the most recent thoughts first
     const thoughtsFeed = await Thought.find().limit(20).sort({createdAt: 'desc'});
-/*     res.status(200).json({
+    res.status(200).json({
       success: true,
       response: thoughtsFeed
-    }); */
-    res.status(200).json(thoughtsFeed);
+    });
   } catch(error) {
     res.status(400).json({
       success: false,
@@ -59,7 +56,6 @@ app.get("/thoughts", async(req, res) => {
   }
 });
 
-// V 1
 app.post("/thoughts", async(req, res) => {
   const { message } = req.body;
   try { 
@@ -71,7 +67,7 @@ app.post("/thoughts", async(req, res) => {
     } catch(error) {
       res.status(400).json({
         success: false,
-        reponse: error //Could not post thought?
+        reponse: error
       });
     };
 });
