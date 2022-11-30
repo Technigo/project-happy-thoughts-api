@@ -1,10 +1,6 @@
-import express from "express";
-import cors from "cors";
-import mongoose from "mongoose";
-
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.Promise = Promise;
+import express from 'express';
+import cors from 'cors';
+import { Thought } from './libs/mongoose';
 
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
@@ -17,41 +13,21 @@ app.use(cors());
 app.use(express.json());
 
 // Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+app.get('/', (req, res) => {
+  res.send('Hello Technigo!');
 });
 
-const ThoughtSchema = new mongoose.Schema({
-  message: {
-    type: String,
-    minlength: 5,
-    maxlength: 400,
-    //removes unnecessary whitespaces
-    trim: true,
-  },
-  hearts: {
-    type: Number,
-    default: 0,
-  },
-  createdAt: {
-    type: Date,
-    default: () => new Date(),
-  },
-});
-
-const Thought = mongoose.model("Thought", ThoughtSchema);
-
-app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20);
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20);
   res.json(thoughts);
 });
 
-app.post("/thoughts", async (req, res) => {
+app.post('/thoughts', async (req, res) => {
   const { message } = req.body;
   console.log(req.body);
   try {
     const newThought = await new Thought({
-      message: message,
+      message: message
     }).save();
     res.status(201).json({ success: true, response: newThought });
   } catch (error) {
@@ -60,15 +36,15 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
-app.post("/thoughts/:id/like", async (req, res) => {
+app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params;
   try {
     const heartToUpdate = await Thought.findByIdAndUpdate(id, {
-      $inc: { hearts: 1 },
+      $inc: { hearts: 1 }
     });
     res.status(200).json({
       success: true,
-      response: `Member ${heartToUpdate.message} has their score updated`,
+      response: `Member ${heartToUpdate.message} has their score updated`
     });
   } catch (error) {
     console.warn(error);
