@@ -1,8 +1,11 @@
 import express, { response } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+dotenv.config()
+
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-api";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -17,7 +20,7 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
-const ThoughtSchema = new mongoose.Schema({
+const ThoughtSchema = new mongoose.Schema({ // vad var skillnaden på schema och model?
   text: {
     type: String,
     required: true,
@@ -25,9 +28,9 @@ const ThoughtSchema = new mongoose.Schema({
     maxlength: 140,
     trim: true
   },
-  likes: {
+  like: {
     type: Number,
-    default: 0
+    default: 0 // det går att skapa en ny och skriva in likes i JSON - ska inte gå
   },
   createdAt: {
     type: Date,
@@ -45,9 +48,9 @@ app.get('/thoughts', async (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
-  const { text } = req.body;
+  const { text, like, createdAt } = req.body;
   try {
-    const newThought = await new Thought({text: text}).save();
+    const newThought = await new Thought({text: text, like: like, createdAt: createdAt}).save();
     res.status(201).json({success: true, response: newThought});
   } catch (error) {
     res.status(400).json({success: false, response: error, message: 'could not save thought to the database' })
@@ -57,8 +60,8 @@ app.post("/thoughts", async (req, res) => {
 app.patch("/thoughts/:id/likes", async (req, res) => {
   const { id } = req.params;
   try {
-   const thoughtToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {likes: 1}});
-   res.status(200).json({success: true, response: `Thought ${thoughtToUpdate.text} has their score updated`});
+   const thoughtToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {like: 1}});
+   res.status(200).json({success: true, response: `Thought ${thoughtToUpdate.text} has their likes updated`});
   } catch (error) {
    res.status(400).json({success: false, response: error});
   }
