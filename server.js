@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import listEndpoints from "express-list-endpoints";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -18,7 +19,18 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  try {
+    res.status(200).json({
+      success: true,
+      message: "Happy Thoughts API",
+      data: listEndpoints(app)
+    });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      response: err
+    })
+  }
 });
 
 const ThoughtSchema = new mongoose.Schema({
@@ -41,6 +53,7 @@ const ThoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model("Thought", ThoughtSchema);
 
+// This will provide a response with the latest 20 created thoughts sorted descending using createdAt
 app.get("/thoughts", async (req, res) => {
   try {
     const thoughts = await Thought.find({}).sort({ createdAt: "desc" }).limit(20)
@@ -50,6 +63,7 @@ app.get("/thoughts", async (req, res) => {
   }
 });
 
+// This will allow to post a message if it pass the validation from the Schema
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
   try {
@@ -60,6 +74,7 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
+// This will allow the possibility to implement a "like" functionality
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
   try {
