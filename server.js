@@ -77,17 +77,17 @@ app.post("/thoughts", async (req, res) => {
     const savedThought = await new Thought({message: message, createdAt: createdAt}).save();
     res.status(201).json({success: true, response: savedThought});
   }catch (err){
-    res.status(400).json({success: false, message:'cannot post thoughts', errors: err.errors})
+    res.status(400).json({success: false, message:'cannot post thoughts'/* , errors: err.errors */})
   }
 });
 
-app.patch("/thoughts/:id/hearts", async (req,res) => {
+app.patch("/thoughts/:id/heart", async (req, res) => {
   const { id } = req.params;
   try{
     const heartsUpdate = await Thought.findByIdAndUpdate(id, {$inc: {heart: 1}});
     res.status(200).json({success: true, response: `Heart ${heartsUpdate.message} has their heart updated`});
   } catch (error) {
-    res.status(400).json({success: false, response: error});
+    res.status(400).json({success: false, message:'cannot post likes'});
   }
 })
 
