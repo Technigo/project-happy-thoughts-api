@@ -29,7 +29,7 @@ const ThoughtSchema = new mongoose.Schema({
     trim: true,
     required: true
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -45,10 +45,11 @@ app.get("/thoughts", async(req, res) => {
   try {
     // return 20 thoughts max, sorted by createdAt to show the most recent thoughts first
     const thoughtsFeed = await Thought.find().limit(20).sort({createdAt: 'desc'});
-    res.status(200).json({
+/*     res.status(200).json({
       success: true,
       response: thoughtsFeed
-    });
+    }); */
+    res.status(200).json(thoughtsFeed);
   } catch(error) {
     res.status(400).json({
       success: false,
