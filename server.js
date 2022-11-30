@@ -33,7 +33,7 @@ const MessageSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  CreatedAt: {
+  createdAt: {
     type: Date,
     default: () => new Date()
   }
@@ -43,7 +43,10 @@ const Message = mongoose.model("Message", MessageSchema);
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send([
+    {"path":"/messages","url":'https://project-happy-thoughts-api-auhzlcxnrq-lz.a.run.app/messages/',"methods":["GET","POST"]},
+    {"path":"/messages/:id/like","url":'https://project-happy-thoughts-api-auhzlcxnrq-lz.a.run.app/messages/:id/like/',"methods":["POST"]}
+  ]);
 });
 
 app.get("/messages", async (req, res) => {
