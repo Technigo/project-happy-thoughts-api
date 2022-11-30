@@ -1,6 +1,9 @@
 import express, { response } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts-api";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -66,9 +69,9 @@ app.post("/thoughts", async (req, res) => {
 })
 
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
-   const { thoughtId } = req.params;
+   const {thoughtId} = req.params;
    try {
-    const thoughtToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}});
+    const thoughtToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}});
     res.status(200).json({success: true, response: `Thought ${thoughtToUpdate.id} has their likes updated`});
    } catch (error) {
     res.status(400).json({success: false, response: "Thought id not found", error: error});
