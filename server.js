@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 
 dotenv.config()
 
-const mongoUrl = process.env.MONGO_URL || `mongodb+srv://spacecake:${process.env.STRING_PW}@cluster0.ixfhmma.mongodb.net/happyThoughts?retryWrites=true&w=majority`;
+const mongoUrl = process.env.MONGO_URL || `mongodb+srv://spacecake:${process.env.STRING_PW}@cluster0.jgvyhjl.mongodb.net/happyThoughts?retryWrites=true&w=majority`;
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
