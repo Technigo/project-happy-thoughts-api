@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thougts";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts";
 
 // OLD --> "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -44,7 +44,6 @@ app.get("/", (req, res) => {
   res.send("This is my API for the project Happy Thoughts, view it live at https://steady-faun-1238b0.netlify.app");
 });
 
-
 // POST => create stuff
 // PUT => repacing something in the DB --> for example: one person switch with another
 // PATCH => change / modify stuff
@@ -80,11 +79,11 @@ app.post("/thoughts", async (req, res) => {
 })
 
 // ENDPOINT 3: LIKEING THOUGHTS
-app.patch("/thoughts/:id/like", async (req, res) => {
-  const { id } = req.params;
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
 
   try {
-    const likedThought = await Thought.findByIdAndUpdate(id, {
+    const likedThought = await Thought.findByIdAndUpdate(thoughtId, {
       $inc: { hearts: 1 },
     });
     res.status(200).json({success: true, response:`It's working! The post got ${likedThought.hearts} likes`});
