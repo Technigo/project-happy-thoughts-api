@@ -21,6 +21,61 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
+const ThoughtSchema = new mongoose.Schema({
+  message: {
+    type: String,
+    minlength: 5,
+    maxlength: 400,
+    //removes unnecessary whitespaces
+    trim: true,
+  },
+  heart: {
+    type: Number,
+    default: 0,
+  },
+  createdAt: {
+    type: Date,
+    default: () => new Date(),
+  },
+});
+
+const Thought = mongoose.model("Thought", ThoughtSchema);
+
+app.get("/thoughts", async (req, res) => {
+  const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20);
+  res.json(thoughts);
+});
+
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body;
+  console.log(req.body);
+  try {
+    const newThought = await new Thought({
+      message: message,
+    }).save();
+    res.status(201).json({ success: true, response: newThought });
+  } catch (error) {
+    console.warn(error);
+    res.status(400).json({ success: false, response: error });
+  }
+});
+
+app.post("/thoughts/:thoughtsId/like", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const heartToUpdate = await Thought.findByIdAndUpdate(id, {
+      $inc: { heart: 1 },
+    });
+    res.status(200).json({
+      success: true,
+      response: `Member ${heartToUpdate.message} has their score updated`,
+    });
+  } catch (error) {
+    console.warn(error);
+    res.status(400).json({ success: false, response: error });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
