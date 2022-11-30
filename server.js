@@ -18,7 +18,27 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Happy Thoughts API");
+  res.send([
+    {
+    path: "/",
+    methods: [
+      "GET"
+    ]
+  },
+  {
+    path: "/thoughts",
+    methods: [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    path: "/thoughts/:id/like",
+    methods: [
+      "PATCH"
+    ]
+  }
+]);
 });
 
 const ThoughtSchema = new mongoose.Schema({
@@ -41,6 +61,7 @@ const ThoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model("Thought", ThoughtSchema);
 
+// get request for the 20 last thoughts
 app.get("/thoughts", async(req, res) => {
   try {
     const thoughtsFeed = await Thought.find().limit(20).sort({createdAt: 'desc'});
@@ -56,6 +77,7 @@ app.get("/thoughts", async(req, res) => {
   }
 });
 
+// post request for posting new thoughts
 app.post("/thoughts", async(req, res) => {
   const { message } = req.body;
   try { 
@@ -72,25 +94,7 @@ app.post("/thoughts", async(req, res) => {
     };
 });
 
-// V2 mongoose syntax
-/* app.post("/thoughts", async(req, res) => {
-  const { name, description } = req.body;
-
-  const newThought = await new TechnigoMember({name: name, description: description}).save((error, data) => {
-    if(error){
-      res.status(400).json({success: false, response: error});
-    } else {
-      res.status(201).json({success: true, response: data})
-    }
-  });
-}); */
-
-// Update (like-button)
-
-// POST => create
-// PUT => replacing something in db
-// PATCH => change/modify stuff
-
+// patch request for the like-button
 app.patch("/thoughts/:id/like", async(req, res) => {
   const { id } = req.params;
   try {
@@ -106,3 +110,21 @@ app.patch("/thoughts/:id/like", async(req, res) => {
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
+
+
+// V2 mongoose syntax
+/* app.post("/thoughts", async(req, res) => {
+  const { name, description } = req.body;
+
+  const newThought = await new TechnigoMember({name: name, description: description}).save((error, data) => {
+    if(error){
+      res.status(400).json({success: false, response: error});
+    } else {
+      res.status(201).json({success: true, response: data})
+    }
+  });
+}); */
+
+// POST => create
+// PUT => replacing something in db
+// PATCH => change/modify stuff
