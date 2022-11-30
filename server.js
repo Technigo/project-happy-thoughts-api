@@ -3,6 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts-api";
+
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -32,38 +33,58 @@ const Thought = mongoose.model("Thought", ThoughtSchema);
 // PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
+const listEndpoints = require('express-list-endpoints');
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
-// Check if connection to database is ok: 
+
+// Middleware that happens around each request, checks if db is connected
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next();
+  } else {
+    res.status(503).json({error: 'Service unavailable'});
+  }
+});
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  // Lists the enpoints available:
+  res.json(listEndpoints(app));
 });
 
 // Getting all current thoughts stored in the database
 app.get("/thoughts", async (req, res) => {
   try {
-    const allThoughts = await Thought.find().sort({ createdAt: 'desc' });
+    const allThoughts = await Thought.find().limit(20).sort({ createdAt: 'desc' });
     res.status(201).json(allThoughts);
   } catch(error) {
       res.status(400).json({ error: 'Could not get messages'});
   }
-  
 });
 
 // Adding users messages to the database via API
 app.post("/thoughts", async (req, res) => {
   try {
-    const newThought = new Thought({ message: req.body.message })
-    await newThought.save()
-    res.status(201).json(newThought)
+    const newThought = new Thought({ message: req.body.message });
+    await newThought.save();
+    res.status(201).json(newThought);
   } catch(error) {
       res.status(400).json({ error: 'Could not post message'});
   }
-})
+});
+
+// Increasing the like button
+app.post("/thoughts/:id/like", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const updatedHeart = await Thought.findByIdAndUpdate(id, {$inc: {like: 1}});
+    res.status(200);
+  } catch {
+    res.status(400).json({ error: 'Thought not found' });
+  }
+});
 
 // Start the server
 app.listen(port, () => {

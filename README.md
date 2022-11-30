@@ -1,13 +1,27 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+The aim of the project was to build an API that includes handling of user input and works well with an existing frontend, and to:
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+✓ use POST requests to send data to the API
+
+✓ store data in a database from those POST requests
+
+✓ validate data and ensure the database only contains 'good' data
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+MongoDB was used as the database and Mongoose to model and store the data. For the API the following endpoints were made to fit the existing frontend project "Happy Thoughts":
+
+**/thoughts** - get 20 of the latest thoughts currently stored in the database using GET **OR** POST and new thought to be added to the database provided it passes validation 
+
+**/thoughts/:id/like** - increase an existing thoughts like count (for when user clicks the heart button on the frontend)
+
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+View the API:
+https://project-happy-thoughts-api-d6aenh5q2a-lz.a.run.app/
+
+View it when used in a frontend:
+https://happy-thoughts.brucette.com/
+
