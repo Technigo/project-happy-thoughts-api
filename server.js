@@ -68,7 +68,7 @@ app.post("/thoughts", async (req, res) => {
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params; 
   try {
-  const thoughtToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}}); 
+  const thoughtToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}}); 
   res.status(200).json({sucess: true, response: `Thought ${thoughtToUpdate.id} was liked!`})
   }
  catch (error) {
