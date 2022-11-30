@@ -94,8 +94,8 @@ app.post("/thoughts", async(req, res) => {
 app.patch("/thoughts/:id/like", async(req, res) => {
   const { id } = req.params;
   try {
-    const thoughtToUpdate = await TechnigoMember.findByIdAndUpdate(id, {$inc: {heart: 1}});
-    res.status(200).json({success: true, response: `Member ${thoughtToUpdate.heart} has been updated`});
+    const thoughtToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}});
+    res.status(200).json(/* {success: true, response: `Member ${thoughtToUpdate.hearts} has been updated`} */);
   } catch (error) {
     res.status(404).json({success: false, response: error});
   }
