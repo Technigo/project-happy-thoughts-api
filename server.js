@@ -81,7 +81,7 @@ app.patch('/thoughts/:id', async(req, res)=>{
      console.log(req.body);
   try{
     const updateThoughts= await Thought.findByIdAndUpdate({_id: id}, {message:req.body.description});
- console.log(updateThoughts)
+//  console.log(updateThoughts)
     if(updateThoughts){
       res.status(200).json({success:true, response:updateThoughts});
     }
@@ -100,14 +100,13 @@ app.patch('/thoughts/:id', async(req, res)=>{
 
 // Endpoint increase heart Number
 
-
 app.patch('/thoughts/:id/like',async (req, res)=>{
   try{
    const { id } = req.params;
    const addHearts = await Thought.findById({ _id: id });
   const updateThoughts = await Thought.findByIdAndUpdate(
     { _id: id },
-    { hearts: addHearts.hearts + 1 }
+     { hearts: addHearts.hearts + 1 }
   );
   console.log(updateThoughts);
   if (updateThoughts) {
