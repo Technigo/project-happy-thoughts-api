@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const mongoUrl = /* process.env.MONGO_URL || */ "mongodb://localhost/project-happyThoughts";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -71,11 +71,10 @@ app.post("/thoughts", async (req, res) => {
 //This endpoint doesn't require a JSON body. Given a valid thought id in the URL, 
 //the API should find that thought, and update its hearts property to add one heart.
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
-  const {id, likes} = req.body;
+  const {id} = req.body;
    try {
     const likedThought = await Thought.findById(id).exec();
     likedThought.likes +=1;
-    console.log(likedThought.likes);
     likedThought.save()
     res.status(201).json(likedThought)
    }
