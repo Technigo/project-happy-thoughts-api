@@ -17,7 +17,7 @@ const ThoughtSchema = new mongoose.Schema({
     maxlength: 140,
     trim: true
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -68,7 +68,7 @@ app.post("/thoughts", async (req, res) => {
   }
 })
 
-app.post("/thoughts/:thoughtId/like", async (req, res) => {
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
    const {thoughtId} = req.params;
    try {
     const thoughtToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}});
