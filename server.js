@@ -77,8 +77,9 @@ app.patch("/thoughts/:id/like", async (req, res) => {
           hearts: 1
         }
       },
+      { new: true }
     );
-    res.status(200).json({ heartToUpdate })
+    res.status(200).json(heartToUpdate)
   } catch (error) {
     res.status(400).json({ error: "Couldn't find thought by id" })
   }
