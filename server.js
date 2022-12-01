@@ -10,25 +10,6 @@ const mongoUrl = process.env.MONGO_URL || `mongodb+srv://spacecake:${process.env
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-/* if(process.env.RESET_DB) {
-  console.log("Resetting database!")
-  const resetDataBase = async () => {
-    await Thought.deleteMany();
-    thoughtsData.forEach(singleThought => {
-      const newGlobe = new Thought(singleThought)
-      newGlobe.save();
-    }) 
-  }
-  resetDataBase();
-}  */
-
-const port = process.env.PORT || 8080;
-const app = express();
-
-// Add middlewares to enable cors and json body parsing
-app.use(cors());
-app.use(express.json());
-
 const ThoughtSchema = new mongoose.Schema({
   message: {
     type: String,
@@ -37,7 +18,7 @@ const ThoughtSchema = new mongoose.Schema({
     maxlength: 140,
     trim: true
   },
-  hearts: {
+  heart: {
     type: Number,
     default: 0 
   },
@@ -47,15 +28,22 @@ const ThoughtSchema = new mongoose.Schema({
   }
 });
 
-app.use((req, res, next) => {
+const Thought = mongoose.model("Thought", ThoughtSchema);
+
+const port = process.env.PORT || 8080;
+const app = express();
+
+// Add middlewares to enable cors and json body parsing
+app.use(cors());
+app.use(express.json());
+
+/* app.use((req, res, next) => {
   if (mongoose.connection.readyState === 1) {
     next()
   } else {
     res.status(503).json({ error: 'Service unavailable' })
   }
-})
-
-const Thought = mongoose.model("Thought", ThoughtSchema);
+}) */
 
 // Start defining your routes here
 app.get("/", (req, res) => {
@@ -85,10 +73,10 @@ app.post("/thoughts", async (req, res) => {
 /* const newThought = await new Thought({text: text , like: like, createdAt: createdAt }).save();
 const { text, like, createdAt } = req.body; */
 
-app.post("/thoughts/:id/like", async (req, res) => {
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
   try {
-   const thoughtToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}}/* , {new: true} */);
+   const thoughtToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {heart: 1}}/* , {new: true} */);
     if (thoughtToUpdate) {
    res.status(200).json({success: true, response: `Thought ${thoughtToUpdate.id} has been like'ed`});
   } else {
