@@ -1,13 +1,18 @@
 # Project Happy Thoughts API
-
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This projects' aim was to create a personal backend for the Happy Thoughts project - a twitter like feed. 
 
 ## The problem
+The previous API was public, so the goal was to create one where only the thoughts posted on this project would show up. 
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Endpoints, 
+* GET /thoughts to show all thoughts previously posted, in order of descending order. 
+* POST /thoughts to be able to add new thoughts to the feed. 
+* PATCH /thoughts/:thoughtId/like  to update the likes - now a unicorn! 
 
 ## View it live
+This API is best viewed using a tool, like POSTMAN (https://www.postman.com)
+### LINK TO API 
+http://happythoughts-iwmxwmfrcq-lz.a.run.app/
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+### LINK TO FRONTEND REPO 
+https://github.com/Sneezan/project-happy-thoughts/blob/master/README.md
