@@ -16,9 +16,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const listEndpoints = require('express-list-endpoints');
+
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello Technigo!');
+  res.json(listEndpoints(app));
 });
 
 const ThoughtSchema = new mongoose.Schema({
