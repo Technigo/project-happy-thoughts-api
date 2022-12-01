@@ -2,11 +2,12 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import listEndpoints from "express-list-endpoints";
 
 dotenv.config()
 
 // const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
-const mongoUrl = process.env.MONGO_URL || "mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.eilze2r.mongodb.net/project-happy-thoughts-api?retryWrites=true&w=majority";
+const mongoUrl = process.env.MONGO_URL || `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.eilze2r.mongodb.net/project-happy-thoughts-api?retryWrites=true&w=majority`;
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -90,7 +91,7 @@ const Thoughts = mongoose.model("Thoughts", ThoughtsSchema);
   
 // Start defining your routes here
 app.get("/", (req, res) => {
-	res.send({Message:"Hello, Welcome to our Happy Thoughts!"});
+	res.send({Message:"Hello, Welcome to our Happy Thoughts!", data: listEndpoints(app)});
 });
 
 app.get("/thoughts", async (req, res) => {
@@ -114,7 +115,7 @@ app.post("/thoughts", async (req, res) => {
   console.log(req.body);
   try {
 		// Use our mongoose model to create the database entry/create a new thought to Mongo and will send it to the Database
-    const newThoughts = await new Thoughts({message}).save();
+    const newThoughts = await new Thoughts({message: message}).save();
     //Success
 		res.status(201).json({success: true, response: newThoughts});
   } catch(err){
@@ -155,9 +156,9 @@ app.post("/thoughts", async (req, res) => {
 	const { thoughtId } = req.params;
 	try {
 	 const thoughtToUpdateLike = await Thoughts.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}});
-	 res.status(200).json({success: true, response: `Thought ${thoughtToUpdateLike} has their heart updated`});
+	 res.status(200).json({success: true, response: `Thoughts ${thoughtToUpdateLike} has their heart updated`});
 	} catch (error) {
-	 res.status(400).json({success: false, response: error});
+	 res.status(400).json({success: false, response: "Could not show the likes for this ID"});
 	}
 });
 
