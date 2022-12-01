@@ -18,7 +18,7 @@ const ThoughtSchema = new mongoose.Schema({
     maxlength: 140,
     trim: true
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0 
   },
@@ -76,7 +76,7 @@ const { text, like, createdAt } = req.body; */
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
   try {
-   const thoughtToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {heart: 1}}/* , {new: true} */);
+   const thoughtToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}}/* , {new: true} */);
     if (thoughtToUpdate) {
    res.status(200).json({success: true, response: `Thought ${thoughtToUpdate.thoughtId} has been like'ed`});
   } else {
