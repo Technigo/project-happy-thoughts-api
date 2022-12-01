@@ -39,7 +39,14 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigoo!");
+  res.send({
+    "Welcome": "Happy Thoughts API",
+    "Routes": [
+      {
+        "/thoughts": "To catch all happy thoughts"
+      }
+    ]
+  });
 });
 
 app.get("/thoughts", async (req, res) => {
