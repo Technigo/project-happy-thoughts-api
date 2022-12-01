@@ -104,6 +104,97 @@ app.patch("/members/:id/score", async (req, res) => {
   }
 });
 
+/// Thursday lession ///
+
+// Pagination //
+app.get("/members", async (req, res) => {
+  // const members = await TechnigoMember.find({});
+    // V1 mongoose //
+  // const {page, perPage} = req.query;
+  // try {
+  //   const members = await TechnigoMember.find({}).sort({createdAt: -1})
+  //   .skip((page -1 ) * perPage).limit(perPage);
+  //   // case 1 == page is 1, perPage is 10
+  //   // .skip ( 1 -1) == 0; 0*10 == 0 => skip(0) => not skipping anything
+  //   // .limit(10) => we are returning 10 items, not skipping anything, first 10 items are returned
+    
+  //   // case 2 == page is 1, perPage is 10
+  //   // .skip ( 2 -1) == 1; 1*10 == 10 => skip(10) => skipping 10 first item
+  //   // .limit(10) => we are returning 10 items, skipping the first page, second 10 items are returned
+    
+  //   // case 3 == page is 43, perPage is 10
+  //   // .skip ( 43 -1) == 42; 42*10 == 420 => skip(420) => skipping 420 items == skipping the first 420 pages
+  //   // .limit(10) => we are returning 10 items, skipping the first 42 pages, the 43rd items are returned
+  //   res.status(200).json({success: true, response: members})
+  // } catch (error) {
+  //   res.status(400).json({success: false, response: error})
+  // }
+
+  // V2 Mongo
+  const { page, perPage, numberPage = +page, numberPerPage = +perPage } = req.query;
+  try {
+  const members = await TechnigoMember.aggregate([
+      {
+        $sort: {
+          createdAt: -1
+        }
+      },
+      {
+        $skip: (numberPage -1) * numberPerPage
+      },
+      {
+        $limit: numberPerPage
+      }
+  ]);
+    res.status(200).json({success: true, response: members})
+  }
+  catch (error) {
+    res.status(400).json({success: false, response: error})
+  }
+});
+
+// http://localhost:8080/members?page=2&perPage=1
+
+app.delete("/members/:id", async (req, res) => {
+  const { id } = req.params;
+  // Delete removes entry and returns the deleted one 
+  // Remove removes entry and returns true/false
+  try {
+    const deleteMemeber = await TechnigoMember.findOneAndDelete({_id: id});
+    if (deleteMemeber) {
+      res.status(200).json({success: true, response: deleteMemeber})
+    } else {
+      res.status(404).json({success: false, response: "Not found"})
+    }
+  } catch (error) {
+    res.status(400).json({success: false, response: error})
+  }
+});
+
+/// Nesting Schemas
+const TestSchema = new mongoose.Schema({
+  testProperty: {
+    type: String
+  },
+  secondTestProperty: {
+    type: Number,
+    default: 8
+  }, 
+});
+const SuperSchema = new mongoose.Schema({
+  superTestProperty: {
+    type: String
+  },
+  superSecondTestProperty: {
+    type: Number,
+    default: 8
+  },
+  lalalala:  {
+    type: TestSchema,
+    required: true
+  }
+});
+
 ////////////////////////
 // Start the server
 app.listen(port, () => {
