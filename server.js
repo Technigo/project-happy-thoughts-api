@@ -27,6 +27,7 @@ const HappyThoughtSchema = new mongoose.Schema({
     required: true,
     minlenght: 4,
     maxlength: 140,
+    trim: true
   },
   counter: {
     type: Number,
@@ -51,15 +52,15 @@ app.post("/thoughts", async (req, res) => {
   }
 })
 
-app.patch("/thoughts/:id/counter", async (req, res) => {
-  const { id } = req.params
-  try {
-    const thoughtToAddLike = await HappyThought.findByIdAndUpdate(id, { $inc: { counter: 1 } })
-    res.status(200).json({ success: true, response: `One more like for ${thoughtToAddLike.message}` })
-  } catch (error) {
-    res.status(400).json({ success: false, response: error })
-  }
-})
+// app.patch("/thoughts/:id/counter", async (req, res) => {
+//   const { id } = req.params
+//   try {
+//     const thoughtToAddLike = await HappyThought.findByIdAndUpdate(id, { $inc: { counter: 1 } })
+//     res.status(200).json({ success: true, response: `One more like for ${thoughtToAddLike.message}` })
+//   } catch (error) {
+//     res.status(400).json({ success: false, response: error })
+//   }
+// })
 
 app.get("/thoughts/", async (req, res) => {
   const response = {
@@ -83,6 +84,26 @@ app.get("/thoughts/", async (req, res) => {
   }
 
 })
+
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params
+  try {
+    const thoughtToAddLike = await HappyThought.findByIdAndUpdate(thoughtId, { $inc: { counter: 1 } })
+    res.status(200).json({ success: true, response: `One more like for ${thoughtToAddLike.message}` })
+  } catch (error) {
+    res.status(400).json({ success: false, response: error })
+  }
+})
+
+// app.patch("/thoughts/:id/counter", async (req, res) => {
+//   const { id } = req.params
+//   try {
+//     const thoughtToAddLike = await HappyThought.findByIdAndUpdate(id, { $inc: { counter: 1 } })
+//     res.status(200).json({ success: true, response: `One more like for ${thoughtToAddLike.message}` })
+//   } catch (error) {
+//     res.status(400).json({ success: false, response: error })
+//   }
+// })
 
 // app.get("/thoughts", async (req, res) => {
 //   try {
