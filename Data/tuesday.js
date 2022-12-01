@@ -1,4 +1,4 @@
-/* import express, { response } from "express";
+import express, { response } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
@@ -112,4 +112,3 @@ app.patch("/members/:id/score", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
-*/
