@@ -10,4 +10,6 @@ Describe how you approached to problem, and what tools and techniques you used t
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Link to API: https://project-happy-thoughts-api-afgzgbi3gq-lz.a.run.app
+Link to frontend: https://loquacious-kitten-5cad9c.netlify.app/
+Link to frontend repo: https://github.com/uohman/project-happy-thoughts
