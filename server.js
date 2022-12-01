@@ -48,7 +48,7 @@ app.get("/", (req, res) => {
 
 app.get("/thoughts", async (req, res) => {
   try {
-    const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
+    const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec();
     res.status(200).json(thoughts)
   } catch (error) {
     res.status(400).json({ message: "Failed to load thoughts" })
@@ -62,6 +62,23 @@ app.post("/thoughts/", async (req, res) => {
     res.status(200).json({ newThought })
   } catch (error) {
     res.status(400).json({ error: "Thought cannot be sent" })
+  }
+});
+
+app.patch("/thoughts/:id/like", async (req, res) => {
+  const { id } = req.params
+  try {
+    const heartToUpdate = await Thought.findByIdAndUpdate(
+      id,
+      {
+        $inc: {
+          hearts: 1
+        }
+      },
+    );
+    res.status(200).json({ heartToUpdate })
+  } catch (error) {
+    res.status(400).json({ error: "Couldn't find thought by id" })
   }
 });
 
