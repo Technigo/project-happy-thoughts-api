@@ -1,4 +1,4 @@
-import express, { json } from "express";
+import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
@@ -22,47 +22,37 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
-/////////////////////////
 const HappyThoughtSchema = new mongoose.Schema({
   name: {
-    // Most important ine
     type: String,
-    // Forced to provide this value. Default value is "false"
-    required: true,
-    // New name will have to be different than all others in the database
-    unique: true,
-    // An array of all the allowed values. Only these five names are allowed in the database. Should not be used everywhere.
-    enum: ["Matilda", "Poya", "Petra", "Hanna", "Daniel"],
-  },
-  description: {
-    type: String,
-    minlength: 4,
     maxlength: 30,
-    // Removes unneccessary whitespaces
+  },
+  message: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 140,
     trim: true,
   },
   hearts: {
     type: Number,
-    // Initial value if none other is specified
     default: 0,
   },
   createdAt: {
     type: Date,
-    // new Date() will execute once - when we start the server. It is not being called when creating the person but when the database starts.
-    // default: new Date()
-    // onClick = {new Date()}
-    // IIFE - in the moment you call the function it it executed right away
-    // default: (() => new Date())()
-    // function is not called right away.
     default: () => new Date(),
   },
 });
 
 const HappyThought = mongoose.model("HappyThought", HappyThoughtSchema);
 
+// GET messages from database, display only 20 latest
 app.get("/thoughts", async (req, res) => {
   try {
-    const allThoughts = await HappyThought.find({});
+    const allThoughts = await HappyThought.find()
+      .sort({ createdAt: "desc" })
+      .limit(20)
+      .exec();
     res.status(201).json({
       success: true,
       response: allThoughts,
@@ -75,70 +65,30 @@ app.get("/thoughts", async (req, res) => {
   }
 });
 
-// Version 1
-// app.post("/thoughts", async (req, res) => {
-//   const { name, description } = req.body;
-//   console.log(req.body);
-//   try {
-//     const newThought = await new HappyThought({
-//       name: name,
-//       description: description,
-//     }).save();
-//     res.status(201).json({
-//       success: true,
-//       response: newThought,
-//     });
-//   } catch (error) {
-//     res.status(400).json({
-//       success: false,
-//       response: error,
-//     });
-//   }
-// });
+// POST messages
+app.post("/thoughts", async (req, res) => {
+  const { name, message } = req.body;
 
-//Version 2 POST with promises
-app.post("/thoughts", (req, res) => {
-  const { name, description } = req.body;
-
-  const newThought = new HappyThought({ name: name, description: description })
-    .save()
-    .then((data) => {
-      res.status(201).json({ success: true, response: data });
-    })
-    .catch((error) => {
-      res.status(400).json({ success: false, response: error });
+  try {
+    const newThought = await new HappyThought({
+      name: name,
+      message: message,
+    }).save();
+    res.status(201).json({
+      success: true,
+      response: newThought,
     });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: "Could not post new message",
+      response: error,
+    });
+  }
 });
 
-// Version 3 POST mongoose sytnax
-// app.post("/thoughts", (req, res) => {
-//   const { name, description } = req.body;
-
-//   const newThought = new HappyThought({
-//     name: name,
-//     description: description,
-//   }).save((error, data) => {
-//     if (error) {
-//       res.status(400).json({
-//         success: false,
-//         response: error,
-//       });
-//     } else {
-//       res.status(201).json({
-//         success: true,
-//         response: data,
-//       });
-//     }
-//   });
-// });
-
-// Update hearts <3
-// POST => create stuff, put thing into the database
-// GET => get info
-// PUT => replace in DB -> one person switch with another
-// PATCH => change/modify in DB
-
-app.patch("/thoughts/:id/hearts", async (req, res) => {
+// PATCH Update likes <3
+app.patch("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
   const thoughtToUpdate = await HappyThought.findByIdAndUpdate(id, {
     $inc: { hearts: 1 },
@@ -146,7 +96,7 @@ app.patch("/thoughts/:id/hearts", async (req, res) => {
   try {
     res.status(200).json({
       success: true,
-      response: `Thought ${thoughtToUpdate.name} has their hearts updated`,
+      response: `Message '${thoughtToUpdate.message}' got liked`,
     });
   } catch (error) {
     res.status(400).json({
@@ -156,7 +106,26 @@ app.patch("/thoughts/:id/hearts", async (req, res) => {
   }
 });
 
-/////////////////////////
+// DELETE removes entry and returns the removed one
+app.delete("/thoughts/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedThought = await HappyThought.findOneAndDelete({ _id: id });
+    if (deletedThought) {
+      res.status(200).json({
+        success: true,
+        response: deletedThought,
+      });
+    } else {
+      res.status(404).json({ success: false, response: "Not found" });
+    }
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      response: error,
+    });
+  }
+});
 
 // Start the server
 app.listen(port, () => {
