@@ -56,7 +56,7 @@ const Thought = mongoose.model("Thought", ThoughtSchema);
 // This will provide a response with the latest 20 created thoughts sorted descending using createdAt
 app.get("/thoughts", async (req, res) => {
   try {
-    const thoughts = await Thought.find({}).sort({ createdAt: "desc" }).limit(20)
+    const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20)
     res.status(200).json({ success: true, response: thoughts })
   } catch (err) {
     res.status(400).json({ success: false, response: err })
@@ -83,8 +83,95 @@ app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   } catch (err) {
     res.status(400).json({ success: false, response: err });
   }
-})
+});
 
+////
+// PAGINATION
+
+// app.get("/thoughts", async (req, res) => {
+// V1 mongoose //
+// const { page, perPage } = req.query;
+// try {
+//   const thoughts = await Thought.find({}).sort({ createdAt: -1 }).skip((page - 1) * perPage).limit(perPage);
+//   res.status(200).json({ success: true, response: thoughts });
+// } catch (err) {
+//   res.status(400).json({ success: false, response: err });
+// }
+
+// V2 mongo // Is going to work besides we have mongoose or not.
+//   const { page, perPage, numberPage = +page, numberPerPage = +perPage } = req.query;
+//   try {
+//     const thoughts = await Thought.aggregate([
+//       {
+//         $sort: {
+//           createdAt: -1
+//         }
+//       },
+//       {
+//         $skip: (numberPage - 1) * perPage
+//       },
+//       {
+//         $limit: numberPerPage
+//       }
+//     ]);
+//     res.status(200).json({ success: true, response: thoughts });
+//   } catch {
+//     res.status(400).json({ success: false, response: err });
+//   }
+//   // http://localhost:8080/members?page=2&perPage=1
+// });
+
+// Delete always by ID
+app.delete("/thoughts/:id", async (req, res) => {
+  // Delete removes entry and returns the removed one
+  // Remove removes entry and returns true/false
+  const { id } = req.params;
+  try {
+    const deletedThought = await Thought.findOneAndDelete({ _id: id });
+    if (deletedThought) {
+      res.status(200).json({ success: true, response: deletedThought });
+    } else {
+      res.status(404).json({ success: false, response: "Not found" });
+    }
+  } catch (err) {
+    res.status(400).json({ success: false, response: err });
+  }
+});
+
+// Nesting Schemas
+
+// const TestSchema = new mongoose.Schema({
+//   testProperty: {
+//     type: String,
+//   },
+//   secondTestProperty: {
+//     type: Number,
+//     default: 8
+//   }
+// });
+// const SuperSchema = new mongoose.Schema({
+//   superTestProperty: {
+//     type: String,
+//   },
+//   superSecondTestProperty: {
+//     type: Number,
+//     default: 8
+//   },
+//   lalala: {
+//     type: TestSchema,
+//     required: true
+//   }
+// });
+
+// const SuperModel = mongoose.model("SuperModel", SuperSchema);
+// const superObject = new SuperModel({
+//   superTestProperty: "superTestProperty",
+//   superSecondTestProperty: 9,
+//   lalala: {
+//     testProperty: "testProperty",
+//     secondTestProperty: ""
+//   }
+// });
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
