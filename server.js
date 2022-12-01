@@ -27,8 +27,8 @@ const Thought = mongoose.model('Thought', {
     minlength: 5,
     maxlength: 140
   },
-  heart: {
-    type: Boolean,
+  hearts: {
+    type: Number,
     default: 0,
   },
   createdAt: {
@@ -39,7 +39,7 @@ const Thought = mongoose.model('Thought', {
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Van 3!");
+  res.send("This is a happy thought API!");
 });
 
 // The post request - to read from database
@@ -51,10 +51,10 @@ app.get('/thoughts', async (req, res) =>{
 // To add items to the database
 app.post('/thoughts', async(req, res) =>{
   // Collect the information sent by the client to our API 
-  const {message, heart} = req.body;
+  const {message , hearts} = req.body;
 
   // Use our mongoose model to create the database entry - to save
-  const thought = new Thought({message, heart})
+  const thought = new Thought({message, hearts})
   try{
     const savedThought = await thought.save();
   res.status(201).json(savedThought);
@@ -69,3 +69,14 @@ app.post('/thoughts', async(req, res) =>{
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
+
+//PATCH => change/modify individual stuff
+app.patch("/thoughts/:id/like", async (req, res) => {
+  const { id } = req.params;
+  try{
+  const likeToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}})
+  res.status(200).json({success: true, response:`Like ${likeToUpdate.id} has their like updated`})
+  } catch (error) {
+    res.status(400).json({success: false, response: error});
+  }
+})

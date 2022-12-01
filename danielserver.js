@@ -101,6 +101,96 @@ app.patch("/members/:id/score", async (req, res) => {
   }
 })
 
+//// Pagination ////
+app.get("/members", async (req, res) => {
+  // const members = await TechnigoMember.find({})
+  //V1 mongoose
+  const {page, perPage} = req.query;
+  try{
+    const members = await TechnigoMember.find({}).sort({createdAt: -1}).skip((page -1) * perPage).limit(perPage);
+    //case 1 page is 1, perPage is 10
+    // skip(1-1) == 0; 0*10 == 0 => skip(0) => not skipping anything; .limit(10) => we are returning 10 items, not skipping anything
+    //first 10 items are returned
+
+    //case 2 page = 2, perPage = 10
+    // skip(2-1) == 0; 0*10 == 0 => skip(10) => skipping the first page; .limit(10) => we are returning 10 items, skipping the first page
+    //second 10 items are returned
+
+    //case 3 page = 43, perPage = 10
+    // skip(43-1) == 42; 42*10 == 420 => skip(420) => skipping 420 items; .limit(10) => we are returning 10 items, skipping the first 42 pages, the 43rd 10 items are returned
+    //second 10 items are returned
+    res.status(200).json({success: true, response: members});
+  } catch (error) {
+    res.status(400).json({success: false, response: error})
+  }
+
+  //Mongoose
+  const { page, perPage, numberPage = +page, numberPerPage = +perPage } = req.query;
+  try {
+  const members = await TechnigoMember.aggregate([
+    {
+      $sort: {
+        createdAt: -1
+      }
+    },
+    {
+      $skip: (page - 1) * numberPage
+    },
+    {
+      $limit: numberPerPage
+    }
+  ])
+  res.status(200).json({success: true, response: members});
+  } 
+  catch (error) {
+    res.status(400).json({success: false, response: error})
+  }
+});
+
+//http://localhost:8080/members?page=2&perPage=1
+
+app.delete("/members/:id"), async (req, res) => {
+  const { id } = req.params
+  // Delete removes entry and returns the removed one
+  // Remove removes entry and return true/false
+  try{
+  const deletedMember = await TechnigoMember.findOneAndDelete({_id: id});
+  if (deletedMember) {
+  res.status(200).json({success: true, response: deletedMember})
+  } else {
+  res.status(404).json({success: false, response: "not found"})  
+  }
+  } 
+  } catch (error) {
+  res.status(400).json({success: false, response: error})  
+  }
+}); 
+
+// Nesting Schemas
+const SuperSchema = new mongoose.Schema({
+  superTestProperty: {
+    type: String
+  },
+  superSecondTestProperty: {
+    type: Number,
+    default: 8
+  },
+  lalala: {
+    type: TestSchema,
+    required:
+  }
+});
+
+const SuperModel = mongoose.model("SuperModel", SuperSchema)
+const superObject = new SuperModel({
+  superTestProperty: "superTestProperty",
+  superSecondTestProperty: 9,
+  lalala: {
+    testProperty: "testProperty",
+    secondTestProperty: 10
+  }
+})
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
