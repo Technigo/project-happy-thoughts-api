@@ -14,7 +14,6 @@ const Thought = mongoose.model('Thought', {
   createdAt: {
     type: Date,
     default: () => new Date()
-    // default: (() => new Date())() -- IIFE - in the moment that you declare the function it is called/executed right away.
   }, 
   hearts: {
     type: Number,
@@ -34,7 +33,14 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.json({
+    ResponseMessage: "Welcome to Jessika's Happy Thoughts-API. With the use of this API, you can post happy thoughts (POST), view happy thoughts (GET) and like happy thoughts (PATCH)",
+    routes: {
+      "GET: /thoughts": "displays the 20 (if there are 20) most recent happy thoughts in the database",
+      "POST: /thoughts": "post a happy thought (text) to the database in JSON-format",
+      "PATCH: /thoughts/:id/hearts": "like a happy thought"
+    }
+  });
 });
 
 //Get-request
