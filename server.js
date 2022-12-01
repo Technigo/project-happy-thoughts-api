@@ -40,7 +40,9 @@ app.get("/", (req, res) => {
   const HappyThoughtsApi = {
     Welcome: 'Hi! This is the happy-thoughts-API from https://happy-thoughts-antonella.netlify.app/',
     Routes: [{
-      "/thoughts": 'Get all Happy Thoughts.'
+      "/thoughts": 'Get all Happy Thoughts.',
+      "/thoughts/{message}": 'Post you thought.',
+      "/thoughts/:id/like": 'Patch your like to a thought.'
     }]
   }
   res.send(HappyThoughtsApi);
@@ -69,7 +71,7 @@ app.patch("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params
   try {
     const heartToUpdate = await Thought.findByIdAndUpdate(
-      id,
+      {_id: id},
       {
         $inc: {
           hearts: 1
