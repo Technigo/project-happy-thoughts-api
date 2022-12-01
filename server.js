@@ -6,22 +6,27 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-tho
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-const Thought = mongoose.model('Thought', {
-  text: {
+const ThoughtSchema = new mongoose.Schema ({
+  message: {
     type: String,
     required: true,
-    minlength: 5
+    minlength: 5,
+    maxlenght: 140,
+    trim: true
   },
-  complete: {
-    type: Boolean,
-    default: false
+  hearts: {
+    type: Number,
+    default: 0
   },
   createdAt: {
     type: Date,
     default: Date.now
+    // default: () => new Date()
   }
-
 });
+
+const Thought = mongoose.model("Thought", ThoughtSchema);
+
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
 // PORT=9000 npm start
@@ -39,7 +44,7 @@ app.get("/", (req, res) => {
     "Welcome to this Happy thoughts API.❤️",
     Routes: [
       { 
-        "/thought": "Show all posted happy thoughts",
+        "/thoughts": "Show all posted happy thoughts",
       }
     ],
   });
@@ -51,18 +56,39 @@ app.get('/thoughts', async (req, res) => {
 });
 
 app.post('/thoughts', async (req, res) => {
+  const {message} = req.body;
+  try {
+    const newThought = await new Thought({message: message}).save();
+    res.status(201).json({success: true, response: newThought});
+  } catch(error) {
+    res.status(400).json({success: false, response: error});
+  }
+});
+
+/* app.post('/thoughts', async (req, res) => {
   // Retrieve the information sent by the client to our API endpoint
-  const {text, complete} = req.body;
+  const {message} = req.body;
 
   // Use our mongoose model to create the database entry
-  const thought = new Thought({text, complete});
+  const thought = new Thought({message});
 
   try {
     // Success
-    const savedThought = await  thought.save();
-    res.status(201).json(savedThought);
+    const newThought = await thought.save();
+    res.status(201).json(newThought);
   } catch (err) {
     res.status(400).json({message: 'Could not save thought to the Database', error: err.errors});
+  }
+}); */
+
+// PATCH => change/modify stuff
+app.patch("thoughts/:thoughtId/like", async (req, res) => {
+  const { id } = req.params;
+  try {
+   const addLike = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}});
+   res.status(200).json({success: true, response: addLike.message});
+  } catch (error) {
+   res.status(400).json({success: false, response: error});
   }
 });
 
