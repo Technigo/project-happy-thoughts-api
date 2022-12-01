@@ -24,7 +24,8 @@ app.get('/', (req, res) => {
 const ThoughtSchema = new mongoose.Schema({
   name: {
     type: String,
-    default: 'Thought'
+    default: 'Thought',
+    enum: 'Thought'
   },
   message: {
     type: String,
@@ -49,7 +50,7 @@ app.post('/thoughts', async (req, res) => {
   console.log(req.body);
   const { message } = req.body;
   try {
-    const newThought = await new Thought({ message }).save();
+    const newThought = await new Thought({ message, hearts: 0 }).save();
     res.status(201).json({
       success: true,
       response: newThought
