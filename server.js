@@ -50,7 +50,7 @@ app.get("/thoughts", async (req, res) => {
       .sort({ createdAt: 'desc' }).limit(20).exec()
     res.status(200).json(thoughts);
   } catch (error) {
-    res.status(400).json({ success: false, response: "Sorry, something went wrong"  });
+    res.status(400).json({ success: false, response: "Sorry, something went wrong."  });
   }
 });
 
