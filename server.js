@@ -44,7 +44,7 @@ app.get("/", (req, res) => {
     "Welcome to this Happy thoughts API.❤️",
     Routes: [
       { 
-        "/thoughts": "Show all posted happy thoughts",
+        "/thoughts": "Send a GET request to show all posted happy thoughts",
       }
     ],
   });
