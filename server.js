@@ -26,7 +26,7 @@ const ThoughtSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 5,
-    maxlenght: 140,
+    maxlength: 140,
   },
   hearts: {
     type: Number,
@@ -57,29 +57,6 @@ app.post ('/thoughts', async (req, res) => {
   }
 })
 
-// app.post("/members", (req, res) => {
-//   const {name, description} = req.body;
-
-//     const newMember = new TechnigoMember({name: name, description: description}).save()
-//     .then (data => {
-//         res.status(201).json({success: true, response: data});
-//       }).catch(error => {
-//       res.status(400).json({success: false, error: error})
-//     })
-// });
-
-// app.post("/members", (req, res) => {
-//   const {name, description} = req.body;
-
-//     const newMember = new TechnigoMember({name: name, description: description}).save((error, data) => {
-//       if(error) {
-//         res.status(400).json({success: false, response: error});
-//       } else {
-//         res.status(201).json({success: true, response: newMember});
-//       } 
-//     });
-// });
-
 app.patch("/thoughts/:id/heart", async (req, res) => {
   const { id } = req.params;
   try {
@@ -89,7 +66,7 @@ app.patch("/thoughts/:id/heart", async (req, res) => {
    res.status(400).json({success: false, response: error});
   }
 });
-///////////////
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
