@@ -86,22 +86,16 @@ app.post('/thoughts', async (req, res) => {
 })
 
 // Update like by thought id
-app.patch("/thoughts/:id/hearts", async (req, res) => {
-    const { id } = req.params;
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+    const {thoughtId} = req.params;
     try {
-        const heartsUpdated = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}});
-        res.status(200).json({
-         response: heartsUpdated,
-         success: true
-    });
-    } catch (error) {
-        res.status(400).json({
-         message: "Couldn't find any post with that ID",
-         response: error,
-         success: false,  
-    });
-    }
- });
+    const thoughtToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}});
+    res.status(200).json({sucess: true, response: `Thought ${thoughtToUpdate.id} has their likes updated`});
+  } catch (error) {
+    res.status(400).json({success: false, response: "id not found", error: error})
+  }
+  });
+  
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
