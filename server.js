@@ -71,8 +71,14 @@ app.post('/thoughts/:id/like', async (req, res) => {
     { new: true }
   );
   try {
-    console.log(thoughtToUpdate);
-    res.status(200).json(thoughtToUpdate);
+    if (thoughtToUpdate) {
+      console.log(thoughtToUpdate);
+      res.status(200).json(thoughtToUpdate);
+    } else {
+      res
+        .status(404)
+        .json({ success: false, response: 'Thought was not found' });
+    }
   } catch (error) {
     res.status(400).json({
       success: false,
