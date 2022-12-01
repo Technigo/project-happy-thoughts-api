@@ -34,12 +34,15 @@ app.get("/", (req, res) => {
 });
 
 const ThoughtSchema = new mongoose.Schema({
+  userName: {
+    type: String,
+  },
   message: {
     type: String,
     required: true,
     minlength: 5,
     maxlength: 140,
-    trim: true,
+    trim: true
   },
   hearts: {
     type: Number,
@@ -56,18 +59,19 @@ const Thought = mongoose.model("Thought", ThoughtSchema);
 // This will provide a response with the latest 20 created thoughts sorted descending using createdAt
 app.get("/thoughts", async (req, res) => {
   try {
-    const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20)
+    const thoughts = await Thought.find({}).sort({ createdAt: "desc" }).limit(20)
     res.status(200).json({ success: true, response: thoughts })
   } catch (err) {
     res.status(400).json({ success: false, response: err })
   }
 });
 
-// This will allow to post a message if it pass the validation from the Schema
+// This will allow to post a message if it pass the validation from the Schema.
+// It also makes it possible to add a username. It has to be unique
 app.post("/thoughts", async (req, res) => {
-  const { message } = req.body;
+  const { message, userName } = req.body;
   try {
-    const newThought = await new Thought({ message: message }).save();
+    const newThought = await new Thought({ message: message, userName: userName }).save();
     res.status(201).json({ success: true, response: newThought });
   } catch (err) {
     res.status(400).json({ success: false, response: err })
