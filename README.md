@@ -1,13 +1,20 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
-
+This week we created a backend for our previous frontend project: https://dynamic-puffpuff-f7c490.netlify.app/
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+The problem was to make our own backend with routes for the previous frontend project "Happy Thoughts"
+We did diffrent routes depending on what the "user" does,
+IF the wanted to add a thought,
+or like a posted thought
+Tech used
+MongoDB -> moongose -> Google cloud -> React -> API - Javascript
+
+If I had more time:
+I would add more routes that sortet 
+example: sort by most liked
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Backend: https://project-happy-thoughts-api-nczig4g6cq-lz.a.run.app/
+Frontend: https://dynamic-puffpuff-f7c490.netlify.app/
