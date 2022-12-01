@@ -83,7 +83,7 @@ app.post('/thoughts/:id/like', async (req, res) => {
 
 app.get('/thoughts', async (req, res) => {
   try {
-    const thoughts = await Thought.find({}).sort({ createdAt: -1 });
+    const thoughts = await Thought.find({}).sort({ createdAt: -1 }).limit(20);
 
     res.status(200).json(thoughts);
   } catch (error) {
