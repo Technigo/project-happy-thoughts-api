@@ -40,7 +40,7 @@ app.get("/", (req, res) => {
     {"Hello":  "This is a backend built for: https://dynamic-puffpuff-f7c490.netlify.app/"},
     {"/": "start page for backend api : https://project-happy-thoughts-api-nczig4g6cq-lz.a.run.app/"},
     {"/thoughts": "Displays the latest 20 thoughts. Example: https://project-happy-thoughts-api-nczig4g6cq-lz.a.run.app/thoughts"},
-    {"/thoughts/:id/hearth": "creates a route where the user where we store how many likes the thought, ex: https://project-happy-thoughts-api-nczig4g6cq-lz.a.run.app/63863c0713c6c039df9e3b22/hearth"},
+    {"/thoughts/:id/hearth": "route where we store how many likes (hearth) a thought has, and we can add likes thats also stored, ex: https://project-happy-thoughts-api-nczig4g6cq-lz.a.run.app/63863c0713c6c039df9e3b22/hearth"},
   ]);
 });
 
