@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 const MessageSchema = new mongoose.Schema({
   message: {
     type: String,
-    minlength: 1,
+    minlength: 5,
     maxlength: 140,
     required: true
   },
@@ -51,7 +51,7 @@ app.get("/", (req, res) => {
 
 app.get("/messages", async (req, res) => {
   try {
-    const messages = await Message.find({});
+    const messages = await Message.find().sort({createdAt: -1}).limit(20).exec();
     res.status(201).json({
       success: true, 
       response: messages
@@ -80,7 +80,7 @@ app.post("/messages", async (req, res) => {
   }
 })
 
-app.patch("/messages/:id/like", async (req, res) => {
+app.post("/messages/:id/like", async (req, res) => {
   const { id } = req.params;
   try {
    await Message.findByIdAndUpdate(id, {$inc: {like: 1}});
