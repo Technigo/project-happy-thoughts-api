@@ -36,6 +36,7 @@ app.get("/", (req, res) => {
 const ThoughtSchema = new mongoose.Schema({
   userName: {
     type: String,
+    default: "anonymous"
   },
   message: {
     type: String,
