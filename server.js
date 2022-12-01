@@ -35,7 +35,6 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  "Hello, this is a backend built for: https://dynamic-puffpuff-f7c490.netlify.app/"
   res.send([
     {"Hello":  "This is a backend built for: https://dynamic-puffpuff-f7c490.netlify.app/"},
     {"/": "start page for backend api : https://project-happy-thoughts-api-nczig4g6cq-lz.a.run.app/"},
