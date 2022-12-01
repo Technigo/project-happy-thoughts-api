@@ -73,12 +73,12 @@ app.post("/thoughts", async (req, res) => {
 /* const newThought = await new Thought({text: text , like: like, createdAt: createdAt }).save();
 const { text, like, createdAt } = req.body; */
 
-app.post("/thoughts/:thoughtId/like", async (req, res) => {
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
   try {
    const thoughtToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {heart: 1}}/* , {new: true} */);
     if (thoughtToUpdate) {
-   res.status(200).json({success: true, response: `Thought ${thoughtToUpdate.id} has been like'ed`});
+   res.status(200).json({success: true, response: `Thought ${thoughtToUpdate.thoughtId} has been like'ed`});
   } else {
     res.status(404).json({success: false, error: 'Thought not found'})
   }
