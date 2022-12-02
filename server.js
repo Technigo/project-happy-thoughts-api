@@ -54,7 +54,7 @@ app.get("/thoughts", async (req, res) => {
   }
 });
 
-//Post request
+//Post Request
 app.post("/thoughts", async (req, res) => {
   // Message which created by users
   const { description } = req.body;
@@ -73,7 +73,25 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
-//update
+// Delete Post
+app.delete("/thoughts", async (req, res) => {
+  const { id } = req.params;
+  const { description } = req.body;
+
+  const thought = new Thought({ message: description });
+  try {
+    const deleteThought = await thought.findOneAndDelete({ _id: id });
+    if (deleteThought) {
+      res.status(200).json({ success: true, response: deleteThought });
+    } else {
+      res.status(404).json({ success: false, response: "Can not delete it" });
+    }
+  } catch (error) {
+    res.status(400).json({ success: false, response: error });
+  }
+});
+
+//Update Post
 app.patch("/thoughts/:id", async (req, res) => {
   const { id } = req.params;
   console.log(req.body);
@@ -102,13 +120,34 @@ app.patch("/thoughts/:id/like", async (req, res) => {
       { _id: id },
       { hearts: addHearts.hearts + 1 }
     );
-    console.log(updateThoughts);
+    // console.log(updateThoughts);
     if (updateThoughts) {
       res.status(200).json({ success: true, response: updateThoughts });
     } else {
       res.status(404).json({ success: false, response: "Thought Not Found" });
     }
-  } catch (error) {}
+  } catch (error) {
+    res.status(400).json({ success: false, response: error });
+  }
+});
+
+// Delete like
+app.delete("/thoughts/:id/like", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleteHearts = await Thought.findById({ _id: id });
+    const updateHearts = await Thought.findOneAndDelete(
+      { _id: id },
+      { hearts: deleteHearts.hearts - 1 }
+    );
+    if (updateHearts) {
+      res.status(200).json({ success: true, response: updateLike });
+    } else {
+      res.status(404).json({ success: false, response: "Can not delete" });
+    }
+  } catch (error) {
+    res.status(400).json({ success: false, response: error });
+  }
 });
 
 // Start the server
