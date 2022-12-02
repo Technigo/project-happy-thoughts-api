@@ -25,3 +25,6 @@ https://project-happy-thoughts-api-d6aenh5q2a-lz.a.run.app/
 View it when used in a frontend:
 https://happy-thoughts.brucette.com/
 
+Frontend repo: 
+https://github.com/brucette/project-happy-thoughts
+

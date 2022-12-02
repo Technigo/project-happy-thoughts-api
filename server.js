@@ -7,7 +7,7 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-tho
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-// Define how the structure of the data will be:
+// Defines how the structure of the data will be:
 const ThoughtSchema = new mongoose.Schema({
   message: {
     type: String,
@@ -48,9 +48,8 @@ app.use((req, res, next) => {
   }
 });
 
-// Start defining your routes here
+/// Lists the enpoints available:
 app.get("/", (req, res) => {
-  // Lists the enpoints available:
   res.json(listEndpoints(app));
 });
 
@@ -75,11 +74,11 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
-// Increasing the like button
+// Increasing the like/hearts count
 app.patch("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
   try {
-    const updatedHeart = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}});
+    const updatedHeart = await Thought.findByIdAndDelete(id, {$inc: {hearts: 1}});
     res.status(200).json({ message: `Thought ${updatedHeart.id} has their likes updated` });
   } catch {
     res.status(400).json({ error: 'Thought not found' });
