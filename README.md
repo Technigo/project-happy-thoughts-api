@@ -2,12 +2,14 @@
 
 Replace this readme with your own information about your project.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+The assignment was to build an API to go with my previous frontend project "Happy thoughts".
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Using a mongoose model, I created GET, POST and PATCH endpoints for the user to allow him/her to view, post and like messages.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+API: https://project-happy-thoughts-api-2su4jgkxaa-lz.a.run.app
+Frontend: https://happy-thoughts-jessika.netlify.app/ (see code here: https://github.com/jessikalind/project-happy-thoughts)
+
