@@ -5,8 +5,8 @@ This newly created API was then tested out in the old project Happy Thoughts fro
 
 Routes:
 
-/thoughts (Send a GET request to show all posted happy thoughts or send a POST request to post a happy thought.)
-/thoughts/:thoughtId/like (Add a heart/like to a message.)
+- /thoughts (Send a GET request to show all posted happy thoughts or send a POST request to post a happy thought.)
+- /thoughts/:thoughtId/like (Add a heart/like to a message.)
 
 ## The problem
 - How to use POST requests to send data to your API
@@ -16,6 +16,6 @@ Routes:
 - How to build an API which works well with an existing frontend
 
 ## View it live
-Link to API: https://project-happy-thoughts-api-afgzgbi3gq-lz.a.run.app
-Link to frontend live: https://loquacious-kitten-5cad9c.netlify.app/
-Link to frontend repo: https://github.com/uohman/project-happy-thoughts
+- Link to API: https://project-happy-thoughts-api-afgzgbi3gq-lz.a.run.app
+- Link to frontend live: https://loquacious-kitten-5cad9c.netlify.app/
+- Link to frontend repo: https://github.com/uohman/project-happy-thoughts

@@ -82,7 +82,7 @@ app.post('/thoughts', async (req, res) => {
 }); */
 
 // PATCH => change/modify stuff
-app.patch("thoughts/:thoughtId/like", async (req, res) => {
+/* app.patch("thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
   try {
    const thoughtToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}});
@@ -90,6 +90,16 @@ app.patch("thoughts/:thoughtId/like", async (req, res) => {
   } catch (error) {
    res.status(400).json({success: false, response: error});
   }
+}); */
+
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+  const {thoughtId} = req.params;
+  try {
+  const thoughtToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}});
+  res.status(200).json({sucess: true, response: `Thought ${thoughtToUpdate.id} was liked`});
+} catch (error) {
+  res.status(400).json({success: false, response: "id not found", error: error})
+}
 });
 
 // Start the server
