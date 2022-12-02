@@ -23,22 +23,16 @@ mongoose.Promise = Promise;
 }); */
 
 const PostsSchema = new mongoose.Schema({
-	text: {
+	message: {
 		type: String,
-		required: true, //set to true will be saved to the database
+		//required: true, //set to true will be saved to the database
 		unique: false, // new text will need to be different if set to true
 		// enum:[] //all the allowed values, has to be one of the values that are in the array.
-	},
-	complete: {
-		type: Boolean,
-		default: false,
-	},
-	description: {
-		type: String,
 		minlength: 4,
 		maxlength: 30,
+		trim: true,
 	},
-	score: {
+	hearts: {
 		type: Number,
 		default: 0,
 	},
@@ -61,7 +55,15 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-	res.send('hello world');
+	res.send({
+		Message: 'This API is dedicated to Technigo Project Happy Thoughts',
+		Routes: [
+			{
+				'/posts': 'Request the latest 20 posts',
+				'/posts/:id/heart': 'Storing how many times heart has been updated',
+			},
+		],
+	});
 });
 
 app.get('/posts', async (req, res) => {
