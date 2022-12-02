@@ -35,6 +35,8 @@ const ThoughtsSchema = new mongoose.Schema({
 
 const Thoughts = mongoose.model("Thoughts", ThoughtsSchema);
 
+// * ROUTES *
+
 // Fetching the thoughts and ordering them in a descending order, with a maximum of 20 thoughts.
 app.get("/thoughts", async (req, res) => {
   const thoughts = await Thoughts.find().sort({createdAt: "desc"}).limit(20).exec();
