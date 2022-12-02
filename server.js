@@ -1,4 +1,4 @@
-import express, { response } from "express";
+import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
@@ -63,8 +63,6 @@ app.get('/thoughts', async (req, res) => {
   res.status(400).json({success: false, response: error})
 }
 });
-
-
 
 app.post("/thoughts", async (req, res) => {
   const { name, message } = req.body;
