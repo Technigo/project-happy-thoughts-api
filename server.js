@@ -28,17 +28,6 @@ const ThoughtSchema  =  new mongoose.Schema({
 
 const Thought = mongoose.model('Thought', ThoughtSchema)
 
-/*
-// if connection to server is down, show below and don't move to routes
-app.use((req, res, next) => {
-    if (mongoose.connection.readyState === 1) {
-      next()
-    } else {
-      res.status(503).json({ 
-        status_code: 503,
-        error: "Server unavailable" })
-    }
-})*/
 
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
@@ -50,9 +39,28 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+// if connection to server is down, show below and don't move to routes
+app.use((req, res, next) => {
+    if (mongoose.connection.readyState === 1) {
+      next()
+    } else {
+      res.status(503).json({ 
+        status_code: 503,
+        error: "Server unavailable" })
+    }
+})
+
 // ROUTES
+
+app.get("/", (req, res) => {
+    res.json({
+      ResponseMessage: "Welcome to Our Happy Thoughts-API! Se live version at https://our-happy-thoughts.netlify.app/ 🌞",
+    });
+  });
+
 // Lists all endpoints available
-app.get('/', (req, res) => {
+app.get('/endpoints', (req, res) => {
     res.send(listEndpoints(app))
 })
 
