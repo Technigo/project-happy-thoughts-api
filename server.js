@@ -63,20 +63,18 @@ app.post('/thoughts', async(req, res) =>{
   }
 })
 
-// app.post(thoughts/:thoughtId/like) //for likes
+//PATCH => change/modify individual stuff
+app.patch("/thoughts/:id/like", async (req, res) => {
+  const { id } = req.params;
+  try{
+    const likeToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}})
+    res.status(200).json({success: true, response:`Like ${likeToUpdate.id} has their like updated`})
+  } catch (error) {
+    res.status(400).json({success: false, response: error});
+  }
+})
 
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
-
-//PATCH => change/modify individual stuff
-app.patch("/thoughts/:id/like", async (req, res) => {
-  const { id } = req.params;
-  try{
-  const likeToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}})
-  res.status(200).json({success: true, response:`Like ${likeToUpdate.id} has their like updated`})
-  } catch (error) {
-    res.status(400).json({success: false, response: error});
-  }
-})
