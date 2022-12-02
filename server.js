@@ -27,9 +27,7 @@ const Thought = mongoose.model('Thought', {
   }
 
   })
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
+
 const port = process.env.PORT || 8080;
 const app = express();
 
@@ -48,8 +46,7 @@ app.get("/thoughts", async (req, res) => {
   res.json(thoughts);
 })
 
-//expects a json body with {"message" : "Random thought"}. If valid, thought should
-//be saved. Response (res) should include the saved object, including it's _id.
+
 app.post("/thoughts", async (req, res) => {
   // retrieve info sent by client to api endpoint
   const {message} = req.body;
@@ -68,24 +65,15 @@ app.post("/thoughts", async (req, res) => {
   }
 })
 
-//This endpoint doesn't require a JSON body. Given a valid thought id in the URL, 
-//the API should find that thought, and update its hearts property to add one heart.
-app.post("/thoughts/:thoughtId/like", async (req, res) => {
-  const {id} = req.body;
-   try {
-    const likedThought = await Thought.findById(id).exec();
-    likedThought.likes +=1;
-    likedThought.save()
-    res.status(201).json(likedThought)
-   }
-   catch (err) {
-    res.status(400).json({
-      message: 'Could not like selected thought',
-      error: err.errors
-    })
-   }
-
-})
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+  try {
+   const updatedLikes = await Thought.findByIdAndUpdate(thoughtId, {$inc: {likes: 1}});
+   res.status(200).json({success: true, response: `Likes updated for id ${updatedLikes._id}`});
+  } catch (error) {
+   res.status(400).json({success: false, response: error});
+  }
+});
 
 
 // Start the server
