@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
   res.send("Happy thoughts on repeat!");
 });
 
-const HappyThoughtSchema = new mongoose.Schema({
+const ThoughtSchema = new mongoose.Schema({
   message: {
     type: String,
     required: true,
@@ -29,7 +29,7 @@ const HappyThoughtSchema = new mongoose.Schema({
     maxlength: 140,
     trim: true
   },
-  counter: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -39,36 +39,36 @@ const HappyThoughtSchema = new mongoose.Schema({
   }
 })
 
-const HappyThought = mongoose.model("HappyThought", HappyThoughtSchema)
+const Thought = mongoose.model("Thought", ThoughtSchema)
 
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body
   console.log(req.body)
   try {
-    const newThought = await new HappyThought({ message: message }).save()
+    const newThought = await new Thought({ message: message }).save()
     res.status(201).json({ success: true, response: newThought })
   } catch (error) {
     res.status(400).json({ success: false, response: error })
   }
 })
 
-// app.patch("/thoughts/:id/counter", async (req, res) => {
+// app.patch("/thoughts/:id/heart", async (req, res) => {
 //   const { id } = req.params
 //   try {
-//     const thoughtToAddLike = await HappyThought.findByIdAndUpdate(id, { $inc: { counter: 1 } })
+//     const thoughtToAddLike = await HappyThought.findByIdAndUpdate(id, { $inc: { heart: 1 } })
 //     res.status(200).json({ success: true, response: `One more like for ${thoughtToAddLike.message}` })
 //   } catch (error) {
 //     res.status(400).json({ success: false, response: error })
 //   }
 // })
 
-app.get("/thoughts/", async (req, res) => {
+app.get("/thoughts", async (req, res) => {
   const response = {
     success: true,
     body: {}
   }
   try {
-    response.body = await HappyThought.find()
+    response.body = await Thought.find()
 
     res.status(200).json({
       success: true,
@@ -88,17 +88,17 @@ app.get("/thoughts/", async (req, res) => {
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params
   try {
-    const thoughtToAddLike = await HappyThought.findByIdAndUpdate(thoughtId, { $inc: { counter: 1 } })
+    const thoughtToAddLike = await Thought.findByIdAndUpdate(thoughtId, { $inc: { hearts: 1 } })
     res.status(200).json({ success: true, response: `One more like for ${thoughtToAddLike.message}` })
   } catch (error) {
     res.status(400).json({ success: false, response: error })
   }
 })
 
-// app.patch("/thoughts/:id/counter", async (req, res) => {
+// app.patch("/thoughts/:id/heart", async (req, res) => {
 //   const { id } = req.params
 //   try {
-//     const thoughtToAddLike = await HappyThought.findByIdAndUpdate(id, { $inc: { counter: 1 } })
+//     const thoughtToAddLike = await HappyThought.findByIdAndUpdate(id, { $inc: { heart: 1 } })
 //     res.status(200).json({ success: true, response: `One more like for ${thoughtToAddLike.message}` })
 //   } catch (error) {
 //     res.status(400).json({ success: false, response: error })
