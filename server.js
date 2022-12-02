@@ -37,13 +37,20 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Here will be a list of endpoints");
+  res.send({
+    Message:"Welcome to Happy Thoughts API! Here is a list of accessible endpoints.", 
+    endpoints: 
+      {'GET': '/thoughts to get the 20 latest thoughs from the database',
+      'POST' : '/thougths to post new message',
+      'PATCH' : '/thougths/:thoughtId/like to like a posted message'
+     }
+    });
 });
 
 //should return a maximum of 20 thoughts with the most recent at the top
 app.get("/thoughts", async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
-  res.json(thoughts);
+  res.status(200).json({thoughts});
 })
 
 
