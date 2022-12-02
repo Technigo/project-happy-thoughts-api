@@ -23,7 +23,7 @@ const ThoughtsSchema = new mongoose.Schema({
   }
 })
 
-const Thought = mongoose.model("THouhgt", ThoughtsSchema);
+const Thought = mongoose.model("Thouhgt", ThoughtsSchema);
 
 /*
 const Note = mongoose.model('Note', {
