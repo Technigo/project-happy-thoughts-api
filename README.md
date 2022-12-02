@@ -1,7 +1,5 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
 The assignment was to build an API to go with my previous frontend project "Happy thoughts".
 
 ## The problem
