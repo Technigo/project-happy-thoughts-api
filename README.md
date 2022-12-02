@@ -1,13 +1,20 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+To Build our own API, with Express and MongoDB, which includes GET/POST and PATCH request endpoints to return data and to create/edit data.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
-
+Using Happy thoughts project as a frontend to connect to bilt backend.
+In the Happy Thoughts project week 7 we built a frontend in React which uses an API to store thoughts in chatboard.
+Routes:
+/thougths - use either GET or POST to see a list of thoughts or post a new one.
+/thoughts/:thoughtId/like - increases the number of hearts/likes on a post.
+The GET request should only return the latest 20 results.
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I have started from the lessons, one part was to re open the "old" Happy-thoughts-project and updat myself on the project to be able to use it as frontend. which endpoints do I have to use etc. 
+I used PATCH request to find by Id and update the harts/likes for that thought.
+We are to validate the data and ensure that the database contains "good" data.
+To deploy the database and make the connection to frontend project.
 
 ## View it live
 Frontend netlify link:  https://happy-thought-nina-berggren.netlify.app/
-Backend google Cloud Link:
+Backend Google Cloud, API Link: https://project-happy-thoughts-api-cslqliynka-lz.a.run.app
