@@ -7,9 +7,10 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
 const Thought = mongoose.model('Thought', {
-  text: {
+  message: {
     type: String,
-    minlength: 5
+    minlength: 5,
+    maxlength: 140
   }, 
   createdAt: {
     type: Date,
@@ -37,8 +38,8 @@ app.get("/", (req, res) => {
     ResponseMessage: "Welcome to Jessika's Happy Thoughts-API. With the use of this API, you can post happy thoughts (POST), view happy thoughts (GET) and like happy thoughts (PATCH)",
     routes: {
       "GET: /thoughts": "displays the 20 (if there are 20) most recent happy thoughts in the database",
-      "POST: /thoughts": "post a happy thought (text) to the database in JSON-format",
-      "PATCH: /thoughts/:id/hearts": "like a happy thought"
+      "POST: /thoughts": "post a happy thought (message) to the database in JSON-format",
+      "PATCH: /thoughts/:id/like": "like a happy thought"
     }
   });
 });
@@ -51,8 +52,8 @@ app.get("/thoughts", async (req, res) => {
 
 //Post-request
 app.post("/thoughts", async (req, res) => {
-  const {text} = req.body
-  const thought = new Thought({text})
+  const {message} = req.body
+  const thought = new Thought({message})
 
   try {
     const savedThought = await thought.save()
@@ -63,7 +64,7 @@ app.post("/thoughts", async (req, res) => {
 })
 
 // PATCH-request
-app.patch("/thoughts/:id/hearts", async (req, res) => {
+app.patch("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params
   const thoughtToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}})
 
