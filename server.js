@@ -54,46 +54,36 @@ const ThoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model('Thought', ThoughtSchema);
 
-// get request for the 20 last thoughts
+// queries for pagination (if queries – the mongo way with aggregate(), 
+// else (no queries) – mongoose way. 
+// Maybe sa little messy, but I did it to practice both)
 app.get('/thoughts', async (req, res) => {
-  try {
-    const thoughtsFeed = await Thought.find()
-      .limit(20)
-      .sort({ createdAt: 'desc' });
-    res.status(200).json({
-      success: true,
-      response: thoughtsFeed,
-    });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      response: error,
-    });
-  }
-});
-
-// queries for pagination (the mongo way with aggregate instead of using mongoose, to practice both)
-app.get('/thoughts', async (req, res) => {
+  let thoughtsFeed = {};
   const {
     page,
     perPage,
     numberPage = +page,
     numberPerPage = +perPage,
   } = req.query;
+  
   try {
-    const thoughtsFeed = await Thought.aggregate([
-      {
-        $sort: {
-          createdAt: -1,
+    if (page) {
+      thoughtsFeed = await Thought.aggregate([
+        {
+          $sort: {
+            createdAt: -1,
+          },
         },
-      },
-      {
-        $skip: (page - 1) * perPage,
-      },
-      {
-        $limit: perPage,
-      },
-    ]);
+        {
+          $skip: (numberPage - 1) * numberPerPage,
+        },
+        {
+          $limit: numberPerPage,
+        },
+      ]);
+    } else {
+      thoughtsFeed = await Thought.find().limit(20).sort({ createdAt: 'desc' });
+    }
     res.status(200).json({ success: true, response: thoughtsFeed });
   } catch (error) {
     res.status(400).json({ success: false, response: error });
@@ -125,9 +115,9 @@ app.patch('/thoughts/:id/like', async (req, res) => {
       $inc: { hearts: 1 },
     });
     res.status(200).json({
-        success: true,
-        response: `Thought ${thoughtToUpdate.hearts} has been updated`,
-      });
+      success: true,
+      response: `Thought ${thoughtToUpdate.hearts} has been updated`,
+    });
   } catch (error) {
     res.status(404).json({ success: false, response: error });
   }
@@ -137,3 +127,21 @@ app.patch('/thoughts/:id/like', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
+
+// get request for the 20 last thoughts
+// app.get('/thoughts', async (req, res) => {
+//   try {
+//     const thoughtsFeed = await Thought.find()
+//       .limit(20)
+//       .sort({ createdAt: 'desc' });
+//     res.status(200).json({
+//       success: true,
+//       response: thoughtsFeed,
+//     });
+//   } catch (error) {
+//     res.status(400).json({
+//       success: false,
+//       response: error,
+//     });
+//   }
+// });
