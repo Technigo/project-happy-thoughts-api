@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts-api";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -23,7 +23,7 @@ const ThoughtsSchema = new mongoose.Schema({
   }
 })
 
-const Thought = mongoose.model("Thouhgt", ThoughtsSchema);
+const Thought = mongoose.model("Thought", ThoughtsSchema);
 
 /*
 const Note = mongoose.model('Note', {
