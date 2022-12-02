@@ -34,7 +34,6 @@ const Thought = mongoose.model("Thought", {
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
-// app.use(express.json());
 app.use(bodyParser.json());
 
 // Start defining your routes here
@@ -65,61 +64,52 @@ app.post("/thoughts", async (req, res) => {
     const savedThought = await thought.save();
     res.status(200).json({ response: savedThought, success: true });
   } catch (error) {
-    console.log(error)
-    res.status(400)
-      .json({
-        message: "Could not save message",
-        error: error.error,
-        success: false,
-      });
+    console.log(error);
+    res.status(400).json({
+      message: "Could not save message",
+      error: error.error,
+      success: false,
+    });
   }
 });
 
 //update
-app.patch('/thoughts/:id', async(req, res)=>{
-  const {id} = req.params;
-     console.log(req.body);
-  try{
-    const updateThoughts= await Thought.findByIdAndUpdate({_id: id}, {message:req.body.description});
-//  console.log(updateThoughts)
-    if(updateThoughts){
-      res.status(200).json({success:true, response:updateThoughts});
+app.patch("/thoughts/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log(req.body);
+  try {
+    const updateThoughts = await Thought.findByIdAndUpdate(
+      { _id: id },
+      { message: req.body.description }
+    );
+    if (updateThoughts) {
+      res.status(200).json({ success: true, response: updateThoughts });
+    } else {
+      res.status(404).json({ success: false, response: "Thought Not Found" });
     }
-    else{
-
-      res.status(404).json({success:false, response:"Thought Not Found"})
-    }
-    
-  }catch(error){
+  } catch (error) {
     console.log(error);
-     res.status(400).json({success: false, response: error});
-
+    res.status(400).json({ success: false, response: error });
   }
-
-})
+});
 
 // Endpoint increase heart Number
-
-app.patch('/thoughts/:id/like',async (req, res)=>{
-  try{
-   const { id } = req.params;
-   const addHearts = await Thought.findById({ _id: id });
-  const updateThoughts = await Thought.findByIdAndUpdate(
-    { _id: id },
-     { hearts: addHearts.hearts + 1 }
-  );
-  console.log(updateThoughts);
-  if (updateThoughts) {
-    res.status(200).json({ success: true, response: updateThoughts });
-  } else {
-    res.status(404).json({ success: false, response: "Thought Not Found" });
-  }
-
-  }
-  catch(error){
-
-  }
-})
+app.patch("/thoughts/:id/like", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const addHearts = await Thought.findById({ _id: id });
+    const updateThoughts = await Thought.findByIdAndUpdate(
+      { _id: id },
+      { hearts: addHearts.hearts + 1 }
+    );
+    console.log(updateThoughts);
+    if (updateThoughts) {
+      res.status(200).json({ success: true, response: updateThoughts });
+    } else {
+      res.status(404).json({ success: false, response: "Thought Not Found" });
+    }
+  } catch (error) {}
+});
 
 // Start the server
 app.listen(port, () => {
