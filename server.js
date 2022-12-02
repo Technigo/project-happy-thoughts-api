@@ -29,17 +29,12 @@ const ThoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model("Thought", ThoughtSchema)
 
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
 
-// Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
 
-// Start defining your routes here
 app.get("/", (req, res) => {
   res.send({
     Message: "Welcome to my Happy Thoughts API",
@@ -72,13 +67,12 @@ app.patch("/thoughts/:thoughtId/like", async (req, res) => {
    const {thoughtId} = req.params;
    try {
     const thoughtToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}});
-    res.status(200).json({success: true, response: `Thought ${thoughtToUpdate.id} has their likes updated`});
+    res.status(200).json({success: true, response: `Thought ${thoughtToUpdate.thoughtId} has their likes updated`});
    } catch (error) {
     res.status(400).json({success: false, response: "Thought id not found", error: error});
    }
 });
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
