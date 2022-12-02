@@ -1,9 +1,12 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
 const mongoUrl =
-  process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts";
+  process.env.MONGO_URL ||
+  `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PW}@projectmongoapi.weegxnh.mongodb.net/projectmongoapi?retryWrites=true&w=majority`;
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
