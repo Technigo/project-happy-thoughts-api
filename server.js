@@ -1,8 +1,8 @@
-import express from "express";
-import cors from "cors";
-import mongoose from "mongoose";
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/project-mongo';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -17,28 +17,21 @@ app.use(cors());
 app.use(express.json());
 
 // Start defining your routes here
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   res.send([
     {
-    path: "/",
-    methods: [
-      "GET"
-    ]
-  },
-  {
-    path: "/thoughts",
-    methods: [
-      "GET",
-      "POST"
-    ]
-  },
-  {
-    path: "/thoughts/:id/like",
-    methods: [
-      "PATCH"
-    ]
-  }
-]);
+      path: '/',
+      methods: ['GET'],
+    },
+    {
+      path: '/thoughts',
+      methods: ['GET', 'POST'],
+    },
+    {
+      path: '/thoughts/:id/like',
+      methods: ['PATCH'],
+    },
+  ]);
 });
 
 const ThoughtSchema = new mongoose.Schema({
@@ -47,84 +40,100 @@ const ThoughtSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 140,
     trim: true,
-    required: true
+    required: true,
   },
   hearts: {
     type: Number,
-    default: 0
+    default: 0,
   },
   createdAt: {
     type: Date,
-    default: () => new Date()
+    default: () => new Date(),
+  },
+});
+
+const Thought = mongoose.model('Thought', ThoughtSchema);
+
+// get request for the 20 last thoughts
+app.get('/thoughts', async (req, res) => {
+  try {
+    const thoughtsFeed = await Thought.find()
+      .limit(20)
+      .sort({ createdAt: 'desc' });
+    res.status(200).json({
+      success: true,
+      response: thoughtsFeed,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      response: error,
+    });
   }
 });
 
-const Thought = mongoose.model("Thought", ThoughtSchema);
-
-// get request for the 20 last thoughts
-app.get("/thoughts", async(req, res) => {
+// queries for pagination (the mongo way with aggregate instead of using mongoose, to practice both)
+app.get('/thoughts', async (req, res) => {
+  const {
+    page,
+    perPage,
+    numberPage = +page,
+    numberPerPage = +perPage,
+  } = req.query;
   try {
-    const thoughtsFeed = await Thought.find().limit(20).sort({createdAt: 'desc'});
-    res.status(200).json({
-      success: true,
-      response: thoughtsFeed
-    });
-  } catch(error) {
-    res.status(400).json({
-      success: false,
-      response: error
-    })
+    const thoughtsFeed = await Thought.aggregate([
+      {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+      {
+        $skip: (page - 1) * perPage,
+      },
+      {
+        $limit: perPage,
+      },
+    ]);
+    res.status(200).json({ success: true, response: thoughtsFeed });
+  } catch (error) {
+    res.status(400).json({ success: false, response: error });
   }
 });
 
 // post request for posting new thoughts
-app.post("/thoughts", async(req, res) => {
+app.post('/thoughts', async (req, res) => {
   const { message } = req.body;
-  try { 
-    const newThought = await new Thought({message: message}).save();
+  try {
+    const newThought = await new Thought({ message: message }).save();
     res.status(201).json({
       success: true,
-      response: newThought
+      response: newThought,
     });
-    } catch(error) {
-      res.status(400).json({
-        success: false,
-        reponse: error
-      });
-    };
-});
-
-// patch request for the like-button
-app.patch("/thoughts/:id/like", async(req, res) => {
-  const { id } = req.params;
-  try {
-    const thoughtToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}});
-    res.status(200).json({success: true, response: `Thought ${thoughtToUpdate.hearts} has been updated`});
   } catch (error) {
-    res.status(404).json({success: false, response: error});
+    res.status(400).json({
+      success: false,
+      reponse: error,
+    });
   }
 });
 
+// patch request for the like-button
+app.patch('/thoughts/:id/like', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const thoughtToUpdate = await Thought.findByIdAndUpdate(id, {
+      $inc: { hearts: 1 },
+    });
+    res.status(200).json({
+        success: true,
+        response: `Thought ${thoughtToUpdate.hearts} has been updated`,
+      });
+  } catch (error) {
+    res.status(404).json({ success: false, response: error });
+  }
+});
 
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
-
-
-// V2 mongoose syntax
-/* app.post("/thoughts", async(req, res) => {
-  const { name, description } = req.body;
-
-  const newThought = await new TechnigoMember({name: name, description: description}).save((error, data) => {
-    if(error){
-      res.status(400).json({success: false, response: error});
-    } else {
-      res.status(201).json({success: true, response: data})
-    }
-  });
-}); */
-
-// POST => create
-// PUT => replacing something in db
-// PATCH => change/modify stuff
