@@ -71,13 +71,10 @@ app.get("/thoughts", async (req, res) => {
    }
  });
 
-// POST => create stuff
-// PUT => replace in DB -> one PErson switch with another
-// PATCH => change/modify stuff
-app.patch("/thoughts/:_id/hearts", async (req, res) => {
-   const { _id } = req.params;
+app.patch("/thoughts/:id/hearts", async (req, res) => {
+   const { id } = req.params;
    try {
-    const thoughtToUpdate = await Thoughts.findByIdAndUpdate(_id, {$inc: {hearts: 1}});
+    const thoughtToUpdate = await Thoughts.findByIdAndUpdate(id, {$inc: {hearts: 1}});
     res.status(200).json({success: true, response: `Message ${thoughtToUpdate.message} is updated`});
    } catch (error) {
     res.status(400).json({success: false, response: error});
