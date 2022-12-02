@@ -18,9 +18,7 @@ app.use(cors());
 app.use(express.json());
 
 // Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
-});
+
 ////////////////
 const ThoughtsSchema = new mongoose.Schema({
   message: {
@@ -44,6 +42,24 @@ const ThoughtsSchema = new mongoose.Schema({
 const Thoughts = mongoose.model("Thoughts", ThoughtsSchema);
 
 
+app.get("/", (req, res) => {
+  res.send({
+    Message: "Happy thoughts API",
+    Routes: [{
+      "/thoughts": "GET to see all thoughts, POST to create a new thought"
+    }]
+  });
+});
+
+app.get("/thoughts", async (req, res) => {
+  try {
+    const allThoughts = await Thoughts.find().sort({createdAt: "desc"}).limit(20).exec();
+    res.status(200).json(allThoughts);
+  } catch (error) {
+    res.status(400).json({success: false, response: 'bad request'})
+  }
+});
+
  app.post("/thoughts", async (req, res) => {
   const {message, createdAt} = req.body;
    console.log(req.body);
@@ -58,10 +74,10 @@ const Thoughts = mongoose.model("Thoughts", ThoughtsSchema);
 // POST => create stuff
 // PUT => replace in DB -> one PErson switch with another
 // PATCH => change/modify stuff
-app.patch("/thoughts/:id/hearts", async (req, res) => {
-   const { id } = req.params;
+app.patch("/thoughts/:_id/hearts", async (req, res) => {
+   const { _id } = req.params;
    try {
-    const thoughtToUpdate = await Thoughts.findByIdAndUpdate(id, {$inc: {hearts: 1}});
+    const thoughtToUpdate = await Thoughts.findByIdAndUpdate(_id, {$inc: {hearts: 1}});
     res.status(200).json({success: true, response: `Message ${thoughtToUpdate.message} is updated`});
    } catch (error) {
     res.status(400).json({success: false, response: error});
