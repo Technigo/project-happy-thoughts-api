@@ -52,16 +52,6 @@ app.post("/thoughts", async (req, res) => {
   }
 })
 
-// app.patch("/thoughts/:id/heart", async (req, res) => {
-//   const { id } = req.params
-//   try {
-//     const thoughtToAddLike = await HappyThought.findByIdAndUpdate(id, { $inc: { heart: 1 } })
-//     res.status(200).json({ success: true, response: `One more like for ${thoughtToAddLike.message}` })
-//   } catch (error) {
-//     res.status(400).json({ success: false, response: error })
-//   }
-// })
-
 app.get("/thoughts", async (req, res) => {
   const response = {
     success: true,
@@ -81,7 +71,6 @@ app.get("/thoughts", async (req, res) => {
       }
     });
   }
-
 })
 
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
@@ -93,54 +82,6 @@ app.patch("/thoughts/:thoughtId/like", async (req, res) => {
     res.status(400).json({ success: false, response: error })
   }
 })
-
-// app.patch("/thoughts/:id/heart", async (req, res) => {
-//   const { id } = req.params
-//   try {
-//     const thoughtToAddLike = await HappyThought.findByIdAndUpdate(id, { $inc: { heart: 1 } })
-//     res.status(200).json({ success: true, response: `One more like for ${thoughtToAddLike.message}` })
-//   } catch (error) {
-//     res.status(400).json({ success: false, response: error })
-//   }
-// })
-
-// app.get("/thoughts", async (req, res) => {
-//   try {
-//     const thoughts = await HappyThought.aggregate([
-//       {
-//         $sort: {
-//           createdAt: -1
-//         }
-//       }
-//     ])
-//     res.status(200).json({ success: true, response: thoughts })
-//   } catch {
-//     res.status(400).json({ success: false, response: error })
-//   }
-// })
-
-// app.get("/thoughts", async (req, res) => {
-//   const { page, perPage, numberPage = +page, numberPerPage = +perPage } = req.query
-//   try {
-//     const thoughts = await HappyThought.aggregate([
-//       {
-//         $sort: {
-//           createdAt: -1
-//         }
-//       }, {
-//         $skip: (numberPage - 1) * numberPerPage
-//       },
-//       {
-//         $limit: numberPerPage
-//       }
-//     ])
-//     res.status(200).json({ success: true, response: thoughts })
-//   } catch (error) {
-//     res.status(400).json({ success: false, response: error })
-//   }
-// })
-
-
 
 // Start the server
 app.listen(port, () => {
