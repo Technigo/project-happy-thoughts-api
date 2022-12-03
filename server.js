@@ -18,7 +18,7 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Happy thoughts on repeat!");
+  res.send("Happy thoughts on repeat! Type '/thoughts' to see them!");
 });
 
 const ThoughtsSchema = new mongoose.Schema({
