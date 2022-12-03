@@ -21,9 +21,10 @@ app.use(express.json());
 const Thought = mongoose.model("Thought", {
   message: {
         type: String,
-        //required: true,
+        required: true,
         minlength: 5,
         maxlength: 140,
+        trim: true
       },
       hearts: {
         type: Number,
@@ -31,7 +32,7 @@ const Thought = mongoose.model("Thought", {
       },
       createdAt: {
         type: Date,
-        default: new Date()
+        default: () => new Date()
       }
     })
 
@@ -48,19 +49,21 @@ app.get("/thoughts", async (req, res) => {
  }
 })
 
- //POST new thought, Version 2
+ //POST new thought, Version 1
 app.post("/thoughts", async (req, res) => {
-  const thought = new Thought(req.body)
+  //const thought = new Thought(req.body)
+  const {message} = req.body;
+  console.log(req.body);
 
  try {
-   const savedThought = await thought.save()
+   const savedThought = await new Thought({message}).save();
    res.status(201).json({
      success: true, 
      response: savedThought});
  } catch (error) {
     res.status(400).json
     ({ success: false, 
-      message: 'Could not save this message', errors: err.errors
+      message: 'Could not save this thought message', errors: err.errors
    });
  } 
 })
@@ -119,10 +122,10 @@ app.post("/thoughts", async (req, res) => {
 // });
 
 
-app.patch("thoughts/:id/like", async (req, res) => {
+app.patch("thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
   try {
-    const thoughtToBeUpdate = await HappyThought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}});
+    const thoughtToBeUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}});
     res.status(200).json({
       success: true,
       response: `Thought ${thoughtToBeUpdate.hearts} its heart updated`});
