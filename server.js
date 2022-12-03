@@ -61,7 +61,7 @@ app.post('/thoughts', async (req, res) => {
   //The line below will add the actual time-stamp.
   try {
   const thought = new Thought({ 
-    thoughtmessage: req.body.message
+    message: req.body.message
   }).save();
   res.json(await thought);
 } catch (err) {
