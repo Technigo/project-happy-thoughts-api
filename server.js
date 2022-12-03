@@ -96,7 +96,7 @@ app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const {thoughtId} = req.params;
   try {
   const thoughtToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}});
-  res.status(200).json({sucess: true, response: `Thought ${thoughtToUpdate.id} was liked`});
+  res.status(200).json({sucess: true, response: `Thought ${thoughtToUpdate.id} was liked!`});
 } catch (error) {
   res.status(400).json({success: false, response: "id not found", error: error})
 }
