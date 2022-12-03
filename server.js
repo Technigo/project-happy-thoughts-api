@@ -6,27 +6,10 @@ const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/project-mongo';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-/* const Post = mongoose.model('Post', {
-	text: {
-		type: String,
-		required: true,
-		minlength: 5,
-	},
-	complete: {
-		type: Boolean,
-		default: false,
-	},
-	createAt: {
-		type: Date,
-		default: Date.now,
-	},
-}); */
-
-const PostsSchema = new mongoose.Schema({
+const ThoughtsSchema = new mongoose.Schema({
 	message: {
 		type: String,
-		//required: true, //set to true will be saved to the database
-		unique: false, // new text will need to be different if set to true
+		required: true, //for your msg to show up in the json body
 		// enum:[] //all the allowed values, has to be one of the values that are in the array.
 		minlength: 4,
 		maxlength: 30,
@@ -42,7 +25,7 @@ const PostsSchema = new mongoose.Schema({
 	},
 });
 
-const Posts = mongoose.model('Posts', PostsSchema);
+const Thoughts = mongoose.model('Thoughts', ThoughtsSchema);
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
 // PORT=9000 npm start
@@ -59,37 +42,59 @@ app.get('/', (req, res) => {
 		Message: 'This API is dedicated to Technigo Project Happy Thoughts',
 		Routes: [
 			{
-				'/posts': 'Request the latest 20 posts',
-				'/posts/:id/heart': 'Storing how many times heart has been updated',
+				'/thoughts': 'Request the latest 20 posts',
+				'/thoughts/:id/like': 'Storing how many times like has been updated',
 			},
 		],
 	});
 });
 
-app.get('/posts', async (req, res) => {
-	const { page, perPage } = req.query;
+app.get('/thoughts', async (req, res) => {
 	try {
-		const posts = await Posts.find()
+		const showThoughts = await Thoughts.find()
 			.sort({ createAt: 'desc' })
-			.skip((page - 1) * perPage)
-			.limit(perPage); // not skipping anything
-		res.status(200).json({ success: true, response: posts });
-	} catch (err) {
-		res.status(400).json({ success: false, response: err.errors });
-	}
-});
-
-app.post('/posts', async (req, res) => {
-	//retrieve info sent by the client to API end point, then use mongoose model to create the database entree
-	const { text, complete } = req.body;
-	const post = new Posts({ text, complete });
-	try {
-		const savedPost = await post.save(); // post is the new Post model, calling it on the new model
-		res.status(201).json({ success: true, response: savedPost });
+			.limit(20)
+			.exec();
+		res.status(200).json(showThoughts);
 	} catch (err) {
 		res.status(400).json({
 			success: false,
-			message: 'Could not save post to the database',
+			message: 'Bad request - try again',
+			response: err.errors,
+		});
+	}
+});
+
+app.post('/thoughts', async (req, res) => {
+	//retrieve info sent by the client to API end point, then use mongoose model to create the database entree
+	const { message, createAt } = req.body;
+	const thought = new Thoughts({ message, createAt });
+	try {
+		const savedThought = await thought.save(); // post is the new Post model, calling it on the new model
+		res.status(201).json({ success: true, response: savedThought });
+	} catch (err) {
+		res.status(400).json({
+			success: false,
+			message: 'Could not save your thoughts to the database',
+			response: err.errors,
+		});
+	}
+});
+
+app.patch('/thoughts/:id/like', async (req, res) => {
+	const { id } = req.params;
+	try {
+		const likeUpdate = await Thoughts.findByIdAndUpdate(id, {
+			$inc: { hearts: 1 },
+		});
+		res.status(200).json({
+			success: true,
+			response: `Thought ${likeUpdate.id} has the total likes updated`,
+		});
+	} catch (err) {
+		res.status(400).json({
+			success: false,
+			message: 'Could not update the request',
 			response: err.errors,
 		});
 	}
