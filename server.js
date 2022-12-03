@@ -23,54 +23,52 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 //////////////////
-const TechnigoMemberSchema = new mongoose.Schema({
-  name: {
-    // Most important one
+const ThoughtSchema = new mongoose.Schema({
+  message: {
     type: String,
-    // forces to provide this value
     required: true,
-    // New name must be different than all others in the DB
-    unique: true,
-    // All allowed values
-    enum: ["Matilda", "Poya", "Petra", "Hanna", "Daniel"]
+    minlength: 5,
+    maxlength: 140,
   },
-  description: {
-    type: String,
-    minlength: 4,
-    maxlength: 30,
-    // Removes unnecessary whitespaces
-    trim: true
-  },
-  score: {
+  hearts: {
     type: Number,
-    //Initial value if none other is specified
     default: 0
   },
   createdAt: {
     type: Date,
-    // New Date() will execute once - when we start the server
     default: (() => new Date())()
   }
 })
 
-const TechnigoMember = mongoose.model("TechnigoMember", TechnigoMemberSchema);
+const Thought = mongoose.model("Thought", ThoughtSchema);
 
-app.post("/members", async (req, res) => {
-  const { name, description } = req.body;
-  console.log(req.body)
+// Get 20 of the latest thoughts added
+app.get("/thoughts", async (req, res) => {
   try {
-    const newMember = await new TechnigoMember({name: name, description: description}).save();
-    res.status(201).json({ success:true, response: newMember });
+    const thoughts = await Thought.find({}).sort({ createdAt: 'desc' }).limit(20).exec()
+      res.status(200).json(thoughts);
   } catch(error) {
-    res.status(400).json({success: false, response: error });
+    res.status(400).json({success: false, response: "Error, couldn't find what you where looking for." });
   }
 })
 
-app.patch("/members/:id/score", async (req, res) => {
-  const { id } = req.params;
+// Posting a new message
+app.post("/thoughts", async(req, res) => {
+  const { message } = req.body;
+  try{
+    const newThought = await new Thought({ message: message }).save();
+    res.status(201).json({ success: true, response: newThought });
+  } catch (error) {
+    res.status(400).json({success: false, response: "Error, couldn't find what you where looking for." });
+  }
+})
+
+//Updating likes
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
   try {
-    const memberToUpdate = await TechnigoMember.findByIdAndUpdate(id, {$inc: { score: 1 }});
-    res.status(200).json({success: true, response: `Member ${memberToUpdate.name} has their score updated`});
+    const thoughtToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: { hearts: 1 }});
+    res.status(200).json({success: true, response: `Thought ${thoughtToUpdate.id} got a new heart`});
   } catch (error) {
     res.status(400).json({success: false, response: error });
   }
