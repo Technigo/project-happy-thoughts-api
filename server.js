@@ -66,7 +66,7 @@ app.post("/members", async (req, res) => {
   }
 })
 
-app.patch("/members/:id/soce", async (req, res) => {
+app.patch("/members/:id/score", async (req, res) => {
   const { id } = req.params;
   try {
     const memberToUpdate = await TechnigoMember.findByIdAndUpdate(id, {$inc: { score: 1 }});
