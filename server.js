@@ -41,7 +41,9 @@ const port = process.env.PORT || 8080;
 const app = express();
 
 // Add middlewares to enable cors and json body parsing
-app.use(cors({origin:"http://localhost:3002"}));
+// app.use(cors({origin:"http://localhost:3002"}));
+// app.use(cors({origin:"https://dontworry-behappy.netlify.app/"}));
+app.use(cors());
 app.use(express.json());
 
 // Start defining your routes here
