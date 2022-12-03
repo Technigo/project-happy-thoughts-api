@@ -36,7 +36,7 @@ const Thought = mongoose.model("Thought", {
     })
 
 // GET all Thoughts
-app.get("/", async (req, res) => {
+app.get("/thoughts", async (req, res) => {
  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
 
  if (thoughts) {
@@ -120,9 +120,9 @@ app.post("/thoughts", async (req, res) => {
 
 
 app.patch("thoughts/:id/likes", async (req, res) => {
-  const { id } = req.params;
+  const { thoughtId } = req.params;
   try {
-    const thoughtToBeUpdate = await HappyThought.findByIdAndUpdate(id, {$inc: {hearts: 1}});
+    const thoughtToBeUpdate = await HappyThought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}});
     res.status(200).json({
       success: true,
       response: `Thought ${thoughtToBeUpdate.hearts} its heart updated`});
