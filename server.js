@@ -6,30 +6,11 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/my-happy-project"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-/* const Thoughts = mongoose.model('Thought', {
-  message: {
-    type: String,
-    required: true,
-    minlength: 5,
-    maxlength: 140,
-    trim: true
-  },
-  heart: {
-    type: Number,
-    default: 0
-  }, 
-  createdAt: {
-    type: Date,
-    default: () => new Date()
-  }
-}) */
-//Daniel
+
 const ThoughtsSchema = new mongoose.Schema({
   message: {
     type: String,
     required: true,
-    // new name will have to be different
-    // unique: true,
     minlength: 5,
     maxlength: 140,
     trim: true
@@ -56,8 +37,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
-
 // Start defining your routes here
 app.get("/", (req, res) => {
   res.send("Happy Thoughts!");
@@ -69,15 +48,12 @@ app.get("/thoughts", async (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
-  // retrieve info sent by clients to our API endpoint
   const {message, createdAt} = req.body;
-  // use mongoose model to create the database entry
-  // const newTask = new Thought({message, createdAt})
   try{
     const savedThought = await new Thought({message: message, createdAt: createdAt}).save();
     res.status(201).json({success: true, response: savedThought});
   }catch (err){
-    res.status(400).json({success: false, message:'cannot post thoughts'/* , errors: err.errors */})
+    res.status(400).json({success: false, message:'cannot post thoughts'})
   }
 });
 
@@ -95,16 +71,3 @@ app.patch("/thoughts/:id/heart", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
-
-
-/* 
-app.patch("/members/:id/score", async (req, res) => {
-   const { id } = req.params;
-   try {
-    const memberToUpdate = await TechnigoMember.findByIdAndUpdate(id, {$inc: {score: 1}});
-    res.status(200).json({success: true, response: `Member ${memberToUpdate.name} has their score updated`});
-   } catch (error) {
-    res.status(400).json({success: false, response: error});
-   }
-});
-*/
