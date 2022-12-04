@@ -42,10 +42,19 @@ app.get("/", (req, res) => {
   res.send("Welcome!");
 });
 
-//This returns all the thoughts in the db
+//This returns all the thoughts in the db in descending order and with a limit of 20 items
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
-  res.json(thoughts);
+  try {
+    const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
+    res.json(thoughts);
+  }
+  catch (error) {
+    res.status(400).json({
+      success: false,
+      response: error,
+    });
+  }
+ 
 });
 
 //This is the request for posting a new happy thought to the db
