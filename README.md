@@ -8,4 +8,7 @@ Everything went smoothly, I used the lives sessions to answer the questions I ha
 
 ## View it live
 
-https://project-happy-thoughts-api-dsxqivtt3a-lz.a.run.app/thoughts
+https://project-happy-thoughts-api-dsxqivtt3a-lz.a.run.app/
+
+GET 
+/thoughts?page=1&perPage=5 (an example. add any page and perPage you want) 
