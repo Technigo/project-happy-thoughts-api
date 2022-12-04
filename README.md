@@ -1,13 +1,12 @@
 # Project Happy Thoughts API
-
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Build a full API that is working well with an excisisting frontend, including handling user input (PATCH, POST, GET) and store the data from POST req in Mondodb. 
+Add requirements to validate data and ensure your database only contains 'good' data.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Built the API using POSTMAN, Express, node js and mongodDb deplying it to google cloude. When I had checked that everything worked fine after the deployment, I added the URL to my Happy thought project from week 7. You can find that project here:
+https://github.com/petrasson/project-happy-thoughts
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://project-happy-thoughts-api-xjix6ss5fq-lz.a.run.app/
