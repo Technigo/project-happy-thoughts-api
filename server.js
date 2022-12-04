@@ -68,6 +68,28 @@ app.post("/thoughts", async (req, res) => {
  } 
 })
 
+app.patch("thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+  try {
+    const thoughtToBeUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}});
+    res.status(200).json({
+      success: true,
+      response: `Thought ${thoughtToBeUpdate.hearts} its heart updated`});
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      response: error});
+  }
+})
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
+
+//POST => create stuff
+// PUT => replace something in database -> replace in DB -> one Person switch with another
+// PATCH => change/modify one thing, stuff
 
 
 //will do this in 3 different versions
@@ -120,27 +142,3 @@ app.post("/thoughts", async (req, res) => {
 //     }
 //    });
 // });
-
-
-app.patch("thoughts/:thoughtId/like", async (req, res) => {
-  const { thoughtId } = req.params;
-  try {
-    const thoughtToBeUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}});
-    res.status(200).json({
-      success: true,
-      response: `Thought ${thoughtToBeUpdate.hearts} its heart updated`});
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      response: error});
-  }
-})
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
-
-//POST => create stuff
-// PUT => replace something in database -> replace in DB -> one Person switch with another
-// PATCH => change/modify one thing, stuff
