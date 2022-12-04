@@ -18,7 +18,15 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send('hey you! you are looking great today')
+  res.json({
+    responseMessage: "Happy Thoughts API by Linnéa Ajger ",
+    endpoints: 
+      {
+        "/thoughts": "use this endpoint with POST or PATCH to update or save to the database",
+        "/thoughts?page=<page number>&perPage=<numbers per page>": "Give you the thoughts sorted with the latest one in the top",
+        "/thoughts/mostliked": "Sorts the list of thoughts with the one with most hearts at the top",
+        "/thoughts/oldest": "Gives you the oldest thought first"
+      }});
 });
 
 const ThoughtSchema = new mongoose.Schema({
@@ -41,7 +49,6 @@ const ThoughtSchema = new mongoose.Schema({
 const Thought = mongoose.model('Thought', ThoughtSchema)
 
 app.get("/thoughts", async (req, res) => {
-  // const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
  
   const { page, perPage, numberPage = +page, numberPerPage = +perPage } = req.query;
   try {
@@ -63,8 +70,27 @@ app.get("/thoughts", async (req, res) => {
  catch (error) {
     res.status(400).json({success: false, response: error});
   }
-  // res.status(200).json(thoughts)
 });
+
+app.get("/thoughts/mostliked", async (req, res) => {
+  try {
+    const thoughts = await Thought.find().sort({hearts: - 1}).limit(20).exec()
+    res.status(200).json({success: true, response: thoughts});
+  }
+  catch (error) {
+  res.status(400).json({success: false, response: error});
+  }
+})
+
+app.get("/thoughts/oldest", async (req, res) => {
+  try {
+    const thoughts = await Thought.find().sort({createdAt: 1}).limit(20).exec()
+    res.status(200).json({success: true, response: thoughts});
+  }
+  catch (error) {
+  res.status(400).json({success: false, response: error});
+  }
+})
 
 
 app.post ('/thoughts', async (req, res) => {
