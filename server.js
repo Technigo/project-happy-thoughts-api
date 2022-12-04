@@ -17,6 +17,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+    // Start defining your routes here
+    app.get("/", (req, res) => {
+      res.send({
+        Message: "This is an API for Happy Thoughts",
+        Routes: [{
+          "/thoughts": "POST / GET option for thought handling",
+          "/thoughts/:thoughtsId/like" : " Update likes to a thought in the API"
+          }]
+        });
+      });
 
 const ThoughtSchema = new mongoose.Schema({ // allowing us to create a object, below the description/type
   message: {
@@ -36,18 +46,7 @@ const ThoughtSchema = new mongoose.Schema({ // allowing us to create a object, b
   }
   })
 
-  const Thought = mongoose.model("Thought", ThoughtSchema) // mongoose with ThoughtSchema
-
-    // Start defining your routes here
-  app.get("/", (req, res) => {
-    res.send({
-      Message: "This is an API for Happy Thoughts",
-      Routes: [{
-        "/thoughts": "POST / GET option for thought handling",
-        "/thoughts/:thoughtsId/like" : " Update likes to a thought in the API"
-        }]
-      });
-    });
+  const Thought = mongoose.model("Thought", ThoughtSchema) // mongoose with ThoughtSchem
 
 
   app.post("/thoughts", async (req, res) => {
@@ -72,7 +71,7 @@ const ThoughtSchema = new mongoose.Schema({ // allowing us to create a object, b
     }
   })
 
-  app.get("/thoughts", async (req ,res) => { // http://localhost:8080/thoughts?page=2&perPage=1
+  app.get("/thoughts", async (req ,res) => { 
     const { page, perPage } = req.query
 
     try {
@@ -83,7 +82,7 @@ const ThoughtSchema = new mongoose.Schema({ // allowing us to create a object, b
     }
   })
 
-  // Start the server
+// Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
