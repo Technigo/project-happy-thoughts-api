@@ -7,7 +7,7 @@ mongoose.Promise = Promise;
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
 
-
+//This is the model for Thought
 const Thought = mongoose.model('Thought', {
   message: {
     type: String,
@@ -27,14 +27,6 @@ const Thought = mongoose.model('Thought', {
 
 });
 
-const Like = mongoose.model('Like', {
-    Like: {
-      type: Boolean,
-      hearts: Number
-    }
-  
-  });
-
 
 // PORT=9000 npm start
 const port = process.env.PORT || 8080;
@@ -45,15 +37,18 @@ app.use(express.json());
 
 
 // Start defining your routes here
+//first one returns welcome. 
 app.get("/", (req, res) => {
   res.send("Welcome!");
 });
 
+//This returns all the thoughts in the db
 app.get("/thoughts", async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
   res.json(thoughts);
 });
 
+//This is the request for posting a new happy thought to the db
 app.post('/thoughts', async (req, res) => {
   //Retrieve the information sent by the client to our API endpoint
  const {message, complete} = req.body;
@@ -73,6 +68,7 @@ app.post('/thoughts', async (req, res) => {
  }
 });
 
+//This is how to add a like or heart to the measseg
 app.patch("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
   try{
@@ -83,6 +79,7 @@ app.patch("/thoughts/:id/like", async (req, res) => {
   }
 });
 
+//This is for deleting one single thought by id
 app.delete("/thoughts/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -104,7 +101,7 @@ app.delete("/thoughts/:id", async (req, res) => {
   }
 });
 
-// Start the server
+// This starts the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
