@@ -36,6 +36,10 @@ const ThoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model("Thought", ThoughtSchema)
 
+app.get('/', (_, res) => {
+  res.send('Happy thoughts API')
+})
+
 app.get("/thoughts", async (req, res) => {
   try {
     const thoughtsToReturn = await Thought.find().sort({ createdAt: -1 }).limit(20)
