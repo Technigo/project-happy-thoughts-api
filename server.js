@@ -1,8 +1,6 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import { process_params } from "express/lib/router";
-import res from "express/lib/response";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -45,7 +43,7 @@ const Thought = mongoose.model("Thought", ThoughtSchema);
 // Get 20 of the latest thoughts added
 app.get("/thoughts", async (req, res) => {
   try {
-    const thoughts = await Thought.find({}).sort({ createdAt: 'desc' }).limit(20).exec()
+    const thoughts = await Thought.find({}).sort({ createdAt: -1 }).limit(20).exec()
       res.status(200).json(thoughts);
   } catch(error) {
     res.status(400).json({success: false, response: "Error, couldn't find what you where looking for." });
