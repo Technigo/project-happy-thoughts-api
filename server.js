@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import { process_params } from "express/lib/router";
 import res from "express/lib/response";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
