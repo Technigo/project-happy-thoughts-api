@@ -6,9 +6,6 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
 
@@ -16,98 +13,83 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
-});
-////////////////
-const TechnigoMemberSchema = new mongoose.Schema({
-  name: {
-    // most important one
+// The schema has properties. It will requier the user to provide the properties with the 
+// given restrictions.
+const ThoughtSchema = new mongoose.Schema({
+  message: {
     type: String,
-    // forces to provide this value
     required: true,
-    // new name will have to be different than all others in the DB
-    unique: true,
-    // all the allowed values. Right not are only these 5 allowed in the database.  
-    // Better exampels temperature messurements ex farhenheit, celcius 
-    // or in a gallery that ONLY have picaso and van gogh
-    
-    enum: ["Matilda", "Poya", "Petra", "Hanna", "Daniel"]
-  },
-  description: {   //Like the main body of the texts in HT min 4 max 140
-    type: String,
-    minlength: 4,
-    maxlength: 30,
-    // removes unnecessary whitespaces
+    minlength: 5,
+    maxlength: 140,
     trim: true
   },
-  score: {
+  hearts: {
     type: Number,
-    // initial value, if none other is specified
     default: 0
   },
   createdAt: {
     type: Date,
-    // new Date() will execute once - when we start the server
-    // default: new Date()
-    // onClick = { someFunction()}
-    // Immediatly Invoked  Function expression IIFE - in the moment that you declare the function it is called/executed right away
-    // (() => new Date())()
-    // (function functionName () {new Date()})()
     default: () => new Date()
   }
 });
 
-const TechnigoMember = mongoose.model("TechnigoMember", TechnigoMemberSchema);
+const Thought = mongoose.model("Thought", ThoughtSchema);
 
-app.post("/members", async (req, res) => {
-  const {name, description} = req.body;
-  console.log(req.body);
+// Start defining your routes here
+app.get("/", (req, res) => {
+  res.json({ 
+    Message: "Welcome to Happy Thoughts",
+    Routes: {
+      "/thoughts": "Is to GET and POST Thouhgts",
+      "/thoughts/:id/like": "a PATCH that will add Hearts to the Happy Thoughts"
+    }
+  });
+});
+
+app.get("/thoughts", async (req, res) => {
   try {
-    const newMember = await new TechnigoMember({name: name, description: description}).save();
-    res.status(201).json({success: true, response: newMember});
+    const thoguts = await Thought.find({}).sort({createdAt: -1}).limit(20);
+    res.status(201).json({
+      success: true, 
+      response: messages
+    });
   } catch(error) {
-    res.status(400).json({success: false, response: error});
+    res.status(400).json({
+      success: false,
+      response: 'Could not find Thoughts'
+    });
+  }
+})
+// Will add users new messages in the database
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body;
+  try {
+    const newThought = await new Thought({message: message}).save();
+    res.status(201).json({
+      success: true, 
+      response: newThought
+    });
+  } catch(error) {
+    res.status(400).json({
+      success: false, 
+      response: 'Could not post new thought'});
   }
 });
-
-// V2 POST with promises
-// app.post("/members", (req, res) => {
-//  const {name, description} = req.body;
-//    const newMember = new TechnigoMember({name: name, description: description}).save()
-//    .then(data => {
- //       res.status(201).json({success: true, response: data});
-//   }).catch(error => {
- //       res.status(400).json({success: false, response: error});
- //   });
-// });
-
-// V3 POST mongoose syntax
-// app.post("/members", (req, res) => {
-//   const {name, description} = req.body;
-//     const newMember = new TechnigoMember({name: name, description: description}).save((error, data) => {
-//       if(error) {
-//         res.status(400).json({success: false, response: error});
-//       } else {
-//         res.status(201).json({success: true, response: data});
-//       } 
-//     });
-// });
-
-// POST => create stuff
-// PUT => replace in DB -> one PErson switch with another
-// PATCH => change/modify stuff
-app.patch("/members/:id/score", async (req, res) => {
+// PATCH => changes/modifys things 
+app.patch("/thoughts/:id/like", async (req, res) => {
    const { id } = req.params;
    try {
-    const memberToUpdate = await TechnigoMember.findByIdAndUpdate(id, {$inc: {score: 1}});
-    res.status(200).json({success: true, response: `Member ${memberToUpdate.name} has their score updated`});
+    const heartsToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}});
+    res.status(200).json({
+      success: true, 
+      response: `Thought ${heartsToUpdate.thought} has their hearts updated`});
    } catch (error) {
-    res.status(400).json({success: false, response: error});
+    res.status(400).json({
+      success: false, 
+      response: 'Could not find updated thought'});
    }
 });
-///////////////
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
