@@ -40,7 +40,7 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("This is my API for Happy Thought-project. Find it live here:");
+  res.send("This is my API for Happy Thought-project. Find it live here: https://project-happy-thoughts-api-doim2lnzba-lz.a.run.app/");
 });
 
 // Returning the thoughts
