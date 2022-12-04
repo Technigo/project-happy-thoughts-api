@@ -3,7 +3,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 
 const mongoUrl =
-	process.env.MONGO_URL || 'mongodb://localhost/project-happy-thoughts';
+	process.env.MONGO_URL || 'mongodb://localhost/project-project-mongo';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
