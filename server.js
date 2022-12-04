@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
+import listEndpoints from "express-list-endpoints";
 
 
 dotenv.config()
@@ -16,10 +17,22 @@ mongoose.Promise = Promise;
 const port = process.env.PORT || 8080;
 const app = express();
 
+//an express middleware to check if mongoose is ready and throw an error if not. Note: Should always be added before the router.
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({
+      error: `Service unavailable`
+    })
+  }
+})
+
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
 
+//Define the model and SchemaTypes in Mangoose
 const ThougtsSchema = new mongoose.Schema({
   message: {
     type: String,
@@ -43,13 +56,18 @@ const Thoughts = mongoose.model("Thoughts", ThougtsSchema);
 
 //*******ROUTES*********//
 
+// Start defining your routes here
+app.get("/", (req, res) => {
+  res.send({ "Routes": listEndpoints(app)});
+});
+
 // Displaying thoughs in descending order with a maximum of 20 thoughts.
 app.get("/thoughts", async (req, res) => {
   const thoughts = await Thoughts.find().sort({createdAt: "desc"}).limit(20).exec();
   res.json(thoughts);
 })
 
-app.post('/thoughts', async(req, res) =>{
+app.post("/thoughts", async(req, res) =>{
   // Collect the information sent by the client to our API 
   const {message , hearts} = req.body;
 
@@ -58,10 +76,27 @@ app.post('/thoughts', async(req, res) =>{
   try{
     const savedThought = await thought.save();
   res.status(201).json(savedThought);
-  }catch(err){
-    res.status(400).json({message: 'Could not save thought to the database', errors: err.errors});
+  }catch(error){
+    res.status(400).json({
+      message: "Could not save thought to the database", 
+      response: error});
   }
 })
+
+// Increase the heart counts by one
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params
+  try {
+  const updatedHeart = await Thoughts.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}});
+  res.status(200).json({
+    success: true, 
+    response: `There are ${updatedHeart.hearts} hearts on this post`})
+  } catch (error) {
+    res.status(400).json({
+      success: false, 
+      response: error})
+  }
+  })
 
 // Start the server
 app.listen(port, () => {
