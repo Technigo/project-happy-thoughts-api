@@ -1,13 +1,11 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+A backend for the frontend project happy thoughts. It's validating the data and saves the user input to the database using POST and PATCH requests. 
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Everything went smoothly, I used the lives sessions to answer the questions I had and that was enough. I'll see if i can add the pagination and infinite scroll before the deadline is up. 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://project-happy-thoughts-api-dsxqivtt3a-lz.a.run.app/thoughts

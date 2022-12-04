@@ -41,8 +41,29 @@ const ThoughtSchema = new mongoose.Schema({
 const Thought = mongoose.model('Thought', ThoughtSchema)
 
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
-  res.status(200).json(thoughts)
+  // const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
+ 
+  const { page, perPage, numberPage = +page, numberPerPage = +perPage } = req.query;
+  try {
+    const thoughts = await Thought.aggregate([
+      {
+        $sort: {
+          createdAt: -1
+        }
+      },
+      {
+        $skip: (numberPage - 1) * numberPerPage
+      },
+      {
+        $limit: numberPerPage
+      }
+    ]);
+    res.status(200).json({success: true, response: thoughts});
+  }
+ catch (error) {
+    res.status(400).json({success: false, response: error});
+  }
+  // res.status(200).json(thoughts)
 });
 
 
