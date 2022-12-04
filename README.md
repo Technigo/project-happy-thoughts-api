@@ -12,5 +12,5 @@ Backend:
 https://project-happy-thoughts-api-icpo5wm3kq-uc.a.run.app/
 
 Frontend: 
-
+https://teal-biscotti-944ab1.netlify.app/
 

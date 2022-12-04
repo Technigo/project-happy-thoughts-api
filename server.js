@@ -16,14 +16,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-/* app.use((req, res, next) => {
-  if(mongoose.connection.readyState === 1) {
-    next()
-  } else {
-    res.status(503).json({ error: "Service unavailable "})
-  }
-}) */
-
 const HappyThoughts = new mongoose.Schema({
   message:{
     type: String, 
@@ -50,7 +42,8 @@ app.get("/", (req, res) => {
   res.send({
     Message: "This is an API for Happy Thoughts",
     Routes: [{
-      "/thoughts": "To GET and POST Happy thoughts"
+      "/thoughts": "To GET and POST Happy thoughts",
+      "/thoughts/:id/like" : " Add likes to a thought"
     }]
   });
 });
