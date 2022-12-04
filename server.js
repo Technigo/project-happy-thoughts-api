@@ -21,6 +21,14 @@ app.use((req, res, next) => {
   }
 });
 
+mongoose.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: (doc, converted) => {
+    delete converted._id;
+  }
+});
+
 // MongoDB
 const MessageSchema = new mongoose.Schema({
   message: {
