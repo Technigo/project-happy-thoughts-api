@@ -1,13 +1,27 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+API for saving Thoughts
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Handle validation and updates of the thoughts database using Mongoose and MongoDB.
+
+## Routes
+
+### `GET /thoughts`
+
+This endpoint returns a maximum of 20 thoughts, sorted by `createdAt` 
+
+### `POST /thoughts`
+
+This endpoint created a new thought and expects a JSON body with the thought `message`, like this: `{ "message": "Express is great!" }`.
+
+### `POST /thoughts/:thoughtId/like`
+
+This endpoint increments the likes of a thought.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Browse the API on this url: https://project-happy-thoughts-api-j7vhqcm4aq-lz.a.run.app
+
+Or browse the React UI at https://happythoughtsproject.netlify.app/
