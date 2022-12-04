@@ -21,6 +21,7 @@ app.use(express.json());
 // Start defining your routes here
 app.get("/", (req, res) => {
   res.send("Hello Technigo!");
+  res.send("This is my happy thoughts api");
 });
 //////////////////
 const ThoughtSchema = new mongoose.Schema({
