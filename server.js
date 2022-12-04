@@ -40,24 +40,14 @@ app.use(cors());
 app.use(express.json());
 
 
-// if connection to server is down, show below and don't move to routes
-app.use((req, res, next) => {
-    if (mongoose.connection.readyState === 1) {
-      next()
-    } else {
-      res.status(503).json({ 
-        status_code: 503,
-        error: "Server unavailable" })
-    }
-})
-
 // ROUTES
-
-app.get("/", (req, res) => {
-    res.json({
-      ResponseMessage: "Welcome to Our Happy Thoughts-API! Se live version at https://our-happy-thoughts.netlify.app/ 🌞",
-    });
-  });
+  app.get("/", (req, res) => {
+  const HappyThoughtsAPI = {
+    message: "Welcome to Our Happy Thoughts-API! Go to /thoughts to see the 20 most recently posted happy thoughts",
+    frontend: "See live frontend site at https://our-happy-thoughts.netlify.app/ 🌞",
+  };
+  res.send({ HappyThoughtsAPI });
+});
 
 // Lists all endpoints available
 app.get('/endpoints', (req, res) => {
