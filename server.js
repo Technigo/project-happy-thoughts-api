@@ -11,9 +11,7 @@ const mongoUrl = process.env.MONGO_URL || `mongodb+srv://${process.env.MONGO_USE
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
+
 const port = process.env.PORT || 8080;
 const app = express();
 
@@ -61,7 +59,7 @@ app.get("/", (req, res) => {
   res.send({ "Routes": listEndpoints(app)});
 });
 
-// Displaying thoughs in descending order with a maximum of 20 thoughts.
+// Displaying thoughts in descending order with a maximum of 20 thoughts.
 app.get("/thoughts", async (req, res) => {
   const thoughts = await Thoughts.find().sort({createdAt: "desc"}).limit(20).exec();
   res.json(thoughts);
@@ -78,15 +76,16 @@ app.post("/thoughts", async(req, res) =>{
   res.status(201).json(savedThought);
   }catch(error){
     res.status(400).json({
-      message: "Could not save thought to the database", 
+      message: "Could not save massage to the database", 
       response: error});
   }
 })
 
-// Increase the heart counts by one
+// update heart likes
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params
   try {
+  // First argument passid id, second what property should be updated
   const updatedHeart = await Thoughts.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}});
   res.status(200).json({
     success: true, 
