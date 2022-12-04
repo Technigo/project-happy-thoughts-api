@@ -36,11 +36,6 @@ const ThoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model("Thought", ThoughtSchema)
 
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!")
-})
-
 app.get("/thoughts", async (req, res) => {
   try {
     const thoughtsToReturn = await Thought.find().sort({ createdAt: -1 }).limit(20)
