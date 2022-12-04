@@ -13,10 +13,7 @@ const Thought = mongoose.model('Thought', {
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 140,
-    trim: true
-
-
+    maxlength: 140
   },
   hearts: {
     type: Number,
@@ -49,7 +46,7 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send("Welcome!");
 });
 
 app.get("/thoughts", async (req, res) => {
@@ -71,18 +68,39 @@ app.post('/thoughts', async (req, res) => {
   res.status(201).json({success: true, response: savedThought});
 //if unseccessful
  } catch (error){
-  res.status(400).json({message: "could not save thought to db", error: err.errors});
+  res.status(400).json({success: false, message: "Could not save happy thought to db", error: err.errors});
 
  }
 });
 
-app.patch("/thoughts/:id/hearts", async (req, res) => {
+app.patch("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
   try{
-  const heartsUpToDate = await TechnigoMember.findByIdAndUpdate(id, {$inc: {hearts: 1}})
-  res.status(200).json({success: true, response:`Thought ${heartsUpToDate.id} has the score updated`})
+  const heartsUpToDate = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}})
+  res.status(200).json({success: true, response:`Thought ${heartsUpToDate.id} has been updated with a heart`})
   } catch (error) {
-    res.status(400).json({success: false, response: error});
+    res.status(400).json({success: false, response: "Thought-id not found"});
+  }
+});
+
+app.delete("/thoughts/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedThought = await Thought.findOneAndDelete({ _id: id });
+    if (deletedThought) {
+      res.status(200).json({
+        success: true,
+        response: deletedThought,
+        message: "thought is now deleted"
+      });
+    } else {
+      res.status(404).json({ success: false, response: "Thought id not found" });
+    }
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      response: error,
+    });
   }
 });
 
