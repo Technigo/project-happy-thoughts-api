@@ -40,13 +40,13 @@ app.use(cors());
 app.use(express.json());
 
 // Middleware that happens around each request, checks if db is connected
-app.use((req, res, next) => {
-  if (mongoose.connection.readyState === 1) {
-    next();
-  } else {
-    res.status(503).json({error: 'Service unavailable'});
-  }
-});
+// app.use((req, res, next) => {
+//   if (mongoose.connection.readyState === 1) {
+//     next();
+//   } else {
+//     res.status(503).json({error: 'Service unavailable'});
+//   }
+// });
 
 /// Lists the enpoints available:
 app.get("/", (req, res) => {
