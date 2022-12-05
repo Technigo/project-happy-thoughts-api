@@ -1,13 +1,15 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+The project was to create our own api for our previously done frontend. Practising get, post and patch requests. 
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I first sketched up which endpoints I needed and then tried to follow code alongs and change the code to fit my project. When I got stuck I reached out to my awseome team. In this project I did a lot of minor misstakes that caused errors, but together with my teammates we solved them all and got to learn a lot! 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+To view only the backend code: 
+https://project-happy-thoughts-api-t2v5z5lalq-lz.a.run.app
+
+To view how it look in frontend: 
+https://frabjous-nasturtium-a2ae42.netlify.app

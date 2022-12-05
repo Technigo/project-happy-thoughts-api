@@ -58,7 +58,7 @@ app.post("/thoughts", async (req, res) => {
 // Gets the last 20 thoughts
 app.get("/thoughts", async (req, res) => {
   try {
-    const thoughts = await Thought.find().sort({createdAt: "desc"}).limit(5).exec();
+    const thoughts = await Thought.find().sort({createdAt: "desc"}).limit(20).exec();
     res.status(200).json(thoughts)
   } catch (error) {
     res.status(400).json({success: false, response: error});
