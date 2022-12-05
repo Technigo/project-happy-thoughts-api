@@ -78,7 +78,7 @@ app.post("/thoughts", async (req, res) => {
 app.patch("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
   try {
-    const updatedHeart = await Thought.findByIdAndDelete(id, {$inc: {hearts: 1}});
+    const updatedHeart = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}});
     res.status(200).json({ message: `Thought ${updatedHeart.id} has their likes updated` });
   } catch {
     res.status(400).json({ error: 'Thought not found' });
