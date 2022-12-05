@@ -38,7 +38,7 @@ const ThoughtSchema = new mongoose.Schema({ // allowing us to create a object, b
   },
   hearts: { 
     type: Number,
-    default: 0,
+    default: 1,
   },
   createdAt: {
     type: Date,               // on default you can do logic with anonymous function on Schemas () =>
@@ -50,10 +50,10 @@ const ThoughtSchema = new mongoose.Schema({ // allowing us to create a object, b
 
 
   app.post("/thoughts", async (req, res) => {
-    const { message, _id } = req.body // ex. "message": "Maria" => terminal gives output
-    console.log(req.body)
+    const { message } = req.body // ex. "message": "Maria" => terminal gives output
+    
     try {
-      const newInput = await new Thought({ message: message, id : _id }).save()
+      const newInput = await new Thought({ message: message }).save()
       res.status(201).json({ success: true, response: newInput }) // 201 created success
     } catch (error) {
       res.status(400).json({ success: false, response: error })
@@ -65,7 +65,7 @@ const ThoughtSchema = new mongoose.Schema({ // allowing us to create a object, b
     console.log(thoughtId)
     try {
       const update = await new Thought.findByIdAndUpdate({thoughtId, $inc: {hearts: 1} })
-      res.status(201).json({ success: true, response: update })
+      res.status(201).json({ success: true, message: update })
     } catch (error) {
       res.status(400).json({ suceess: false, response: error})
     }
