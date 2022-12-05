@@ -1,6 +1,6 @@
 # Project Happy Thoughts API
 
-API for saving Thoughts
+API for saving Happy Thoughts
 
 ## The problem
 
@@ -14,7 +14,7 @@ This endpoint returns a maximum of 20 thoughts, sorted by `createdAt`
 
 ### `POST /thoughts`
 
-This endpoint created a new thought and expects a JSON body with the thought `message`, like this: `{ "message": "Express is great!" }`.
+This endpoint creates a new thought and expects a JSON body with the thought `message`, like this: `{ "message": "The weather todays is great, yay 😎" }`.
 
 ### `POST /thoughts/:thoughtId/like`
 
