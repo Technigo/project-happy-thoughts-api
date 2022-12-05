@@ -8,7 +8,7 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
 // PORT=9000 npm start
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 9000;
 const app = express();
 
 // Create Model for mongo database
@@ -56,9 +56,9 @@ app.get("/thoughts", async (req, res) => {
 //Post Request
 app.post("/thoughts", async (req, res) => {
   // Message which created by users
-  const { description } = req.body;
+  const { message } = req.body;
   // our Mongoose createing database according to users message
-  const thought = new Thought({ message: description });
+  const thought = new Thought({ message });
   try {
     const savedThought = await thought.save();
     res.status(200).json({ response: savedThought, success: true });
@@ -111,7 +111,7 @@ app.patch("/thoughts/:id", async (req, res) => {
 });
 
 // Endpoint increase heart Number
-app.patch("/thoughts/:id/like", async (req, res) => {
+app.post("/thoughts/:id/like", async (req, res) => {
   try {
     const { id } = req.params;
     const addHearts = await Thought.findById({ _id: id });
