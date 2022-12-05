@@ -11,4 +11,4 @@ Describe how you approached to problem, and what tools and techniques you used t
 ## View it live
 Backend view: https://project-happy-thoughts-api-4xuxefucaa-uc.a.run.app/
 
-Frontend view:
+Frontend view: https://happy-thought-project-fc.netlify.app/
