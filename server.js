@@ -25,15 +25,6 @@ const ThoughtsSchema = new mongoose.Schema({
 
 const Thought = mongoose.model("Thought", ThoughtsSchema);
 
-/*
-const Note = mongoose.model('Note', {
-  text: String,
-  createdAt: {
-    type: Date,
-    default: () => new Date()
-  }
-}) */
-
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
 // PORT=9000 npm start
@@ -41,8 +32,6 @@ const port = process.env.PORT || 8080;
 const app = express();
 
 // Add middlewares to enable cors and json body parsing
-// app.use(cors({origin:"http://localhost:3002"}));
-// app.use(cors({origin:"https://dontworry-behappy.netlify.app/"}));
 app.use(cors());
 app.use(express.json());
 
@@ -53,6 +42,7 @@ app.get("/", (req, res) => {
    });
 });
 
+// To view all thoughts posted
 app.get("/thoughts", async (req, res) => {
   const thoughts = await Thought.find()
   .sort({createdAt: 'desc'})
@@ -61,8 +51,8 @@ app.get("/thoughts", async (req, res) => {
   res.json(thoughts);
 });
 
+// To post thoughts to the database
 app.post('/thoughts', async (req, res) => {
-  //The line below will add the actual time-stamp.
   try {
   const thought = new Thought({ 
     message: req.body.message
@@ -76,6 +66,7 @@ app.post('/thoughts', async (req, res) => {
  }
 });
 
+// To post new changes for the like-button
 app.post('/thoughts/:id/like', async (req, res) => {
   try {
     await Thought.updateOne({ _id: req.params.id }, { $inc: { hearts: 1 }});
