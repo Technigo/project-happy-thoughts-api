@@ -68,10 +68,10 @@ app.post("/thoughts", async (req, res) => {
 })
 
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
-  // Hämta ut vilket id vi vill likea
+  // Find the id of the thought we want to like
   const thoughtId = req.params.thoughtId
 
-  // Hämta ut den thoughten med det idt
+  // Use that id to get the thought
   let thoughtToLike
   try { 
     const filter = {_id: thoughtId}
@@ -89,7 +89,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
       return
     }
   
-    // skicka tillbaka thoughten i responsen
+    // Send that tought back in the response
     res.json(thoughtToLike)
   } catch (error) {
     console.log(error)
@@ -101,8 +101,6 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   }
 })
 
-
-// Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
 })
