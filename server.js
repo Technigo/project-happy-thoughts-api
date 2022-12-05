@@ -14,7 +14,7 @@ mongoose.Promise = Promise;
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
 // PORT=9000 npm start
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8020;
 const app = express();
 
 // Add middlewares to enable cors and json body parsing
@@ -23,23 +23,7 @@ app.use(express.json());
 
 
 const ThoughtsSchema = new mongoose.Schema({
-	//in this object specify every single thing about this property(name)
-	name: {
-		//adding parameters
-		// most impotant one is type
-		type: String,
-		default: "unknown",
-		// will require forces to provide this value
-		// required: true,
-		// new name will have to be different than all others in the database/it should be unique
-		// unique: true,
-		//to delete the whitespace
-		trim: true
-		//enum is handy for final project which is all the allowed values
-		// here in enum, only these "five" will be allowd in our database. nothing else rather than we write here is allowed here
-		// enum: ["Matilda", "Poya", "Petra", "Hanna", "Daniel"]
-	},
-	//can be sth similar to happy thought
+	//in this object specify every single thing about this property
 	message: {
 		type: String,
 		minlength: 5,
@@ -59,11 +43,6 @@ const ThoughtsSchema = new mongoose.Schema({
 	createdAt: {
 		type: Date,
 		// new Date() will execute once - when we start the server
-		// default: new Date()
-		// onClick = { someFunction()}
-		// IIFE/immediatly function expression. //in the moment that you declare the function it is called/executed right away
-		// (() => new Date())()
-		// or it can be like this: (function functionName () {new Date()})()
 		default: () => new Date()
 	}
 });
@@ -72,7 +51,11 @@ const Thoughts = mongoose.model("Thoughts", ThoughtsSchema);
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-	res.send({ Message: "Hello, Welcome to our Happy Thoughts!", data: listEndpoints(app) });
+	res.send({ Message: "Hello, Welcome to our Happy Thoughts!", data: listEndpoints(app), endpoints: 
+	{'GET': '/thoughts  get the 20 latest thoughs',
+	'POST' : '/thougths post new message',
+	'PATCH' : '/thougths/:thoughtId/like to like a posted message'
+ } });
 });
 
 
@@ -89,7 +72,6 @@ app.get("/thoughts", async (req, res) => {
 });
 
 // Create a Post handler and using Restful route that should be Post to thoughts
-// 3 different ways
 //V1/the most universal one is with async await
 
 app.post("/thoughts", async (req, res) => {
@@ -107,37 +89,6 @@ app.post("/thoughts", async (req, res) => {
 	}
 });
 
-// V2 POST with promises
-
-// app.post("/members", (req, res) => {
-//   const {name, description} = req.body;
-//     const newMember = new TechnigoMember({name: name, description: description}).save()
-//       .then(data => {
-//         res.status(201).json({success: true, response: data});
-//     }).catch(error => {
-//         res.status(400).json({success: false, response: error});
-//     })
-// });
-
-// V3 POST mongoose syntax/just to know more
-
-// app.post("/members", (req, res) => {
-//   const {name, description} = req.body;
-//     const newMember = new TechnigoMember({name: name, description: description}).save((error, data) => {
-//       if(error) {
-//         res.status(400).json({success: false, response: error});
-//       } else {
-//         res.status(201).json({success: true, response: data});
-//       } 
-//     });
-// });
-
-//** To Update with the hearts for project happy thoughts api**
-
-//POST => create stuff
-//PUT => replace in DB -> one person switch with another
-// PATCH => change/modify stuff
-
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
 	const { thoughtId } = req.params;
 	try {
@@ -147,44 +98,6 @@ app.patch("/thoughts/:thoughtId/like", async (req, res) => {
 		res.status(400).json({ success: false, response: "Could not show the likes for this ID" });
 	}
 });
-
-///////////////
-/// Pagination ///will be handy for final project
-// v1 mongoose
-
-// app.get("/members", aync (req, res) => {
-// 	const members = await TechnigoMember.find({})
-//   const {page, perPage} = req.query;
-//   try{
-// 		const members = await TechnigoMember.find({}).sort({createdAt: -1})
-//    .skip((page - 1) * perPage).limit(perPage)
-// 	}
-// })
-
-// const paginatedResults = (model) => {
-//   return (req, res, next) => {
-//     const page = +req.query.page 
-//     const limit = +req.query.limit
-
-//     const startIndex = (page - 1) * limit
-//     const endIndex = page * limit
-
-//     const results = {}
-
-//     if (endIndex < model.length) {
-//       results.next = {
-//         page: page + 1,
-//         limit: limit
-//       }
-//     }
-//       if (startIndex > 0) {
-//       results.previous = {
-//         page: page - 1,
-//         limit: limit
-//       }
-//     }
-
-//     results.result
 
 // Start the server
 app.listen(port, () => {
