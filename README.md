@@ -10,4 +10,5 @@ Describe how you approached to problem, and what tools and techniques you used t
 
 ## View it live
 
-https://project-happy-thoughts-api-ysfn4yodaa-lz.a.run.app/
+Backend: https://project-happy-thoughts-api-ysfn4yodaa-lz.a.run.app/
+Frontend; https://project-happy-thoughts-miadahlgren.netlify.app/
