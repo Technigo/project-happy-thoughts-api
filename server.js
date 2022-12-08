@@ -49,15 +49,21 @@ app.get("/", (req, res) => {
 
 app.get("/thoughts", async (req, res) => {
   try {
-    const allThoughts = await Thought.find().limit(20).sort({ createdAt: 'desc' });
-    res.status(201).json(allThoughts);
+    const thoughts = await Thought.find().sort({createdAt: -1}).limit(20).exec();
+    res.status(201).json({
+      success: true, 
+      response: thoughts
+    });
   } catch(error) {
-      res.status(400).json({ error: 'Could not get messages'});
+    res.status(400).json({
+      success: false,
+      response: error
+    });
   }
-});
-// Will add users new messages in the database
+})
+
 app.post("/thoughts", async (req, res) => {
-  const { message } = req.body;
+  const {message} = req.body;
   try {
     const newThought = await new Thought({message: message}).save();
     res.status(201).json({
@@ -66,10 +72,11 @@ app.post("/thoughts", async (req, res) => {
     });
   } catch(error) {
     res.status(400).json({
-      success: false, 
-      response: 'Could not post new thought'});
+      success: false,
+      response: error
+    });
   }
-});
+})
 // PATCH => changes/modifys things 
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
    const { id } = req.params;
