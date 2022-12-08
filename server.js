@@ -13,6 +13,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
 // The schema has properties. It will requier the user to provide the properties with the 
 // given restrictions.
 const ThoughtSchema = new mongoose.Schema({
@@ -48,18 +49,12 @@ app.get("/", (req, res) => {
 
 app.get("/thoughts", async (req, res) => {
   try {
-    const thoguts = await Thought.find({}).sort({createdAt: -1}).limit(20);
-    res.status(201).json({
-      success: true, 
-      response: messages
-    });
+    const allThoughts = await Thought.find().limit(20).sort({ createdAt: 'desc' });
+    res.status(201).json(allThoughts);
   } catch(error) {
-    res.status(400).json({
-      success: false,
-      response: 'Could not find Thoughts'
-    });
+      res.status(400).json({ error: 'Could not get messages'});
   }
-})
+});
 // Will add users new messages in the database
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
@@ -76,7 +71,7 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 // PATCH => changes/modifys things 
-app.patch("/thoughts/:id/like", async (req, res) => {
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
    const { id } = req.params;
    try {
     const heartsToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}});
@@ -86,7 +81,7 @@ app.patch("/thoughts/:id/like", async (req, res) => {
    } catch (error) {
     res.status(400).json({
       success: false, 
-      response: 'Could not find updated thought'});
+      response: 'Could not updated thought'});
    }
 });
 
