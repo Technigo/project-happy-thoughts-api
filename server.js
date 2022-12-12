@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1/project-mongo";
+
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -47,7 +48,7 @@ app.get("/thoughts", async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(20)
       .exec();
-    res.status(201).json({ success: true, response: thoughts });
+    res.status(200).json({ success: true, answer: thoughts });
   } catch (error) {
     res.status(400).json({ success: false, response: error });
   }
