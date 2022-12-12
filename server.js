@@ -30,6 +30,7 @@ const Thought = mongoose.model('Thought', {
   hearts: {
     type: Number,
     default: 0,
+    max: 1
   },
   createdAt: {
    type: Date,
@@ -51,10 +52,9 @@ app.get('/thoughts', async (req, res) =>{
 // To add items to the database
 app.post('/thoughts', async(req, res) =>{
   // Collect the information sent by the client to our API 
-  const {message , hearts} = req.body;
-
+  const {message} = req.body;
   // Use our mongoose model to create the database entry - to save
-  const thought = new Thought({message, hearts})
+  const thought = new Thought({message})
   try{
     const savedThought = await thought.save();
   res.status(201).json(savedThought);
@@ -66,8 +66,9 @@ app.post('/thoughts', async(req, res) =>{
 //PATCH => change/modify individual stuff
 app.patch("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
+  const opts = { runValidators: true };
   try{
-    const likeToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}})
+    const likeToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}}, opts);
     res.status(200).json({success: true, response:`Like ${likeToUpdate.id} has their like updated`})
   } catch (error) {
     res.status(400).json({success: false, response: error});
