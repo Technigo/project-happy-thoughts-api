@@ -1,6 +1,6 @@
 # Project Happy Thoughts API
 
-In this project I'm using Express and MongoDB to build an API. The API includes both GET request endpoints to return data and POST request endpoints to create data. I'm connecting my API to an old project, Happy Thoughts.
+In this backend project I'm using Express and MongoDB to build an API. The API includes both GET request endpoints to return data, POST request endpoints to create data and PATCH request endpoints to modify data. I'm connecting my API to an old frontend project, Happy Thoughts.
 
 ## The problem
 
@@ -26,3 +26,4 @@ Frontend:
 https://maria-wellanders-happy-thoughts.netlify.app/
 
 Backend:
+https://project-happy-thoughts-api-nr7fpk77ra-lz.a.run.app

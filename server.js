@@ -13,8 +13,8 @@ const ThoughtSchema = new mongoose.Schema({
      unique: true,
      minlength:1,
      trim: true
-   },
-   hearth: {
+  },
+  hearts: {
     type: Number,
     default: 0
   },
@@ -62,11 +62,11 @@ app.post("/thoughts", async (req, res) => {
 
 // 4th route: route to modify the number of hear-likes a thought gets. Updates the thought with +1 hearts when heart-liking the specific thought.
 
-app.patch("/thoughts/:id/hearth", async (req, res) => {
+app.patch("/thoughts/:id/hearts", async (req, res) => {
 const { id } = req.params;
 try {
-  const hearthToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearth: 1}})
-  res.status(200).json({success: true, response: `Thought ${hearthToUpdate.name} has their likes updated`})
+  const heartsToUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}})
+  res.status(200).json({success: true, response: `Thought ${heartsToUpdate.name} has their likes updated`})
 } catch (error) {
   res.status(400).json({success: false, response: error})
 }
