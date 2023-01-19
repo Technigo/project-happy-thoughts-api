@@ -19,7 +19,7 @@ app.use(express.json());
 
 // Creating Schema
 const ThoughtsSchema = new mongoose.Schema({
-  text: {
+  message: {
     type: String,
     required: true, 
     minlength: 5,
@@ -46,9 +46,9 @@ app.get("/", (req, res) => {
 
 //Creates a new thought
 app.post("/thoughts", async (req, res) => {
-  const {text, createdAt} = req.body;
+  const {message, createdAt} = req.body;
   try {
-    const newThought = await new Thought({text: text, createdAt: createdAt}).save();
+    const newThought = await new Thought({message: message, createdAt: createdAt}).save();
     res.status(201).json({success: true, response: newThought});
   } catch (error) {
     res.status(400).json({success: false, response: error});
