@@ -14,7 +14,7 @@ const port = process.env.PORT || 8080;
 const app = express();
 
 // Add middlewares to enable cors and json body parsing
-app.use(cors({origin: '*'}));
+app.use(cors());
 app.use(express.json());
 
 // Creating Schema
@@ -48,7 +48,7 @@ app.get("/", (req, res) => {
 app.post("/thoughts", async (req, res) => {
   const {message, createdAt} = req.body;
   try {
-    const newThought = await new Thought({message: message, createdAt: createdAt}).save();
+    const newThought = await new Thought({message, createdAt}).save();
     res.status(201).json({success: true, response: newThought});
   } catch (error) {
     res.status(400).json({success: false, response: error});
