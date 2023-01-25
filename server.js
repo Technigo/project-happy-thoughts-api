@@ -9,7 +9,7 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
 // PORT=9000 npm start
-const port = process.env.PORT || 9000;
+const port = process.env.PORT || 8080;
 const app = express();
 
 // Create Model for mongo database
