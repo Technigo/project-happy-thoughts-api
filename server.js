@@ -9,7 +9,7 @@ mongoose.Promise = Promise;
 
 // when starting the server. Example command to overwrite PORT env variable value:
 // PORT=9000 npm start
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8080;
 const app = express();
 
 // Create Model for mongo database
