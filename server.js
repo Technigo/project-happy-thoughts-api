@@ -42,7 +42,7 @@ app.get("/", (req, res) => {
 });
 
 // The post request - to read from database
-app.get('/post', async (req, res) =>{
+app.get('/info', async (req, res) =>{
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
   res.json(thoughts);
 })
