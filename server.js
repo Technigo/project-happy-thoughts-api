@@ -1,11 +1,9 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 
-dotenv.config()
 
-const mongoUrl = process.env.MONGO_URL || `mongodb+srv://Paprika:${process.env.STRING_PW}@cluster0.6gvgrxz.mongodb.net/project-happy-thoughts-api?retryWrites=true&w=majority`;
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -40,17 +38,17 @@ const Thought = mongoose.model('Thought', {
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("This is a happy thought API!");
+  res.send("Veronika & Honza 2023");
 });
 
 // The post request - to read from database
-app.get('/thoughts', async (req, res) =>{
+app.get('/post', async (req, res) =>{
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
   res.json(thoughts);
 })
 
 // To add items to the database
-app.post('/thoughts', async(req, res) =>{
+app.post('/info', async(req, res) =>{
   // Collect the information sent by the client to our API 
   const {message} = req.body;
   // Use our mongoose model to create the database entry - to save
@@ -64,7 +62,7 @@ app.post('/thoughts', async(req, res) =>{
 })
 
 //PATCH => change/modify individual stuff
-app.patch("/thoughts/:id/like", async (req, res) => {
+app.patch("/info/:id/like", async (req, res) => {
   const { id } = req.params;
   const opts = { runValidators: true };
   try{
