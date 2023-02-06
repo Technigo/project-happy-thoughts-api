@@ -22,8 +22,7 @@ const Thought = mongoose.model('Thought', {
   message: {
     type: String,
     required: true,
-    minlength: 5,
-    maxlength: 140
+    minlength: 10,
   },
   hearts: {
     type: Number,
