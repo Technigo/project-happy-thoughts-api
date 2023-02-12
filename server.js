@@ -19,7 +19,7 @@ app.use(express.json());
 
 // Start here
 const Thought = mongoose.model('Thought', {
-  header: {
+  headline: {
     type: String,
     required: true,
   },
@@ -53,14 +53,14 @@ app.get('/info', async (req, res) =>{
 // To add items to the database
 app.post('/info', async(req, res) =>{
   // Collect the information sent by the client to our API 
-  const {header, message} = req.body;
+  const {headline, message} = req.body;
   // Use our mongoose model to create the database entry - to save
-  const thought = new Thought({header, message})
+  const thought = new Thought({headline, message})
   try{
     const savedThought = await thought.save();
   res.status(201).json(savedThought);
   }catch(err){
-    res.status(400).json({message: 'Could not save thought to the database', errors: err.errors});
+    res.status(400).json({success: false, response: error});
   }
 })
 
