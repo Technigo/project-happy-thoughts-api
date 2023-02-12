@@ -47,7 +47,7 @@ app.get('/info', async (req, res) =>{
 })
 
 // To add items to the database
-app.post('/info/092015', async(req, res) =>{
+app.post('/info', async(req, res) =>{
   // Collect the information sent by the client to our API 
   const {message} = req.body;
   // Use our mongoose model to create the database entry - to save
