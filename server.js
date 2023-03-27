@@ -36,7 +36,7 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send([
-    {"Hello!": "This is a backend built for: https://maria-wellanders-happy-thoughts.netlify.app/"}
+    {"Hello!": "This is the backend built for: https://maria-wellanders-happy-thoughts.netlify.app/"}
   ]);
 });
 
@@ -60,7 +60,8 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
-// 4th route: route to modify the number of hear-likes a thought gets. Updates the thought with +1 hearts when heart-liking the specific thought.
+// 4th route: route to modify the number of heart-likes a thought gets.
+// Updates the thought with +1 hearts when heart-liking the specific thought.
 
 app.patch("/thoughts/:id/hearts", async (req, res) => {
 const { id } = req.params;
