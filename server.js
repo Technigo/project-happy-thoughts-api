@@ -2,10 +2,27 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/happy-thoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
+// Mongoose Thought model
+const Thought = mongoose.model('Thought', {
+  message: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 140
+  },
+  heart: {
+    type: Number,
+    default: 0,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
 // PORT=9000 npm start
@@ -17,9 +34,23 @@ app.use(cors());
 app.use(express.json());
 
 // Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+app.get("/thoughts", async (req, res) => {
+  const Thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20);
+  res.json(Thoughts);
 });
+
+app.post("/thoughts", async (req, res) => {
+  const { message, createdAt} = req.body;
+  const thought = new Thought({message, createdAt});
+  
+  try {
+    const savedThought = await thought.save();
+    res.status(200).json(savedThought);
+  } catch (e) {
+    res.status(400).json({message: 'Could not save thought', error: e});
+  }
+})
+
 
 // Start the server
 app.listen(port, () => {
