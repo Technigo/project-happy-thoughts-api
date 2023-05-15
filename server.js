@@ -20,7 +20,19 @@ const Thoughts = mongoose.model('Thoughts',{
   heart:{
     type:Number,
     default:0
-  }
+  },
+category:{
+  type:String,
+  minlength:2,
+  maxlength:10,
+  default:"Other"
+},
+name:{
+  type:String,
+  minlength:2,
+  maxlength:15,
+  default:"Anonymous"
+}
 })
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
@@ -66,8 +78,8 @@ try{
 })
 
 app.post('/thoughts', async(req, res)=>{
-  const { text }= req.body
-  const thought = await Thoughts({ text })
+  const { text, category }= req.body
+  const thought = await Thoughts(req.body)
 
 try{
   const savedThought = await thought.save()
