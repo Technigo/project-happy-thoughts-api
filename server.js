@@ -6,6 +6,36 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
+
+//In order to store the database we need a database model 
+const { Schema } = mongoose;
+const HappyThoughtsSchema = new Schema({
+  text: {
+   type: String,
+   required: true,
+   unique: true,
+},
+ description: {
+  type: String,
+  minlength: 4,
+  maxlength: 20,
+  trim: true  //removes unnecessary whitespaces from string
+ },
+ createdAt: {
+  type: Date,
+  default: new Date()
+ }, 
+ heart: {
+  type: Number,
+  default: 0
+ },
+ kind: { //array of all the allowed values
+  type: String,
+  enum: ["Thoughts", "Emojis"]
+ }
+
+});
+
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
 // PORT=9000 npm start
@@ -21,37 +51,35 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
-//In order to store the database we need a database model 
-const { Schema } = mongoose;
-const HappyThoughtsSchema = new Schema({
-  name: {
-   type: String,
-   required: true,
-   unique: true,
-},
- description: {
-  type: String,
-  minlength: 4,
-  maxlength: 20,
-  trim: true  //removes unnecessary whitespaces from string
- },
- createdAt: {
-  type: Date,
-  default: new Date()
- }, 
- kind: { //array of all the allowed values
-  type: String,
-  enum: ["Thoughts", "Emojis"]
- }
 
-});
+const HappyThoughts = mongoose.model("HappyThoughts", HappyThoughtsSchema);
 
-const HappyThoughts = mongoose.model("HappyThoguhts", HappyThoughtsSchema);
+app.get("/HappyThoughts", async(req, res) => {
+  const allThoughtsData = await HappyThoughts.find()
+  try {
+    const happyThought = await HappyThoughts.aggregate([
+      { $sort: { createdAt: -1 } },
+    ])
+    if(happyThought){
+      res.status(200).json({
+        success: true,
+        message: "OK",
+        body: {
+          result: HappyThoughts,
+        }
+      })
+    } else {
+      res.status(404).json({ error: "No HappyThoughts found" })
+    }}
+    catch(err){
+      res.status(400).json({ message: "Request failed", error: err })
+    }
+  })
 
 app.post("/HappyThoughts", async (req, res) =>{
-  const {kind, name, description} = req.body;
+  const {kind, text, description} = req.body;
   try {
-    const happyThought = await new HappyThoughts({kind, name, description}).save();
+    const happyThought = await new HappyThoughts({kind, text, heart}).save();
     res.status(201).json({
       success: true,
       response: happyThought,
@@ -92,7 +120,7 @@ app.patch("/HappyThoughts/:id", async (req,res) => {
 app.get("/HappyThought/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const happyThought= await FruitOrVegetable.findById(id);
+    const happyThought= await HappyThoughts.findById(id);
     res.status(200).json({
       success: true,
       response: happyThought,
