@@ -35,13 +35,13 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/thoughts", async (req, res) => {
-  const Thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20);
-  res.json(Thoughts);
+  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20);
+  res.json(thoughts);
 });
 
 app.post("/thoughts", async (req, res) => {
-  const { message, createdAt} = req.body;
-  const thought = new Thought({message, createdAt});
+  const { message } = req.body;
+  const thought = new Thought({message});
   
   try {
     const savedThought = await thought.save();
@@ -51,6 +51,13 @@ app.post("/thoughts", async (req, res) => {
   }
 })
 
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  // holds the request-id
+  const likeRequestId = req.params.thoughtId;
+  // Full thoughts list (matches)
+  const likedThought = await Thought.findById(likeRequestId);
+  console.log(likedThought);
+});
 
 // Start the server
 app.listen(port, () => {
