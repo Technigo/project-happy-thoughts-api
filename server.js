@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happythoughtproject";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -81,22 +81,6 @@ app.post("/thoughts", async (req, res) =>{
   }
 });
 
-// POST thoughts/:thoughtId/like
-// app.post("/thoughts/:thoughtId/like", async (req, res)=>{
-//   try{
-//         const likes = await Thought.findOneAndUpdate(
-//           { "_id": req.params.thoughtId }, //filters and required
-//           { $inc: { "hearts": 1 } }, //updates and required
-//           { new: true } //updates the numbers of hearts in POST
-//         )
-//         res.status(201).json(likes)
-//   } catch (err) {
-//     res.status(400).json({ message: "Could not save your like", error: err.errors})
-//   }
-// })
-
-
-//PATCH- to update like-count
 
 // Patch for updating like-count
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
