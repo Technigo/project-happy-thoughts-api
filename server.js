@@ -2,26 +2,29 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-const Thought = mongoose.model('Thought', {
+const { Schema } = mongoose;
+const ThoughtsSchema = new Schema ({
   message: {
     type: String,
     required: true,
     minlength: 5,
     maxlength: 500
   },
-  createdAT: {
-    type: Date,
-    default: () => new Date()
-  },
   hearts: {
     type: Number,
     default: 0
+  },
+  createdAt: {
+    type: Date,
+    default: () => new Date()
   }
 })
+
+const Thoughts = mongoose.model("Thoughts", ThoughtsSchema)
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
 // PORT=9000 npm start
@@ -37,24 +40,65 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
-app.post('/thoughts', async (req, res) => {
+app.get("/thoughts", async (req, res) => {
+  const { thought } = req.params;
+  try {
+    const thoughtList = await Thoughts.find(thought)
+    .sort({ 
+      createdAt: "desc" }).limit(20).exec();
+    res.status(200).json({
+      success: true,
+      response: thoughtList,
+      message: "Success"
+    });
+  } catch(e) {
+    res.status(400).json({
+      success: false,
+      response: e,
+      message: "Could not fetch list"
+    });
+  }
+});
+
+
+app.post('/thoughts', (req, res) => {
   //Promises
   const { message } = req.body
-  const thought = new Thought({ message })
-  await thought.save()
-.then ((thought) => {
-  res.status(200).json(thought)
+  const newThought = new Thoughts({ message: message }).save()
+.then ((newThought) => {
+  res.status(201).json({
+    success: true,
+    response: newThought,
+    message: "Success"
+  })
 })
 .catch((e) => {
-  res.status(400).json({message: "Could not send thought", errors: e.errors})
+  res.status(400).json({
+    success: false,
+    response: e,
+    message: "Could not send thought"
+  })
 })
 })
 
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+  const { id } = req.params
 
-app.post('thoughts/:thoughtId/like', async (req, res) => {
-
+  try {
+    const heartUpdate = await Thoughts.findByIdAndUpdate(id, {$inc: { hearts: 1 }})
+    res.status(200).json({
+      success: true,
+      response: heartUpdate,
+      message: "Added heart"
+    })
+  } catch (e) {
+    res.status(400).json({
+      success: false,
+      response: e,
+      message: "Did not update"
+    })
+  }
 })
-
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
