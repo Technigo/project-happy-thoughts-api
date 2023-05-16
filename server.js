@@ -71,10 +71,9 @@ app.post("/HappyThoughts", async (req, res) =>{
 
 app.patch("/HappyThoughts/:id", async (req,res) => {
  const { id } = req.params;
- const newDescription = req.body.newDescription;
  try {
- const happyThought = await HappyThoughts.findByIdAndUpdate(id, {description: newDescription})
- res.status(201).json({
+ const happyThought = await HappyThoughts.findById(id);
+ res.status(200).json({
   success: true,
   response: happyThought,
   message: "Created successfully"
@@ -87,6 +86,45 @@ app.patch("/HappyThoughts/:id", async (req,res) => {
   });
  }
 
+});
+
+// modify when nothing found
+app.get("/HappyThought/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const happyThought= await FruitOrVegetable.findById(id);
+    res.status(200).json({
+      success: true,
+      response: happyThought,
+      message: "found successfully"
+     });
+  } catch(e) {
+    res.status(400).json({
+      success: false,
+      response: e,
+      message: "did not successfully"
+     });
+  }
+});
+
+// delete
+app.delete("/HappyThought/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    // const foodItem = await FruitOrVegetable.findByIdAndDelete(id);
+    const happyThought = await HappyThoughts.findByIdAndRemove(id);
+    res.status(200).json({
+      success: true,
+      response: happyThought,
+      message: "deleted successfully"
+     });
+  } catch(e) {
+    res.status(400).json({
+      success: false,
+      response: e,
+      message: "did not successfully"
+     });
+  }
 });
 
 // Start the server
