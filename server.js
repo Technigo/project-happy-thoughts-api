@@ -30,7 +30,7 @@ const Thoughts = mongoose.model("Thoughts", ThoughtsSchema)
 
 if (process.env.RESET_DB) {
 	const seedDatabase = async () => {
-    await Thoughts.deleteMany({})
+    // await Thoughts.deleteMany({})
 
 		data.forEach((thoughtsData) => {
 			new Thoughts(thoughtsData).save()
