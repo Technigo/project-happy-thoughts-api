@@ -6,6 +6,8 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
+const listEndpoints = require('express-list-endpoints')
+
 const { Schema } = mongoose;
 const ThoughtsSchema = new Schema ({
   message: {
@@ -25,6 +27,18 @@ const ThoughtsSchema = new Schema ({
 })
 
 const Thoughts = mongoose.model("Thoughts", ThoughtsSchema)
+
+if (process.env.RESET_DB) {
+	const seedDatabase = async () => {
+    await Thoughts.deleteMany({})
+
+		data.forEach((thoughtsData) => {
+			new Thoughts(thoughtsData).save()
+		})
+  }
+
+  seedDatabase()
+}
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
 // PORT=9000 npm start
@@ -37,7 +51,7 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.json(listEndpoints(app));
 });
 
 app.get("/thoughts", async (req, res) => {
