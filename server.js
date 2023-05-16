@@ -12,6 +12,22 @@ mongoose.Promise = Promise;
 const port = process.env.PORT || 8080;
 const app = express();
 
+const Thought = mongoose.model('Thought', {
+  message: {
+    type: String,
+    required: true,
+    minlength:5,
+    maxlength:500
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  heart: {
+    likes: Number
+  }
+})
+
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
@@ -20,6 +36,24 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
+
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
+  res.json(thoughts); 
+})
+
+app.post('/thoughts', async (req, res) => {
+const {message} = req.body;
+
+const thought = new Thought({message})
+
+try{
+  const savedThought = await thought.save();
+  res.status(201).json(savedThought)
+}catch (e) {
+  res.status(400).json({message: 'Could not save thought to the database', error: e.errors})
+}
+})
 
 // Start the server
 app.listen(port, () => {
