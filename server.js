@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts-api";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -93,6 +93,20 @@ try{
   }
 });
 
+/*app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+  //id from url :param
+  const { thoughtId } = req.params;
+  // if id is found increases heart count by one
+  try {
+    const liked = await Thought.findByIdAndUpdate(thoughtId,{ $inc: { heart: 1 } });
+    res.status(200).json(liked);
+  } catch (e) {
+    res.status(400).json({
+      success: false,
+      message: 'Could not like thought',
+      error: e});
+  };
+});*/
  /* app.post("thoughts/:thoughtId/like", async (req, res)=>{
   const {id} = req.body;
   try{ 
