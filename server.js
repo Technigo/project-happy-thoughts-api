@@ -41,6 +41,13 @@ const ThoughtSchema = new Schema({
 });
 const Thought = mongoose.model("Thought", ThoughtSchema);
 
+// This endpoint should return a maximum of 20 thoughts
+// and sorted by createdAt to show the most recent thoughts first.
+app.get("/thoughts", async(req, res) => {
+  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
+  res.json(thoughts);
+});
+
 // Post new thought
 app.post("/thoughts", async(req, res) => {
   const { message } = req.body;
