@@ -55,9 +55,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/thoughts", async (req, res) => {
-  const { thought } = req.params;
   try {
-    const thoughtList = await Thoughts.find(thought)
+    const thoughtList = await Thoughts.find()
     .sort({ 
       createdAt: "desc" }).limit(20).exec();
     res.status(200).json({
@@ -77,8 +76,8 @@ app.get("/thoughts", async (req, res) => {
 
 app.post('/thoughts', (req, res) => {
   //Promises
-  const { message } = req.body
-  const newThought = new Thoughts({ message: message }).save()
+  const { message, createdAt } = req.body
+  const newThought = new Thoughts({ message: message, createdAt: createdAt }).save()
 .then ((newThought) => {
   res.status(201).json({
     success: true,
