@@ -1,8 +1,6 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This Express-MongoDB API project is an API built with Express and MongoDB, offering GET request endpoints for data retrieval and POST endpoints for data creation. It implements documented routes, ensures validation and error handling for user input, and handles errors when adding hearts to a thought.
 
 ## The problem
 
