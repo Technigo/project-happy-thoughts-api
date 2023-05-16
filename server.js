@@ -82,69 +82,59 @@ app.post("/thoughts", async (req, res) =>{
 });
 
 // POST thoughts/:thoughtId/like
-app.post("thoughts/:thoughtId/like", async (req, res)=>{
-  try{
-        const likes = await Thought.findOneAndUpdate(
-          { "_id": req.params.id }, //filters and required
-          { $inc: { "hearts": 1 } }, //updates and required
-          { new: true } //updates the numbers of hearts in POST
-        )
-        res.status(201).json(likes)
-  } catch (err) {
-    res.status(400).json({ message: "Could not save your like", error: err.errors})
-  }
-})
-  //         success: true,
-  //         response: likes,
-  //          message: "created successfully"
-  //        });
-  //      } catch (e) {
-  //        res.status(400).json({
-  //         success: false,
-  //         response: e,
-  //         message: "error occured"
-  //       });
-  //     }
-  //  });
-
-//PATCH- to update
-app.patch("/thoughts/:id", async (req,res) => {
- const { id } = req.params;
- try {
- const thought = await Thoughts.findById(id);
- res.status(200).json({
-  success: true,
-  response: thought,
-  message: "Created successfully"
-});
- } catch(e) {
-  res.status(400).json({
-    success: false,
-    response: e,
-    message: "Error occured"
-  });
- }
-
-});
-
-
-// app.get("/thought/:id", async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const thought= await Thoughts.findById(id);
-//     res.status(200).json({
-//       success: true,
-//       response: thought,
-//       message: "found successfully"
-//      });
-//   } catch(e) {
-//     res.status(400).json({
-//       success: false,
-//       response: e,
-//       message: "did not successfully"
-//      });
+// app.post("/thoughts/:thoughtId/like", async (req, res)=>{
+//   try{
+//         const likes = await Thought.findOneAndUpdate(
+//           { "_id": req.params.thoughtId }, //filters and required
+//           { $inc: { "hearts": 1 } }, //updates and required
+//           { new: true } //updates the numbers of hearts in POST
+//         )
+//         res.status(201).json(likes)
+//   } catch (err) {
+//     res.status(400).json({ message: "Could not save your like", error: err.errors})
 //   }
+// })
+
+
+//PATCH- to update like-count
+
+// Patch for updating like-count
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+  //id from url :param
+  const { thoughtId } = req.params;
+  // if id is found increases heart count by one
+  try {
+    const liked = await Thought.findByIdAndUpdate(thoughtId,{ $inc: { heart: 1 } });
+    res.status(200).json(liked);
+  } catch (e) {
+    res.status(400).json({
+      success: false,
+      message: 'Could not like thought',
+      error: e});
+    }
+  });
+
+// app.patch("/thoughts/:id", async (req,res) => {
+//  const { id } = req.params;
+//  try {
+//  const thought = await Thoughts.findById(id);
+//  res.status(200).json({
+//   success: true,
+//   response: thought,
+//   message: "Created successfully"
 // });
+//  } catch(e) {
+//   res.status(400).json({
+//     success: false,
+//     response: e,
+//     message: "Error occured"
+//   });
+//  }
+
+// });
+
+
+
 
 // delete
 app.delete("/thought/:id", async (req, res) => {
