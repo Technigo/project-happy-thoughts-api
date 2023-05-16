@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 
 //In order to store the database we need a database model 
 const { Schema } = mongoose;
-const ThoughtsSchema = new Schema({
+const ThoughtSchema = new Schema({
   message: {
    type: String,
    required: true,
@@ -41,15 +41,15 @@ const ThoughtsSchema = new Schema({
  }
 });
 
-const Thoughts = mongoose.model("Thoughts", ThoughtsSchema);
+const Thought = mongoose.model("Thought", ThoughtSchema);
 
 // GET - a thought, modify when nothing found
 app.get("/thoughts", async (req, res) => {
   try {
-    const thoughts = await HappyThoughts.find().sort({ createdAt: -1 }).limit(20);
+    const thought = await Thought.find().sort({ createdAt: -1 }).limit(20);
     res.status(200).json({
       success: true,
-      response: thoughts,
+      response: thought,
       message: "Thoughts retrieved successfully"
     });
   } catch(e) {
@@ -64,8 +64,9 @@ app.get("/thoughts", async (req, res) => {
 //POST-create something
 app.post("/thoughts", async (req, res) =>{
   const {message} = req.body;
+  const thought = new Thought ({ message })
   try {
-    const newThought = await new HappyThoughts({message}).save();
+    const newThought = await thought.save();
     res.status(201).json({
       success: true,
       response: newThought,
@@ -75,28 +76,36 @@ app.post("/thoughts", async (req, res) =>{
     res.status(400).json({
       success: false,
       response: e,
-      message: "Error occured"
+      message: "Could not save your thought"
     });
   }
 });
 
+// POST thoughts/:thoughtId/like
 app.post("thoughts/:thoughtId/like", async (req, res)=>{
-  const {id} = req.body;
   try{
-        const likes = await new HappyThoughts({id}).save();
-        res.status(201).json({
-          success: true,
-          response: likes,
-           message: "created successfully"
-         });
-       } catch (e) {
-         res.status(400).json({
-          success: false,
-          response: e,
-          message: "error occured"
-        });
-      }
-   });
+        const likes = await Thought.findOneAndUpdate(
+          { "_id": req.params.id }, //filters and required
+          { $inc: { "hearts": 1 } }, //updates and required
+          { new: true } //updates the numbers of hearts in POST
+        )
+        res.status(201).json(likes)
+  } catch (err) {
+    res.status(400).json({ message: "Could not save your like", error: err.errors})
+  }
+})
+  //         success: true,
+  //         response: likes,
+  //          message: "created successfully"
+  //        });
+  //      } catch (e) {
+  //        res.status(400).json({
+  //         success: false,
+  //         response: e,
+  //         message: "error occured"
+  //       });
+  //     }
+  //  });
 
 //PATCH- to update
 app.patch("/thoughts/:id", async (req,res) => {
