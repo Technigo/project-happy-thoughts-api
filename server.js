@@ -66,7 +66,7 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const thoughtId = req.params.thoughtId;
 
   try {
-    const hearted = await Thought.updateOne(
+    const hearted = await Thought.findOneAndUpdate(
       { _id: thoughtId },
       { $inc: { hearts: 1 } }
     );
