@@ -33,30 +33,37 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Start defining your routes here
+// Return 20 latest thoughts
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20);
-  res.json(thoughts);
+  const thoughtsList = await Thought.find().sort({createdAt: 'desc'}).limit(20);
+  res.json(thoughtsList);
 });
 
+// Add new post
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
-  const thought = new Thought({message});
+  const newThought = new Thought({ message });
   
   try {
-    const savedThought = await thought.save();
-    res.status(200).json(savedThought);
+    const savedThought = await newThought.save();
+    res.status(201).json(savedThought);
   } catch (e) {
-    res.status(400).json({message: 'Could not save thought', error: e});
+    res.status(400).json({ message: 'Could not save thought', error: e });
   }
-})
+});
 
-app.post("/thoughts/:thoughtId/like", async (req, res) => {
-  // holds the request-id
-  const likeRequestId = req.params.thoughtId;
-  // Full thoughts list (matches)
-  const likedThought = await Thought.findById(likeRequestId);
-  console.log(likedThought);
+
+// Patch for updating like-count
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+  //id from url :param
+  const { thoughtId } = req.params;
+  // if id is found increases heart count by one
+  try {
+    const liked = await Thought.findByIdAndUpdate(thoughtId,{ $inc: { heart: 1 } });
+    res.status(201).json(liked);
+  } catch (e) {
+    res.status(400).json({message: 'Could not like thought', error: e});
+  };
 });
 
 // Start the server
