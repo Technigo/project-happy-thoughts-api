@@ -73,7 +73,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     if (updatedThought) {
       res.json(updatedThought);
     } else {
-      res.status(404).json({ message: 'The thought could not found' });
+      res.status(404).json({ message: 'The thought could not be found' });
     }
   } catch (error) {
     res.status(400).json({ message: 'Invalid request', error });
