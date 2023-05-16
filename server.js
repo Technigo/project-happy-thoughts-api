@@ -78,8 +78,8 @@ try{
 })
 
 app.post('/thoughts', async(req, res)=>{
-  const { text, category }= req.body
-  const thought = await Thoughts(req.body)
+  const { text, category, name } = req.body
+  const thought = await Thoughts({text, category, name})
 
 try{
   const savedThought = await thought.save()
@@ -91,7 +91,24 @@ res.status(400).json({message: 'Post failed', error:err })
 }
 })
 
-app.post('/thoughts/:thoughtId/like', async(req, res)=>{
+app.get('/thoughts/:thoughtId', async(req, res)=>{
+const {thoughtId} = req.params
+
+try{
+const thought = await Thoughts.findById(thoughtId);
+if (thought) {
+res.status(200).json(thought);
+}
+else {
+      res.status(404).json({ message: 'Thought not found' });
+    }
+}
+catch(err){
+res.status(400).json({message: 'Failed to like thought', error:err })
+}
+})
+
+app.patch('/thoughts/:thoughtId/like', async(req, res)=>{
 const {thoughtId} = req.params
 
 try{
@@ -105,6 +122,46 @@ else {
 }
 catch(err){
 res.status(400).json({message: 'Failed to like thought', error:err })
+}
+})
+
+app.patch('/thoughts/:thoughtId', async(req, res)=>{
+  const {thoughtId} = req.params
+  const { category, text } = req.body
+  const thought = await Thoughts({category, text})
+
+try{
+  if(thought){
+  const updatedThought = await Thoughts.findByIdAndUpdate(thoughtId, { category, text }, { new: true });
+  res.status(200).json(updatedThought);
+  }else{
+    res.status(404).json({message: 'Not allowed to update', error:err })
+  }
+}
+
+catch(err){
+res.status(400).json({message: 'Update failed', error:err })
+}
+})
+
+app.delete('/thoughts/:thoughtId', async(req, res)=>{
+  const {thoughtId} = req.params
+try{
+    const thought = await Thoughts.findById(thoughtId);
+  if(thought){
+  const deletedThought = await Thoughts.findByIdAndDelete(thoughtId);
+  res.status(200).json({
+success:'OK',
+message:'Thought got deleted successfully',
+body:deletedThought
+  });
+  }else{
+    res.status(404).json({message: 'Thought not found', error:err })
+  }
+}
+
+catch(err){
+res.status(400).json({message: 'Deletion failed', error:err })
 }
 })
 
