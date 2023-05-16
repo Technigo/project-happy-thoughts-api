@@ -41,7 +41,7 @@ const ThoughtSchema = new Schema({
 });
 const Thought = mongoose.model("Thought", ThoughtSchema);
 
-// POST new thought
+// Post new thought
 app.post("/thoughts", async(req, res) => {
   const { message } = req.body;
   try {
@@ -56,6 +56,26 @@ app.post("/thoughts", async(req, res) => {
       success: false,
       respone: e,
       message: "error occured, could not create new thought"
+    });
+  }
+});
+
+// Update amount of likes (hearts)
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+  const { addHeart } = req.body;
+  try {
+    const updateHearts = await Thought.findByIdAndUpdate(thoughtId, {hearts: addHeart});
+    res.status(201).json({
+      success: true,
+      response: {},
+      message: "updated successfully"
+    });
+  } catch(e) {
+    res.status(400).json({
+      success: false,
+      response: e,
+      message: "error occured, could not update hearts"
     });
   }
 });
