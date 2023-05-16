@@ -139,7 +139,6 @@ app.get("/HappyThought/:id", async (req, res) => {
 app.delete("/HappyThought/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    // const foodItem = await FruitOrVegetable.findByIdAndDelete(id);
     const happyThought = await HappyThoughts.findByIdAndRemove(id);
     res.status(200).json({
       success: true,
