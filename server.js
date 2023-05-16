@@ -7,35 +7,6 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
 
-//In order to store the database we need a database model 
-const { Schema } = mongoose;
-const HappyThoughtsSchema = new Schema({
-  text: {
-   type: String,
-   required: true,
-   unique: true,
-},
- description: {
-  type: String,
-  minlength: 4,
-  maxlength: 20,
-  trim: true  //removes unnecessary whitespaces from string
- },
- createdAt: {
-  type: Date,
-  default: new Date()
- }, 
- heart: {
-  type: Number,
-  default: 0
- },
- kind: { //array of all the allowed values
-  type: String,
-  enum: ["Thoughts", "Emojis"]
- }
-
-});
-
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
 // PORT=9000 npm start
@@ -51,38 +22,53 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
+//In order to store the database we need a database model 
+const { Schema } = mongoose;
+const ThoughtsSchema = new Schema({
+  message: {
+   type: String,
+   required: true,
+   minlength: 4,
+   maxlength: 20
+},
+ createdAt: {
+  type: Date,
+  default: new Date()
+ }, 
+ hearts: {
+  type: Number,
+  default: 0
+ }
+});
 
-const HappyThoughts = mongoose.model("HappyThoughts", HappyThoughtsSchema);
+const Thoughts = mongoose.model("Thoughts", ThoughtsSchema);
 
-app.get("/HappyThoughts", async(req, res) => {
-  const allThoughtsData = await HappyThoughts.find()
+// GET - a thought, modify when nothing found
+app.get("/thoughts", async (req, res) => {
   try {
-    const happyThought = await HappyThoughts.aggregate([
-      { $sort: { createdAt: -1 } },
-    ])
-    if(happyThought){
-      res.status(200).json({
-        success: true,
-        message: "OK",
-        body: {
-          result: HappyThoughts,
-        }
-      })
-    } else {
-      res.status(404).json({ error: "No HappyThoughts found" })
-    }}
-    catch(err){
-      res.status(400).json({ message: "Request failed", error: err })
-    }
-  })
+    const thoughts = await HappyThoughts.find().sort({ createdAt: -1 }).limit(20);
+    res.status(200).json({
+      success: true,
+      response: thoughts,
+      message: "Thoughts retrieved successfully"
+    });
+  } catch(e) {
+    res.status(400).json({
+      success: false,
+      response: e,
+      message: "did not successfully"
+     });
+  }
+});
 
-app.post("/HappyThoughts", async (req, res) =>{
-  const {kind, text, description} = req.body;
+//POST-create something
+app.post("/thoughts", async (req, res) =>{
+  const {message} = req.body;
   try {
-    const happyThought = await new HappyThoughts({kind, text, heart}).save();
+    const newThought = await new HappyThoughts({message}).save();
     res.status(201).json({
       success: true,
-      response: happyThought,
+      response: newThought,
       message: "Created successfully"
     });
   } catch (e) {
@@ -93,17 +79,33 @@ app.post("/HappyThoughts", async (req, res) =>{
     });
   }
 });
-//POST-create something
-//PATCH-update
-//PUT-replace
 
-app.patch("/HappyThoughts/:id", async (req,res) => {
+app.post("thoughts/:thoughtId/like", async (req, res)=>{
+  const {id} = req.body;
+  try{
+        const likes = await new HappyThoughts({id}).save();
+        res.status(201).json({
+          success: true,
+          response: likes,
+           message: "created successfully"
+         });
+       } catch (e) {
+         res.status(400).json({
+          success: false,
+          response: e,
+          message: "error occured"
+        });
+      }
+   });
+
+//PATCH- to update
+app.patch("/thoughts/:id", async (req,res) => {
  const { id } = req.params;
  try {
- const happyThought = await HappyThoughts.findById(id);
+ const thought = await Thoughts.findById(id);
  res.status(200).json({
   success: true,
-  response: happyThought,
+  response: thought,
   message: "Created successfully"
 });
  } catch(e) {
@@ -116,33 +118,33 @@ app.patch("/HappyThoughts/:id", async (req,res) => {
 
 });
 
-// modify when nothing found
-app.get("/HappyThought/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const happyThought= await HappyThoughts.findById(id);
-    res.status(200).json({
-      success: true,
-      response: happyThought,
-      message: "found successfully"
-     });
-  } catch(e) {
-    res.status(400).json({
-      success: false,
-      response: e,
-      message: "did not successfully"
-     });
-  }
-});
+
+// app.get("/thought/:id", async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const thought= await Thoughts.findById(id);
+//     res.status(200).json({
+//       success: true,
+//       response: thought,
+//       message: "found successfully"
+//      });
+//   } catch(e) {
+//     res.status(400).json({
+//       success: false,
+//       response: e,
+//       message: "did not successfully"
+//      });
+//   }
+// });
 
 // delete
-app.delete("/HappyThought/:id", async (req, res) => {
+app.delete("/thought/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const happyThought = await HappyThoughts.findByIdAndRemove(id);
+    const thought = await Thoughts.findByIdAndRemove(id);
     res.status(200).json({
       success: true,
-      response: happyThought,
+      response: thought,
       message: "deleted successfully"
      });
   } catch(e) {
