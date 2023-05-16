@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1/project-happy-thoughts-api";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -12,14 +12,85 @@ mongoose.Promise = Promise;
 const port = process.env.PORT || 8080;
 const app = express();
 
+// Will create a list of all endpoints in our API
+const listEndpoints = require('express-list-endpoints');
+
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
 
+
+// Schemas and models constructed here:
+
+const { Schema } = mongoose;
+
+const ThoughtSchema = new Schema({
+  message: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 140
+  },
+  heart: {
+    type: Number,
+    default: 0
+  },
+  createdAt: {
+    type: Date,
+    default: new Date()
+  }
+})
+
+const Thought = mongoose.model('Thought', ThoughtSchema)
+
+
+
+
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.status(200).send({
+    success: true,
+    message: "OK",
+    body: {
+      content: "Matildas Happy Thoughts API",
+      endpoints: listEndpoints(app)
+    }
+  });
 });
+
+
+app.get("/thoughts", async (req, res) => {
+    // Find all thoughts, sort in descending order by creation date, limit thoughts to 20, and execute the query.
+    const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
+    res.status(200).json(thoughts);
+});
+
+
+app.post("/thoughts", async (req, res) => {
+  const {message} = req.body;
+  try {
+    const thought = await new Thought({message}).save();
+    res.status(201).json({
+      success: true,
+      response: thought,
+      message: 'Thought posted successfully'
+    })
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      response: err,
+      message: 'Error occured while trying to post the thought'
+    })
+  }
+});
+
+
+// Patch = update
+app.patch("/thoughts/:id", async (req, res) => {
+  const { id } = req.params;
+  
+})
+
 
 // Start the server
 app.listen(port, () => {
