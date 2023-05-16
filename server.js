@@ -17,14 +17,15 @@ const Thought = mongoose.model('Thought', {
     type: String,
     required: true,
     minlength:5,
-    maxlength:500
+    maxlength:140
   },
   createdAt: {
     type: Date,
     default: Date.now
   },
-  heart: {
-    likes: Number
+  hearts: {
+    type: Number,
+    default: 0
   }
 })
 
@@ -40,7 +41,7 @@ app.get("/", (req, res) => {
 app.get('/thoughts', async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
   res.json(thoughts); 
-})
+  })
 
 app.post('/thoughts', async (req, res) => {
 const {message} = req.body;
@@ -53,6 +54,17 @@ try{
 }catch (e) {
   res.status(400).json({message: 'Could not save thought to the database', error: e.errors})
 }
+})
+
+app.post('/thoughts/:thoughtID/like', async (req, res) => {
+  const { id } = req.params
+
+  try{
+    const heartsUpdated = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}})
+    res.status(200).json({success: true, response: `Thought ${heartsUpdated.id} has been updated with a heart`})
+  } catch (e) {
+    res.status(400).json({success: false, response: "Thought-Id not found"})
+  }
 })
 
 // Start the server
