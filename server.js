@@ -1,8 +1,9 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import listEndpoints from "express-list-endpoints"
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -16,10 +17,61 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Thought schema
+const ThoughtSchema = new mongoose.Schema({
+  message: {
+    type: String,
+    minlength: 5,
+    maxlength: 400,
+    required: true
+  },
+  hearts: {
+    type: Number,
+    default: 0
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+})
+
+// Model for ThoughtSchema
+const Thought = mongoose.model('Thought', ThoughtSchema)
+
+
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.json(listEndpoints(app))
 });
+
+app.get("/thoughts", async (req, res) => {
+  const thoughts = await Thought.find();
+  if (thoughts) {
+    res.json(thoughts)
+  } else {
+    res.status(404).json({ error: "thoughts not found" })
+  }
+  
+})
+
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body;
+  try {
+    const newThought = await new Thought({
+      message: message
+    }).save()
+    res.status(200).json({
+      succes: true,
+      response: `"${newThought}" was added` 
+    })
+  } catch (err) {
+      res.status(400).json({
+        succes: false,
+        message: 'Thought could not be added',
+        errors: err.errors
+    })
+  }
+})
 
 // Start the server
 app.listen(port, () => {
