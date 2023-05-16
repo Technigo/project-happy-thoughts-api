@@ -98,28 +98,6 @@ app.patch("/thoughts/:thoughtId/like", async (req, res) => {
     }
   });
 
-// app.patch("/thoughts/:id", async (req,res) => {
-//  const { id } = req.params;
-//  try {
-//  const thought = await Thoughts.findById(id);
-//  res.status(200).json({
-//   success: true,
-//   response: thought,
-//   message: "Created successfully"
-// });
-//  } catch(e) {
-//   res.status(400).json({
-//     success: false,
-//     response: e,
-//     message: "Error occured"
-//   });
-//  }
-
-// });
-
-
-
-
 // delete
 app.delete("/thought/:id", async (req, res) => {
   const { id } = req.params;
