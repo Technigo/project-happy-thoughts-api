@@ -45,13 +45,12 @@ app.get("/", (req, res) => {
 });
 
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find();
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec();
   if (thoughts) {
     res.json(thoughts)
   } else {
     res.status(404).json({ error: "thoughts not found" })
   }
-  
 })
 
 app.post("/thoughts", async (req, res) => {
@@ -62,12 +61,12 @@ app.post("/thoughts", async (req, res) => {
     }).save()
     res.status(200).json({
       succes: true,
-      response: `"${newThought}" was added` 
+      response: `This thought was posted: ${newThought}` 
     })
   } catch (err) {
       res.status(400).json({
         succes: false,
-        message: 'Thought could not be added',
+        message: 'Thought could not be posted',
         errors: err.errors
     })
   }
