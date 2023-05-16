@@ -94,7 +94,7 @@ app.post('/thoughts', async (req, res) => {
   }
 });
 
-app.patch("/thoughts/:id/likes", async (req, res) => {
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { id } = req.params;
   try {
     const updateLikes = await Message.findByIdAndUpdate(id, { $inc: { likes: 1 } });
