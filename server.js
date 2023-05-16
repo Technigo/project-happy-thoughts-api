@@ -80,7 +80,20 @@ try{
  });
 
  // POST thoughts/:thoughtId/like
- app.post("thoughts/:thoughtId/like", async (req, res)=>{
+ app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  try {
+    const likes = await HappyThoughts.findOneAndUpdate(
+      { "_id": req.params.thoughtId }, // Corrected parameter name
+      { $inc: { "hearts": 1 } },
+      { new: true }
+    );
+    res.status(201).json(likes);
+  } catch (err) {
+    res.status(400).json({ message: "Could not save your like", error: err.errors });
+  }
+});
+
+ /* app.post("thoughts/:thoughtId/like", async (req, res)=>{
   const {id} = req.body;
   try{ 
         const likes = await new HappyThoughts({id}).save();
@@ -96,7 +109,7 @@ try{
           message: "error occured"
         });
       }
-   });
+   });*/
 
 
 
