@@ -88,11 +88,11 @@ app.post("/thoughts", async (req, res) => {
 
 
 
-////////////PATCH////////////////
-app.patch("/thoughts/:id/likes", async (req, res) => {
-  const { id } = req.params
+////////////POST////////////////
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params
   try{
-    const updateLikes = await Thought.findByIdAndUpdate(id, {$inc: {likes: 1 } })
+    const updateLikes = await Thought.findByIdAndUpdate(thoughtId, {$inc: {likes: 1 } })
     res.status(201).json({
       success: true,
       response: `Happy thought: ${updateLikes.message} has been updated`
