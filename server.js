@@ -65,26 +65,27 @@ app.get("/thoughts", async (req, res) => {
     res.status(200).json(thoughts);
 });
 
+// Accessing a single thought by _id
+// E.g. http://localhost:8080/thoughts/id/6463dda65e61139a83f59492
 app.get("/thoughts/id/:id", async (req, res) => {
   const { id } = req.params;
   try {
-  const singleThought = await Thought.findById(id)
-  if (singleThought) {
-    res.status(200).json(singleThought);
-  } else {
-    res.status(400).json('Not found');
-  }
-  } catch (err) {
-    res.status(400).json('No such id found in here');
-  }
-  
+    const singleThought = await Thought.findById(id)
+    if (singleThought) {
+      res.status(200).json(singleThought);
+    } else {
+      res.status(400).json('Not found');
+    }
+    } catch (err) {
+      res.status(400).json('No such id found in here');
+    }
 });
 
 
 app.post("/thoughts", async (req, res) => {
-  const {message} = req.body;
+  const { message } = req.body;
   try {
-    const thought = await new Thought({message}).save();
+    const thought = await new Thought({ message }).save();
     res.status(201).json({
       success: true,
       response: thought,
@@ -101,11 +102,14 @@ app.post("/thoughts", async (req, res) => {
 
 
 // Patch = update
-app.patch("/thoughts/:id/like", async (req, res) => {
+// E.g. http://localhost:8080/thoughts/id/6463dda65e61139a83f59492/like
+app.patch("/thoughts/id/:id/like", async (req, res) => {
   const { id } = req.params;
-  const updateHeart = req.body.updateHeart
+  // const updateHeart = req.body.updateHeart
   try {
-    const thought = await Thought.findByIdAndUpdate(id, {heart: updateHeart})
+    // const thought = await Thought.findByIdAndUpdate(id, {heart: updateHeart})
+    // Find the thought by ID and increment the 'heart' field by 1
+    const thought = await Thought.findByIdAndUpdate(id, { $inc: { heart: 1 } }, { new: true });
     res.status(201).json({
       success: true,
       response: thought,
