@@ -37,7 +37,7 @@ const ThoughtSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: new Date()
+    default: () => new Date()
   }
 })
 
@@ -65,6 +65,21 @@ app.get("/thoughts", async (req, res) => {
     res.status(200).json(thoughts);
 });
 
+app.get("/thoughts/id/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+  const singleThought = await Thought.findById(id)
+  if (singleThought) {
+    res.status(200).json(singleThought);
+  } else {
+    res.status(400).json('Not found');
+  }
+  } catch (err) {
+    res.status(400).json('No such id found in here');
+  }
+  
+});
+
 
 app.post("/thoughts", async (req, res) => {
   const {message} = req.body;
@@ -86,9 +101,23 @@ app.post("/thoughts", async (req, res) => {
 
 
 // Patch = update
-app.patch("/thoughts/:id", async (req, res) => {
+app.patch("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
-  
+  const updateHeart = req.body.updateHeart
+  try {
+    const thought = await Thought.findByIdAndUpdate(id, {heart: updateHeart})
+    res.status(201).json({
+      success: true,
+      response: thought,
+      message: 'Like updated successfully'
+    })
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      response: err,
+      message: 'Error occured while trying to update the like'
+    })
+  }
 })
 
 
