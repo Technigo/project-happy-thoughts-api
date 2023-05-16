@@ -6,28 +6,6 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-//In order to store the database we need a database model 
-// const Task = mongoose.model('Task', {
-//   text: {
-//     type: String,
-//     required: true,
-//     minlength:2,
-//     maxlength:10
-
-//   },
-//   complete: {
-//     type: Boolean,
-//     default: false,
-    
-//   }, 
-//   createdAt: {
-//     type: Date,
-//     default: Date.now
-
-//   }
-// });
-
-// new Task({text: "Eva"}).save();
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
 // PORT=9000 npm start
@@ -43,6 +21,7 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
+//In order to store the database we need a database model 
 const { Schema } = mongoose;
 const HappyThoughtsSchema = new Schema({
   name: {
@@ -86,11 +65,29 @@ app.post("/HappyThoughts", async (req, res) =>{
     });
   }
 });
+//POST-create something
+//PATCH-update
+//PUT-replace
 
-// app.get('/tasks', async (req, res) => {
-//   const tasks = await Task.find().sort({createdAt: 'desc'}).limit(20).exec();
-//   res.json(tasks);
-// });
+app.patch("/HappyThoughts/:id", async (req,res) => {
+ const { id } = req.params;
+ const newDescription = req.body.newDescription;
+ try {
+ const happyThought = await HappyThoughts.findByIdAndUpdate(id, {description: newDescription})
+ res.status(201).json({
+  success: true,
+  response: happyThought,
+  message: "Created successfully"
+});
+ } catch(e) {
+  res.status(400).json({
+    success: false,
+    response: e,
+    message: "Error occured"
+  });
+ }
+
+});
 
 // Start the server
 app.listen(port, () => {
