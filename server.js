@@ -40,10 +40,12 @@ const Thought = mongoose.model('Thought', ThoughtSchema)
 
 
 // Start defining your routes here
+// GET: List of endpoints
 app.get("/", (req, res) => {
   res.json(listEndpoints(app))
 });
 
+// GET: List of 20 most recent thoughts, in descending order.
 app.get("/thoughts", async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec();
   if (thoughts) {
@@ -53,6 +55,7 @@ app.get("/thoughts", async (req, res) => {
   }
 })
 
+// POST: Thought is posted to the database, if message fits validation rules.
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
   try {
@@ -66,8 +69,26 @@ app.post("/thoughts", async (req, res) => {
   } catch (err) {
       res.status(400).json({
         succes: false,
-        message: 'Thought could not be posted',
+        response: 'Thought could not be posted',
         errors: err.errors
+    })
+  }
+})
+
+// POST: Increases the number of hearts by 1.
+app.post('/thoughts/:id/like', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const heartUpdate = await Thought.findByIdAndUpdate (id, { $inc: { hearts: 1 } });
+    res.status(200).json({
+      success: true,
+      response: `Heart-count was updated for post  ${heartUpdate.id}`
+    })
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      response: 'Heart-count could not update',
+      error: err.errors
     })
   }
 })
