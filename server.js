@@ -15,10 +15,117 @@ const app = express();
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+const listEndPoints = require('express-list-endpoints');
+
+const { Schema } = mongoose;
+
+const thoughtSchema = new Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  message: {
+    type: String,
+    required: true,
+    minlenght: 5,
+    maxlenght: 140,
+    trim: true
+  },
+  heart: {
+    type: Number,
+    default: 0,
+  },
+  createdAt: {
+    type: Date,
+    default: new Date
+  },
+  tag: {
+    type: String,
+    enum:["Food", "Project", "Home"]
+  }
+})
+
+const Thought = mongoose.model("Thought", thoughtSchema);
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  const welcomeText = "Happy Thoughts";
+  const deployedAPI = "https://project-mongo-api-ozexcouyaq-lz.a.run.app";
+  const apiDocumentation = "https://project-mongo-api-ozexcouyaq-lz.a.run.app/api-docs";
+  const endpoints = (listEndPoints(app))
+
+  res.send({
+    body: {
+      welcomeText,
+      deployedAPI,
+      apiDocumentation,
+      endpoints
+    }
+  });
+});
+
+app.get("/thoughts", async (req, res) => {
+  try {
+    const thoughtList = await Thought.find({}).sort({ createdAt: -1 }).limit(20)
+     // return response
+    if (thoughtList.length > 0) {
+      res.status(200).json({
+        success: true,
+        body: thoughtList
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        body: {
+          message: "No thoughts found in list"
+        }
+      })
+    }
+  } catch(err) {
+    res.status(500).json({
+      success: false,
+      body: {
+        error: err.error,
+        message: "Internal Server Error"
+      }
+    })
+  }
+});
+
+app.post("/thoughts", async (req, res) => {
+  const { message, tag, name } = req.body;
+  try {
+    const thought = await new Thought({ message, tag, name }).save();
+      res.status(201).json({
+      success: true,
+      response: thought,
+      message: "created successfully"
+    });
+  } catch (e) {
+    res.status(400).json({
+      success: false,
+      response: e,
+      message: "error occured"
+    });
+  }
+});
+
+app.post("/:thoughtId/like", async (req, res) => {
+ const { thoughtId } = req.params;
+  try {
+    const updateHeart = await Thought.findByIdAndUpdate(thoughtId, { $inc: { heart: 1 } }, { new: true });
+    res.status(200).json({
+      success: true,
+      response: updateHeart,
+      message: "updated successfully"
+     });
+  } catch(e) {
+    res.status(400).json({
+      success: false,
+      response: e,
+      message: "did not successfully"
+     });
+  }
 });
 
 // Start the server
