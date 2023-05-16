@@ -20,7 +20,6 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
-////// Tuesday ////
 
 const { Schema } = mongoose;
 const ThoughtSchema = new Schema({
@@ -46,7 +45,7 @@ const ThoughtSchema = new Schema({
     type: Date,
     default: new Date()
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
     // an array of all the allowed values
@@ -56,6 +55,23 @@ const ThoughtSchema = new Schema({
 
 const Thought = mongoose.model("Thought", ThoughtSchema);
 
+app.get("/thoughts", async (req, res) => {
+  try {
+    const thoughtsList = await Thought.find().sort({ createdAt: "desc" }).limit(20);
+    res.status(200).json({
+      success: true,
+      response: thoughtsList,
+      message: "Thoughts found successfully"
+     });
+  } catch(e) {
+    res.status(400).json({
+      success: false,
+      response: e,
+      message: "Thoughts not found"
+     });
+  }
+});
+
 app.post("/thoughts", async (req, res)=>{
   const {message} = req.body;
     try{
@@ -63,115 +79,58 @@ app.post("/thoughts", async (req, res)=>{
       res.status(201).json({
        success: true,
         response: thoughtItem,
-        message: "thought posted successfully"
+        message: "Thought posted successfully"
       });
     } catch (e) {
       res.status(400).json({
         success: false,
         response: e,
-        message: "post failed"
+        message: "Thought posting failed"
        });
      }
  });
 
- app.get("/thoughts", async (req, res) => {
-  try {
-    const thoughtItem = await Thought.find().sort({ createdAt: "desc" }).limit(20);
-    res.status(200).json({
-      success: true,
-      response: thoughtItem,
-      message: "Thought found successfully"
-     });
-  } catch(e) {
-    res.status(400).json({
-      success: false,
-      response: e,
-      message: "Thought not successfully found"
-     });
-  }
-});
 
- // modify when nothing found
-app.patch("/thoughts/:_id/like", async (req, res) => {
-  const { _id } = req.params;
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
   try {
-    const likedThought = await Thought.findByIdAndUpdate(_id, {
-      $inc: { heart: 1},
+    const likedThought = await Thought.findByIdAndUpdate(thoughtId, {
+      $inc: { hearts: 1},
     });
     res.status(200).json({
       success: true,
       response: likedThought,
-      message: "like successfully"
+      message: "Like added"
      });
   } catch(e) {
     res.status(400).json({
       success: false,
       response: e,
-      message: "like unsuccessfull"
-     });
-  }
-});
-
-/* app.post("/fruit_or_vegetable", (req, res)=>{
-  const {kind, name, description} = req.body;
-  const foodItem = new FruitOrVegetable({kind: kind, name: name, description: description}).save()
-    .then(item => {
-      res.status(201).json({
-        success: true,
-         response: item,
-         message: "created successfully"
-       });
-    }).catch(e => {
-      res.status(400).json({
-        success: false,
-        response: e,
-        message: "error occured"
-      });
-    })
-}); */
-// POST - create something
-// PATCH - update
-// PUT - replace
-app.patch("/fruit_or_vegetable/:id", async (req, res) => {
-  const { id } = req.params;
-  // const newDescription = req.body.newDescription;
-  const { newDescription } = req.body;
-  try {
-    const foodItem = await FruitOrVegetable.findByIdAndUpdate(id, {description: newDescription});
-    res.status(200).json({
-      success: true,
-      response: foodItem,
-      message: "updated successfully"
-     });
-  } catch(e) {
-    res.status(400).json({
-      success: false,
-      response: e,
-      message: "did not successfully update"
+      message: "Like not added"
      });
   }
 });
 
 // delete
 // https://stackoverflow.com/questions/54081114/what-is-the-difference-between-findbyidandremove-and-findbyidanddelete-in-mongoo
-app.delete("/fruit_or_vegetable/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    // const foodItem = await FruitOrVegetable.findByIdAndDelete(id);
-    const foodItem = await FruitOrVegetable.findByIdAndRemove(id);
-    res.status(200).json({
-      success: true,
-      response: foodItem,
-      message: "deleted successfully"
-     });
-  } catch(e) {
-    res.status(400).json({
-      success: false,
-      response: e,
-      message: "did not successfully"
-     });
-  }
-});
+// app.delete("/fruit_or_vegetable/:id", async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     // const foodItem = await FruitOrVegetable.findByIdAndDelete(id);
+//     const foodItem = await FruitOrVegetable.findByIdAndRemove(id);
+//     res.status(200).json({
+//       success: true,
+//       response: foodItem,
+//       message: "deleted successfully"
+//      });
+//   } catch(e) {
+//     res.status(400).json({
+//       success: false,
+//       response: e,
+//       message: "did not successfully"
+//      });
+//   }
+// });
 
 // Start the server
 app.listen(port, () => {
