@@ -29,11 +29,6 @@ const HappyThoughtsSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  description: {
-    type: String,
-    minlength: 4,
-    maxlength: 140
-  },
   likes: {
     type: Number,
     default: 0
@@ -43,22 +38,14 @@ const HappyThoughts = mongoose.model("HappyThoughts", HappyThoughtsSchema);
 
 
 app.get("/", (req, res) => {
-  const Navigation = {
-    guide: "Routes for Happythoughts project",
-    Endpoints: [
-      {
-        "/thoughts": "happy thoughts",
-        "/thoughts/:id/like": "likes"
-      }
-    ]
-  }
-  res.send(Navigation);
+  res.send(listEndpints(app));
 });
 
 app.get('/thoughts', async (req, res) => {
   const thoughts = await HappyThoughts.find().sort({createdAt: 'desc'}).limit(20).exec();
   res.json(thoughts)
   });
+
 app.post('/thoughts', async (req, res) => {
   const { text, description } = req.body;
   const thought = new HappyThoughts({ text, description });
@@ -76,7 +63,7 @@ app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params;
 
   try {
-    const thought = await HappyThoughts.findById(id);
+    const thought = await HappyThoughts.findByIdAndUpdate(id, { $inc: { likes: 1 } }, { new: true });
     if (!thought) {
       return res.status(404).json({ message: 'Thought not found' });
     }
