@@ -17,6 +17,12 @@ const thoughtSchema = new Schema({
     minlength: 5,
     maxlength: 140,
   },
+  name: {
+    type: String,
+    required: true,
+    minlength: 1,
+    maxlength: 30
+  },
   hearts: {
     type: Number,
     default: 0
@@ -52,9 +58,9 @@ app.get("/thoughts", async (req, res) => {
 // Endpoint to post a thought:
 app.post('/thoughts', async (req, res) => {
   // Retreieve information sent by the client to our API endpoint:
-  const { message } = req.body;
+  const { message, name } = req.body;
   // Use our mongoose model to create the database entry:
-  const thought = new Thought({message});
+  const thought = new Thought({ message, name });
   try {
     // Success!
     const savedThought = await thought.save();
