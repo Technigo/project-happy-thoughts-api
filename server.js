@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import listEndpoints from "express-list-endpoints";
+import moment from "moment-timezone";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -12,124 +14,105 @@ mongoose.Promise = Promise;
 const port = process.env.PORT || 8080;
 const app = express();
 
+//const listEndpoints = require('express-list-endpoints');
+
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
 
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
-});
-//////// TUESDAY
-
+// SCHEMA GOES HERE
 const { Schema } = mongoose;
-const FruitOrVegetableSchema = new Schema({
-  name: {
-    // most important one
+
+const ThoughtSchema = new Schema({
+  message: {
     type: String,
-    // required true or false
     required: true,
-    // only a new name that is different than all the others (that are already in the database) is allowed
-    unique: true
+    minlength: 5,
+    maxlength: 140
   },
-  description: {
-    type: String,
+  heart: {
+    type: Number,
     minlength: 4,
-    maxlength: 40,
-    // removes unnecessary whitespaces from string
-    trim: true
+    default: 0
   },
   createdAt: {
     type: Date,
-    default: new Date()
-  },
-  kind: {
-    type: String,
-    // an array of all the allowed values
-    enum:["fruit", "vegetable"] 
+    default: () => moment().tz("UTC").toDate()
   }
 });
 
-const FruitOrVegetable = mongoose.model("FruitOrVegetable", FruitOrVegetableSchema);
+const Thought = mongoose.model('Thought', ThoughtSchema)
 
-app.post("/fruit_or_vegetable", async (req, res) => {
-  const {kind, name, description} = req.body;
+// ROUTES GOES HERE
+app.get("/", (req, res) => {
+  res.status(200).send({
+    success: true,
+    message: "OK",
+    body: {
+      content: "project-happy-thoughts-api",
+      endpoints: listEndpoints(app)
+    }
+  });
+});
+
+// GET 20 LATEST THOUGHTS
+app.get("/thoughts", async (req, res) => {
+  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
+  res.status(200).json(thoughts);
+});
+
+// GET THOUGHT BY ID
+app.get("/thoughts/id/:id", async (req, res) => {
+  const { id } = req.params;
   try {
-    const foodItem = await new FruitOrVegetable({kind, name, description}).save();
+    const singleThought = await Thought.findById(id)
+    if (singleThought) {
+      res.status(200).json(singleThought);
+    } else {
+      res.status(400).json('Not found');
+    }
+    } catch (e) {
+      res.status(400).json('No such id found in here');
+    }
+});
+
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body;
+  try {
+    const thought = await new Thought({ message }).save();
     res.status(201).json({
       success: true,
-      response: foodItem,
-      message: "error occured"
-    });
+      response: thought,
+      message: 'Happy thought successfully sent!'
+    })
   } catch (e) {
-    res.status(404).json({
-      success: false,
-      response: e,
-      message: "error occured"
-    });
-  }
-});
-
-// POST - create something
-// PATCH - update
-// PUT - replace
-app.patch("/fruit_or_vegetable/:id", async (req, res) => {
-  const { id } = req.params;
-  // const newDescription = req.body.newDescription
-  const  { newDescription } = req.body;
-  try {
-    const foodItem = await FruitOrVegetable.findByIdAndUpdate(id, {description: newDescription });
-    res.status(200).json({
-      success: true,
-      response: foodItem,
-      message: "updated successfully"
-    });
-  } catch(e) {
     res.status(400).json({
       success: false,
       response: e,
-      message: "did not updated successfully"
-    });
+      message: 'Error! Happy thought not sent successfully!'
+    })
   }
 });
 
-
-//modify when nothing found
-app.get("/fruit_or_vegetable/:id", async (req, res) => {
+// PATCH
+app.patch("/thoughts/id/:id/like", async (req, res) => {
   const { id } = req.params;
+  // const updateHeart = req.body.updateHeart
   try {
-    const foodItem = await FruitOrVegetable.findById(id);
-    res.status(200).json({
+    // const thought = await Thought.findByIdAndUpdate(id, {heart: updateHeart})
+    // Find the thought by ID and increment the 'heart' field by 1
+    const thought = await Thought.findByIdAndUpdate(id, { $inc: { heart: 1 } }, { new: true });
+    res.status(201).json({
       success: true,
-      response: foodItem,
-      message: "found successfully"
-    });
-  } catch(e) {
+      response: thought,
+      message: 'Like updated successfully'
+    })
+  } catch (e) {
     res.status(400).json({
       success: false,
       response: e,
-      message: "did not updated successfully"
-    });
-  }
-});
-
-// delete
-
-app.delete("/fruit_or_vegetable/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const foodItem = await FruitOrVegetable.findByIdAndDelete(id);
-    res.status(200).json({
-      success: true,
-      response: foodItem,
-      message: "deleted successfully"
-    });
-  } catch(e) {
-    res.status(400).json({
-      success: false,
-      response: e,
-      message: "did not updated successfully"
-    });
+      message: 'Error occured while trying to update the like'
+    })
   }
 })
 
