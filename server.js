@@ -54,17 +54,31 @@ app.get("/", (req, res) => {
 });
 
 
-// Fetches the thoughts from the API
+// Fetches the thoughts from the API, using pagination
 app.get("/thoughts", async (req, res) => {
+  const page = parseInt(req.query.page) || 1; // Current page (default: 1)
+  const limit = parseInt(req.query.limit) || 20; // Number of thoughts per page (default: 20)
+
+  // /thoughts?page=2&limit=10
+
   try {
+    const totalThoughts = await Thought.countDocuments(); // Counts thoughts
+    const totalPages = Math.ceil(totalThoughts / limit); // Calculate total pages, rounding upwards to an integer
+
+    
     const thoughts = await Thought.find()
       .sort({ createdAt: 'desc' })
-      .limit(20)
+      .skip((page - 1) * limit)  // Basically sets where to start showing the thoughts (skipping the ones before it)
+      // E.g: If page is 3 and limit is 20, the skip value would be 40. This means that for the third page, we need to skip the first 40 thoughts in the sorted result.
+      .limit(limit)   // We change this to a variable instead of fixed 20
       .exec();
   
     res.status(200).json({
       success: true,
       message: 'Thoughts fetched successfully',
+      currentPage: page,
+      totalPages: totalPages,
+      totalThoughts: totalThoughts,
       thoughts: thoughts
     });
   } catch (err) {
