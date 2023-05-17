@@ -55,13 +55,13 @@ app.get("/thoughts", async (req, res) => {
     res.status(200).json({ //sets the response status code to 200 and prepares the response as a json object
       success: true,
       response: thoughts, //this is where the thoughts are store, that's why I needed to changes the code in the original Happy Thoughts-project, the structure is different from the original API
-      message: "Sucessful get request"
+      message: "Sucessfully fetched messages."
     })
   } catch (e) {
     res.status(400).json({
       success: false, 
       response: e, //includes the error object and message caught in the catch block. 
-      message: "Bad request"
+      message: "Bad request, couldn't fetch thoughts"
     })
   }
 })
@@ -70,7 +70,6 @@ app.get("/thoughts", async (req, res) => {
 app.post("/thoughts", async (req, res) => {
   const {message, createdAt} = req.body;
     try {
-      // const foodItem = await new FruitOrVegetable({kind: kind, name: name, description: description})
       const savedThought = await new Thought({message: message, createdAt: createdAt}).save();
       res.status(201).json({
        success: true,
@@ -81,7 +80,7 @@ app.post("/thoughts", async (req, res) => {
       res.status(400).json({
         success: false,
         response: e,
-        message: "Did not create thought successfully."
+        message: "Did not create thought successfully." 
       });
     }
 });
@@ -101,7 +100,7 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
     res.status(400).json({
       success: false, 
       response: e,
-      message: "Could not save like to database!"
+      message: "Could not save like to message."
     })
   }
 })
