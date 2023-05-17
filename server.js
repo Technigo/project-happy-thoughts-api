@@ -13,15 +13,14 @@ const port = process.env.PORT || 8080;
 const app = express();
 
 // Add middlewares to enable cors and json body parsing
-const cors = require("cors");
 app.use(cors());
 app.use(express.json());
 const listEndPoints = require('express-list-endpoints');
 
 app.use((req, res, next) => {
-  res.header({"Access-Control-Allow-Origin": "*"});
+  res.header("Access-Control-Allow-Origin", "*");
   next();
-}) 
+});
 
 const { Schema } = mongoose;
 
@@ -39,11 +38,13 @@ const thoughtSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: new Date
   }
 })
 
 const Thought = mongoose.model("Thought", thoughtSchema);
+
+// Resetting database
 
 // Start defining your routes here
 app.get("/", (req, res) => {
@@ -93,8 +94,8 @@ app.get("/thoughts", async (req, res) => {
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
   const thought = new Thought({ message })
+  const savedThought = await thought.save()
   try {
-      const savedThought = await thought.save()
       res.status(201).json({
       success: true,
       response: savedThought,
