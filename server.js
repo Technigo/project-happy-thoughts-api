@@ -54,13 +54,30 @@ app.get("/", (req, res) => {
 });
 
 
+// Fetches the thoughts from the API
 app.get("/thoughts", async (req, res) => {
-    // Find all thoughts, sort in descending order by creation date, limit thoughts to 20, and execute the query.
-    const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
-    res.status(200).json(thoughts);
+  try {
+    const thoughts = await Thought.find()
+      .sort({ createdAt: 'desc' })
+      .limit(20)
+      .exec();
+  
+    res.status(200).json({
+      success: true,
+      message: 'Thoughts fetched successfully',
+      thoughts: thoughts
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'Error occurred while fetching thoughts',
+      error: err.message
+    });
+  }
 });
 
 
+// Post a new thought to the API
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
   try {
@@ -73,7 +90,7 @@ app.post("/thoughts", async (req, res) => {
   } catch (err) {
     res.status(400).json({
       success: false,
-      message: 'Error occured while trying to post the thought',
+      message: 'Error occurred while trying to post the thought',
       response: err
     })
   }
@@ -81,8 +98,8 @@ app.post("/thoughts", async (req, res) => {
 
 
 // Accessing a single thought by _id
-// E.g. http://localhost:8080/thoughts/id/6463dda65e61139a83f59492
-app.get("/thoughts/id/:id", async (req, res) => {
+// E.g. http://localhost:8080/thoughts/6463dda65e61139a83f59492
+app.get("/thoughts/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const singleThought = await Thought.findById(id)
@@ -109,8 +126,9 @@ app.get("/thoughts/id/:id", async (req, res) => {
 });
 
 // Patch = update
-// E.g. http://localhost:8080/thoughts/id/6463dda65e61139a83f59492/like
-app.patch("/thoughts/id/:id/like", async (req, res) => {
+// E.g. http://localhost:8080/thoughts/6463dda65e61139a83f59492/like
+// Updating the heart property on a specific thought
+app.patch("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
   try {
     // Find the thought by ID and increment the 'heart' field by 1
@@ -138,7 +156,7 @@ app.patch("/thoughts/id/:id/like", async (req, res) => {
 });
 
 
-// Error handling middleware
+// Error handling middleware, for catching unexpected errors.
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
