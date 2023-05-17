@@ -6,9 +6,7 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/project-hap
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
+// Defines the port the app will run on
 const port = process.env.PORT || 8080;
 const app = express();
 
@@ -16,40 +14,40 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Start defining your routes here
+// Start defining routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send("Happy Thoughts API - Joanna Philips");
 });
 
 const { Schema } = mongoose;
 const ThoughtSchema = new Schema({
   message: {
-    // most important one
     type: String,
-    // required true or false
     required: true,
-    // only a new name that is different than all the others (that are already in the DB) is allowed
-    // unique: true
     minlength: 5,
     maxlength: 140,
     trim: true
   },
-  /* description: {
-    type: String,
-    minlength: 4,
-    maxlength: 40,
-  // removes unnecessary whitespaces from string
-    trim: true
-  } */
   createdAt: {
     type: Date,
-    default: new Date()
+    default: Date.now()
   },
   hearts: {
     type: Number,
     default: 0
+  },
+  username: {
+    type: String,
+    default: "Anonymous",
+    minlength: 2,
+    maxlength: 20,
     // an array of all the allowed values
     // enum:["fruit", "vegetable"]
+  },
+  tags: {
+    type: String,
+    default: "random",
+    enum:["weather", "work", "life", "happy"]
   }
 }); 
 
