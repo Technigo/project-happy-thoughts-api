@@ -44,10 +44,11 @@ const app = express();
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+const listEndpoints = require('express-list-endpoints')
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!!!");
+  res.send(listEndpoints(app));
 });
 
 app.get("/thoughts", async (req, res) => {
@@ -69,7 +70,7 @@ app.post('/thoughts', async (req, res) => {
   catch (err) {
     res.status(400).json({message: 'Could not save thought', error: err.errors});
   }
-})
+});
 
 // Testing endpoint to find a single thought (it works):
 app.get('/thoughts/:_id', async (req, res) => {
