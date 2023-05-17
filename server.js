@@ -66,9 +66,9 @@ app.post('/thoughts', async (req, res) => {
 })
 
 // Testing endpoint to find a single thought (it works):
-app.get('/thoughts/:thoughtId', async (req, res) => {
+app.get('/thoughts/:_id', async (req, res) => {
   try {
-    const singleThought = await Thought.findById(req.params.thoughtId);
+    const singleThought = await Thought.findById(req.params._id);
     if (singleThought) {
       res.status(200).json({
         message: "Here is a thought",
@@ -94,9 +94,9 @@ app.get('/thoughts/:thoughtId', async (req, res) => {
 });
 
 // Endpoint to like a single thought:
-app.post('/thoughts/:thoughtId/like', async (req, res) => {
+app.post('/thoughts/:_id/like', async (req, res) => {
     try {
-      const singleThought = await Thought.findById(req.params.thoughtId);
+      const singleThought = await Thought.findById(req.params._id);
       if (singleThought) {
         singleThought.hearts += 1;
         await singleThought.save();
