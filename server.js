@@ -30,6 +30,13 @@ const ThoughtSchema = new Schema({
     maxlength: 140,
     minlength: 5,
     trim: true // removes unnecessary whitespaces from string
+  },  
+  name: {
+    type: String,
+    required: true,
+    minlength: 1,
+    maxlength: 20,
+    trim: true
   },
   likes: {
     type: Number,
@@ -61,16 +68,17 @@ app.get("/thoughts", async (req, res) => {
     res.status(400).json({
       success: false, 
       response: e, //includes the error object and message caught in the catch block. 
-      message: "Bad request, couldn't fetch thoughts"
+      message: "Bad request, couldn't fetch thoughts",
+      error: e.message
     })
   }
 })
 
 //////////POST REQUEST/////////
 app.post("/thoughts", async (req, res) => {
-  const {message, createdAt} = req.body;
+  const { message, name, createdAt } = req.body;
     try {
-      const savedThought = await new Thought({message: message, createdAt: createdAt}).save();
+      const savedThought = await new Thought({ message, name, createdAt }).save();
       res.status(201).json({
        success: true,
         response: savedThought,
