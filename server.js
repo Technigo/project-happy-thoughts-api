@@ -16,7 +16,8 @@ const ThoughtSchema = new Schema({
     maxlength: 140
   },
   hearts: {
-    default: 0,
+    type: Number,
+    default: 0
   },
   createdAt: {
     type: Date,
@@ -43,31 +44,30 @@ const app = express();
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+const listEndpoints = require("express-list-endpoints")
+
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.json(listEndpoints(app));
 });
 
 // GET
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec(); //execute
-  res.json(thoughts);
-  try {
-  res.status(200).json({
-    success: true,
-    response: Thought,
-    message: "Thoughts retreived"
+  try{
+    const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec(); //execute
+    res.status(200).json({
+      success: true,
+      response: thoughts,
+      message: "Thoughts retreived"
   })
 } catch (err) {
-  res.status(400).json({
-    success: false,
-    response: e,
-    message: "Error, no thoughts found"
+    res.status(400).json({
+      success: false,
+      response: err,
+      message: "Error, no thoughts found"
   })
 }
-
-
 })
 
 // POST
@@ -79,10 +79,40 @@ app.post('/thoughts', async (req, res) => {
     res.status(201).json(savedThought);
   }
   catch(err) {
-    res.status(400).json({message: "Could not save thought to the database"})
-
+    res.status(400).json({
+      message: "Could not save thought to the database", error: err.errors
+    })
   };
 })
+
+// POST thoughts/:thoughtId/like
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params;
+  try {
+    const thought = await Thought.findById(thoughtId);
+    if (thought) {
+      thought.hearts += 1;
+      const updatedThought = await thought.save();
+      res.status(200).json({
+        success: true,
+        response: updatedThought,
+        message: "Thought added heart successfully"
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "Thought not found"
+      });
+    }
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      response: err,
+      message: "Error occured"
+    });
+  }
+})
+
 
 // Start the server
 app.listen(port, () => {
