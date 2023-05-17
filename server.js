@@ -55,7 +55,7 @@ app.get("/", (req, res) => {
       }
     ]
   }
-  res.send("Navigation");
+  res.send(Navigation);
 });
 
 app.get('/thoughts', async (req, res) => {
