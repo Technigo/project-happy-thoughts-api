@@ -18,7 +18,7 @@ app.use(express.json());
 const listEndpoints = require('express-list-endpoints');
 
 const { Schema } = mongoose;
-const ThoughtSchema = new Schema({
+const ThoughtsSchema = new Schema({
   message: {
     type: String,
     required: true,
@@ -31,31 +31,34 @@ const ThoughtSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: ()=> new Date()
+    default: new Date()
   }
 });
 
-const Thoughts = mongoose.model("Thoughts", ThoughtSchema);
+const Thoughts = mongoose.model("Thoughts", ThoughtsSchema);
 
 // Start defining your routes here
 app.get("/", (req, res) => {
   res.json(listEndpoints(app));
 });
 
-
+app.get("/thoughts", async (req,res)=> {
+  const thoughts = await Thoughts.find().sort({createdAt: 'desc'}).limit(20).exec();
+  res.json(thoughts);
+})
 
 
 app.post("/thoughts", async (req, res) =>{
   try{
-const newThought = new Thoughts({message: req.body.message });
-await newThought.save();
-res.status(201).json(newThought);
+const newThoughts = new Thoughts({message: req.body.message });
+await newThoughts.save();
+res.status(201).json(newThoughts);
   } catch (error) {
-    res.status(400).json({error: "error occurred" });
+    res.status(400).json({message: "Error occurred", error: error.errors });
   }
 });
 
-app.patch("/thoughts:id/like", async (req, res) => {
+app.patch("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
   const { newDescription } = req.body;
   try{
@@ -73,10 +76,10 @@ app.patch("/thoughts:id/like", async (req, res) => {
   }
 });
 
-app.delete("/thoughts:id", async (req, res) => {
+/*app.delete("/thoughts/:id", async (req, res) => {
   const { id } = req.params;
   try{
-  const Thought = await Thoughts.findByIdAndDelete(id);
+  const deletedThoughts = await Thoughts.findByIdAndDelete(id);
   res.status(200).json({
     success: true,
     message: "deleted successfully"
@@ -88,7 +91,7 @@ app.delete("/thoughts:id", async (req, res) => {
       message: "Something went wrong"
     })
   }
-});
+});*/
 
 
 // Start the server
