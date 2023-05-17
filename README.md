@@ -6,4 +6,6 @@ I've used Node.js, Express.js, and MongoDB. The Mongoose ODM has been particular
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+API https://irupe-happy-thoughts-api-kobjwpkrba-lz.a.run.app 
+
+happy thoughts frontend https://joyful-nougat-d637a7.netlify.app/
