@@ -97,21 +97,18 @@ app.post("/thoughts", async (req, res) => {
 // PATCH
 app.patch("/thoughts/id/:id/like", async (req, res) => {
   const { id } = req.params;
-  // const updateHeart = req.body.updateHeart
   try {
-    // const thought = await Thought.findByIdAndUpdate(id, {heart: updateHeart})
-    // Find the thought by ID and increment the 'heart' field by 1
     const thought = await Thought.findByIdAndUpdate(id, { $inc: { heart: 1 } }, { new: true });
     res.status(201).json({
       success: true,
       response: thought,
-      message: 'Like updated successfully'
+      message: 'Updated successfully!'
     })
   } catch (e) {
     res.status(400).json({
       success: false,
       response: e,
-      message: 'Error occured while trying to update the like'
+      message: 'Error trying update the like!'
     })
   }
 })
