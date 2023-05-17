@@ -27,11 +27,6 @@ const ThoughtSchema = new Schema({
 
 })
 
-// ThoughtSchema.pre('save', function (next) {
-//   // Make the hearts property non-assignable by setting it to 0 before saving
-//   this.hearts = 0;
-//   next();
-// });
 
 const Thought = mongoose.model("Thought", ThoughtSchema);
 
@@ -52,7 +47,7 @@ app.get("/", (req, res) => {
   res.json(listEndpoints(app));
 });
 
-// GET
+// GET - fetch latest 20 thoughts 
 app.get('/thoughts', async (req, res) => {
   try{
     const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec(); //execute
@@ -70,10 +65,10 @@ app.get('/thoughts', async (req, res) => {
 }
 })
 
-// POST
+// POST - post a new thought 
 app.post('/thoughts', async (req, res) => {
   const { message, createdAt } = req.body;
-  const thoughts = new Thought({ message, createdAt, hearts: 0 });
+  const thoughts = new Thought({ message, createdAt, hearts: 0 }); // hearts always 0, but can still update using patch request 
   try {
     const savedThought = await thoughts.save();
     res.status(201).json(savedThought);
@@ -85,7 +80,7 @@ app.post('/thoughts', async (req, res) => {
   };
 })
 
-// PATCH thoughts/:thoughtId/like
+// PATCH thoughts/:thoughtId/like - get a heart like on a thought 
 app.patch('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params;
   try {
@@ -96,7 +91,7 @@ app.patch('/thoughts/:thoughtId/like', async (req, res) => {
       res.status(200).json({
         success: true,
         response: updatedThought,
-        message: "Thought added heart successfully"
+        message: `Thought ${ updatedThought.id} added heart successfully`
       });
     } else {
       res.status(404).json({
