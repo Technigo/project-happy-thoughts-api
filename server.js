@@ -15,21 +15,17 @@ const app = express();
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
-
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
-});
+const listEndpoints = require('express-list-endpoints')
 
 const { Schema } = mongoose;
-const HappyThoughtsSchema = new Schema({
+const HappyThoughtSchema = new Schema({
   message: {
     // type is the most important one
     type: String,
     required: true,
     minlength: 5,
     maxlength: 140,
-    // removes unnecessary whitspaces from string
+    // removes unnecessary whitespaces from string
     trim: true
   },
   hearts: {
@@ -45,40 +41,58 @@ const HappyThoughtsSchema = new Schema({
   }
 })
 
-const HappyThoughts = mongoose.model("HappyThoughts", HappyThoughtsSchema);
+const HappyThought = mongoose.model("HappyThought", HappyThoughtSchema);
+
+// Start defining your routes here
+app.get("/", (req, res) => {
+  res.send(listEndpoints(app));
+});
+
+app.get("/thoughts", async (req, res) => {
+    const thoughts = await HappyThought.find().sort({createdAt: 'desc'}).limit(20).exec();
+    res.json(thoughts)
+})
 
 app.post("/thoughts", async (req, res) => {
-  const { message, hearts, createdAt } = req.body;
+  const { message } = req.body;
+  const thought = await new HappyThought({message}).save();
     try {
-      const thought = await new HappyThoughts({message, hearts, createdAt}).save();
-      res.status(201).json({
+        res.status(201).json({
         success: true,
         response: thought,
-        message: "thought created successfully"
+        message: "thought posted successfully"
       })
     } catch (e) {
       res.status(400).json({
         success: false,
         response: e,
-        message: "error occured when creating thought"
+        message: "error occured when posting thought"
     })
   }
 })
 
-app.get("/thoughts/", async (req, res) => {
-  const { id } = req.params;
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
     try {
-      const foodItem = await FruitOrVegetable.findById(id)
-      res.status(200).json({
-        success: true,
-        response: foodItem,
-        message: "thought found successfully"
-      })
-    } catch(e) {
-      res.status(400).json({
+      const likedThought = await HappyThought.findById(req.params.id);
+      if (likedThought) {
+        likedThought.hearts +=1
+        await likedThought.save()
+        res.status(201).json({
+          success: true,
+          response: thought,
+          message: "thought created successfully"
+        })
+      } else {
+        res.status(400) ({
+          success: false,
+          message: "could not like thought"
+        })
+      }
+    } catch (e) {
+      res.status(500).json({
         success: false,
         response: e,
-        message: "error occured when searching for thought"
+        message: "error"
     })
   }
 })
@@ -87,60 +101,42 @@ app.get("/thoughts/", async (req, res) => {
 // PATCH - update something
 // PUT - replace something
 
-app.patch("/fruit_or_vegetable/:id", async (req, res) => {
-  const { id } = req.params;
-  const { newDescription } = req.body;
-    try {
-      const foodItem = await FruitOrVegetable.findByIdAndUpdate(id, {description: newDescription})
-      res.status(200).json({
-        success: true,
-        response: {},
-        message: "updated successfully"
-      })
-    } catch(e) {
-      res.status(400).json({
-        success: false,
-        response: e,
-        message: "error occured"
-    })
-  }
-})
+// app.patch("/fruit_or_vegetable/:id", async (req, res) => {
+//   const { id } = req.params;
+//   const { newDescription } = req.body;
+//     try {
+//       const foodItem = await FruitOrVegetable.findByIdAndUpdate(id, {description: newDescription})
+//       res.status(200).json({
+//         success: true,
+//         response: {},
+//         message: "updated successfully"
+//       })
+//     } catch(e) {
+//       res.status(400).json({
+//         success: false,
+//         response: e,
+//         message: "error occured"
+//     })
+//   }
+// })
 
-app.get("/fruit_or_vegetable/:id", async (req, res) => {
-  const { id } = req.params;
-    try {
-      const foodItem = await FruitOrVegetable.findById(id)
-      res.status(200).json({
-        success: true,
-        response: foodItem,
-        message: "found successfully"
-      })
-    } catch(e) {
-      res.status(400).json({
-        success: false,
-        response: e,
-        message: "error occured"
-    })
-  }
-})
-
-app.delete("/fruit_or_vegetable/:id", async (req, res) => {
-  const { id } = req.params;
-    try {
-      const foodItem = await FruitOrVegetable.findByIdAndRemove(id)
-      res.status(200).json({
-        success: true,
-        response: foodItem,
-        message: "deleted successfully"
-      })
-    } catch(e) {
-      res.status(400).json({
-        success: false,
-        response: e,
-        message: "error occured"
-    })
-  }
-})
+// app.delete("/fruit_or_vegetable/:id", async (req, res) => {
+//   const { id } = req.params;
+//     try {
+//       const foodItem = await FruitOrVegetable.findByIdAndRemove(id)
+//       res.status(200).json({
+//         success: true,
+//         response: foodItem,
+//         message: "deleted successfully"
+//       })
+//     } catch(e) {
+//       res.status(400).json({
+//         success: false,
+//         response: e,
+//         message: "error occured"
+//     })
+//   }
+// })
 
 // Start the server
 app.listen(port, () => {
