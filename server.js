@@ -8,6 +8,7 @@ mongoose.Promise = Promise;
 
 const listEndpoints = require('express-list-endpoints')
 
+// Mongoose model for the input-data
 const { Schema } = mongoose;
 const ThoughtsSchema = new Schema ({
   message: {
@@ -50,10 +51,12 @@ app.use(cors());
 app.use(express.json());
 
 // Start defining your routes here
+// Show all the endpoints for the API
 app.get("/", (req, res) => {
   res.json(listEndpoints(app));
 });
 
+// GET to show the list with thoughts/messages
 app.get("/thoughts", async (req, res) => {
   try {
     const thoughtList = await Thoughts.find()
@@ -73,7 +76,7 @@ app.get("/thoughts", async (req, res) => {
   }
 });
 
-
+// POST to send new thought/message
 app.post('/thoughts', (req, res) => {
   //Promises
   const { message, createdAt } = req.body
@@ -94,6 +97,7 @@ app.post('/thoughts', (req, res) => {
 })
 })
 
+// PATCH to update the likes based on the ID
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { id } = req.params
 
