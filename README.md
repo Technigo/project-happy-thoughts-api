@@ -6,4 +6,4 @@ The project went quite smoothly overall. I was able to follow the instructional 
 Tools: MongoDB, Mongoose, Express, MongoDB Compass, MongoDB Atlas, Google Cloud.
 
 ## View it live
-https://project-happy-thoughts-api-gs6unh3wsa-lz.a.run.app/thoughts
+https://project-happy-thoughts-api-gs6unh3wsa-lz.a.run.app/
