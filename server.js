@@ -89,20 +89,20 @@ app.get("/thoughts/id/:id", async (req, res) => {
     if (singleThought) {
       res.status(200).json({      
         success: true,
-        message: 'Thought with id ${id} found',
+        message: `Thought with id ${id} found`,
         response: singleThought
       });
     } else {
       res.status(404).json({
         success: false,
-        message: 'Id ${id} - Not found',
+        message: `Id ${id} - Not found`,
         response: err
       })
     }
     } catch (err) {
       res.status(400).json({
         success: false,
-        message: 'Not found',
+        message: 'Error occurred while trying to access the thought',
         response: err
       })
     }
@@ -118,20 +118,20 @@ app.patch("/thoughts/id/:id/like", async (req, res) => {
     if (thought) {
       res.status(201).json({
         success: true,
-        message: 'Like updated successfully for post with id ${id}',
+        message: `Like updated successfully for post with id ${id}`,
         response: thought
       });
     } else {
       res.status(404).json({
         success: false,
-        message: 'Thought with the given id ${id} not found',
+        message: `Thought with the given id ${id} not found`,
         response: null
       });
     }
   } catch (err) {
     res.status(400).json({
       success: false,
-      message: 'Error occurred while trying to update the like for id ${id}',
+      message: `Error occurred while trying to update the like`,
       response: err
     });
   }
