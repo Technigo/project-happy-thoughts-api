@@ -21,6 +21,57 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
+//////// Live sesh //////////
+const { Schema } = mongoose;
+const ThoughtSchema = new Schema ({
+  message: {
+    // Most important one is:
+    type: String,
+    // required is true or false
+    required: true,
+    // true or false: only a new name that is different than all the others
+    minlength: 4,
+    maxlength: 140,
+    //removes unnecessary white spaces from string
+    trim: true
+  },
+  hearts: {
+    type: Number,
+    default: 0
+  },
+  createdAt: {
+    type: Date,
+    default: new Date()
+  }
+  })
+
+const Thought = mongoose.model("Thought", ThoughtSchema)
+
+app.get('/thoughts', async (req, res) => {
+
+})
+
+app.post('/thoughts', async (req, res) => {
+  const {message, hearts, createdAt} = req.body;
+  try{
+    const thoughts = await new Thought({ message, hearts, createdAt }).save()
+    res.status(201).json({
+      success: true,
+      response: thoughts,
+      message: "created successfully"
+    })
+  } catch(e) {
+    res.status(400).json({
+      success: false,
+      response: e,
+      message: "error occurred"
+  })
+}
+})
+
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+
+})
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
