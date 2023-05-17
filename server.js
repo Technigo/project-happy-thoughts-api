@@ -34,10 +34,6 @@ const thoughtSchema = new Schema({
   createdAt: {
     type: Date,
     default: new Date
-  },
-  tag: {
-    type: String,
-    enum:["Food", "Project", "Home"]
   }
 })
 
@@ -89,9 +85,9 @@ app.get("/thoughts", async (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
-  const { message, tag } = req.body;
+  const { message } = req.body;
   try {
-    const thought = await new Thought({ message, tag }).save();
+    const thought = await new Thought({ message }).save();
       res.status(201).json({
       success: true,
       response: thought,
