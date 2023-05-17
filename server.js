@@ -65,33 +65,33 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-//Testing endpoint to find a single thought (it works):
-// app.get('/thoughts/:thoughtId', async (req, res) => {
-//   try {
-//     const singleThought = await Thought.findById(req.params.thoughtId);
-//     if (singleThought) {
-//       res.status(200).json({
-//         message: "Here is a thought",
-//         success: true,
-//         body: singleThought
-//       });
-//     } else {
-//       res.status(404).json({
-//         success: false,
-//         body: {
-//           message: "There is no such thought"
-//         }
-//       })
-//     }
-//   } catch(e) {
-//     res.status(500).json({
-//       success: false,
-//       body: {
-//         message: e
-//       }
-//     })
-//   }
-// });
+// Testing endpoint to find a single thought (it works):
+app.get('/thoughts/:thoughtId', async (req, res) => {
+  try {
+    const singleThought = await Thought.findById(req.params.thoughtId);
+    if (singleThought) {
+      res.status(200).json({
+        message: "Here is a thought",
+        success: true,
+        body: singleThought
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        body: {
+          message: "Faulty ID"
+        }
+      })
+    }
+  } catch(e) {
+    res.status(500).json({
+      success: false,
+      body: {
+        message: e
+      }
+    })
+  }
+});
 
 // Endpoint to like a single thought:
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
@@ -109,7 +109,7 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
         res.status(404).json({
           success: false,
           body: {
-            message: "No thought with this ID was found"
+            message: "Faulty ID"
           }
         })
       }
