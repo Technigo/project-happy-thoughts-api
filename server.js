@@ -105,8 +105,9 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
-app.post("/:thoughtId/like", async (req, res) => {
+/* app.patch("/:thoughtId/like", async (req, res) => {
  const { thoughtId } = req.params;
+ const newHeart = req.body.newHeart
   try {
     const updateHeart = await Thought.findByIdAndUpdate(thoughtId, { $inc: { heart: 1 } }, { new: true });
     res.status(200).json({
@@ -120,6 +121,29 @@ app.post("/:thoughtId/like", async (req, res) => {
       response: e,
       message: "did not successfully"
      });
+  }
+}); */
+
+app.patch("/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+  const newHeart = req.body.newHeart;
+  try {
+    const updateHeart = await Thought.findByIdAndUpdate(
+      thoughtId,
+      { heart: newHeart },
+      { new: true }
+    );
+    res.status(200).json({
+      success: true,
+      response: updateHeart,
+      message: "updated successfully",
+    });
+  } catch (e) {
+    res.status(400).json({
+      success: false,
+      response: e,
+      message: "did not update successfully",
+    });
   }
 });
 
