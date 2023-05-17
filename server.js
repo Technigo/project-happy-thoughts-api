@@ -67,8 +67,8 @@ app.post("/thoughts", async (req, res) => {
 });
 
 
-// Patch for updating like-count
-app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+// Post request for updating like-count
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
   //id from url :param
   const { thoughtId } = req.params;
   // if id is found increases heart count by one
