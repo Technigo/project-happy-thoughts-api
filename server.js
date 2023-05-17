@@ -70,7 +70,7 @@ app.post("/thoughts", async(req, res) => {
 });
 
 // Update amount of likes (hearts)
-app.post("/thoughts/:thoughtId/like", async (req, res) => {
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
   try {
     const updateHearts = await Thought.findByIdAndUpdate(thoughtId, { $inc: { hearts: 1 } }, { new: true });
