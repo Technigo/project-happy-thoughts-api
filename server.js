@@ -1,8 +1,9 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import listEndpoints from "express-list-endpoints";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts-irupe";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/ ";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -18,7 +19,7 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send(listEndpoints(app));
 });
 ////// Tuesday ////
 
