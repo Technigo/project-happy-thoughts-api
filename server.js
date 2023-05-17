@@ -27,11 +27,11 @@ const ThoughtSchema = new Schema({
 
 })
 
-ThoughtSchema.pre('save', function (next) {
-  // Make the hearts property non-assignable by setting it to 0 before saving
-  this.hearts = 0;
-  next();
-});
+// ThoughtSchema.pre('save', function (next) {
+//   // Make the hearts property non-assignable by setting it to 0 before saving
+//   this.hearts = 0;
+//   next();
+// });
 
 const Thought = mongoose.model("Thought", ThoughtSchema);
 
@@ -72,8 +72,8 @@ app.get('/thoughts', async (req, res) => {
 
 // POST
 app.post('/thoughts', async (req, res) => {
-  const { message, hearts, createdAt } = req.body;
-  const thoughts = new Thought({message, hearts, createdAt});
+  const { message, createdAt } = req.body;
+  const thoughts = new Thought({ message, createdAt, hearts: 0 });
   try {
     const savedThought = await thoughts.save();
     res.status(201).json(savedThought);
@@ -85,8 +85,8 @@ app.post('/thoughts', async (req, res) => {
   };
 })
 
-// POST thoughts/:thoughtId/like
-app.post('/thoughts/:thoughtId/like', async (req, res) => {
+// PATCH thoughts/:thoughtId/like
+app.patch('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params;
   try {
     const thought = await Thought.findById(thoughtId);
