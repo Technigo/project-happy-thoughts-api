@@ -14,7 +14,7 @@ const thoughtSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 140
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0,
   },
