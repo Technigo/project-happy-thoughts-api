@@ -1,13 +1,12 @@
 # Project Happy Thoughts API
-
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This weeks project was about building our own API which includes both GET request endpoints to return data and POST endpoints to create data using Express and MongoDB. 
+The API should implement the routes
+Validate user input and return appropriate errors if the input is invalid.
+Create a new thought which is connected to a previous project for the Frontend called project-happy-thought. 
 
 ## The problem
-
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+My main issue with the backend is being able to check if it works and reading the error messages, knowing when Postman should be used and Compass. I also find it consuming fully grasping Atlas and Cloude but a bit clearer after this project. But mostly if the code and the API is communicating or not is my main challenge to figure out as I code and work on the project. 
 
 ## View it live
-
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Created API link: https://project-happy-thoughts-api-6nzr46lxka-uc.a.run.app
+Frontend deployed webpage connected to it: https://spontaneous-beignet-bb56fb.netlify.app
