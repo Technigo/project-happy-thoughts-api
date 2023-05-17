@@ -33,14 +33,29 @@ const HappyThoughtsSchema = new Schema({
     type: String,
     minlength: 4,
     maxlength: 140
+  },
+  likes: {
+    type: Number,
+    default: 0
   }
 })
 
 const HappyToughts = mongoose.model("HappyThoughts", HappyThoughtsSchema)
 
-// Start defining your routes here
+
+
+
 app.get("/", (req, res) => {
-  res.send("Hello from Nina!");
+  const Navigation = {
+    guide: "Routes for Happythoughts project",
+    Endpoints: [
+      {
+        "/thoughts": "happy thoughts",
+        "/thoughts/:id/like": "likes"
+      }
+    ]
+  }
+  res.send("Navigation");
 });
 
 app.get('/thoughts', async (req, res) => {
@@ -57,6 +72,24 @@ app.post('/thoughts', async (req, res) => {
   } catch (err){
     console.error(err);
     res.status(400).json({message: 'Could not save thought', error:err.errors})
+  }
+})
+
+app.post('/thoughts/:id/like', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const thought = await HappyToughts.findById(id);
+    if (!thought) {
+      return res.status(404).json({ message: 'Thought not found' });
+    }
+    thought.likes += 1;
+    await thought.save();
+
+    res.status(200).json({ message: 'Thought liked successfully' })
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ message: 'Like not successfull', error: err.errors })
   }
 })
 
