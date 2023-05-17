@@ -48,7 +48,7 @@ const happyThoughtSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: () => new Date()
+    default: () => moment().tz("UTC").toDate()
   },
 });
 
