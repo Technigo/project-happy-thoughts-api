@@ -56,12 +56,12 @@ app.get("/", (req, res) => {
 });
 
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await HappyToughts.find().sort({createdAt: 'desc'}).limit(20).exec();
+  const thoughts = await HappyThoughts.find().sort({createdAt: 'desc'}).limit(20).exec();
   res.json(thoughts)
   });
 app.post('/thoughts', async (req, res) => {
   const { text, description } = req.body;
-  const thought = new HappyToughts({ text, description });
+  const thought = new HappyThoughts({ text, description });
 
   try{
     const savedThought = await thought.save()
@@ -76,7 +76,7 @@ app.post('/thoughts/:id/like', async (req, res) => {
   const { id } = req.params;
 
   try {
-    const thought = await HappyToughts.findById(id);
+    const thought = await HappyThoughts.findById(id);
     if (!thought) {
       return res.status(404).json({ message: 'Thought not found' });
     }
