@@ -47,7 +47,7 @@ const ThoughtSchema = new Schema({
   tags: {
     type: String,
     default: "random",
-    enum:["weather", "work", "life", "happy"]
+    enum:["weather", "work", "life", "happy", "random"]
   }
 }); 
 
