@@ -6,18 +6,29 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-tho
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-const Thought = mongoose.model('Thought', {
-  text: {
+const { Schema } = mongoose;
+
+const thoughtSchema = new Schema({
+  message: {
     type: String,
     required: true,
+    // so as to hinder spam:
+    unique: true,
     minlength: 5,
-    maxlength: 140
+    maxlength: 140,
+  },
+  hearts: {
+    type: Number,
+    default: 0
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now()
   }
-})
+});
+
+const Thought = mongoose.model("Thought", thoughtSchema);
+
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
 // PORT=9000 npm start
@@ -30,7 +41,7 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo?!");
+  res.send("Hello Technigo!!!");
 });
 
 app.get("/thoughts", async (req, res) => {
@@ -38,12 +49,12 @@ app.get("/thoughts", async (req, res) => {
   res.json(thoughts);
 });
 
+// Endpoint to post a thought:
 app.post('/thoughts', async (req, res) => {
   // Retreieve information sent by the client to our API endpoint:
-  const { text } = req.body;
+  const { message } = req.body;
   // Use our mongoose model to create the database entry:
-  const thought = new Thought({text});
-
+  const thought = new Thought({message});
   try {
     // Success!
     const savedThought = await thought.save();
@@ -52,8 +63,66 @@ app.post('/thoughts', async (req, res) => {
   catch (err) {
     res.status(400).json({message: 'Could not save thought', error: err.errors});
   }
-
 })
+
+//Testing endpoint to find a single thought (it works):
+// app.get('/thoughts/:thoughtID', async (req, res) => {
+//   try {
+//     const singleThought = await Thought.findById(req.params.thoughtID);
+//     if (singleThought) {
+//       res.status(200).json({
+//         message: "Here is a thought",
+//         success: true,
+//         body: singleThought
+//       });
+//     } else {
+//       res.status(404).json({
+//         success: false,
+//         body: {
+//           message: "There is no such thought"
+//         }
+//       })
+//     }
+//   } catch(e) {
+//     res.status(500).json({
+//       success: false,
+//       body: {
+//         message: e
+//       }
+//     })
+//   }
+// });
+
+// Endpoint to like a single thought:
+app.post('/thoughts/:thoughtID/like', async (req, res) => {
+    try {
+      const singleThought = await Thought.findById(req.params.thoughtID);
+      if (singleThought) {
+        singleThought.hearts += 1;
+        await singleThought.save();
+        res.status(200).json({
+          success: true,
+          message: "Thought successfully liked!",
+          singleThought: singleThought
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          body: {
+            message: "No thought with this ID was found"
+          }
+        })
+      }
+    } catch(e) {
+      res.status(500).json({
+        success: false,
+        body: {
+          message: "Server error",
+          error: err
+        }
+      })
+    }
+  });
 
 // Start the server
 app.listen(port, () => {
