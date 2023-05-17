@@ -50,7 +50,19 @@ app.get("/", (req, res) => {
 
 app.get("/thoughts", async (req, res) => {
     const thoughts = await HappyThought.find().sort({createdAt: 'desc'}).limit(20).exec();
-    res.json(thoughts)
+      try {
+        res.status(201).json({
+          success: true,
+          response: thoughts,
+          message: "thought fetched successfully"
+        })
+      } catch (e) {
+        res.status(400).json({
+          success: false,
+          response: e,
+          message: "error occured when fetching thought"
+      })
+      }
 })
 
 app.post("/thoughts", async (req, res) => {
@@ -96,47 +108,6 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
     })
   }
 })
-
-// POST - create something
-// PATCH - update something
-// PUT - replace something
-
-// app.patch("/fruit_or_vegetable/:id", async (req, res) => {
-//   const { id } = req.params;
-//   const { newDescription } = req.body;
-//     try {
-//       const foodItem = await FruitOrVegetable.findByIdAndUpdate(id, {description: newDescription})
-//       res.status(200).json({
-//         success: true,
-//         response: {},
-//         message: "updated successfully"
-//       })
-//     } catch(e) {
-//       res.status(400).json({
-//         success: false,
-//         response: e,
-//         message: "error occured"
-//     })
-//   }
-// })
-
-// app.delete("/fruit_or_vegetable/:id", async (req, res) => {
-//   const { id } = req.params;
-//     try {
-//       const foodItem = await FruitOrVegetable.findByIdAndRemove(id)
-//       res.status(200).json({
-//         success: true,
-//         response: foodItem,
-//         message: "deleted successfully"
-//       })
-//     } catch(e) {
-//       res.status(400).json({
-//         success: false,
-//         response: e,
-//         message: "error occured"
-//     })
-//   }
-// })
 
 // Start the server
 app.listen(port, () => {
