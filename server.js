@@ -38,7 +38,7 @@ const ThoughtSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: new Date()
+    default: () => new Date()
   }
 });
 const Thought = mongoose.model("Thought", ThoughtSchema);
