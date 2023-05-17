@@ -18,7 +18,17 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Happy thoughts!");
+
+  const HappyThoughtsAPIGuide = {
+    Routes: [
+      { 'Hello': 'Welcome to Annikas Happy thoughts-API! See instructions below',
+        '/thoughts': 'GET Get all thoughts.',
+        '/thoughts': 'POST Post new thought',
+        '/thouhgts/:thoughtId/like': 'Like a specific thought',
+      },
+    ],
+  };
+  res.send({responseMessage: HappyThoughtsAPIGuide});
 });
 
 const { Schema } = mongoose;
