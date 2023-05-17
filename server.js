@@ -38,8 +38,16 @@ const HappyThoughts = mongoose.model("HappyThoughts", HappyThoughtsSchema);
 
 
 app.get("/", (req, res) => {
-  res.send(listEndpints(app));
+  const endpoints = app._router.stack
+    .filter((route) => route.route && route.route.path)
+    .map((route) => ({
+      path: route.route.path,
+      method: Object.keys(route.route.methods)[0],
+    }));
+
+  res.json(endpoints);
 });
+
 
 app.get('/thoughts', async (req, res) => {
   const thoughts = await HappyThoughts.find().sort({createdAt: 'desc'}).limit(20).exec();
