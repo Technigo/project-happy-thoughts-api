@@ -20,24 +20,20 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Happy thoughts!");
 });
-////// Tuesday ////
 
 const { Schema } = mongoose;
 const ThoughtSchema = new Schema({
   message: {
     // most important one
     type: String,
-    // required true or false
-    required: true,
+    required: true, // required true which means the user MUST provide a message in order to send it. 
     maxlength: 140,
     minlength: 5,
     trim: true // removes unnecessary whitespaces from string
-    
   },
   likes: {
     type: Number,
     default: 0
-    
   },
   createdAt: {
     type: Date,
@@ -50,18 +46,22 @@ const Thought = mongoose.model("Thought", ThoughtSchema);
 
 ////////////GET-REQUEST/////////
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
+  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec() 
+  // 1. Thought.find() asks for all documents (thoughts) without any specific filter. 
+  // 2. .sort({createdAt: 'desc'}) sorts the retrieved thoughts based on createdAt-field in descending order, so the most recent thoughts goes on top. 
+  // 3. .limit(20) limits the number of thoughts returned to 20. Only the latest 20 thoughts are retreived. 
+  // 4. .exec() executes the query
   try {  
-    res.status(200).json({
+    res.status(200).json({ //sets the response status code to 200 and prepares the response as a json object
       success: true,
-      response: thoughts, 
-      message: "sucessful get request"
+      response: thoughts, //this is where the thoughts are store, that's why I needed to changes the code in the original Happy Thoughts-project, the structure is different from the original API
+      message: "Sucessful get request"
     })
   } catch (e) {
     res.status(400).json({
       success: false, 
-      response: e,
-      message: "Bad request",
+      response: e, //includes the error object and message caught in the catch block. 
+      message: "Bad request"
     })
   }
 })
@@ -69,33 +69,33 @@ app.get("/thoughts", async (req, res) => {
 //////////POST REQUEST/////////
 app.post("/thoughts", async (req, res) => {
   const {message, createdAt} = req.body;
-    try{
+    try {
       // const foodItem = await new FruitOrVegetable({kind: kind, name: name, description: description})
       const savedThought = await new Thought({message: message, createdAt: createdAt}).save();
       res.status(201).json({
        success: true,
         response: savedThought,
-        message: "created thought successfully"
+        message: "Created thought successfully."
       });
     } catch (e) {
       res.status(400).json({
         success: false,
         response: e,
-        message: "not thoughts?"
+        message: "Did not create thought successfully."
       });
     }
 });
 
 
 
-////////////POST////////////////
+////////////POST-REQUEST FOR ADDING LIKES////////////////
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params
-  try{
-    const updateLikes = await Thought.findByIdAndUpdate(thoughtId, {$inc: {likes: 1 } })
+  try {
+    const MessageWithUpdatedLikes = await Thought.findByIdAndUpdate(thoughtId, {$inc: {likes: 1 } })
     res.status(201).json({
       success: true,
-      response: `Happy thought: ${updateLikes.message} has been updated`
+      response: `Happy thought: ${MessageWithUpdatedLikes.message} has been updated`
     })
   } catch (e) {
     res.status(400).json({
