@@ -33,7 +33,7 @@ const ThoughtSchema = new Schema({
 },
  createdAt: {
   type: Date,
-  default: new Date()
+  default: () => new Date()
  }, 
  hearts: {
   type: Number,
@@ -88,7 +88,7 @@ app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
   // if id is found increases heart count by one
   try {
-    const liked = await Thought.findByIdAndUpdate(thoughtId,{ $inc: { heart: 1 } });
+    const liked = await Thought.findOneAndUpdate({ _id: thoughtId }, { $inc: { hearts: 1 } }, { new: true })
     res.status(200).json(liked);
   } catch (e) {
     res.status(400).json({
