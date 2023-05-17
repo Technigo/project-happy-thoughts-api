@@ -17,6 +17,11 @@ app.use(cors());
 app.use(express.json());
 const listEndPoints = require('express-list-endpoints');
 
+app.use((req, res, next) => {
+  res.header({"Access-Control-Allow-Origin": "*"});
+  next();
+}) 
+
 const { Schema } = mongoose;
 
 const thoughtSchema = new Schema({
@@ -33,7 +38,7 @@ const thoughtSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: new Date
+    default: Date.now
   }
 })
 
@@ -86,11 +91,12 @@ app.get("/thoughts", async (req, res) => {
 
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
+  const thought = new Thought({ message })
   try {
-    const thought = await new Thought({ message }).save();
+      const savedThought = await thought.save()
       res.status(201).json({
       success: true,
-      response: thought,
+      response: savedThought,
       message: "created successfully"
     });
   } catch (e) {
