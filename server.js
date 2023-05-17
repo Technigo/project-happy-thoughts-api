@@ -39,10 +39,7 @@ const HappyThoughtsSchema = new Schema({
     default: 0
   }
 })
-
-const HappyToughts = mongoose.model("HappyThoughts", HappyThoughtsSchema)
-
-
+const HappyThoughts = mongoose.model("HappyThoughts", HappyThoughtsSchema);
 
 
 app.get("/", (req, res) => {
