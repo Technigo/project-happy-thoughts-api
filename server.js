@@ -99,9 +99,9 @@ app.get("/thoughts", async (req, res) => {
 
 app.post("/thoughts", async (req, res) => {
   const { message, createdAt } = req.body
-  const thought = new Thoughts({ message, createdAt})
+
   try {
-    const newThought = await thought.save()
+    const newThought = await new thought({message, createdAt}).save()
     res.status(201).json({
       success: true,
       response: newThought,
