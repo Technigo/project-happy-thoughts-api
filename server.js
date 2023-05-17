@@ -46,9 +46,20 @@ app.get("/", (req, res) => {
 
 app.get("/thoughts", async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
-  res.json(thoughts);
+  try {
+  res.status(200).json({
+    success: true,
+    body: thoughts,
+    message: "Success"
+  });
+} catch(e) {
+  res.status(400).json({
+    success: false,
+    body: e,
+    message: "Could not fetch list"
+  });
+}
 });
-
 // Endpoint to post a thought:
 app.post('/thoughts', async (req, res) => {
   // Retreieve information sent by the client to our API endpoint:
