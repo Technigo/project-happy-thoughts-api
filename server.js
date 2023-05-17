@@ -79,7 +79,7 @@ app.get("/thoughts", async (req, res) => {
       currentPage: page,
       totalPages: totalPages,
       totalThoughts: totalThoughts,
-      thoughts: thoughts
+      response: thoughts
     });
   } catch (err) {
     res.status(500).json({
