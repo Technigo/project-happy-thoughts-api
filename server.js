@@ -69,7 +69,7 @@ app.post("/thoughts", async(req, res) => {
 });
 
 // Update amount of likes (hearts)
-app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
   const { addHeart } = req.body;
   try {
