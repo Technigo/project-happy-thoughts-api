@@ -126,11 +126,10 @@ app.post("/thoughts", async (req, res) => {
 
 app.patch("/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
-  const newHeart = req.body.newHeart;
   try {
     const updateHeart = await Thought.findByIdAndUpdate(
       thoughtId,
-      { heart: newHeart },
+      { $inc: { heart: 1 } },
       { new: true }
     );
     res.status(200).json({
