@@ -1,4 +1,4 @@
-// /////////////////////////////// IMPORT //////////////////////////////// //
+// /////////////////////////////// IMPORT ///////////////////////////////// //
 
 import express from "express";
 import cors from "cors";
@@ -10,17 +10,13 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-tho
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
 
-// Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
 
-// //////////////////////////// SCHEMA ////////////////////////////////////////// //
+// //////////////////////////// SCHEMA //////////////////////////////////// //
 
 const ThoughtsSchema = new mongoose.Schema({
   message: {
@@ -42,27 +38,20 @@ const ThoughtsSchema = new mongoose.Schema({
 
 const Message = mongoose.model("Message", ThoughtsSchema);
 
-
-// ////////// STARTPAGE /////////////////// //
+// //////////////////////////// STARTPAGE //////////////////////////////////// //
 
 app.get("/", (req, res) => {
   res.send({
     "Hello": "Welcome to this Happy Thought API!",
     "Endpoints": [
-    {
-    "/": "Startpage / Api Info"
-    },
-    {
-    "/thoughts": "GET. See 20 thoughts in descending order"
-    },
-    {
-    "/thoughts": "POST. Post your thoughts" 
-    }
+    {"/": "Startpage / Api Info"},
+    {"/thoughts": "GET. See 20 thoughts in descending order"},
+    {"/thoughts": "POST. Post your thoughts"}
     ]
     });
 });
 
-// /////////////// GET ///////////////////////
+// //////////////////////////// GET //////////////////////////////////// //
 
 app.get("/thoughts", async (req, res) => {
   const thoughtsList = await Message.find().sort({createdAt: 'desc'}).limit(20).exec();
@@ -81,7 +70,7 @@ app.get("/thoughts", async (req, res) => {
   }
 });
 
-// //////////// POST //////////////////////////
+// //////////////////////////// POST //////////////////////////////////// //
 
 app.post('/thoughts', async (req, res) => {
   const { message, createdAt } = req.body;
@@ -101,10 +90,10 @@ app.post('/thoughts', async (req, res) => {
   }
 });
 
-// //////////// PATCH //////////////////////////
+// //////////////////////////// PATCH //////////////////////////////////// //
 
-app.patch("/thoughts/:id/likes", async (req, res) => {
-  const { id } = req.params;
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
   try {
    const updateLikes = await Message.findByIdAndUpdate(id, {$inc: {likes: 1}});
    res.status(200).json({
@@ -119,7 +108,6 @@ app.patch("/thoughts/:id/likes", async (req, res) => {
   }
 });
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
