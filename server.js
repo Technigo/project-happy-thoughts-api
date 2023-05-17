@@ -56,7 +56,7 @@ const happyThought = mongoose.model('happyThought', happyThoughtSchema);
 
 
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
+  const thoughts = await happyThought.find().sort({ createdAt: "desc" }).limit(20).exec();
   res.status(200).json(thoughts);
 });
 
@@ -74,10 +74,10 @@ app.get("/thoughts/id/:id", async (req, res) => {
     }
 });
 
-app.post("/thoughts", async (req, res)=>{
-const {message} = req.body;
-  try{
-    const thought = await new thought({ message }).save();
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body;
+  try {
+    const thought = await new happyThought({ message }).save();
     res.status(201).json({
       success: true,
       response: thought,
@@ -87,10 +87,11 @@ const {message} = req.body;
     res.status(400).json({
       success: false,
       response: e,
-      message: "Error occured while posting"
+      message: "Error occurred while posting"
     });
   }
 });
+
 
 //Patching:
 app.patch("/thoughts/id/:id/like", async (req, res) => {
