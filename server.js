@@ -23,7 +23,7 @@ const thoughtSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: () => new Date()
+    default: new Date()
   }
 });
 
@@ -49,13 +49,13 @@ app.get("/thoughts", async (req, res) => {
   try {
   res.status(200).json({
     success: true,
-    body: thoughts,
+    res: thoughts,
     message: "Success"
   });
 } catch(e) {
   res.status(400).json({
     success: false,
-    body: e,
+    res: e,
     message: "Could not fetch list"
   });
 }
