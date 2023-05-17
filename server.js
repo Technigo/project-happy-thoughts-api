@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
+import listEndpoints from 'express-list-endpoints';
 
 dotenv.config();
 
@@ -9,16 +10,9 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1/project-happy-tho
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
 
-// Will create a list of all endpoints in our API
-const listEndpoints = require('express-list-endpoints');
-
-// Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
 
@@ -48,8 +42,6 @@ const Thought = mongoose.model('Thought', ThoughtSchema)
 
 
 
-
-// Start defining your routes here
 app.get("/", (req, res) => {
   res.status(200).send({
     success: true,
@@ -68,22 +60,6 @@ app.get("/thoughts", async (req, res) => {
     res.status(200).json(thoughts);
 });
 
-// Accessing a single thought by _id
-// E.g. http://localhost:8080/thoughts/id/6463dda65e61139a83f59492
-app.get("/thoughts/id/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const singleThought = await Thought.findById(id)
-    if (singleThought) {
-      res.status(200).json(singleThought);
-    } else {
-      res.status(400).json('Not found');
-    }
-    } catch (err) {
-      res.status(400).json('No such id found in here');
-    }
-});
-
 
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
@@ -91,41 +67,87 @@ app.post("/thoughts", async (req, res) => {
     const thought = await new Thought({ message }).save();
     res.status(201).json({
       success: true,
-      response: thought,
-      message: 'Thought posted successfully'
+      message: 'Thought posted successfully',
+      response: thought
     })
   } catch (err) {
     res.status(400).json({
       success: false,
-      response: err,
-      message: 'Error occured while trying to post the thought'
+      message: 'Error occured while trying to post the thought',
+      response: err
     })
   }
 });
 
 
+// Accessing a single thought by _id
+// E.g. http://localhost:8080/thoughts/id/6463dda65e61139a83f59492
+app.get("/thoughts/id/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const singleThought = await Thought.findById(id)
+    if (singleThought) {
+      res.status(200).json({      
+        success: true,
+        message: 'Thought with id ${id} found',
+        response: singleThought
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'Id ${id} - Not found',
+        response: err
+      })
+    }
+    } catch (err) {
+      res.status(400).json({
+        success: false,
+        message: 'Not found',
+        response: err
+      })
+    }
+});
+
 // Patch = update
 // E.g. http://localhost:8080/thoughts/id/6463dda65e61139a83f59492/like
 app.patch("/thoughts/id/:id/like", async (req, res) => {
   const { id } = req.params;
-  // const updateHeart = req.body.updateHeart
   try {
-    // const thought = await Thought.findByIdAndUpdate(id, {heart: updateHeart})
     // Find the thought by ID and increment the 'heart' field by 1
     const thought = await Thought.findByIdAndUpdate(id, { $inc: { heart: 1 } }, { new: true });
-    res.status(201).json({
-      success: true,
-      response: thought,
-      message: 'Like updated successfully'
-    })
+    if (thought) {
+      res.status(201).json({
+        success: true,
+        message: 'Like updated successfully for post with id ${id}',
+        response: thought
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'Thought with the given id ${id} not found',
+        response: null
+      });
+    }
   } catch (err) {
     res.status(400).json({
       success: false,
-      response: err,
-      message: 'Error occured while trying to update the like'
-    })
+      message: 'Error occurred while trying to update the like for id ${id}',
+      response: err
+    });
   }
-})
+});
+
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    message: 'Internal Server Error',
+    error: err.message
+  });
+});
+
 
 
 // Start the server
