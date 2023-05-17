@@ -54,7 +54,7 @@ app.get("/", (req, res) => {
     "Endpoints": [
     {"/": "Startpage / Api Info"},
     {"/thoughts": "GET. See 20 thoughts in descending order"},
-    {"/thoughts": "POST. Post your thoughts"}
+    {"/thoughts": "POST. Post your thoughts"},
     {"/thoughts/:thoughtId/like": "POST. Update likes"}
     ]
     });
