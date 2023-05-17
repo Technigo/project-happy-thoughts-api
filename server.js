@@ -130,6 +130,35 @@ app.post('/thoughts/:_id/like', async (req, res) => {
     }
   });
 
+// Endpoint that deletes a thought:
+app.delete('/thoughts/:_id', async (req, res) => {
+  try {
+    const deletedThought = await Thought.findByIdAndDelete(req.params._id);
+    if (deletedThought) {
+      res.status(200).json({
+        success: true,
+        message: "Thought successfully deleted!",
+        deletedThought: deletedThought
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        body: {
+          message: "Faulty ID"
+        }
+      });
+    }
+  } catch(e) {
+    res.status(500).json({
+      success: false,
+      body: {
+        message: "Server error",
+        error: e
+      }
+    });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
