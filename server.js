@@ -77,25 +77,45 @@ app.get("/thoughts", async (req, res) => {
 });
 
 // POST to send new thought/message
-app.post('/thoughts', (req, res) => {
-  //Promises
+// app.post('/thoughts', (req, res) => {
+//   //Promises
+//   const { message, createdAt } = req.body
+//   const newThought = new Thoughts({ message, createdAt}).save()
+// .then ((newThought) => {
+//   res.status(201).json({
+//     success: true,
+//     response: newThought,
+//     message: "Success"
+//   })
+// })
+// .catch((e) => {
+//   res.status(400).json({
+//     success: false,
+//     response: e,
+//     message: "Could not send thought"
+//   })
+// })
+// })
+
+app.post("/thoughts", async (req, res) => {
   const { message, createdAt } = req.body
-  const newThought = new Thoughts({ message: message, createdAt: createdAt }).save()
-.then ((newThought) => {
-  res.status(201).json({
-    success: true,
-    response: newThought,
-    message: "Success"
-  })
-})
-.catch((e) => {
-  res.status(400).json({
-    success: false,
-    response: e,
-    message: "Could not send thought"
-  })
-})
-})
+  const thought = new Thoughts({ message, createdAt})
+  try {
+    const newThought = await thought.save()
+    res.status(201).json({
+      success: true,
+      response: newThought,
+      message: "Success"
+    });
+  } catch(e) {
+    res.status(400).json({
+      success: false,
+      response: e,
+      message: "Could not post thought"
+    });
+  }
+});
+
 
 // PATCH to update the likes based on the ID
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
