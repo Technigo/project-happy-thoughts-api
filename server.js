@@ -71,9 +71,9 @@ app.post("/thoughts", async (req, res) => {
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   //id from url :param
   const { thoughtId } = req.params;
-  // if id is found increases heart count by one
+  // if id is found increases hearts count by one
   try {
-    const liked = await Thought.findByIdAndUpdate(thoughtId,{ $inc: { heart: 1 } });
+    const liked = await Thought.findByIdAndUpdate(thoughtId,{ $inc: { hearts: 1 } });
     res.status(200).json(liked);
   } catch (e) {
     res.status(400).json({
