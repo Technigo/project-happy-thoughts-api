@@ -108,7 +108,7 @@ app.post('/thoughts/:_id/like', async (req, res) => {
         await singleThought.save();
         res.status(200).json({
           success: true,
-          message: "Thought successfully liked!",
+          message: "Thought successfully liked :)",
           singleThought: singleThought
         });
       } else {
@@ -137,7 +137,7 @@ app.delete('/thoughts/:_id', async (req, res) => {
     if (deletedThought) {
       res.status(200).json({
         success: true,
-        message: "Thought successfully deleted!",
+        message: "Thought successfully deleted :(",
         deletedThought: deletedThought
       });
     } else {
