@@ -20,10 +20,6 @@ const listEndPoints = require('express-list-endpoints');
 const { Schema } = mongoose;
 
 const thoughtSchema = new Schema({
-  name: {
-    type: String,
-    required: true
-  },
   message: {
     type: String,
     required: true,
@@ -93,9 +89,9 @@ app.get("/thoughts", async (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
-  const { message, tag, name } = req.body;
+  const { message, tag } = req.body;
   try {
-    const thought = await new Thought({ message, tag, name }).save();
+    const thought = await new Thought({ message, tag }).save();
       res.status(201).json({
       success: true,
       response: thought,
