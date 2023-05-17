@@ -1,8 +1,16 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+✓ How to use POST requests to send data to your API
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+✓ How to store data in your database from POST requests
+
+✓ How to validate data and ensure your database only contains 'good' data
+
+✓ How to build a full API which includes handling of user input
+
+✓ How to build an API which works well with an existing frontend
+
+✓ Unit tests: What they are and how to run them
 
 ## The problem
 
@@ -10,4 +18,5 @@ Describe how you approached to problem, and what tools and techniques you used t
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Backend - https://project-happy-thoughts-api-ct6uxv3wqq-lz.a.run.app/
+Frontend - https://project-happy-thought.netlify.app
