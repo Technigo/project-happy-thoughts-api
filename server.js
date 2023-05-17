@@ -23,7 +23,7 @@ const thoughtSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: new Date()
+    default: () => new Date()
   }
 });
 
@@ -60,6 +60,7 @@ app.get("/thoughts", async (req, res) => {
   });
 }
 });
+
 // Endpoint to post a thought:
 app.post('/thoughts', async (req, res) => {
   // Retreieve information sent by the client to our API endpoint:
