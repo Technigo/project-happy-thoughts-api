@@ -101,7 +101,7 @@ app.post("/thoughts", async (req, res) => {
   const { message, createdAt } = req.body
 
   try {
-    const newThought = await new thought({message, createdAt}).save()
+    const newThought = await new Thoughts({message, createdAt}).save()
     res.status(201).json({
       success: true,
       response: newThought,
