@@ -21,12 +21,10 @@ const ThoughtSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now, // versus new Date?
-    readOnly: true // need to be non assignable - fix 
+    default: () => new Date()
   }
 
 })
-
 
 const Thought = mongoose.model("Thought", ThoughtSchema);
 
@@ -67,8 +65,8 @@ app.get('/thoughts', async (req, res) => {
 
 // POST - post a new thought 
 app.post('/thoughts', async (req, res) => {
-  const { message, createdAt } = req.body;
-  const thoughts = new Thought({ message, createdAt, hearts: 0 }); // hearts always 0, but can still update using patch request 
+  const { message } = req.body; // removed createdAt so that the user cannot input the date, and it will always set to default
+  const thoughts = new Thought({ message, hearts: 0 }); // hearts always 0, but can still update using patch request 
   try {
     const savedThought = await thoughts.save();
     res.status(201).json(savedThought);
