@@ -22,7 +22,7 @@ const { Schema } = mongoose;
 const thoughtSchema = new Schema({
   name: {
     type: String,
-    required: true,
+    required: false, set: a => a === '' ? undefined : a,
     minlenght: 2,
     maxlenght: 30,
     trim: true
