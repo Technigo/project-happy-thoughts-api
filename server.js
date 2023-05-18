@@ -75,9 +75,6 @@ app.patch('/thoughts/:id/like', async (req, res) => {
     if (!thought) {
       return res.status(404).json({ message: 'Thought not found' });
     }
-    thought.likes += 1;
-    await thought.save();
-
     res.status(200).json({ message: 'Thought liked successfully' })
   } catch (err) {
     console.error(err);
