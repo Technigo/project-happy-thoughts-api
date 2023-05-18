@@ -84,12 +84,9 @@ app.post("/thoughts", async (req, res) =>{
 });
 
 app.patch("/thoughts/:_id/like", async (req, res) => {
-  const { UpdateHearts, _id } = req.params; 
+  const { _id } = req.params; 
   try {
-    const thought = await Thought.findByIdAndUpdate(
-      _id,
-      { $inc: { heart: 1 } },
-      { new: true }
+    const thought = await Thought.findOneAndUpdate(_id, { $inc: { heart: 1 } }, { new: true }
     );
 
     res.status(201).json({
