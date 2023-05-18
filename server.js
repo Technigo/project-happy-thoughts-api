@@ -61,14 +61,10 @@ app.get("/thoughts", async (req, res) => {
   const sortField = req.query.sortField || 'createdAt'; // Default sorting field is 'createdAt'
   const sortOrder = req.query.sortOrder === 'asc' ? 1 : -1; // Default sorting order
 
-
-  // default: /thoughts?page=1&limit=20
+  // E.g:
   // /thoughts?page=2&limit=10
-  // thoughts?sortField=createdAt&sortOrder=desc
-  // /thoughts?page=1&limit=20?sortField=createdAt&sortOrder=asc
-
   // /thoughts?page=1&limit=20&sortField=createdAt&sortOrder=desc
-   // /thoughts?page=1&limit=20&sortField=heart&sortOrder=desc
+  // /thoughts?page=1&limit=20&sortField=heart&sortOrder=desc
 
   try {
     const totalThoughts = await Thought.countDocuments(); // Counts thoughts
