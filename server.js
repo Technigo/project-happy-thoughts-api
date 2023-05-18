@@ -82,7 +82,7 @@ app.post("/thoughts", async (req, res) => {
 
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
     try {
-      const likedThought = await HappyThought.findById(req.params.id);
+      const likedThought = await HappyThought.findById(req.params.thoughtId);
       if (likedThought) {
         likedThought.hearts +=1
         await likedThought.save()
