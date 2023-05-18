@@ -22,7 +22,7 @@ const HappyThoughtsSchema = new Schema({
   text: {
     type:String,
     required: true,
-    minlength: 4,
+    minlength: 6,
     maxlength: 140
   },
   createdAt: {
