@@ -20,6 +20,13 @@ const listEndPoints = require('express-list-endpoints');
 const { Schema } = mongoose;
 
 const thoughtSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+    minlenght: 2,
+    maxlenght: 30,
+    trim: true
+  },
   message: {
     type: String,
     required: true,
