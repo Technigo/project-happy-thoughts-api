@@ -42,6 +42,19 @@ const Thought = mongoose.model("Thought", ThoughtsSchema);
 
 
 // Routes
+app.use(cors());
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send({
+    Welcome: "Welcome to the Happy Thoughts APP",
+    Routes: [{
+      "/thoughts": "All the Happy thoughts!"
+    }]
+  });
+});
+
+
 // Get all thoughts
 app.get("/thoughts", async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
@@ -56,9 +69,18 @@ app.get("/thoughts", async (req, res) => {
  })
 
 //Create new thought
-
+app.post("/thoughts", async (req, res) => {
+  const {message} = req.body;
+  try {
+    const newThought = await new Thought({message: message}).save();
+    res.status(201).json({success: true, response: newThought})
+  } catch(error) {
+    res.status(400).json({success: false, response: error})
+  }
+});
 
 // Update the like count on each thought
+
 
 // Start defining your routes here
 app.get("/", (req, res) => {
