@@ -92,9 +92,9 @@ app.patch("/thoughts/:_id/like", async (req, res) => {
       { new: true }
     );
 
-    res.status(200).json({
+    res.status(201).json({
       success: true,
-      response: thought,
+      response: {UpdateHearts},
       message: "Like received successfully"
     });
   } catch (e) {
