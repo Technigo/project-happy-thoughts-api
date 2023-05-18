@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
       { 'Hello': 'Welcome to Annikas Happy thoughts-API! See instructions below',
         '/thoughts': 'GET Get all thoughts.',
         '/thoughts': 'POST Post new thought',
-        '/thouhgts/:thoughtId/like': 'Like a specific thought',
+        '/thouhgts/:thoughtId/like': 'POST Like a specific thought',
       },
     ],
   };
@@ -123,6 +123,31 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
   }
 })
 
+/////////////////////////DELETE-REQUEST for deleting thoughts////////////////////////
+app.delete("/thoughts/:thoughtId/delete", async (req, res) => {
+  const { thoughtId } = req.params
+  try {
+    const deletedThought = await Thought.findByIdAndDelete(thoughtId);
+    if (deletedThought) {
+      res.status(200).json({
+        success: true,
+        response: deletedThought,
+        message: "Thought deleted successfully."
+      })
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "Thought not found. Deletion unsuccessful."
+      })
+    }
+  } catch (error){
+    res.status(400).json({
+      success: false,
+      response: error, 
+      message: "Could not delete thought."
+    })
+  }
+})
 
 // Start the server
 app.listen(port, () => {
