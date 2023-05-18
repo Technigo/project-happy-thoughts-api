@@ -56,7 +56,10 @@ app.get("/", (req, res) => {
 
 // Finding thoughts, sort them in descening (desc) order by creation date and limit thoughts to 20 and execute query
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
+  const thoughts = await Thought.find()
+  .sort({createdAt: 'desc', _id: 'desc' })
+  .limit(20)
+  .exec();
   res.status(200).json(thoughts);
 });
 
