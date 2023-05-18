@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
 });
 
 const { Schema } = mongoose;
-const ThoughtSchema = new Schema({
+const thoughtSchema = new Schema({
   message: {
     type: String,
     minlength: 5,
@@ -40,7 +40,7 @@ const ThoughtSchema = new Schema({
   }
 });
 
-const Thought = mongoose.model("Thought", ThoughtSchema);
+const Thought = mongoose.model("Thought", thoughtSchema);
 
 app.get("/thoughts", async (req,res)=> {
   try {  
