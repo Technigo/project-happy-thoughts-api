@@ -44,7 +44,7 @@ const Thought = mongoose.model("Thought", ThoughtSchema);
 
 app.get("/thoughts", async (req,res)=> {
   try {  
-  const thought = await Thought.find({}).sort({createdAt: -1 }).limit(20);
+  const thought = await Thought.find().sort({createdAt: -1 }).limit(20).exec();
     res.status(200).json({
       success:true,
       response: thought,
@@ -62,9 +62,9 @@ app.get("/thoughts", async (req,res)=> {
 
 app.post("/thoughts", async (req, res) =>{
   const { message } = req.body;
-  const thought = new Thought({ message, createdAt: new Date() });
-  const savedThought = await thought.save()
+  const thought = new Thought({ message });
    try{
+    const savedThought = await thought.save();
     res.status(201).json(savedThought);
   } catch (error) {
     res.status(400).json({
@@ -93,10 +93,10 @@ app.patch("/thoughts/:id/like", async (req, res) => {
   }
 });
 
-/*app.delete("/thought/:id", async (req, res) => {
+/*app.delete("/thoughts/:_id", async (req, res) => {
   const { id } = req.params;
   try{
-  const deletedThought = await Thought.findByIdAndDelete(id);
+  const deletedThought = await Thought.findByIdAndDelete(_id);
   res.status(200).json({
     success: true,
     message: "deleted successfully"
