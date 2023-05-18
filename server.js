@@ -42,7 +42,22 @@ const Thought = mongoose.model("Thought", ThoughtsSchema);
 
 
 // Routes
+// Get all thoughts
+app.get("/thoughts", async (req, res) => {
+  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
+ 
+  if (thoughts) {
+   res.status(200).json(thoughts)
+  } else {
+   res.status(404).json({
+     message: 'It was not possible to find thoughts', error: err.errors
+   })
+  }
+ })
+
 //Create new thought
+
+
 // Update the like count on each thought
 
 // Start defining your routes here
