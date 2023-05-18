@@ -58,8 +58,17 @@ app.get("/", (req, res) => {
 app.get("/thoughts", async (req, res) => {
   const page = parseInt(req.query.page) || 1; // Current page (default: 1)
   const limit = parseInt(req.query.limit) || 20; // Number of thoughts per page (default: 20)
+  const sortField = req.query.sortField || 'createdAt'; // Default sorting field is 'createdAt'
+  const sortOrder = req.query.sortOrder === 'asc' ? 1 : -1; // Default sorting order
 
+
+  // default: /thoughts?page=1&limit=20
   // /thoughts?page=2&limit=10
+  // thoughts?sortField=createdAt&sortOrder=desc
+  // /thoughts?page=1&limit=20?sortField=createdAt&sortOrder=asc
+
+  // /thoughts?page=1&limit=20&sortField=createdAt&sortOrder=desc
+   // /thoughts?page=1&limit=20&sortField=heart&sortOrder=desc
 
   try {
     const totalThoughts = await Thought.countDocuments(); // Counts thoughts
@@ -67,12 +76,12 @@ app.get("/thoughts", async (req, res) => {
 
     
     const thoughts = await Thought.find()
-      .sort({ createdAt: 'desc' })
+      .sort({ [sortField]: sortOrder }) // Dynamically set the sorting field and order based on query parameters
       .skip((page - 1) * limit)  // Basically sets where to start showing the thoughts (skipping the ones before it)
       // E.g: If page is 3 and limit is 20, the skip value would be 40. This means that for the third page, we need to skip the first 40 thoughts in the sorted result.
       .limit(limit)   // We change this to a variable instead of fixed 20
       .exec();
-  
+
     res.status(200).json({
       success: true,
       message: 'Thoughts fetched successfully',
