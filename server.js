@@ -28,7 +28,7 @@ const ThoughtSchema =new Schema({
     required: true,
     minlength: 5,
     maxlength: 140,
-    trim: true // removes whitespace before and after string
+    trim: true // removes any whitespace before and after string
     // unique: true // if you don't want to allow duplicates
   },
   heart: {
@@ -63,9 +63,9 @@ app.get("/thoughts", async (req, res) => {
 // post to database
 app.post("/thoughts", async (req, res) => {
   // retrieve information sent by client to our API endpoint
-  const { message, heart } = req.body;
+  const { message } = req.body;
   try {
-    const savedThought = await new Thought({message, heart}).save();
+    const savedThought = await new Thought({message}).save();
     res.status(201).json({
       success: true,
       response: savedThought,
@@ -81,9 +81,11 @@ app.post("/thoughts", async (req, res) => {
 
 app.patch("/thoughts/:id", async (req, res) => {
   const { id } = req.params;
-  const { heart } = req.body;
+  const { addHeart } = req.body;
   try {
-    const savedThought = await Thought.findByIdAndUpdate(id, { heart: heart + 1 }, { new: true });
+    const savedThought = await Thought.findByIdAndUpdate(id,  { $set: { heart: addHeart + 1 } },
+      { new: true }
+    );
     res.status(200).json({
       success: true,
       response: savedThought,
@@ -97,6 +99,41 @@ app.patch("/thoughts/:id", async (req, res) => {
   }
 });
 
+//get by id to check the patch
+app.get("/thoughts/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const savedThought = await Thought.findById(id );
+    res.status(200).json({
+      success: true,
+      response: savedThought,
+      message: "Fetch successful"
+    });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      response: "Pardon, could not find this thought", error: err.errors
+    });
+  }
+});
+
+//delete by id
+app.delete("/thoughts/:id", async (req, res) => {
+  const { id } = req.params; 
+  try {
+    const savedThought = await Thought.findByIdAndDelete(id);
+    res.status(200).json({
+      success: true,
+      response: {},
+      message: "Delete successful"
+    });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      response: "Pardon, could not delete", error: err.errors
+    });
+  }
+});
 
 
 //POST to create
