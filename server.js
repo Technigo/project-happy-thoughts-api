@@ -43,18 +43,30 @@ const thoughtsSchema = new Schema({
 const Thought = mongoose.model("thoughts", thoughtsSchema);
 
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec();
-  res.json(thoughts);
-});
+  try { 
+    const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec();
+    res.status(200).json({
+      success: true,
+      response: thoughts,
+      message: "Successfully fetched thoughts"
+    }); 
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      response: error,
+      message: "An error occured when trying to fetch thoughts"
+    });
+  }
+})
 
 app.post("/thoughts", async (req, res)=>{
   const {message} = req.body;
-    try{
+    try {
       const thought = await new Thought({message}).save();
       res.status(201).json({
        success: true,
         response: thought,
-        message: "created successfully"
+        message: "Thought created successfully"
       });
     } catch (error) {
       res.status(400).json({
