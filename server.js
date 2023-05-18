@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts-api";
+const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1/project-happy-thoughts-api";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -30,10 +30,7 @@ const HappyThoughtSchema = new Schema({
   },
   hearts: {
     type: Number,
-    default: 0,
-    set: function (value) {
-    return 0
-    }
+    default: 0
   },
   createdAt: {
     type: Date, 
