@@ -29,7 +29,7 @@ const ThoughtSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now()
+    default: () => Date.now()
   }
 }); 
 
@@ -47,7 +47,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
+  const thoughts = await Thought.find().sort({createdAt: 'asc'}).limit(20).exec();
   res.status(200).json(thoughts);
 });
 
