@@ -83,11 +83,11 @@ app.post("/thoughts", async (req, res) =>{
     }
 });
 
-app.patch("/thoughts/:thoughtId/like", async (req, res) => {
-  const { thoughtId } = req.params; 
+app.patch("/thoughts/:_id/like", async (req, res) => {
+  const { _id } = req.params; 
   try {
     const thought = await Thought.findByIdAndUpdate(
-      thoughtId,
+      _id,
       { $inc: { heart: 1 } },
       { new: true }
     );
@@ -105,7 +105,6 @@ app.patch("/thoughts/:thoughtId/like", async (req, res) => {
     });
   }
 });
-
 
 
 app.listen(port, () => {
