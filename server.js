@@ -56,16 +56,26 @@ try{
 }
 })
 
-app.post('/thoughts/:thoughtID/like', async (req, res) => {
-  const { id } = req.params
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
 
   try{
-    const heartsUpdated = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}})
-    res.status(200).json({success: true, response: `Thought ${heartsUpdated.id} has been updated with a heart`})
+    const heartsUpdated = await Thought.findByIdAndUpdate(
+    thoughtId,
+    {$inc: {hearts: 1}},
+    {new:true}
+    );
+    res.status(200).json({
+    success: true,
+    response: `Thought ${heartsUpdated._id} has been updated with a heart`
+    });
   } catch (e) {
-    res.status(400).json({success: false, response: "Thought-Id not found"})
+    res.status(400).json({
+    success: false,
+    response: "Thought-Id not found"
+  });
   }
-})
+});
 
 // Start the server
 app.listen(port, () => {
