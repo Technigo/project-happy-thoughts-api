@@ -61,12 +61,17 @@ app.get("/thoughts", async (req,res)=> {
 
 
 app.post("/thoughts", async (req, res) =>{
-  try{
-const newThought = new Thought({message: req.body.message });
-await newThought.save();
-res.status(201).json(newThought);
+  const { message } = req.body;
+  const thought = new Thought({ message });
+  const savedThought = await thought.save()
+   try{
+    res.status(201).json(savedThought);
   } catch (error) {
-    res.status(400).json({message: "Error occurred", error: error.errors });
+    res.status(400).json({
+      sucess: false,
+      error: error,
+      message: "Error occurred"
+   });
   }
 });
 
