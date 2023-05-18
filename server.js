@@ -92,8 +92,7 @@ app.post("/thoughts", async (req, res) =>{
       });
     }
 });
-
-app.patch("/thoughts/id/:_id/like", async (req, res) => {
+app.patch("/thoughts/:_id/like", async (req, res) => {
   const { id } = req.params;
   try {
     const thought = await Thought.findByIdAndUpdate(
