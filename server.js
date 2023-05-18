@@ -40,6 +40,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Defines endpoint paths as constants to be able to only update the paths in one place if needed
+const PATHS = {
+  root: "/",
+  thoughts: "/thoughts",
+  thoughtsById: "/thoughts/:id/like"
+}
+
 // Start defining your routes here
 // When a client sends an HTTP GET request to the root URL, 
 // the callback function (req, res) => {...} is executed
@@ -54,7 +61,8 @@ app.use(express.json());
 // res.json(listEndpoints(app)) sends the list of endpoints in JSON format 
 // as the response to the client when a GET request is made to the root URL ("/"). 
 
-app.get("/", (req, res) => {
+// GET
+app.get(PATHS.root, (req, res) => {
   res.send(listEndpoints(app));
 });
 
@@ -69,14 +77,15 @@ app.get("/", (req, res) => {
 // Otherwise, if thoughts is falsy, it executes res.status(404).json({ error: "thoughts not found" }), 
 // which sends a JSON response with a 404 status code and an error message.
 
-app.get('/thoughts', async (req, res) => {
+// GET
+app.get(PATHS.thoughts, async (req, res) => {
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
   thoughts ? res.json(thoughts) : res.status(400).json({ error: 'Posts not found'});
 });
 
-
+// POST
 // User input (thought) is validated and saved in database if the validation checks out
-app.post('/thoughts', async (req, res) => {
+app.post(PATHS.thoughts, async (req, res) => {
   // Retrieve the information sent by the client to our API endpoint
   const {message} = req.body;
 
@@ -84,6 +93,7 @@ app.post('/thoughts', async (req, res) => {
   const newThought = await new Thought({
     message: message
   }).save()
+
   res.status(200).json({
     success: true,
     response: `Your thought was posted: ${newThought}`
@@ -97,8 +107,10 @@ app.post('/thoughts', async (req, res) => {
   }
 });
 
+
+// POST 
 // Increase hearts by 1 if the thought is liked using the $inc operator. The 'hearts' is from the ThoughtSchema.
-app.post('/thoughts/:id/like', async (req, res) => {
+app.post(PATHS.thoughtsById, async (req, res) => {
   const { id } = req.params;
   try {
     const updateHearts = await Thought.findByIdAndUpdate (id, { $inc: { hearts: 1 } });
