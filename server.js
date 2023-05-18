@@ -97,7 +97,7 @@ app.patch("/thoughts/id/:_id/like", async (req, res) => {
   const { id } = req.params;
   try {
     const thought = await Thought.findByIdAndUpdate(
-      id, 
+      _id, 
       { $inc: { heart: 1 } }, 
       { new: true }
     );
