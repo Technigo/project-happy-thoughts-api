@@ -124,7 +124,7 @@ app.post("/thoughts", async (req, res) => {
   }
 }); */
 
-app.patch("/:thoughtId/like", async (req, res) => {
+app.post("/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
   try {
     const updateHeart = await Thought.findByIdAndUpdate(
