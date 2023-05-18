@@ -17,13 +17,18 @@ app.use(cors());
 app.use(express.json());
 const listEndpoints = require('express-list-endpoints');
 
+// Start defining your routes here
+app.get("/", (req, res) => {
+  res.json(listEndpoints(app));
+});
+
 const { Schema } = mongoose;
 const ThoughtsSchema = new Schema({
   message: {
     type: String,
-    required: true,
     minlength: 5,
-    maxlength:140
+    maxlength:140,
+    trim: true
   },
   hearts: {
     type: Number,
@@ -37,14 +42,9 @@ const ThoughtsSchema = new Schema({
 
 const Thoughts = mongoose.model("Thoughts", ThoughtsSchema);
 
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.json(listEndpoints(app));
-});
-
 app.get("/thoughts", async (req,res)=> {
   try {  
-  const thoughts = await Thoughts.find().sort({createdAt: 'desc'}).limit(20).exec();
+  const thoughts = await Thoughts.find({}).sort({createdAt: -1 }).limit(20);
     res.status(200).json({
       success:true,
       response: thoughts,
@@ -52,7 +52,8 @@ app.get("/thoughts", async (req,res)=> {
   } catch(error) {
       res.status(400).json({
         success:false,
-        response:error
+        response:error,
+        message: "Something went wrong"
       });
 
     }
@@ -71,18 +72,18 @@ res.status(201).json(newThoughts);
 
 app.patch("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
-  const { newDescription } = req.body;
+  // const { newDescription } = req.body;
   try{
   const updatedHearts = await Thoughts.findByIdAndUpdate(id, {$inc: {hearts: 1}});
   res.status(200).json({
     success: true,
-    message: "updated successfully"
+    response: `Thought ${thoughtToUpdate.id} hearts updated`
   })
   } catch (error) {
     res.status(400).json({
       success: false,
-      response: error,
-      message: "Something went wrong"
+      error: error,
+      response: "Something went wrong"
     })
   }
 });
