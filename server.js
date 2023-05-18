@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
 });
 
 const { Schema } = mongoose;
-const ThoughtsSchema = new Schema({
+const ThoughtSchema = new Schema({
   message: {
     type: String,
     minlength: 5,
@@ -40,14 +40,14 @@ const ThoughtsSchema = new Schema({
   }
 });
 
-const Thoughts = mongoose.model("Thoughts", ThoughtsSchema);
+const Thought = mongoose.model("Thought", ThoughtSchema);
 
 app.get("/thoughts", async (req,res)=> {
   try {  
-  const thoughts = await Thoughts.find({}).sort({createdAt: -1 }).limit(20);
+  const thought = await Thought.find({}).sort({createdAt: -1 }).limit(20);
     res.status(200).json({
       success:true,
-      response: thoughts,
+      response: thought,
     }) 
   } catch(error) {
       res.status(400).json({
@@ -62,9 +62,9 @@ app.get("/thoughts", async (req,res)=> {
 
 app.post("/thoughts", async (req, res) =>{
   try{
-const newThoughts = new Thoughts({message: req.body.message });
-await newThoughts.save();
-res.status(201).json(newThoughts);
+const newThought = new Thought({message: req.body.message });
+await newThought.save();
+res.status(201).json(newThought);
   } catch (error) {
     res.status(400).json({message: "Error occurred", error: error.errors });
   }
@@ -74,7 +74,7 @@ app.patch("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
   // const { newDescription } = req.body;
   try{
-  const updatedHearts = await Thoughts.findByIdAndUpdate(id, {$inc: {hearts: 1}});
+  const updatedHearts = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}});
   res.status(200).json({
     success: true,
     response: `Thought ${thoughtToUpdate.id} hearts updated`
@@ -88,10 +88,10 @@ app.patch("/thoughts/:id/like", async (req, res) => {
   }
 });
 
-/*app.delete("/thoughts/:id", async (req, res) => {
+/*app.delete("/thought/:id", async (req, res) => {
   const { id } = req.params;
   try{
-  const deletedThoughts = await Thoughts.findByIdAndDelete(id);
+  const deletedThought = await Thought.findByIdAndDelete(id);
   res.status(200).json({
     success: true,
     message: "deleted successfully"
