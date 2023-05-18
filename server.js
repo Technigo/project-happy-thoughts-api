@@ -48,7 +48,7 @@ app.get("/", (req, res) => {
     succes: true,
     message: "OK",
     body: {
-      conent: "Johannas Happy Thoughs API",
+      content: "Johannas Happy Thoughs API",
       endpoints: listEndpoints(app)
     }
   });
