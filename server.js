@@ -44,6 +44,7 @@ const thoughtSchema = new Schema({
   },
   category: {
     type: String,
+    required: false,
     enum:['Food thought', 'Project thought', 'Home thought']
   }
 })
