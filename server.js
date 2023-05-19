@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts-api";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -47,43 +47,44 @@ const ThoughtSchema = new Schema ({
 const Thought = mongoose.model("Thought", ThoughtSchema)
 
 app.get('/thoughts', async (req, res) => {
-  const displayThoughts = await ThoughtsList.find().sort({createdAt: 'desc'}).limit(20).exec();
-    try {
-      res.status(200).json({
-        success: true, 
-        response: displayThoughts,
-        message: "Found the thoughts"
-      });
-  } catch(e) {
-    res.status(400).json({
-      success: false,
-      response: e,
-      message: "Did not find thoughts", 
-      error: e.errors
-     });
-  }
+  const displayThoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
+    res.json(displayThoughts)
 })
 
 app.post('/thoughts', async (req, res) => {
-  const {message, name, hearts, createdAt} = req.body;
-  try{
-    const thoughts = await new Thought({ message, name, hearts, createdAt }).save()
+  const { message, createdAt } = req.body;
+  try {
+    const savedThought = await new Thought({ message, createdAt }).save();
     res.status(201).json({
-      success: true,
-      response: thoughts,
-      message: "created successfully"
-    })
-  } catch(e) {
+      success: true, 
+      message: "Posted!", 
+      response: savedThought
+    });
+  }
+  catch (e){
     res.status(400).json({
-      success: false,
+      success: false, 
       response: e,
-      message: "error occurred"
-  })
-}
+      message: 'Could not save thought to database'
+    });
+  }
 })
 
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
-
+  const { thoughtId } = req.params;
+  try {
+   const updateLikes = await Thought.findByIdAndUpdate(thoughtId, { $inc: { likes: 1 }});
+   res.status(200).json({
+    success: true, 
+    response: `Thought: ${updateLikes.message} has updated likes`
+  });
+  } catch (e) {
+   res.status(400).json({
+    success: false, 
+    message: 'Could not save like to thought',
+    response: e
+  });
+  }
 })
 // Start the server
 app.listen(port, () => {
