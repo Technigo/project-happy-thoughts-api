@@ -29,7 +29,6 @@ const ThoughtSchema = new Schema ({
     type: String,
     // required is true or false
     required: true,
-    // true or false: only a new name that is different than all the others
     minlength: 4,
     maxlength: 140,
     //removes unnecessary white spaces from string
@@ -41,20 +40,34 @@ const ThoughtSchema = new Schema ({
   },
   createdAt: {
     type: Date,
-    default: new Date()
+    default: Date.now
   }
   })
 
 const Thought = mongoose.model("Thought", ThoughtSchema)
 
 app.get('/thoughts', async (req, res) => {
-
+  const displayThoughts = await ThoughtsList.find().sort({createdAt: 'desc'}).limit(20).exec();
+    try {
+      res.status(200).json({
+        success: true, 
+        response: displayThoughts,
+        message: "Found the thoughts"
+      });
+  } catch(e) {
+    res.status(400).json({
+      success: false,
+      response: e,
+      message: "Did not find thoughts", 
+      error: e.errors
+     });
+  }
 })
 
 app.post('/thoughts', async (req, res) => {
-  const {message, hearts, createdAt} = req.body;
+  const {message, name, hearts, createdAt} = req.body;
   try{
-    const thoughts = await new Thought({ message, hearts, createdAt }).save()
+    const thoughts = await new Thought({ message, name, hearts, createdAt }).save()
     res.status(201).json({
       success: true,
       response: thoughts,
