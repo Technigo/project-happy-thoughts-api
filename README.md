@@ -1,12 +1,15 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+So this week we are creating our own API to our previous project Happy Thought.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+We had strict endpoint on our requirement-list for this project:
+GET/thoughts
+POST/thoughts
+POST/thoughts/:thoughtsId/like
+
+I found this project going quite smoothly. Now it's just connecting tge frondend from the previous project left.
 
 ## View it live
 
