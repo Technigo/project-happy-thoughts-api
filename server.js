@@ -43,10 +43,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Return 20 latest thoughts
+// Return 20 latest thoughts + sorted by category
 app.get("/thoughts", async (req, res) => {
-  const thoughtsList = await Thought.find().sort({createdAt: 'desc'}).limit(20);
+  const {cat} = req.query;
+
   try {
+    let thoughtsList;
+
+    if (cat) {
+      thoughtsList = await Thought.find({category: cat}).sort({createdAt: 'desc'}).limit(20);
+    } else {
+      thoughtsList = await Thought.find().sort({createdAt: 'desc'}).limit(20);
+    }
     res.status(200).json(thoughtsList);
   } catch (e) {
     res.status(400).json({ 
