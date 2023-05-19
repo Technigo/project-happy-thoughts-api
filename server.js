@@ -71,16 +71,13 @@ app.get("/", (req, res) => {
 });
 
 app.get("/thoughts", async (req, res) => {
-  const { page = 1, limit = 3, sort = 'createdAt' } = req.query;
+  const { sort = 'createdAt' } = req.query;
   const order = req.query.order === 'asc' ? 1 : -1; 
 
   try {
-    const totalThoughts = await Thought.countDocuments(); 
-    const totalPages = Math.ceil(totalThoughts / limit); 
     const thoughtList = await Thought.find({})
       .sort({ [sort]: order })
-      .skip((page - 1) * limit)  
-      .limit(limit) 
+      .limit(20)
       .exec();
      // return response
     if (thoughtList.length > 0) {
