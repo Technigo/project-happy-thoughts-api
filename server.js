@@ -13,6 +13,7 @@ const ThoughtSchema = new mongoose.Schema({
     minlength: 5, 
     maxlength: 140,
     required: true,
+    trim: true
   },
   hearts: {
     type: Number, 
@@ -20,7 +21,7 @@ const ThoughtSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: new Date()
+    default: () => new Date()
   }
 })
 
@@ -112,7 +113,7 @@ app.post(PATHS.thoughts, async (req, res) => {
 
 // POST
 // Increase hearts by 1 if the thought is liked using the $inc operator. The 'hearts' is from the ThoughtSchema.
-app.post(PATHS.thoughtsById, async (req, res) => {
+app.patch(PATHS.thoughtsById, async (req, res) => {
   const { id } = req.params;
   try {
     const updatedThought = await Thought.findByIdAndUpdate(id, { $inc: { hearts: 1 } }, { new: true });
