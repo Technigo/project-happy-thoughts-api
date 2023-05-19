@@ -18,7 +18,7 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send("Go to /thoughts to see the data added to this endpoint.");
 });
 
 const Thought = mongoose.model('Thought', {
