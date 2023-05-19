@@ -91,9 +91,9 @@ app.post("/thoughts", async(req,res)=>{
 })
 //Endpoint 3: POST/thoughts/:thoughtId/like, like a post by inreasing the hearts by 1
 app.post("/thoughts/:thoughtId/like", async(req,res) => {
-  const { id } = req.params;
+  const { thoughtId } = req.params;
   try {
-    const heartsToUpdate = await ThoughtList.findByIdAndUpdate(id, {$inc: { hearts: 1 }})
+    const heartsToUpdate = await ThoughtList.findByIdAndUpdate(thoughtId, {$inc: { hearts: 1 }})
     res.status(200).json({
       success: true,
       response: heartsToUpdate,
