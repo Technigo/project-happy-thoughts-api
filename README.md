@@ -13,4 +13,5 @@ I found this project going quite smoothly. Now it's just connecting tge frondend
 
 ## View it live
 
-https://project-happy-thoughts-api-gmyhdlk6aa-lz.a.run.app/
+Backend: https://project-happy-thoughts-api-gmyhdlk6aa-lz.a.run.app/
+Frontend: https://tbl-happy-thoughts.netlify.app/
