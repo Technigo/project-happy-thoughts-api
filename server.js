@@ -83,9 +83,6 @@ app.get("/thoughts", async (req, res) => {
     if (thoughtList.length > 0) {
       res.status(200).json({
         success: true,
-        currentPage: page,
-        totalPages: totalPages,
-        totalThoughts: totalThoughts,
         response: thoughtList
       });
     } else {
