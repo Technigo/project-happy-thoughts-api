@@ -1,13 +1,14 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This weeks project was about creating an API in MongoDB with 2 endpoints using both GET and POST method and connect it to our frontend project Happy Thoughts that we did early on in this bootcamp.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+This project was overall pretty simmilar to last weeks express API with the dirfferent endpoints, So the setup was pretty easy. The complicated thing was to get it to work with the frontend. and do be consistent with the naming ogf things.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Frontend: https://happy-thoughts-react-app.netlify.app
+
+BackEnd: https://project-happy-thoughts-api-4tdp4buvnq-lz.a.run.app
+
