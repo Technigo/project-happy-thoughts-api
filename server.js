@@ -24,9 +24,9 @@ const thoughtSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    default: 'undefined',
+    default: '',
     enum: [
-      'undefined', 'weather', 'mood', 'professional', 'personal', 'achievement', 'funny', 'family', 'weekend', 'other'
+      '', 'weather', 'mood', 'professional', 'personal', 'achievement', 'funny', 'family', 'weekend', 'other'
     ]
   }
 });
