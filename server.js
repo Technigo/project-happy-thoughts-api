@@ -11,12 +11,12 @@ mongoose.Promise = Promise;
 // PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
+const listEndpoints = require('express-list-endpoints')
+
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
-
-const listEndpoints = require('express-list-endpoints')
 
 // Mongoose model for the input-data
 const { Schema } = mongoose;
@@ -39,17 +39,17 @@ const ThoughtsSchema = new Schema ({
 
 const Thoughts = mongoose.model("Thoughts", ThoughtsSchema)
 
-if (process.env.RESET_DB) {
-	const seedDatabase = async () => {
-    await Thoughts.deleteMany({})
+// if (process.env.RESET_DB) {
+// 	const seedDatabase = async () => {
+//     await Thoughts.deleteMany({})
 
-		data.forEach((thoughtsData) => {
-			new Thoughts(thoughtsData).save()
-		})
-  }
+// 		data.forEach((thoughtsData) => {
+// 			new Thoughts(thoughtsData).save()
+// 		})
+//   }
 
-  seedDatabase()
-}
+//   seedDatabase()
+// }
 
 // Start defining your routes here
 // Show all the endpoints for the API
