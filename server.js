@@ -6,6 +6,16 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
+// Defines the port the app will run on. Defaults to 8080, but can be overridden
+// when starting the server. Example command to overwrite PORT env variable value:
+// PORT=9000 npm start
+const port = process.env.PORT || 8080;
+const app = express();
+
+// Add middlewares to enable cors and json body parsing
+app.use(cors());
+app.use(express.json());
+
 const listEndpoints = require('express-list-endpoints')
 
 // Mongoose model for the input-data
@@ -40,15 +50,6 @@ if (process.env.RESET_DB) {
 
   seedDatabase()
 }
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
-const port = process.env.PORT || 8080;
-const app = express();
-
-// Add middlewares to enable cors and json body parsing
-app.use(cors());
-app.use(express.json());
 
 // Start defining your routes here
 // Show all the endpoints for the API
@@ -76,7 +77,7 @@ app.get("/thoughts", async (req, res) => {
   }
 });
 
-// POST to send new thought/message
+// // POST to send new thought/message
 // app.post('/thoughts', (req, res) => {
 //   //Promises
 //   const { message, createdAt } = req.body
