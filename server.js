@@ -75,7 +75,7 @@ app.post("/thoughts", async (req, res) =>{
   }
 });
 
-app.patch("/thoughts/:id/like", async (req, res) => {
+app.post("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
   // const { newDescription } = req.body;
   try{
