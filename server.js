@@ -15,8 +15,18 @@ app.use(cors());
 app.use(express.json());
 
 // Start defining routes here
+const listEndpoints = require('express-list-endpoints');
+
 app.get("/", (req, res) => {
-  res.send("Happy Thoughts API - Joanna Philips");
+  const text = "Happy Thoughts API - Joanna Philips";
+  const endpoints = (listEndpoints(app))
+  
+  res.send({
+    body: {
+      text,
+      endpoints
+    }
+  });
 });
 
 const { Schema } = mongoose;
@@ -41,8 +51,6 @@ const ThoughtSchema = new Schema({
     default: "Anonymous",
     minlength: 2,
     maxlength: 20,
-    // an array of all the allowed values
-    // enum:["fruit", "vegetable"]
   },
   tags: {
     type: String,
@@ -53,6 +61,7 @@ const ThoughtSchema = new Schema({
 
 const Thought = mongoose.model("Thought", ThoughtSchema);
 
+//Get all thoughts
 app.get("/thoughts", async (req, res) => {
   try {
     const thoughtsList = await Thought.find().sort({ createdAt: "desc" }).limit(20);
@@ -70,6 +79,7 @@ app.get("/thoughts", async (req, res) => {
   }
 });
 
+//Post a new thought
 app.post("/thoughts", async (req, res)=>{
   const {message} = req.body;
     try{
@@ -88,7 +98,7 @@ app.post("/thoughts", async (req, res)=>{
      }
  });
 
-
+// Add a heart (like) to a specific post recognised by id
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
   try {
@@ -108,27 +118,6 @@ app.patch("/thoughts/:thoughtId/like", async (req, res) => {
      });
   }
 });
-
-// delete
-// https://stackoverflow.com/questions/54081114/what-is-the-difference-between-findbyidandremove-and-findbyidanddelete-in-mongoo
-// app.delete("/fruit_or_vegetable/:id", async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     // const foodItem = await FruitOrVegetable.findByIdAndDelete(id);
-//     const foodItem = await FruitOrVegetable.findByIdAndRemove(id);
-//     res.status(200).json({
-//       success: true,
-//       response: foodItem,
-//       message: "deleted successfully"
-//      });
-//   } catch(e) {
-//     res.status(400).json({
-//       success: false,
-//       response: e,
-//       message: "did not successfully"
-//      });
-//   }
-// });
 
 // Start the server
 app.listen(port, () => {
