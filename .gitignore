@@ -7,3 +7,5 @@ node_modules
 .env.production.local
 NOTES.js
 server_daniel.js
+server_antonia.js
+server_peki_notes.js
