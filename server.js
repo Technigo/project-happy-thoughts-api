@@ -21,6 +21,13 @@ const thoughtSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  category: {
+    type: String,
+    default: 'undefined',
+    enum: [
+      'undefined', 'weather', 'mood', 'professional', 'personal', 'achievement', 'funny', 'family', 'weekend', 'other'
+    ]
   }
 });
 
