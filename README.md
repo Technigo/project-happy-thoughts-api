@@ -1,13 +1,19 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Created my own API for the Happy Thoughts project that was done some weeks ago. 
+This includes GET, POST and PATCH methods. 
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I made use of the Mongoose documentation to see how to add limits to the responses and adding hearts. 
+It was interesting to connect the backend to the previously created frontend project and to have to make a few tweaks to make it work. Nice to have the whole picture in view. 
 
-## View it live
+## API
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://project-happy-thoughts-api-zrwa4mpyyq-lz.a.run.app/
+
+## Deployed Frontend
+
+https://happy-thoughts-joannaphilips.netlify.app/
+
+
