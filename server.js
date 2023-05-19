@@ -56,23 +56,20 @@ const Thought = mongoose.model("Thought", thoughtSchema);
 // Start defining your routes here
 app.get("/", (req, res) => {
   const welcomeText = "Happy Thoughts";
-  const deployedAPI = "https://project-mongo-api-ozexcouyaq-lz.a.run.app";
-  const apiDocumentation = "https://project-mongo-api-ozexcouyaq-lz.a.run.app/api-docs";
+  const deployedAPI = "https://project-happy-thoughts-api-3t72lksv4a-lz.a.run.app";
   const endpoints = (listEndPoints(app))
 
   res.send({
     body: {
       welcomeText,
       deployedAPI,
-      apiDocumentation,
       endpoints
     }
   });
 });
 
 app.get("/thoughts", async (req, res) => {
-  const { sort = 'createdAt' } = req.query;
-  const order = req.query.order === 'asc' ? 1 : -1; 
+  const { sort = 'createdAt', order = -1 } = req.query;
 
   try {
     const thoughtList = await Thought.find({})
