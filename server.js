@@ -46,8 +46,16 @@ const Thought = mongoose.model("Thought", ThoughtSchema);
 // This endpoint should return a maximum of 20 thoughts
 // and sorted by createdAt to show the most recent thoughts first.
 app.get("/thoughts", async(req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
-  res.json(thoughts);
+  try {
+    const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
+    res.status(200).json(thoughts);
+  } catch(e) {
+    res.status(400).json({
+      success: false,
+      respone: e,
+      message: "error occured, could not fetch thoughts"
+    });
+  }
 });
 
 // Post new thought
@@ -55,11 +63,7 @@ app.post("/thoughts", async(req, res) => {
   const { message } = req.body;
   try {
     const newThought = await Thought({message}).save();
-    res.status(201).json({
-      success: true,
-      response: newThought,
-      message: "new thought created successfully"
-    });
+    res.status(201).json(newThought);
   } catch(e) {
     res.status(400).json({
       success: false,
@@ -70,15 +74,11 @@ app.post("/thoughts", async(req, res) => {
 });
 
 // Update amount of likes (hearts)
-app.post("/thoughts/:thoughtId/like", async (req, res) => {
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
   try {
     const updateHearts = await Thought.findByIdAndUpdate(thoughtId, { $inc: { hearts: 1 } }, { new: true });
-    res.status(201).json({
-      success: true,
-      response: updateHearts,
-      message: "updated successfully"
-    });
+    res.status(201).json(updateHearts);
   } catch(e) {
     res.status(400).json({
       success: false,
