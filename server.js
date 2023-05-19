@@ -90,8 +90,7 @@ app.post("/thoughts", async(req,res)=>{
 
 })
 //Endpoint 3: POST/thoughts/:thoughtId/like, like a post by inreasing the hearts by 1
-// PATCH - update/changes/modifys things
-app.patch("/thoughts/:thoughtId/like", async(req,res) => {
+app.post("/thoughts/:thoughtId/like", async(req,res) => {
   const { id } = req.params;
   try {
     const heartsToUpdate = await ThoughtList.findByIdAndUpdate(id, {$inc: { hearts: 1 }})
@@ -112,24 +111,24 @@ app.patch("/thoughts/:thoughtId/like", async(req,res) => {
  
 
 // Delete a post
-app.delete("/thoughts/:thoughtsId", async (req, res) => {
-  const { thoughtId } = req.params
-  try {
-    const deletedthoughtId = await ThoughtList.findByIdAndDelete({_id: thoughtId}) 
-    res.status(200).json({
-      success: true,
-      response: deletedthoughtId,
-      message: "delete successfully "
-     });
+// app.delete("/thoughts/:thoughtsId", async (req, res) => {
+//   const { thoughtId } = req.params
+//   try {
+//     const deletedthoughtId = await ThoughtList.findByIdAndDelete({_id: thoughtId}) 
+//     res.status(200).json({
+//       success: true,
+//       response: deletedthoughtId,
+//       message: "delete successfully "
+//      });
 
-  } catch (e) {
-  res.status(400).json({
-    success: false,
-    response: e,
-    message: "could not delete the post"
-    });
-  }
-})
+//   } catch (e) {
+//   res.status(400).json({
+//     success: false,
+//     response: e,
+//     message: "could not delete the post"
+//     });
+//   }
+// })
 
 
 
