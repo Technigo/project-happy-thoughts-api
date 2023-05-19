@@ -1,8 +1,8 @@
-import express from "express";
+import express, { response } from "express";
 import cors from "cors";
-import mongoose from "mongoose";
+import mongoose, { get } from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1/";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -20,6 +20,84 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
+
+const { Schema } = mongoose;
+const ThoughtsSchema = new Schema({
+  text: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 140 
+  },
+  hearts: {
+    type: Number,
+    default: 0
+  },
+  createdAt: {
+    type: Date,
+    default: new Date()
+  }
+})
+
+const Thought = mongoose.model("Thought", ThoughtsSchema)
+
+// This endpoint should return a maximum of 20 thoughts, sorted by createdAt to show the most recent thoughts first.
+app.get("/thoughts", async (req, res) => {
+  try {
+    const thought = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
+    res.status(200).json({
+      success: true,
+      response: thought,
+      message: "Thoughts retrieved!"
+    })
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: "Something went wrong!",
+      response: error
+    })
+  }
+})
+
+// This endpoint expects a JSON body with the thought message
+app.post("/thoughts", async (req, res) => {
+  const { text } = req.body
+  try {
+    const savedThought = await new Thought({ text }).save()
+    res.status(200).json({
+      success: true,
+      response: savedThought,
+      message: "Thought saved!"
+    })
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: "Could not create thought!",
+      response: error
+  })
+}})
+
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params
+  try {
+    const savedLike = await Thought.findByIdAndUpdate(
+      thoughtId,
+      { $inc: { hearts: 1 } },
+      { new: true }
+    )
+    res.status(200).json({
+      success: true,
+      message: "Like posted!",
+      response: savedLike
+    })
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: "Could not save like",
+      response: error
+    })
+  }
+})
 
 // Start the server
 app.listen(port, () => {
