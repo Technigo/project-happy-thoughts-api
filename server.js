@@ -110,7 +110,7 @@ app.post('/thoughts', async (req, res) => {
 // //////////////////////////// LIKES //////////////////////////////////// //
 // /////////////////////////////////////////////////////////////////////// //
 
-app.post("/thoughts/:thoughtId/like", async (req, res) => {
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
   try {
    const updateLikes = await ThoughtsList.findByIdAndUpdate(thoughtId, { $inc: { likes: 1 }});
