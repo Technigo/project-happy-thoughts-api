@@ -1,13 +1,17 @@
 # Project Happy Thoughts API
-
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+For week 15 we built our own API for the happy thoughts project that we had in the earlier weeks of the bootcamp then we used that deployed API for our previously built happy thoughts frontend page. 
 
 ## The problem
+I started by writing the server.js similar to last week only this week we discussed post/get/patch and delete. I checked the output using postman, mongodb compass and then deployed to google cloud platform using the same connection thru mongoAtlas that I created last week. 
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+If I had more time I would implement the delete function for each note and refresh the design of the frontend. 
+
 
 ## View it live
+Backend deploy- https://project-happy-thoughts-api-zmlc5jjp5a-lz.a.run.app
+Paths:
+/  - see all endpoints
+/thoughts  - see all thoughts
+/thoughts/:id/like  -to add the hearts or modify individual thoughts 
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Frontend deploy- https://happy-thoughts-by-jennifer.netlify.app/
