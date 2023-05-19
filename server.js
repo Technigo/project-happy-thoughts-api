@@ -2,7 +2,7 @@ import express, { response } from "express";
 import cors from "cors";
 import mongoose, { get } from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1/";
+const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1/happy-thoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
