@@ -68,7 +68,7 @@ app.get('/thoughts', async (req, res) => {
 // });
 
 
-// A POST ENDPOINT 
+// A POST ENDPOINT - LIKE 
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params;
   try {
