@@ -14,4 +14,4 @@ Happy Thoughts API:
 https://project-happy-thoughts-api-i35fofwaaq-lz.a.run.app
 
 Happy Thoughts frontend:
-https://mellow-panda-04a9c0.netlify.app/
+https://happy-thoughts-by-frida.netlify.app/
