@@ -117,24 +117,42 @@ app.post("/thoughts", async(req, res) => {
 // PATCH : to update specific properties of these entries //update
 // PUT : Will replace the entry that we currently have //replace
 
-app.patch("/thoughts/:id/like", async (req, res) => {
-  const { id } = req.params;
+// Update the like count on each thought
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params; 
   try {
-    const heartsUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}});
-    res.status(200).json({
-      success: true,
-      // the response was "response: foodItem", but was changed to "{}" to not confuse the front-end part by what is being returned
-      response: {},
-      message: "Thought ${heartsUpdate.message} has their hearts updated"
-    });
-  } catch (e) {
-    res.status(400).json({
-      success: false,
-      response: e,
-      message: "Failed to update"
-    });
+  const thoughtToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}}); 
+  res.status(200).json({
+    sucess: true,
+    response: "Thought ${thoughtToUpdate.id} was liked!"
+  });
+  } catch (error) {
+      res.status(400).json({
+        sucess: false,
+        response: error,
+        message: "Failed to update"
+      });
   }
 });
+
+// app.patch("/thoughts/:id/like", async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const heartsUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}});
+//     res.status(200).json({
+//       success: true,
+//       // the response was "response: foodItem", but was changed to "{}" to not confuse the front-end part by what is being returned
+//       response: {},
+//       message: "Thought ${heartsUpdate.message} has their hearts updated"
+//     });
+//   } catch (e) {
+//     res.status(400).json({
+//       success: false,
+//       response: e,
+//       message: "Failed to update"
+//     });
+//   }
+// });
 
 // After trying delete, we need to modify when nothing is found
 
