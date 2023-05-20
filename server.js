@@ -46,7 +46,7 @@ app.use(express.json());
 const PATHS = {
   root: "/",
   thoughts: "/thoughts",
-  thoughtsById: "/thoughts/:id/like"
+  thoughtsById: "/thoughts/:_id/like"
 }
 
 // Start defining your routes here
