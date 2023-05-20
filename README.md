@@ -1,13 +1,24 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+In week 15, we got to build our own back-end for our 'Happy Thoughts'-project for which we build the front-end back in week 7, and hook them up together. 
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## The brief
 
-## The problem
+This week's project is to use your new skills with Express and MongoDB to build an API which includes both GET request endpoints to return data and POST endpoints to create data.
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+**What you need to do**
+
+✓ Your API should implement the routes exactly as documented in the instructions about the project.
+
+✓ Your `GET /thoughts` endpoint should only return 20 results, ordered by `createdAt` in descending order.
+
+✓ Your API should validate user input and return appropriate errors if the input is invalid.
+
+✓ In the `POST /thoughts` endpoint to create a new thought, if the input was invalid and the API is returning errors, it should set the response status to `400` (bad request).
+
+✓ The endpoint to add hearts to a thought should return an appropriate error if the thought was not found.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Back-end: https://project-happy-thoughts-api-sfjig4oswa-lz.a.run.app/
+Front-end: https://hilarious-concha-fcce10.netlify.app/
