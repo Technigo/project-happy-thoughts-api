@@ -115,9 +115,10 @@ app.post(PATHS.thoughts, async (req, res) => {
 // PATCH
 // Increase hearts by 1 if the thought is liked using the $inc operator. The 'hearts' is from the ThoughtSchema.
 app.patch(PATHS.thoughtsById, async (req, res) => {
-  const { thoughtId } = req.params;
+  const { _id } = req.params;
+  console.log(`ID received from params: ${_id}`);
   try {
-    const updatedThought = await Thought.findByIdAndUpdate(thoughtId, { $inc: { hearts: 1 } }, { new: true });
+    const updatedThought = await Thought.findByIdAndUpdate(_id, { $inc: { hearts: 1 } }, { new: true });
     res.status(200).json({
       success: true,
       response: `The post ${updatedThought.id} has been updated with a heart`,
