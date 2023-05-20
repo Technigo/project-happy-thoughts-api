@@ -61,6 +61,46 @@ const ThoughtSchema = new Schema({
 
 const Thought = mongoose.model("Thought", ThoughtSchema);
 
+//Get all songs in the dataset with paging, params are page and limit
+app.get("/thoughts", async (req, res) => {
+  try {
+    // Parse query parameters to integers or default to 1 page/10 entries limit
+    // const {page =  1, limit = 10} = req.query
+
+    // Calculate skip value - how many entries to skip from the beginning of the dataset
+    // const skip = (page - 1) * limit;
+
+    // Query database with skip and limit
+    const thoughtsList = await Thought.find();
+
+    if (thoughtsList.length > 0) {
+      res.status(200).json({
+        success: true,
+        body: {
+          thoughtsList: thoughtsList,
+          // currentPage: page,
+          // totalPages: Math.ceil(await Thought.countDocuments() / limit), // Eg: 50 / 10 = 5 pages
+          // totalSongRecords: await Song.countDocuments() // Counts total number of records or items in the DB
+        }
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        body: {
+          message: "No thoughts found in the list"
+        }
+      });
+    }
+  } catch(e) {
+    res.status(500).json({
+      success: false,
+      body: {
+        message: e
+      }
+    });
+  }
+});
+
 //Get all thoughts
 app.get("/thoughts", async (req, res) => {
   try {
@@ -81,9 +121,10 @@ app.get("/thoughts", async (req, res) => {
 
 //Post a new thought
 app.post("/thoughts", async (req, res)=>{
-  const {message} = req.body;
+  const {message, username} = req.body;
+  console.log(req.body )
     try{
-      const thoughtItem = await new Thought({message}).save();
+      const thoughtItem = await new Thought({message, username}).save();
       res.status(201).json({
        success: true,
         response: thoughtItem,
