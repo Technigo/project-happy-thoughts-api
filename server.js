@@ -58,7 +58,7 @@ app.get("/", (req, res) => {
 
 // GET /thoughts endpoint
 app.get("/thoughts", async (req, res) => {
-  const happyThoughts = await HappyThought.find().sort({ createdAt: -1 }).limit(20)
+  const happyThoughts = await HappyThought.find().sort({ createdAt: 'desc' }).limit(20)
   try {
     res.status(200).json({
       success: true,
