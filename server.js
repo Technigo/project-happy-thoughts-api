@@ -3,7 +3,8 @@ import cors from "cors";
 import mongoose from "mongoose";
 import listEndpoints from "express-list-endpoints";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+// const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts-api";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -17,150 +18,121 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+const { Schema } = mongoose
+
+const HappyThoughtSchema = new Schema({
+  message: {
+    // type is the most important one
+    type: String,
+    // required will be true or false, strongly recommended to use
+    required: true,
+    minlength: 5,
+    maxlength: 140,
+    // trim removes unnecessary white spaces from string
+    trim: true
+  },
+  hearts: {
+    type: Number,
+    default: 0
+  },
+  createdAt: {
+    type: Date,
+    default: new Date()
+  }
+})
+
+const HappyThought = mongoose.model("HappyThought", HappyThoughtSchema)
+
+
 // Start defining your routes here
 app.get("/", (req, res) => {
   res.send(listEndpoints(app));
 });
 
-/// Tuesday
-
-const { Schema } = mongoose
-const FruitOrVegetableSchema = new Schema({
-  name: {
-    // type is the most important one
-    type: String,
-    // required will be true or false, strongly recommended to use
-    required: true,
-    // make sure we have no duplicates in our database, only a new name that is different than all the others (that are already in the database) is allowed
-    unique: true
-  },
-  description: {
-    type: String,
-    minlength: 4,
-    maxlength: 40,
-    // removes unnecessary white spaces from string
-    trim: true
-  },
-  createdAt: {
-    type: Date,
-    default: new Date()
-  },
-  kind: {
-    type: String,
-    // an array of all the allowed values
-    enum: ["fruit", "vegetable"]
-  }
-})
-
-const FruitOrVegetable = mongoose.model("FruitOrVegetable", FruitOrVegetableSchema)
-
-// POST
-app.post("/fruit_or_vegetable", async (req, res) => {
-  const { name, description, kind } = req.body
-  try {
-    //  const foodItem = await new FruitOrVegetable({ name: name, description: description, kind: kind })
-    const foodItem = await new FruitOrVegetable({ name, description, kind }).save()
-    // status code 201 is "created"
-    res.status(201).json({
-      success: true,
-      response: foodItem,
-      message: "created successfully"
-    })
-  } catch (err) {
-    res.status(400).json({
-      success: false,
-      response: err,
-      message: "error occurred"
-    })
-  }
-})
-
-
-
-// promises method - another way to do it that you will encounter in older code, legacy??
-// app.post("/fruit_or_vegetable", (req, res)=>{
-//   const {kind, name, description} = req.body;
-//   const foodItem = new FruitOrVegetable({kind: kind, name: name, description: description}).save()
-//     .then(item => {
-//       res.status(201).json({
-//         success: true,
-//          response: item,
-//          message: "created successfully"
-//        });
-//     }).catch(e => {
-//       res.status(400).json({
-//         success: false,
-//         response: e,
-//         message: "error occurred"
-//       });
-//     })
-// });
-
+// GET - fetch data
 // POST - create something
 // PATCH - update
 // PUT - replace
+// DELETE - self-explanatory
 
-
-app.get("/fruit_or_vegetable/:id", async (req, res) => {
-  const { id } = req.params;
+// GET /thoughts endpoint
+app.get("/thoughts", async (req, res) => {
+  const happyThoughts = await HappyThought.find().sort({ createdAt: -1 }).limit(20)
   try {
-    const foodItem = await FruitOrVegetable.findById(id);
     res.status(200).json({
       success: true,
-      response: foodItem,
-      message: "found successfully"
-     });
-  } catch(err) {
-    res.status(400).json({
-      success: false,
-      response: err,
-      message: "did not find object with that id"
-     });
-  }
-});
-
-// PATCH
-app.patch("/fruit_or_vegetable/:id", async (req, res) => {
-  const { id } = req.params
-  // const newDescription = req.body.newDescription
-  const { newDescription } = req.body
-  try {
-    const foodItem = await FruitOrVegetable.findByIdAndUpdate(id, {description: newDescription})
-    res.status(200).json({
-      success: true,
-      response: {},
-      message: "update successful"
+      response: happyThoughts,
+      message: "Happy thoughts found"
     })
   } catch (err) {
     res.status(400).json({
       success: false,
       response: err,
-      message: "error, update failed"
+      message: "Error, happy thoughts could not be found"
     })
   }
 })
 
-// DELETE
-// https://stackoverflow.com/questions/54081114/what-is-the-difference-between-findbyidandremove-and-findbyidanddelete-in-mongoo
-app.delete("/fruit_or_vegetable/:id", async (req, res) => {
-  const { id } = req.params;
+// POST /thoughts endpoint
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body
   try {
-    // const foodItem = await FruitOrVegetable.findByIdAndDelete(id);
-    const foodItem = await FruitOrVegetable.findByIdAndRemove(id);
-
-    res.status(200).json({
+    const newHappyThought = await new HappyThought({ message }).save()
+    res.status(201).json({
       success: true,
-      response: foodItem,
-      message: "deleted successfully"
-     });
-  } catch(e) {
+      response: newHappyThought,
+      message: "New thought message successfully posted"
+    })
+  } catch (err) {
     res.status(400).json({
       success: false,
-      response: e,
-      message: "did not successfully"
-     });
+      response: err,
+      message: "Error, message could not be posted"
+    })
   }
-});
+})
+
+// GET /thoughts/:thoughtId endpoint
+app.get("/thoughts/:thoughtId", async (req, res) => {
+  const { thoughtId } = req.params
+  try {
+    const oneHappyThought = await HappyThought.findById(thoughtId)
+    res.status(200).json({
+      success: true,
+      response: oneHappyThought,
+      message: "Found the happy thought"
+    })
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      response: err,
+      message: "Could not find that happy thought"
+    })
+  }
+})
+
+// Change to PATCH but change in the frontend too if you do
+// POST thoughts/:thoughtId/like endpoint
+// This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its `hearts` property to add one heart.
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params
+  try {
+    const newLike = await HappyThought.findByIdAndUpdate(thoughtId, { $inc: { hearts: 1 } }, { new: true })
+    res.status(201).json({
+      success: true,
+      // response: {},
+      response: newLike,
+      message: "Updated hearts successfully"
+    })
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      response: err,
+      message: "Error, could not update hearts"
+    })
+  }
+})
 
 // Start the server
 app.listen(port, () => {
