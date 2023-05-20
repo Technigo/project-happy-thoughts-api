@@ -32,12 +32,11 @@ const ThoughtSchema = new Schema({
   },
   heart: {
     type: Number,
-    minlength: 4,
     default: 0
   },
   createdAt: {
     type: Date,
-    default: () => moment().tz("UTC").toDate()
+    default: () => Date.now()
   }
 });
 
@@ -57,7 +56,7 @@ app.get("/", (req, res) => {
 
 // GET 20 LATEST THOUGHTS
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
+  const thoughts = await Thought.find().sort({ createdAt: 'desc', _id: 'desc '}).limit(20).exec();
   res.status(200).json(thoughts);
 });
 
@@ -72,7 +71,7 @@ app.get("/thoughts/id/:id", async (req, res) => {
       res.status(400).json('Not found');
     }
     } catch (e) {
-      res.status(400).json('No such id found in here');
+      res.status(400).json('No such id');
     }
 });
 
@@ -89,13 +88,13 @@ app.post("/thoughts", async (req, res) => {
     res.status(400).json({
       success: false,
       response: e,
-      message: 'Error! Happy thought not sent successfully!'
+      message: 'Error! Happy thought NOT sent successfully!'
     })
   }
 });
 
 // PATCH
-app.patch("/thoughts/id/:id/like", async (req, res) => {
+app.patch("/thoughts/:_id/like", async (req, res) => {
   const { id } = req.params;
   try {
     const thought = await Thought.findByIdAndUpdate(id, { $inc: { heart: 1 } }, { new: true });
