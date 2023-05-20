@@ -37,7 +37,7 @@ const ThoughtsSchema = new Schema({
     maxlength: 150,
     trim: true
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   }, 
@@ -117,10 +117,10 @@ app.post("/thoughts", async(req, res) => {
 // PATCH : to update specific properties of these entries //update
 // PUT : Will replace the entry that we currently have //replace
 
-app.patch("/thoughts/:id/heart", async (req, res) => {
+app.patch("/thoughts/:id/hearts", async (req, res) => {
   const { id } = req.params;
   try {
-    const heartsUpdate = await Thought.findByIdAndUpdate(id, {$inc: {heart: 1}});
+    const heartsUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}});
     res.status(200).json({
       success: true,
       // the response was "response: foodItem", but was changed to "{}" to not confuse the front-end part by what is being returned
