@@ -36,8 +36,8 @@ Make sure MongoDB is installed and running
 Run the server with npm start
 Access the API at http://localhost:8080
 
-# API Deployed on Render:
-https://project-happy-thoughts-api-t716.onrender.com/
+# API Deployed on Google Cloud:
+https://project-happy-thoughts-api-kr5kua5o2a-lz.a.run.app/
 
 # The API is also connected to a React Frontend:
 https://happy-thoughts-feed.netlify.app/
