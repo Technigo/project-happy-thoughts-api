@@ -1,13 +1,12 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This Express-MongoDB API project is an API built with Express and MongoDB, offering GET request endpoints for data retrieval and POST endpoints for data creation. It implements documented routes, ensures validation and error handling for user input, and handles errors when adding hearts to a thought.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I based the code on a code along example and live session from Technigo but modified it. If I had more time I would fix the update of hearts to update without having to refresh the page. Tools: MongoDB, Mongoose, Express, MongoDB Compass, MongoDB Atlas, Google Cloud.
 
 ## View it live
+Backend: https://project-happy-thoughts-api-potyd2almq-lz.a.run.app
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Frontend: https://starlit-frangollo-538af1.netlify.app/
