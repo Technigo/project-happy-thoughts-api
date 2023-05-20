@@ -1,13 +1,11 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+A few weeks ago we had a 'Happy Thoughts' React assignment, where we created our own version of Twitter, but focusing on positivity and friendliness. For that project we built the frontend and used an already existing API from Technigo to store the thoughts. For this project, wen built our own API which should work in the same way and should become a drop-in replacement for the API we used originally.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I went through the material for the week thoroughly and practiced and coded along with the live code sessions, looked at how the original API was structured and how I needed to write my own endpoints and my mongoose model. I also studied previous week's projects and other people's code to understand what I needed to do. Practiced using Postman a lot more than I have been before, feeling more familiar with it now. Also felt more secure with how to use and understand Mongo DB Compass/ Atlas and how to deploy on Google Cloud.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://project-happy-thoughts-api-i35fofwaaq-lz.a.run.app

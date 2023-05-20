@@ -114,8 +114,7 @@ app.get("/thoughts/:thoughtId", async (req, res) => {
   }
 })
 
-// Change to PATCH but change in the frontend too if you do
-// POST thoughts/:thoughtId/like endpoint
+// PATCH thoughts/:thoughtId/like endpoint
 // This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its `hearts` property to add one heart.
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params
@@ -123,7 +122,6 @@ app.patch("/thoughts/:thoughtId/like", async (req, res) => {
     const newLike = await HappyThought.findByIdAndUpdate(thoughtId, { $inc: { hearts: 1 } }, { new: true })
     res.status(201).json({
       success: true,
-      // response: {},
       response: newLike,
       message: "Updated hearts successfully"
     })
