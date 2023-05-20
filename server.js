@@ -8,6 +8,8 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-tho
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
+// Deployed API https://project-happy-thoughts-api-i35fofwaaq-lz.a.run.app
+
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
 // PORT=9000 npm start
@@ -115,7 +117,7 @@ app.get("/thoughts/:thoughtId", async (req, res) => {
 // Change to PATCH but change in the frontend too if you do
 // POST thoughts/:thoughtId/like endpoint
 // This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its `hearts` property to add one heart.
-app.post("/thoughts/:thoughtId/like", async (req, res) => {
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params
   try {
     const newLike = await HappyThought.findByIdAndUpdate(thoughtId, { $inc: { hearts: 1 } }, { new: true })
