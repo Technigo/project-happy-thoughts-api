@@ -1,8 +1,6 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import listEndpoints from "express-list-endpoints";
-import moment from "moment-timezone";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -56,7 +54,7 @@ app.get("/", (req, res) => {
 
 // GET 20 LATEST THOUGHTS
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: 'desc', _id: 'desc '}).limit(20).exec();
+  const thoughts = await Thought.find().sort({ createdAt: 'desc', _id: 'desc' }).limit(20).exec();
   res.status(200).json(thoughts);
 });
 
@@ -95,9 +93,9 @@ app.post("/thoughts", async (req, res) => {
 
 // PATCH
 app.patch("/thoughts/:_id/like", async (req, res) => {
-  const { id } = req.params;
+  const { _id } = req.params;
   try {
-    const thought = await Thought.findByIdAndUpdate(id, { $inc: { heart: 1 } }, { new: true });
+    const thought = await Thought.findByIdAndUpdate(_id, { $inc: { heart: 1 } }, { new: true });
     res.status(201).json({
       success: true,
       response: thought,
