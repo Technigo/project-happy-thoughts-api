@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
 });
 
 const { Schema } = mongoose;
-const ThoughtsSchema = new Schema({
+const PostSchema = new Schema({
   text: {
     type: String,
     required: true,
@@ -39,15 +39,15 @@ const ThoughtsSchema = new Schema({
   }
 })
 
-const Thought = mongoose.model("Thought", ThoughtsSchema)
+const Post = mongoose.model("Post", PostSchema)
 
 // This endpoint should return a maximum of 20 thoughts, sorted by createdAt to show the most recent thoughts first.
 app.get("/thoughts", async (req, res) => {
   try {
-    const thought = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
+    const post = await Post.find().sort({createdAt: 'desc'}).limit(20).exec()
     res.status(200).json({
       success: true,
-      response: thought,
+      response: post,
       message: "Thoughts retrieved!"
     })
   } catch (error) {
@@ -63,10 +63,10 @@ app.get("/thoughts", async (req, res) => {
 app.post("/thoughts", async (req, res) => {
   const { text } = req.body
   try {
-    const savedThought = await new Thought({ text }).save()
+    const savedPost = await new Post({ text }).save()
     res.status(200).json({
       success: true,
-      response: savedThought,
+      response: savedPost,
       message: "Thought saved!"
     })
   } catch (error) {
@@ -78,10 +78,10 @@ app.post("/thoughts", async (req, res) => {
 }})
 
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
-  const { thoughtId } = req.params
+  const { postId } = req.params
   try {
     const savedLike = await Thought.findByIdAndUpdate(
-      thoughtId,
+      postId,
       { $inc: { hearts: 1 } },
       { new: true }
     )
