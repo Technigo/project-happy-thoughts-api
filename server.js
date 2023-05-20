@@ -117,7 +117,7 @@ app.post("/thoughts", async(req, res) => {
 // PATCH : to update specific properties of these entries //update
 // PUT : Will replace the entry that we currently have //replace
 
-app.patch("/thoughts/:id/hearts", async (req, res) => {
+app.patch("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
   try {
     const heartsUpdate = await Thought.findByIdAndUpdate(id, {$inc: {hearts: 1}});
