@@ -64,23 +64,20 @@ const Thought = mongoose.model("Thought", ThoughtSchema);
 //Get all songs in the dataset with paging, params are page and limit
 app.get("/thoughts", async (req, res) => {
   try {
-    // Parse query parameters to integers or default to 1 page/10 entries limit
-    // const {page =  1, limit = 10} = req.query
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    
+    const skip = (page - 1) * limit; // Calculate skip value - how many entries to skip from the beginning of the dataset
 
-    // Calculate skip value - how many entries to skip from the beginning of the dataset
-    // const skip = (page - 1) * limit;
-
-    // Query database with skip and limit
-    const thoughtsList = await Thought.find();
+    const thoughtsList = await Thought.find().limit(limit).skip(skip).sort({ createdAt: "desc" })
 
     if (thoughtsList.length > 0) {
       res.status(200).json({
         success: true,
         body: {
           thoughtsList: thoughtsList,
-          // currentPage: page,
-          // totalPages: Math.ceil(await Thought.countDocuments() / limit), // Eg: 50 / 10 = 5 pages
-          // totalSongRecords: await Song.countDocuments() // Counts total number of records or items in the DB
+          currentPage: page,
+          totalPages: Math.ceil(await Thought.countDocuments() / limit), // Eg: 50 / 10 = 5 pages
         }
       });
     } else {
@@ -102,22 +99,22 @@ app.get("/thoughts", async (req, res) => {
 });
 
 //Get all thoughts
-app.get("/thoughts", async (req, res) => {
-  try {
-    const thoughtsList = await Thought.find().sort({ createdAt: "desc" }).limit(20);
-    res.status(200).json({
-      success: true,
-      response: thoughtsList,
-      message: "Thoughts found successfully"
-     });
-  } catch(e) {
-    res.status(400).json({
-      success: false,
-      response: e,
-      message: "Thoughts not found"
-     });
-  }
-});
+// app.get("/thoughts", async (req, res) => {
+//   try {
+//     const thoughtsList = await Thought.find().sort({ createdAt: "desc" }).limit(20);
+//     res.status(200).json({
+//       success: true,
+//       response: thoughtsList,
+//       message: "Thoughts found successfully"
+//      });
+//   } catch(e) {
+//     res.status(400).json({
+//       success: false,
+//       response: e,
+//       message: "Thoughts not found"
+//      });
+//   }
+// });
 
 //Post a new thought
 app.post("/thoughts", async (req, res)=>{
