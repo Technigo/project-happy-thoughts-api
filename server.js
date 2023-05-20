@@ -122,6 +122,7 @@ app.patch(PATHS.thoughtsById, async (req, res) => {
     res.status(200).json({
       success: true,
       response: `The post ${updatedThought.id} has been updated with a heart`,
+      _id: updatedThought._id,
       hearts: updatedThought.hearts // Include the updated hearts value in the response
     });
   } catch (err) {
