@@ -1,13 +1,14 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Create an API to be used with my previus frontend project "Happy Thoughts" deploy it on Google cloud and deploy the database on Atlas. 
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+The API needs 2 different routes to be able to post a new thought, get the thoughts and like a thought.
+The structure of my API was a little bit different then the API we first used. This was solved by comparing the the two and understanding were to moodify the fetch in the frontend.
+I learned how to add validations for the data posted to make sure to only store valid data in the database
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+[View API here](https://project-happy-thoughts-api-c6cfxyvlgq-lz.a.run.app/)
+[Link to frontend](https://happy-vibes.netlify.app)
