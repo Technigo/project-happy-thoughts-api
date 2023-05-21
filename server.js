@@ -99,14 +99,14 @@ app.post("/thoughts", async (req, res) => {;
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params; 
   try {
-  const thoughtToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}}); 
-  res.status(200).json({sucess: true, response: `Thought ${thoughtToUpdate.id} was liked!`})
+    const thoughtToUpdate = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}}, { new: true }); 
+    res.status(200).json({success: true, response: `Thought ${thoughtToUpdate.id} was liked!`})
   }
- catch (error) {
-  res.status(400).json({sucess: false, response: error});
-}
-
+  catch (error) {
+    res.status(400).json({success: false, response: error});
+  }
 });
+
 
 // Start the server
 app.listen(port, () => {
