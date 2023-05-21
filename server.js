@@ -40,7 +40,7 @@ const ThoughtSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now()
+    default: Date.now
   },
   hearts: {
     type: Number,
@@ -52,16 +52,17 @@ const ThoughtSchema = new Schema({
     minlength: 2,
     maxlength: 20,
   },
-  tags: {
+  tag: {
     type: String,
     default: "random",
-    enum:["weather", "work", "life", "happy", "random"]
+    minlength: 1,
+    maxlength: 10,
   }
 }); 
 
 const Thought = mongoose.model("Thought", ThoughtSchema);
 
-//Get all songs in the dataset with paging, params are page and limit
+//Get all thoughts with paging, params are page and limit
 app.get("/thoughts", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -78,6 +79,8 @@ app.get("/thoughts", async (req, res) => {
           thoughtsList: thoughtsList,
           currentPage: page,
           totalPages: Math.ceil(await Thought.countDocuments() / limit), // Eg: 50 / 10 = 5 pages
+          totalThoughtsCount: await Thought.countDocuments() // Counts total number of thoughts in the DB
+
         }
       });
     } else {
@@ -98,30 +101,21 @@ app.get("/thoughts", async (req, res) => {
   }
 });
 
-//Get all thoughts
-// app.get("/thoughts", async (req, res) => {
-//   try {
-//     const thoughtsList = await Thought.find().sort({ createdAt: "desc" }).limit(20);
-//     res.status(200).json({
-//       success: true,
-//       response: thoughtsList,
-//       message: "Thoughts found successfully"
-//      });
-//   } catch(e) {
-//     res.status(400).json({
-//       success: false,
-//       response: e,
-//       message: "Thoughts not found"
-//      });
-//   }
-// });
-
 //Post a new thought
 app.post("/thoughts", async (req, res)=>{
-  const {message, username} = req.body;
+  const {message, username, tag} = req.body;
   console.log(req.body )
     try{
-      const thoughtItem = await new Thought({message, username}).save();
+      const thought = {};
+      thought.message = message;
+      
+      if(username != '')
+        thought.username = username;
+
+      if(tag != '')
+        thought.tag = tag;
+
+      const thoughtItem = await new Thought(thought).save();
       res.status(201).json({
        success: true,
         response: thoughtItem,
