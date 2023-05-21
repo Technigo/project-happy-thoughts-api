@@ -1,12 +1,10 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+The main goal of this project is to learn <bold> POST request: </bold> expose endpoints to my users to allow them to POST data to my API and then use that data to save new objects in my Mongo database.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I'm working with <bold>mongoose</bold> in order to create the endpoints and manipulate the data. I started the project by creating a model for a simple 'Thought'.
 
 ## View it live
 
