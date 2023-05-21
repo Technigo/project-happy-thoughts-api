@@ -12,7 +12,7 @@ mongoose.Promise = Promise;
 const port = process.env.PORT || 8080;
 const app = express();
 
-//const listEndpoints = require('express-list-endpoints');
+const listEndpoints = require('express-list-endpoints');
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
@@ -46,7 +46,7 @@ app.get("/", (req, res) => {
     success: true,
     message: "OK",
     body: {
-      content: "project-happy-thoughts-api",
+      content: "Welcome to Happy Thoughts API!",
       endpoints: listEndpoints(app)
     }
   });
