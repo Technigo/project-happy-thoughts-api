@@ -11,6 +11,7 @@ mongoose.Promise = Promise;
 // PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
+const listEndpoints = require('express-list-endpoints')
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
@@ -45,8 +46,10 @@ const ThoughtSchema = new Schema({
 const Thought = mongoose.model('Thought', ThoughtSchema);
 
 // ENDPOINTS 
-app.get("/", (req, res) => {
-  res.send("Hello, Welcome to Majas HappyThoughts API!");
+app.get('/', (req, res) => {
+  const endpoints = listEndpoints(app);
+  const message = "Hello, Welcome to Majas HappyThoughts API!";
+  res.send(`${message}\n\nAvailable Endpoints:\n${endpoints.map(endpoint => `- ${endpoint.path}`).join('\n')}`);
 });
 
 // GET, /thoughts, showing the most recent thoughts (20 of them)
