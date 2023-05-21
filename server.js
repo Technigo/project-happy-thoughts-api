@@ -124,7 +124,9 @@ app.patch("/thoughts/:thoughtId/like", async (req, res) => {
 
   try {
     const heartUpdate = await Thoughts.findByIdAndUpdate(
-      thoughtId, {$inc: { hearts: 1 }}
+      thoughtId, 
+      {$inc: { hearts: 1 }},
+      {new: true}
       )
     res.status(200).json({
       success: true,
