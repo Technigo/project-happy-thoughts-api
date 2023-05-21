@@ -50,13 +50,21 @@ app.get("/", (req, res) => {
 
 
 app.get('/thoughts', async (req, res) => {
-  const thoughts = await HappyThoughts.find().sort({createdAt: 'desc'}).limit(20).exec();
-  res.json(thoughts)
+  try {
+    const thoughts = await HappyThoughts.find()
+    .sort({createdAt: 'desc'})
+    .limit(20)
+    .exec();
+    res.json(thoughts);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch messages "})
+  }
   });
 
 app.post('/thoughts', async (req, res) => {
-  const { text, description } = req.body;
-  const thought = new HappyThoughts({ text, description });
+  const { text } = req.body;
+  const thought = new HappyThoughts({ text });
 
   try{
     const savedThought = await thought.save()
