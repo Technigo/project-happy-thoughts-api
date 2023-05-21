@@ -120,10 +120,12 @@ app.post("/thoughts", async (req, res) => {
 
 // PATCH to update the likes based on the ID
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
-  const { id } = req.params
+  const { thoughtId } = req.params
 
   try {
-    const heartUpdate = await Thoughts.findByIdAndUpdate(id, {$inc: { hearts: 1 }})
+    const heartUpdate = await Thoughts.findByIdAndUpdate(
+      thoughtId, {$inc: { hearts: 1 }}
+      )
     res.status(200).json({
       success: true,
       response: heartUpdate,
