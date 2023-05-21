@@ -16,18 +16,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
-});
-
 const { Schema } = mongoose;
 const PostSchema = new Schema({
   text: {
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 140 
+    maxlength: 140,
+    trim: true
   },
   hearts: {
     type: Number,
@@ -35,11 +31,16 @@ const PostSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: new Date()
+    default: Date.now
   }
 })
 
 const Post = mongoose.model("Post", PostSchema)
+
+// Start defining your routes here
+app.get("/", (req, res) => {
+  res.send("Hello Technigo!");
+});
 
 // This endpoint should return a maximum of 20 thoughts, sorted by createdAt to show the most recent thoughts first.
 app.get("/thoughts", async (req, res) => {
@@ -61,10 +62,10 @@ app.get("/thoughts", async (req, res) => {
 
 // This endpoint expects a JSON body with the thought message
 app.post("/thoughts", async (req, res) => {
-  const { text } = req.body
+  const {text} = req.body
   try {
     const savedPost = await new Post({ text }).save()
-    res.status(200).json({
+    res.status(201).json({
       success: true,
       response: savedPost,
       message: "Thought saved!"
