@@ -68,7 +68,43 @@ app.get('/thoughts', async (req, res) => {
   }
 });
 
-app.post('/')
+// POST, /thoughts
+app.post('/thoughts', async (req,res) => {
+  const { message, username } = req.body;
+  try {
+    const newThoughts = await new Thought({message, username: username || 'HappyAnonymous' }).save();
+    res.status(201).json({
+      success: true,
+      response: newThoughts,
+      message: 'Created successfully!'
+    });
+  } catch (e) {
+    res.status(400).json({
+      success: false, 
+      response: e,
+      message: 'Something went wrong'
+    })
+  }
+})
+
+// POST, /thoughts, Increases the number of hearts by 1.
+app.post('/thoughts/:id/like', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const heartUpdate = await Thought.findByIdAndUpdate (id, { $inc: { hearts: 1 } });
+    res.status(200).json({
+      success: true,
+      response: 'Heart-count was updated'
+    })
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      response: 'Heart-count could not update',
+      error: err.errors
+    })
+  }
+})
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
