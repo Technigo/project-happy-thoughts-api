@@ -30,4 +30,4 @@ All endpoints use a try / catch combination for error handling. If an input is i
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://project-happy-thoughts-api-q7mqhxeq3q-lz.a.run.app/ 
