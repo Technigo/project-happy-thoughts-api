@@ -39,8 +39,8 @@ const thoughtSchema = new Schema({
   },
   createdAt: { // This will store the date of the thought creation
     type: Date, // It's a date
-    default: new Date() // The default value is the current date
-  },
+    default: Date.now // The default value is the current date
+  }
 });
 
 // Creating a mongoose model from our schema
