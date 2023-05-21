@@ -23,7 +23,7 @@ const thoughtSchema = new Schema({
     type: String, // It must be a string
     required: true, // It's required
     unique: true, // It must be unique
-    minlength: 5, // Minimum length is 5 characters
+    minlength: 2, // Minimum length is 5 characters
     maxlength: 140, // Maximum length is 140 characters
     trim: true // Trims unnecessary whitespaces
   },
@@ -81,7 +81,7 @@ app.post('/thoughts', async (req, res) => {
     // Save the thought to the database
     const savedThought = await thought.save();
     // Respond with the saved thought
-    res.status(200).json(savedThought);
+    res.status(201).json(savedThought);
   } catch (err) {
     // If there was an error, respond with the error message and a 400 status code
     res.status(400).json({ message: 'Could not save thought', errors: err.errors });
