@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import listEndpoints from 'express-list-endpoints';
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -48,9 +49,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send({
     Welcome: "Welcome to the Happy Thoughts APP",
-    Routes: [{
-      "/thoughts": "All the Happy thoughts!"
-    }]
+    Routes: listEndpoints(app)
   });
 });
 
