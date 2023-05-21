@@ -1,13 +1,13 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Making my own API for an old frontend project, using MongoDB and Mongoose.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I didn't have much trouble setting up the API, the difficult part was cleaning up my old frontend repo and implementing it. I ended up reverting the frontend repo to it's original state and just updating the API used.
 
 ## View it live
-
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Backend:
+https://project-happy-thoughts-api-l8j3.onrender.com
+Frontend:
+https://sunnyhappythoughts.netlify.app/
