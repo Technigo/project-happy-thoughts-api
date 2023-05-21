@@ -35,6 +35,16 @@ const ThoughtsSchema = new mongoose.Schema({
   createdAt: {
     type: Date, 
     default: () => new Date()
+  },
+  username: {
+    type: String,
+    default: "Anonymous",
+    minlength: 2,
+    maxlength: 20,
+  },
+  tag: {
+    type: [String],
+    default: ["general"],
   }
 });
 
@@ -56,6 +66,11 @@ app.get("/", (req, res) => {
 
 // Get all thoughts
 app.get("/thoughts", async (req, res) => {
+  //add pagination
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 20;
+  const skip = (page - 1) * limit;
+
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
  
   if (thoughts) {
