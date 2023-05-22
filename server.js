@@ -31,7 +31,7 @@ const ThoughtSchema =new Schema({
     trim: true // removes any whitespace before and after string
     // unique: true // if you don't want to allow duplicates
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -84,7 +84,7 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
   try {
     const likedThought = await Thought.findByIdAndUpdate(
       thoughtId,
-      { $inc: { heart: 1 } },
+      { $inc: { hearts: 1 } },
       { new: true }
     )
     res.status(200).json({
