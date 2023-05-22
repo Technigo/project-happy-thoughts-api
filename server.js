@@ -92,19 +92,6 @@ app.get("/thoughts", async (req, res) => {
 });
 
 
-
-  const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
- 
-  if (thoughts) {
-
-   res.status(200).json(thoughts)
-  } else {
-   res.status(404).json({
-     message: 'It was not possible to find thoughts', error: err.errors
-   })
-  }
- })
-
 //Create new thought
 app.post("/thoughts", async (req, res) => {;
   // req.body to access the thing we send in the post request
