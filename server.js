@@ -41,6 +41,22 @@ const ThoughtSchema = new Schema({
     default: () => new Date()
   }
 });
+const Thought = mongoose.model("Thought", ThoughtSchema);
+
+//Endpoint for returning a maximum of 20 thought - sorted by createdAt to show the
+//most recent one first
+app.get("/thoughts", async(req, res) => {
+  try {
+    const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
+    res.status(200).json(thoughts);
+  } catch(err) {
+    res.status(400).json({
+      success: false,
+      response: err,
+      message: "An error occured, not possible to fetch thoughts"
+    });
+  }
+});
 
 // Start the server
 app.listen(port, () => {
