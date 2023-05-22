@@ -58,6 +58,36 @@ app.get("/thoughts", async(req, res) => {
   }
 });
 
+//Posting a new thought to the API
+app.post("/thoughts", async(req, res) => {
+  const { message } = req.body;
+  try {
+    const newThought = await Thought({message}).save();
+    res.status(200).json(newThought);
+  } catch(err) {
+    res.status(400).json({
+      success: false,
+      response: err,
+      message: "An error occured, not possible to create new thought"
+    });
+  }
+});
+
+//Update the likes for thoughts (hearts)
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+  try {
+    const updateHearts = await Thought.findByIdAndUpdate(thoughtId, { $inc: { hearts: 1 } }, { new: true });
+    res.status(201).json(updateHearts);
+  } catch(err) {
+    res.status(400).json({
+      success: false,
+      response: err,
+      message: "An error occured, not possible to update hearts"
+    });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
