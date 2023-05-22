@@ -65,10 +65,10 @@ app.post("/thoughts", async (req, res) => {
   // retrieve information sent by client to our API endpoint
   const { message } = req.body;
   try {
-    const savedThought = await new Thought({message}).save();
+    const newThought = await new Thought({message}).save();
     res.status(201).json({
       success: true,
-      response: savedThought,
+      response: newThought,
       message: "Thought successfully saved"
     });
   } catch (err) {
@@ -79,16 +79,17 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
-app.patch("/thoughts/:id", async (req, res) => {
-  const { id } = req.params;
-  const { addHeart } = req.body;
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params
   try {
-    const savedThought = await Thought.findByIdAndUpdate(id,  { $set: { heart: addHeart + 1 } },
+    const likedThought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      { $inc: { heart: 1 } },
       { new: true }
-    );
+    )
     res.status(200).json({
       success: true,
-      response: savedThought,
+      response: likedThought,
       message: "Update successful"
     });
   } catch (err) {
@@ -103,10 +104,10 @@ app.patch("/thoughts/:id", async (req, res) => {
 app.get("/thoughts/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const savedThought = await Thought.findById(id );
+    const newThought = await Thought.findById(id );
     res.status(200).json({
       success: true,
-      response: savedThought,
+      response: newThought,
       message: "Fetch successful"
     });
   } catch (err) {
@@ -121,7 +122,7 @@ app.get("/thoughts/:id", async (req, res) => {
 app.delete("/thoughts/:id", async (req, res) => {
   const { id } = req.params; 
   try {
-    const savedThought = await Thought.findByIdAndDelete(id);
+    const newThought = await Thought.findByIdAndDelete(id);
     res.status(200).json({
       success: true,
       response: {},
@@ -167,8 +168,8 @@ app.post("/thoughts",  (req, res) => {
 
   try {
     // success
-    const savedThought = await thought.save();
-    res.status(201).json(savedThought);
+    const newThought = await thought.save();
+    res.status(201).json(newThought);
   } catch (err) {
     // bad request
     res.status(400).json({ message: "Pardon, could not save", error: err.errors });
