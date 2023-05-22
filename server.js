@@ -62,22 +62,28 @@ app.get("/thoughts", async (req, res) => {
 
 // post to database
 app.post("/thoughts", async (req, res) => {
-  // retrieve information sent by client to our API endpoint
+  // Retrieve information sent by client to our API endpoint
   const { message } = req.body;
   try {
-    const newThought = await new Thought({message}).save();
+    const newThought = await new Thought({ message }).save();
+
+    // This will wait for the new thought to be saved before displaying anything
+    const updatedThought = await Thought.findById(newThought._id);
+
     res.status(201).json({
       success: true,
-      response: newThought,
+      response: updatedThought,
       message: "Thought successfully saved"
     });
   } catch (err) {
     res.status(400).json({
       success: false,
-      response:"Pardon, could not save", error: err.errors
+      response: "Pardon, could not save",
+      error: err.errors
     });
   }
 });
+
 
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params
