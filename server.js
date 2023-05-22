@@ -88,7 +88,7 @@ app.get(PATHS.thoughts, async (req, res) => {
 // POST
 // User input (thought) is validated and saved in database if the validation checks out
 app.post(PATHS.thoughts, async (req, res) => {
-  // console.log(Thought)
+ 
   // Retrieve the information sent by the client to our API endpoint
   const {message} = req.body;
 
@@ -96,7 +96,6 @@ app.post(PATHS.thoughts, async (req, res) => {
   const newThought = await new Thought({
     message: message
   }).save()
-  // console.log(newThought)
 
   res.status(200).json({
     success: true,
