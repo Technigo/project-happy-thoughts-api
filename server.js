@@ -67,9 +67,31 @@ app.get("/", (req, res) => {
 // Get all thoughts
 app.get("/thoughts", async (req, res) => {
   //add pagination
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 20;
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 20;
   const skip = (page - 1) * limit;
+
+
+  try {
+    // Finding the thoughts and apply pagination
+    const thoughts = await Thought.find().sort({createdAt: 'desc'}).skip(skip).limit(limit).exec();
+    
+    // Get the total number of thoughts
+    const totalThoughts = await Thought.countDocuments();
+  
+    // Calculate the total pages
+    const totalPages = Math.ceil(totalThoughts / limit);
+  
+    // Return the result with pagination data
+    res.status(200).json({ currentPage: page, totalPages, thoughts });
+  } catch (err) {
+    res.status(404).json({
+      message: 'It was not possible to find thoughts', error: err
+    });
+  }
+});
+
+
 
   const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec()
  
