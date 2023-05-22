@@ -35,7 +35,6 @@ const HappyThoughtsSchema = new Schema({
   hearts: {
     type: Number,
     default: 0
-
   },
   createdAt: {
     type: Date,

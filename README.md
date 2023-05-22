@@ -1,8 +1,6 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Link to frontend-repo: https://github.com/annikalindberg/project-happy-thoughts
 
 ## The problem
 
