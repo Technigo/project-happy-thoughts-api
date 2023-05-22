@@ -31,7 +31,7 @@ const PostSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: new Date()
   }
 })
 
@@ -78,10 +78,10 @@ app.post("/thoughts", async (req, res) => {
   })
 }})
 
-app.post("/thoughts/:thoughtId/like", async (req, res) => {
+app.post("/thoughts/:postId/like", async (req, res) => {
   const { postId } = req.params
   try {
-    const savedLike = await Thought.findByIdAndUpdate(
+    const savedLike = await Post.findByIdAndUpdate(
       postId,
       { $inc: { hearts: 1 } },
       { new: true }
