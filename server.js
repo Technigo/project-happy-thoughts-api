@@ -56,9 +56,19 @@ app.get("/", (req, res) => {
 
 // fetch from database
 app.get("/thoughts", async (req, res) => {
+  try {
   const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20).exec();
-  res.json(thoughts);
-});
+  res.status(200).json({
+    success: true,
+    response: thoughts,
+    message: "Fetch successful"
+  })
+} catch (err) {
+  res.status(400).json({
+    success: false,
+    response: "Pardon, could not find any thoughts", error: err.errors
+  });
+}});
 
 // post to database
 app.post("/thoughts", async (req, res) => {
@@ -82,7 +92,7 @@ app.post("/thoughts", async (req, res) => {
 });
 
 
-app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params
   try {
     const likedThought = await Thought.findByIdAndUpdate(
