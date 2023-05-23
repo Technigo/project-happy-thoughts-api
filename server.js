@@ -67,12 +67,9 @@ app.post("/thoughts", async (req, res) => {
   try {
     const newThought = await new Thought({ message }).save();
 
-    // This will wait for the new thought to be saved before displaying anything
-    const updatedThought = await Thought.findById(newThought._id);
-
     res.status(201).json({
       success: true,
-      response: updatedThought,
+      response: newThought,
       message: "Thought successfully saved"
     });
   } catch (err) {
