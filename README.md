@@ -7,7 +7,7 @@ The goal for this project was to build an API similar to an API used in a previo
 
 Started by looking and understandinig the data structure of the api we've used earlier.
 Then tested the endpoints (GET, POST, PATCH) through Postman. 
-Had some issues with the PATCH request and needed to look through naming of my server to solve that issue. 
+Had some issues with the PATCH request and needed to look through naming for frontend vs api to solve the issue. Really liked this project since it gave me a good understanding on the correlation between back- and frontend.
 
 ## View it live
 
