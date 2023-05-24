@@ -2,7 +2,10 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1/project-happy-thoughts-api";
+//this row below is a solution I saw someone else doing and hopefully it solves the error-
+//messages regarding strictQuery that keeps showing up in the terminal
+mongoose.set('strictQuery', false);
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -22,9 +25,9 @@ app.get("/", (req, res) => {
   res.json(listEndpoints(app));
 });
 
-//The model for the thoughts
+//The model for the thoughts - the "skeleton" that creates the structure of the data
 const { Schema } = mongoose;
-const ThoughtSchema = new Schema({
+const ThoughtSchema = new Schema ({
   message: {
     type: String,
     required: true,
@@ -41,6 +44,8 @@ const ThoughtSchema = new Schema({
     default: () => new Date()
   }
 });
+//The mongoose model can be seen as a wrapper around the Schema to perform specific operations
+//on the database. This adds functionality to the Schema.
 const Thought = mongoose.model("Thought", ThoughtSchema);
 
 //Endpoint for returning a maximum of 20 thought - sorted by createdAt to show the
