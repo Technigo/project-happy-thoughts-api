@@ -11,5 +11,5 @@ Had some issues with the PATCH request and needed to look through naming of my s
 
 ## View it live
 
-Deployed frontend: https://happy-mongo-api-jl.netlify.app
+Deployed frontend: https://happy-mongo-api-jl.netlify.app  
 Deployed backend: https://project-happy-thoughts-api-7b7pldp75q-lz.a.run.app
