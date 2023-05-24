@@ -1,13 +1,15 @@
-# Project Happy Thoughts API
+# Project Happy Thoughts API - https://happy-mongo-api-jl.netlify.app
 
-Replace this readme with your own information about your project.
+## ✓ The brief
+The goal for this project was to build an API similar to an API used in a previous frontend project. We needed to structure it so that the URL-fetch could be replaced with the new one and get the app working with our frontend from before. The "app" is named Happy Thoughts and is created so that you can read, post and like new happy thoughts.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+## 🏔️ The problem
 
-## The problem
-
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Started by looking and understandinig the data structure of the api we've used earlier.
+Then tested the endpoints (GET, POST, PATCH) through Postman. 
+Had some issues with the PATCH request and needed to look through naming of my server to solve that issue. 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Deployed frontend: https://happy-mongo-api-jl.netlify.app
+Deployed backend: https://project-happy-thoughts-api-7b7pldp75q-lz.a.run.app
