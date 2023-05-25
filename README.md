@@ -12,9 +12,10 @@ What you need to do:
 
 ## The problem
 
-I started out with watching the videos for the week and then watched the recorded versions of the live-sessions. Still a bit stuck though and will try more out before handing in the assignment. 
-Due to a foal being born at our place last week I didn't manage to finish in time and will work with this in the beginning of this week to finish.
+I started out with watching the videos for the week and then watched the recorded versions of the live-sessions.
+I had some issues with the deploy but fixed it with some guidance.
 
 ## View it live
 
-Will update with links to deployed versions when I'm ready!
+API: https://happy-thoughts-api-w15-o6447lrzoq-ew.a.run.app/
+Deployed: https://happy-thoughts-w7-ylva-karlsson.netlify.app/
