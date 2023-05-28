@@ -94,9 +94,8 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
   
   try {
     const likedThought = await Thought.findById(thoughtId);
-    const addHeart = likedThought.hearts += 1;
-    // testing to see if += acts differently than + on the frontend
-    // console.log(likedThought)
+    const addHeart = likedThought.hearts + 1;
+      // console.log(likedThought)
     const updateHearts = await Thought.findByIdAndUpdate(thoughtId, {hearts: addHeart})
     // console.log(updateHearts)
     response.body = updateHearts
