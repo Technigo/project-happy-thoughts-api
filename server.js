@@ -34,7 +34,7 @@ const ThoughtSchema = new Schema ({
     //removes unnecessary white spaces from string
     trim: true
   },
-  hearts: {
+  likes: {
     type: Number,
     default: 0
   },
