@@ -30,4 +30,4 @@ All endpoints use a try / catch combination for error handling. If an input is i
 
 ## View it live
 
-https://project-happy-thoughts-api-q7mqhxeq3q-lz.a.run.app/ 
+ https://project-happy-thoughts-api-q7mqhxeq3q-ew.a.run.app/ 
