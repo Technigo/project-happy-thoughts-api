@@ -18,8 +18,49 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send("Time for some happy thoughts!");
 });
+
+const { Schema } = mongoose;
+const FruitOrVegetableSchema = new Schema ({
+  name: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  description: {
+    type: String,
+    minlength: 5,
+    maxlength: 140,
+    trim: true
+  },
+  createdAt:{
+    type: Date,
+    default: new Date()
+  },
+  kind: {
+    type: String,
+    enum:["fruit", "vegetable"]
+  }
+})
+
+const FruitOrVegetable = mongoose.model("FruitOrVegetable", FruitOrVegetableSchema)
+
+app.post("/fruit_or_vegetable", async (req, res) => {
+  const {kind, name, description} = req.body;
+    try{
+      const foodItem = await new FruitOrVegetable({kind, name, description}).save();
+      res.status(201).json({
+        success: true,
+        response: foodItem
+      })
+    } catch (e) {
+      res.status(400).json({
+        success: false,
+        response: e
+      })
+    }
+})
 
 // Start the server
 app.listen(port, () => {
