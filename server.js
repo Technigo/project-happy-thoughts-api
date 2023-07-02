@@ -85,11 +85,12 @@ app.post("/thoughts", async (req, res) => {
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params
     try{
-      const likedItem = await Thought.findByIdAndUpdate (
+      const LikedItem = await Thought.findByIdAndUpdate (
+        thoughtId,
       { $inc: { hearts: 1 } }, { new: true })
       res.status(201).json({
         success: true,
-        response: likedItem,
+        response: LikedItem,
         message: "like of thought successful"
       })
     } catch (e) {
