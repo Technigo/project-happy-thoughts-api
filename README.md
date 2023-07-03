@@ -8,3 +8,6 @@ https://project-happy-thoughts-api-eihxehjbzq-lz.a.run.app
 
 Fontend:
 https://ajmal-happythoughts.netlify.app/
+
+Frontend repo:
+https://github.com/AjmalZ/project-happy-thoughts
