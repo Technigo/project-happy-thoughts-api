@@ -1,4 +1,5 @@
 # Project Happy Thoughts API
+### Week 15 Technigo Bootcamp
 For week 15 we built our own API for the happy thoughts project that we had in the earlier weeks of the bootcamp then we used that deployed API for our previously built happy thoughts frontend page. 
 
 ## The problem
