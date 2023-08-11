@@ -1,13 +1,18 @@
-# Project Happy Thoughts API
+# Happy Thoughts API
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) 
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+An API with both GET and POST endpoints to add to our already existing Happy Thoughts project. This project taught us how to set up and use POST requests and Mongo to store data in our database, and display this data on our frontend.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I found this project pretty easy and I really enjoy backend projects, so I wanted to challenge myself by also creating a feature that would make it possible to delete messages. I also wanted users to be able to identify themselves by their names, so I added a name property to my Mongoose schema. 
+
+## View frontend repository
+
+https://github.com/AntoniaGranit/project-happy-thoughts
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://project-happy-thoughts-api-wcsanbxhyq-lz.a.run.app
+
+
