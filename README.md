@@ -8,4 +8,4 @@ Describe how you approached to problem, and what tools and techniques you used t
 
 ## View it live
 
-Deployed at Google Cloud: https://project-happy-thoughts-api-ss6ohtlv2q-lz.a.run.app/
+Deployed at Render: https://happy-thoughts-express-api.onrender.com/ 
