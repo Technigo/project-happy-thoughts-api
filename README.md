@@ -2,7 +2,7 @@
 
 ## About
 
-Welcome to the backend of Happy Thoughts! This is a custom-built API designed to serve as a backend for the Happy Thoughts React frontend application. It aims to be a drop-in replacement for the Technigo API. The API is built using Node.js, Express, and Mongoose, and it features endpoints for creating, reading, and liking "happy thoughts".
+Welcome to the backend of Happy Thoughts! This is a custom-built API designed to serve as a backend for my Happy Thoughts React frontend application I did at Technigo bootcamp 2023. It aims to be a drop-in replacement for the Technigo API. The API is built using Node.js, Express, and Mongoose, and it features endpoints for creating, reading, and liking "happy thoughts".
 
 Happy Thoughts UI (https://sweet-unicorn-99f547.netlify.app/)
 
@@ -90,11 +90,8 @@ Increments the heart count for a thought by 1. No request body required.
 
 ## Deploying Your API
 
-After building your API, deploy it to a server of your choice. Then, update your Happy Thoughts frontend to use this API instead of the old Technigo one by changing the API URL.
+After building your API, deploy it to a server of your choice.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
 ---
 
