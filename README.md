@@ -1,10 +1,104 @@
-# Project Happy Thoughts API
+# Happy Thoughts API
 
-Link to frontend-repo: https://github.com/annikalindberg/project-happy-thoughts
+## About
 
-## The problem
+Welcome to the backend of Happy Thoughts! This is a custom-built API designed to serve as a backend for the Happy Thoughts React frontend application. It aims to be a drop-in replacement for the Technigo API. The API is built using Node.js, Express, and Mongoose, and it features endpoints for creating, reading, and liking "happy thoughts".
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Happy Thoughts UI (https://sweet-unicorn-99f547.netlify.app/)
+
+## Setup and Installation
+
+1. Clone this repository.
+    ```bash
+    git clone https://github.com/your-username/happy-thoughts-api.git
+    ```
+2. Navigate to the project directory.
+    ```bash
+    cd happy-thoughts-api
+    ```
+3. Install dependencies.
+    ```bash
+    npm install
+    ```
+
+4. Start the server.
+    ```bash
+    npm start
+    ```
+
+## Endpoints
+
+### `GET /thoughts`
+
+Returns a list of up to 20 thoughts, sorted by `createdAt` in descending order.
+
+Example Response:
+
+```json
+[
+  {
+    "_id": "thoughtId1",
+    "message": "Node.js is amazing!",
+    "hearts": 5,
+    "createdAt": "2023-10-21T18:35:00Z"
+  },
+  // ... more thoughts
+]
+```
+
+### `POST /thoughts`
+
+Creates a new thought.
+
+Request Body Example:
+
+```json
+{
+  "message": "Express is great!"
+}
+```
+
+Response Example:
+
+```json
+{
+  "_id": "thoughtId2",
+  "message": "Express is great!",
+  "hearts": 0,
+  "createdAt": "2023-10-22T08:35:00Z"
+}
+```
+
+### `POST /thoughts/:thoughtId/like`
+
+Increments the heart count for a thought by 1. No request body required.
+
+## Thought Model Schema
+
+- `message`: String
+  - Required
+  - Min length: 5
+  - Max length: 140
+
+- `hearts`: Number
+  - Defaults to `0`
+  - Not assignable when creating a new thought
+
+- `createdAt`: Date
+  - Defaults to the current time
+  - Not assignable when creating a new thought
+
+## Deploying Your API
+
+After building your API, deploy it to a server of your choice. Then, update your Happy Thoughts frontend to use this API instead of the old Technigo one by changing the API URL.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
+---
+
+Happy coding! 🌟
 
 ## View it live
 
