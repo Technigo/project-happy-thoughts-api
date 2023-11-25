@@ -64,7 +64,7 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-app.post('thoughts/:thoughtId/like', async (req, res) => {
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
   try {
     const updatedMessage = await Message.findByIdAndUpdate(
