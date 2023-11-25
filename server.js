@@ -7,7 +7,16 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
 const messageSchema = new mongoose.Schema({
-  content: String,
+  content: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 140,
+  },
+  hearts: {
+    type: Number,
+    default: 0
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -52,6 +61,24 @@ app.post('/thoughts', async (req, res) => {
     res.status(201).json(newMessage)
   } catch (error) {
     res.status(500).json({ message: error.message })
+  }
+})
+
+app.post('thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
+  try {
+    const updatedMessage = await Message.findByIdAndUpdate(
+      thoughtId,
+      { $inc: { hearts: 1 } },
+      { new: true }
+    )
+    if(!updatedMessage) {
+      res.status(404).json({ message: 'Thought not found' })
+    } else {
+      res.json(updatedMessage)
+    }
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid thought ID', error })
   }
 })
 
