@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
-app.get('/messages', async (req, res) => {
+app.get('/thoughts', async (req, res) => {
   try {
     const messages = await Message.find().sort({ createdAt: 'desc' }).limit(20).exec()
     res.json(messages)
@@ -40,7 +40,7 @@ app.get('/messages', async (req, res) => {
   }
 })
 
-app.post('/messages', async (req, res) => {
+app.post('/thoughts', async (req, res) => {
   try {
     const { content } = req.body
     if (!content) {
