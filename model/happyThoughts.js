@@ -17,6 +17,15 @@ export const ThoughtsSchema = new Schema({
     type: Date,
     default: () => new Date(),
   },
+  username: {
+    type: String,
+    default: "Anonymous",
+  },
+  // Array of strings to store multiple categories or tags
+  // categories: {
+  //   type: [String],
+  //   default: [],
+  // },
 });
 
 export const HappyThoughts = mongoose.model("HappyThoughts", ThoughtsSchema);

@@ -6,16 +6,37 @@ const router = express.Router();
 
 //All endpoints
 router.get("/", (req, res) => {
-  const endpoints = listEndpoints(router);
-  res.json(endpoints);
+  res.status(200).send({
+    sucess: true,
+    message: "Ok✅",
+    body: {
+      content: "Miko's Happy Thoughts API",
+      endpoints: listEndpoints(router),
+    },
+  });
 });
 
 //Get thoughts
 router.get("/thoughts", async (req, res) => {
   try {
+    let sortOption = {};
+    if (req.query.sort === "hearts") {
+      sortOption.hearts = -1; //sort by hearts in decending order(highest first)
+    }
+    // Pagination options
+    const page = parseInt(req.query.page) || 1;
+    // Default to page 1 if not provided
+    const limit = parseInt(req.query.limit) || 20;
+    // Default to 20 thoughts per page if not provided
+
+    const skip = (page - 1) * limit;
     const thoughts = await HappyThoughts.find()
-      .sort({ createdAt: "desc" })
-      .limit(20);
+      .sort(sortOption)
+      .skip(skip)
+      .limit(limit);
+    // .sort({ createdAt: "desc" })
+    // .limit(20)
+    // .exec();
     res.status(201).json({ sucess: true, body: thoughts });
   } catch (error) {
     console.error("Error fetching thoughts:", error);
@@ -25,7 +46,7 @@ router.get("/thoughts", async (req, res) => {
 // Post thoughts
 router.post("/thoughts", async (req, res) => {
   // Retrieve the information sent by the client to our API endpoint
-  const { message } = req.body;
+  const { message, username } = req.body;
 
   // Check if the message is provided in the request body
   if (!message) {
@@ -35,7 +56,7 @@ router.post("/thoughts", async (req, res) => {
   }
 
   // Use our mongoose model to create the database entry
-  const thought = new HappyThoughts({ message });
+  const thought = new HappyThoughts({ message, username });
   try {
     // Respond with the saved thought object, including its _id
     const savedThought = await thought.save();
