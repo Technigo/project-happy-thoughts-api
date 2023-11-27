@@ -39,8 +39,8 @@ router.post("/thoughts", async (req, res) => {
 router.post("/thoughts/:thoughtId/like", async (req, res) => {
     const id = req.params.id;
 
-    const thought = ThoughtModel.findById(id);
-    
+    const thought = await ThoughtModel.findById(id);
+
     try {
         if (thought) {
             // Use ThoughtModel to find the thought with the given ID and update the number of hearts
