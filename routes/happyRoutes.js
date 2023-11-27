@@ -5,15 +5,13 @@ import listEndpoints from "express-list-endpoints";
 const router = express.Router();
 
 //All endpoints
-router.get("/", (req, res) => {
-  res.status(200).send({
-    sucess: true,
-    message: "Ok✅",
-    body: {
-      content: "Miko's Happy Thoughts API",
-      endpoints: listEndpoints(router),
-    },
-  });
+router.get("/", async (req, res) => {
+  try {
+    const endpoints = listEndpoints(router);
+    res.json(endpoints);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 //Get thoughts
@@ -78,10 +76,10 @@ router.post("/thoughts/:thoughtId/like", async (req, res) => {
         .status(404)
         .json({ success: false, error: "Thought not found." });
     }
-    // Update the hearts property
-    thought.hearts += 1;
-    // Save the updated thought to the database
-    const updatedThought = await thought.save();
+    const addHeart = thought.hearts + 1;
+    const updatedThought = await HappyThoughts.findOneAndUpdate(thoughtId, {
+      hearts: addHeart,
+    });
     res.status(201).json(updatedThought);
   } catch (error) {
     res.status(400).json({ sucess: false, message: error });
