@@ -11,3 +11,11 @@ Describe how you approached to problem, and what tools and techniques you used t
 ## View it live
 
 Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+
+## Connect with Me
+
+[![GitHub](https://img.shields.io/badge/GitHub-black?style=flat-square&logo=github)](https://github.com/IdahCollin)
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/idah-collin)
+
+[My portfolio](https://idah-collin-portfolio.netlify.app/)

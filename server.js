@@ -16,10 +16,36 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Start defining your routes here
+const Thought = require('./models/thought')
+
+const listEndpoints = require("express-list-endpoints")
+
+// ----------- Routes starts here --------- //
+
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  const documentation = {
+    endpoints: listEndpoints(app),
+    additionalInfo: {
+      "/thoughts": {
+        description: "Description here"
+      },
+    },
+  }
+
+  res.json(documentation)
+})
+
+//Route to get 20 latest thoughts
+app.get('/thoughts', async (req, res) => {
+  try {
+    const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20);
+    res.json(thoughts);
+  } catch (error) {
+    res.status(500).json({ message: 'Unable to fetch thoughts, please try again', error: error });
+  }
 });
+
+
 
 // Start the server
 app.listen(port, () => {
