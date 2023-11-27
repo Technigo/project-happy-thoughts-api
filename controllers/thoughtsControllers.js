@@ -2,8 +2,7 @@ const Thoughts = require("../models/thoughtsModel");
 
 exports.getThoughts = async (req, res) => {
   try {
-    const thoughts = await Thoughts.find().sort("createAt").limit(20);
-
+    const thoughts = await Thoughts.find().sort("-createdAt").limit(20);
     res.status(200).json({
       status: "success",
       length: thoughts.length,
@@ -19,7 +18,6 @@ exports.getThoughts = async (req, res) => {
 };
 
 exports.createThought = async (req, res, next) => {
-  console.log(req.body.message, Thoughts);
   try {
     const newThought = new Thoughts({ message: req.body.message });
     await newThought.save();
@@ -37,10 +35,13 @@ exports.createThought = async (req, res, next) => {
 };
 
 exports.postLikes = async (req, res) => {
-  console.log(req.params);
   try {
     const newLike = await Thoughts.findByIdAndUpdate(req.params.thoughtId, { $inc: { likes: 1 } });
 
+    if (!newLike)
+      return res
+        .status(404)
+        .json({ status: "fail", message: "Could not find a thought with the ID 👀" });
     res.status(200).json({
       status: "success",
     });
