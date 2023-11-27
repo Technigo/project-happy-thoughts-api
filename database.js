@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const mongoURI = process.env.MONGO_URL || 'mongodb://localhost/Happy';
+const mongoURI = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/Happy';
 
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,

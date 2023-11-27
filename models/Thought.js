@@ -20,4 +20,4 @@ const thoughtSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('Thought', ThoughtSchema);
+module.exports = mongoose.model('thought', thoughtSchema);

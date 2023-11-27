@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/Happy";
+const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/Happy";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -17,8 +17,11 @@ app.use(cors());
 app.use(express.json());
 
 
-const Thought = require('./models/Thought'); // Import the Thought model
+const Thought = require('./models/thought'); // Import the Thought model
 
+app.get('/', (req, res) => {
+  res.send('Welcome to the Happy Thoughts API- spreading happiness over the world');
+});
 //Route to get all thoughts
 app.get('/thoughts', async (req, res) => {
   try {
