@@ -77,7 +77,7 @@ router.post("/thoughts/:thoughtId/like", async (req, res) => {
         .json({ success: false, error: "Thought not found." });
     }
     const addHeart = thought.hearts + 1;
-    const updatedThought = await HappyThoughts.findOneAndUpdate(thoughtId, {
+    const updatedThought = await HappyThoughts.findByIdAndUpdate(thoughtId, {
       hearts: addHeart,
     });
     res.status(201).json(updatedThought);
