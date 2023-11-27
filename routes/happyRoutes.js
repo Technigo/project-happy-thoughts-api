@@ -29,7 +29,7 @@ router.get("/thoughts", async (req, res) => {
 
     const skip = (page - 1) * limit;
     const thoughts = await HappyThoughts.find()
-      .sort({ createdAt: "desc" })
+      .sort({ createAt: "desc" })
       // .sort(sortOption)
       .skip(skip)
       .limit(limit);
