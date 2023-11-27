@@ -2,7 +2,7 @@ const Thoughts = require("../models/thoughtsModel");
 
 exports.getThoughts = async (req, res) => {
   try {
-    const thoughts = await Thoughts.find().limit(20);
+    const thoughts = await Thoughts.find().sort("createAt").limit(20);
 
     res.status(200).json({
       status: "success",
@@ -39,12 +39,11 @@ exports.createThought = async (req, res, next) => {
 exports.postLikes = async (req, res) => {
   console.log(req.params);
   try {
-    const newLike = await Thoughts.updateOne(req.params, req.body.likes, {
-      new: true,
-      runValidators: true,
-    });
+    const newLike = await Thoughts.findByIdAndUpdate(req.params.thoughtId, { $inc: { likes: 1 } });
 
-    if (!newLike) throw new Error("Couldn't post a like!!");
+    res.status(200).json({
+      status: "success",
+    });
   } catch (err) {
     console.error(err);
     res.status(400).json({
