@@ -15,7 +15,7 @@ const ThoughtSchema = new Schema({
     minlength: 5,
     maxlength: 140
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0
   },
@@ -69,7 +69,7 @@ app.post("/thoughts/:_id/love", async (req, res) => {
   const { _id } = req.params
   console.log(_id)
   try {
-    const lovebombedThought = await Thought.findByIdAndUpdate(_id, { $inc: { heart: 1 } }, {new: true} )
+    const lovebombedThought = await Thought.findByIdAndUpdate(_id, { $inc: { hearts: 1 } }, {new: true} )
     lovebombedThought ? res.status(201).json(lovebombedThought) : res.status(400).json({message: "Could not find a thought with the given ID", error: err.message})
     // console.log(lovebombedThought)
     // res.status(201).json(lovebombedThought)
