@@ -29,7 +29,7 @@ router.post("/thoughts", async (req, res) => {
     try {
         // Successful in saving thought
         const savedThought = await thought.save();
-        res.status(201).json(savedThought);
+        res.status(201).json(savedThought); // Status 201 is called "created", which made sense here
     } catch (error) {
         // Failed to save thought
         res.status(400).json({ message: "Thought could not be saved.", error: error.errors })
@@ -53,22 +53,24 @@ router.get("/thoughts/:_id", async (req, res) => {
 
 // Route to post/add likes to a thought
 router.post("/thoughts/:_id/like", async (req, res) => {
-    const thoughtId = req.params._id; // Adds the id from the url/param to a variable called thoughtId
-
-    // Tries saving the like
+    const thoughtId = req.params._id;
     try {
-        // Finds a thought from the database that matches the id from the url, and saves into a variable called thought
-        const thought = await Thought.findById(thoughtId);
-        // If there is a valid thoughtId, then hearts is increased by one and value is saved into database.
-        if (thoughtId) {
-            thought.hearts += 1;
-            await thought.save();
-            // This is for something visual in Postman during development
-            // res.status(200).json({ message: "Thought successfully liked!", thought: thought })
-        }
-        // Show an error-message if thought can't be liked
+        const updateHearts = await Thought.findByIdAndUpdate(thoughtId,
+            {
+                // The inc-operator increments a field by a specified value, in this case the hearts.
+                $inc:
+                {
+                    hearts: 1
+                }
+            },
+            { new: true }); // Used due to the Mongoose documentations, new should be set to true when updating
+        res.status(201).json(updateHearts); // Status 201 is called "created", which made sense here
     } catch (error) {
-        res.status(400).json({ error: "Couldn't save like, check that you enter a correct id" });
+        res.status(400).json({
+            success: false,
+            response: error,
+            message: "There was an error, like not sent"
+        });
     }
 });
 
