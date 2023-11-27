@@ -5,7 +5,7 @@ const thoughtSchema = new mongoose.Schema({
     message: {
         type: String,
         required: [true, 'Please write a happy thought'],
-        minlength: [1, 'The message must be at least 1 character long'],
+        minlength: [5, 'The message must be at least 5 characters long'],
         maxlength: [140, 'Oups, too long, the message cannot be more than 140 characters']
     },
     hearts: {
