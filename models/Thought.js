@@ -1,6 +1,4 @@
-import mongoose from "mongoose";
-
-const { Schema } = mongoose
+const { Schema } = mongoose;
 
 export const thoughtSchema = new Schema({
     message: {
@@ -8,17 +6,15 @@ export const thoughtSchema = new Schema({
         required: true,
         minlength: 5,
         maxlength: 140,
-        trim: true
+        trim: true,
     },
-
     hearts: {
         type: Number,
         default: 0,
-
     },
     createdAt: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     },
     complete: {
         type: Boolean,
@@ -26,5 +22,4 @@ export const thoughtSchema = new Schema({
     },
 });
 
-
-export const ThoughtModel = mongoose.model("Happy Thoughts", thoughtSchema);
+export const ThoughtModel = mongoose.model("Thought", thoughtSchema);
