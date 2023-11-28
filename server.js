@@ -4,8 +4,12 @@ import mongoose from "mongoose";
 import listEndpoints from 'express-list-endpoints';
 mongoose.set('strictQuery', false);
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+require('dotenv').config();
+
+
+const mongoUrl = process.env.MONGO_URI || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+
 mongoose.Promise = Promise;
 
 // Mongoose model for thoughts
@@ -47,6 +51,7 @@ app.get('/', (req, res) => {
   const endpoints = listEndpoints(app);
   res.json({ endpoints });
 });
+
 // Get all thoughts
 app.get('/thoughts', async (req, res) => {
   try {
