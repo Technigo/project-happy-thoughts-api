@@ -10,8 +10,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import listEndpoints from "express-list-endpoints";
 
-const mongoUrl =
-  process.env.MONGO_URL || "mongodb://localhost/ProjectHappyMongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/thoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -49,6 +48,7 @@ app.get("/", (req, res) => {
 // This endpoint should return a maximum of 20 thoughts, sorted by createdAt to show the most recent thoughts first.
 app.get("/thoughts", async (req, res) => {
   const thoughts = await Thought.find().limit(20);
+  //.sort({createdAt: "des"})
   if (thoughts) {
     res.json(thoughts);
   } else {
@@ -60,13 +60,24 @@ app.get("/thoughts", async (req, res) => {
 // This endpoint expects a JSON body with the thought message, like this: { "message": "Express is great!" }. If the input is valid (more on that below), the thought should be saved, and the response should include the saved thought object, including its _id.
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
-  const thought = new Note({ message });
+  const thought = new Thought({ message });
   await thought.save();
   res.json(thought);
 });
+//ADD ERROR HANDLING ABOVE! but it works right now!
 
 //----- POST/thoughts/:thoughtId/like ------//
 // This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its hearts property to add one heart.
+
+// app.get("/thoughts/:_id", async (req, res) => {
+//   const tId = req.params._id;
+//   const foundThought = await Thought.findById(tId);
+//   if (foundThought) {
+//     res.json({ body: foundThought });
+//   } else {
+//     res.status(404).json({ error: `No thought matching that id found` });
+//   }
+// });
 
 // Start the server
 app.listen(port, () => {
