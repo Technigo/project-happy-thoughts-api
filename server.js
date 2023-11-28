@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 
 // Connect to the thought routes
-app.use("/", thoughtRoutes);
+app.use(thoughtRoutes);
 
 // Start the server
 app.listen(port, () => {

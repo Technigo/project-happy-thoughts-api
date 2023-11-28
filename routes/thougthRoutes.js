@@ -1,7 +1,18 @@
 import express from "express";
+import listEndpoints from "express-list-endpoints";
 import { ThoughtModel } from "../models/Thought";
 
 const router = express.Router(); // Function to create a new router object to handle requests
+
+// This endpoint is for documentation of all the endpoints
+router.get("/", async (req, res) => {
+    try {
+        const endpoints = listEndpoints(router);
+        res.json(endpoints);
+    } catch (error) {
+        res.status(500).json({error: "Internal Server Error"});
+    }
+})
 
 // This endpoint should return a maximum of 20 thoughts, sorted by createdAt to show the most recent thoughts first.
 router.get("/thoughts", async (req, res) => {
