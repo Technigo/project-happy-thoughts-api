@@ -3,7 +3,6 @@ import express from "express"
 import cors from "cors"
 import mongoose from "mongoose"
 
-require('dotenv').config();
 
 // Sets up MondoDB connection using the provided URL or a default local URL
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thought"
