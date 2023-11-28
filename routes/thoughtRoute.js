@@ -1,5 +1,5 @@
 import express from "express";
-import ThoughtModel from "..models/Thoughts"
+import { ThoughtModel } from "../models/Thought";
 import listEndpoints from "express-list-endpoints";
 
 const router = express.Router();

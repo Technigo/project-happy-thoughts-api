@@ -1,7 +1,10 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import thoughtRoute from "thoughtRoute";
+import thoughtRoute from "./routes/thoughtRoute";
+import dotenv from "dotenv";
+
+dotenv.config();
 mongoose.set("strictQuery", false);
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
