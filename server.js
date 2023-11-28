@@ -85,8 +85,18 @@ app.get("/thoughts/:_id", async (req, res) => {
   } else {
     res.status(404).json({ error: `No thought matching that id found` });
   }
+});
 
-  //add the update of the hearts property here
+app.post("/thoughts/:_id/like", async (req, res) => {
+  const tId = req.params._id;
+  const addLike = await Thought.findByIdAndUpdate(
+    tId,
+    {
+      $inc: { hearts: 1 },
+    },
+    { new: true }
+  );
+  res.json(addLike);
 });
 
 // Start the server
