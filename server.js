@@ -36,16 +36,28 @@ app.use(express.json());
 
 // Route to list all endpoints
 app.get('/', (req, res) => {
+  try {
     // Use express-list-endpoints to generate a list of endpoints
   const endpoints = listEndpoints(app);
   res.json(endpoints);
+} catch (err) {
+  // Handle errors and respond with a 500 Internal Server Error
+  console.error('Error while retrieving endpoints:', err);
+  res.status(500).json({ message: 'Internal Server Error', error: err.errors });
+}
 });
 
 // Route to get thoughts
 app.get('/thoughts', async (req, res) => {
+  try {
     // Retrieve up to 20 thoughts, sorted by createdAt in descending order
 const thoughts = await Thought.find().sort({createdAt: 'desc'}).limit(20).exec();
 res.json(thoughts);
+} catch (err) {
+  // Handle errors and respond with a 500 Internal Server Error
+  console.error('Error while retrieving thoughts:', err);
+  res.status(500).json({ message: 'Internal Server Error' });
+}
 });
 
 // Route to post new thoughts
