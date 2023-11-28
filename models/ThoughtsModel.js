@@ -3,14 +3,14 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 export const ThoughtsSchema = new Schema({
-    message: { 
+    message: {
         type: String,
         required: true,
         minlength: 5,
         maxlength: 140
     },
     hearts: {
-        type: Number, 
+        type: Number,
         default: 0,
     },
     createdAt: {
