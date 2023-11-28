@@ -7,6 +7,7 @@ This is the backend API for a project called "Happy Thoughts," which allows user
 The project involves building a backend server using Node.js, Express, and MongoDB to handle the storage and retrieval of positive thoughts. The provided code includes routes for getting all thoughts, posting new thoughts, and liking existing thoughts.
 
 ## Approach
+
 Project Structure: The code is organized into different files for better maintainability. There's a models folder for defining the Mongoose model, a routes folder for handling different API endpoints, and the main server.js file to tie everything together.
 
 Database: MongoDB is used as the database, and Mongoose is employed as an ODM (Object Data Modeling) library to interact with the database.

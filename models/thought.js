@@ -6,7 +6,7 @@ const thoughtSchema = new mongoose.Schema({
         type: String,
         required: true,
         minlength: 5,
-        maxlength: 120,
+        maxlength: 140,
     },
     complete: {
         type: Boolean,
