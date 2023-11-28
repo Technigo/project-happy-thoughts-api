@@ -21,8 +21,16 @@ mongoose.Promise = Promise;
 //createdAt defaults to current time, not assignable when creating a new thought
 
 const Thought = mongoose.model("Thought", {
-  message: String,
-  hearts: Number,
+  message: {
+    type: String,
+    required: true,
+    minLength: 5,
+    maxlength: 140,
+  },
+  hearts: {
+    type: Number,
+    default: 0,
+  },
   createdAt: {
     type: Date,
     default: () => new Date(),
@@ -69,15 +77,17 @@ app.post("/thoughts", async (req, res) => {
 //----- POST/thoughts/:thoughtId/like ------//
 // This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its hearts property to add one heart.
 
-// app.get("/thoughts/:_id", async (req, res) => {
-//   const tId = req.params._id;
-//   const foundThought = await Thought.findById(tId);
-//   if (foundThought) {
-//     res.json({ body: foundThought });
-//   } else {
-//     res.status(404).json({ error: `No thought matching that id found` });
-//   }
-// });
+app.get("/thoughts/:_id", async (req, res) => {
+  const tId = req.params._id;
+  const foundThought = await Thought.findById(tId);
+  if (foundThought) {
+    res.json({ body: foundThought });
+  } else {
+    res.status(404).json({ error: `No thought matching that id found` });
+  }
+
+  //add the update of the hearts property here
+});
 
 // Start the server
 app.listen(port, () => {
