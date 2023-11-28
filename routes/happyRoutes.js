@@ -77,10 +77,11 @@ router.post("/thoughts/:thoughtId/like", async (req, res) => {
         .status(404)
         .json({ success: false, error: "Thought not found." });
     }
-    const addHeart = (thought.hearts += 1);
-    const updatedThought = await HappyThoughts.findByIdAndUpdate(thoughtId, {
-      hearts: addHeart,
-    });
+    thought.hearts + 1;
+    // const updatedThought = await HappyThoughts.findByIdAndUpdate(thoughtId, {
+    //   hearts: addHeart,
+    // });
+    const updatedThought = await thought.save();
     res.status(201).json(updatedThought);
   } catch (error) {
     res.status(400).json({ sucess: false, message: error });
