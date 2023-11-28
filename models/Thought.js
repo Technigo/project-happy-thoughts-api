@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 const { Schema } = mongoose;
 
 export const thoughtSchema = new Schema({
@@ -23,3 +25,4 @@ export const thoughtSchema = new Schema({
 });
 
 export const ThoughtModel = mongoose.model("Thought", thoughtSchema);
+
