@@ -3,6 +3,8 @@ import express from "express"
 import cors from "cors"
 import mongoose from "mongoose"
 
+require('dotenv').config();
+
 // Sets up MondoDB connection using the provided URL or a default local URL
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thought"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -66,25 +68,25 @@ app.post('/thoughts', async (req, res) => {
   }
 })
 
-// // Test-Route to "like" a thought
-// app.post('/thoughts/:thoughtId/like', async (req, res) => {
-//   const { thoughtId } = req.params
+// Route to "like" a thought
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
+  const { thoughtId } = req.params
 
-//   try {
-//     const thought = await Thought.findById(thoughtId)
+  try {
+    const thought = await Thought.findById(thoughtId)
 
-//     if (!thought) {
-//       return res.status(404).json({ message: 'Thought not found' })
-//     }
+    if (!thought) {
+      return res.status(404).json({ message: 'Thought not found' })
+    }
 
-//     thought.hearts += 1;
-//     const updatedThought = await thought.save()
-//     res.json(updatedThought)
-//   } catch (error) {
-//     res.status(400).json({ message: 'Could not add a thought', error: error })
-//   }
-// })
-
+    thought.hearts += 1;
+    const updatedThought = await thought.save()
+    res.json(updatedThought)
+  } catch (error) {
+    res.status(400).json({ message: 'Could not add a thought', error: error })
+  }
+})
+// ------- Routes end here -------- //
 
 // Starts the server
 app.listen(port, () => {
