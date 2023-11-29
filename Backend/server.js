@@ -17,6 +17,11 @@ const app = express();
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+app.use((req, res, next) => {
+  mongoose.connection.readyState === 1
+    ? next()
+    : res.status(503).json({ error: "Service Unavailable" });
+});
 app.use(taskRoutes)
 
 // Start defining your routes here
