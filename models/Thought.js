@@ -20,5 +20,5 @@ export const thoughtSchema = new Schema({
   },
 });
 
-// Edporting userSchema all around the project
+// Exporting thoughtSchema all around the project
 export const ThoughtModel = mongoose.model("thought", thoughtSchema);

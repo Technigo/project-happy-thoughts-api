@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 import thoughtRoutes from "./routes/thoughtRoutes";
+import { ThoughtModel } from "./models/Thought";
 
 mongoose.set("strictQuery", false);
 
@@ -17,6 +18,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next();
+  } else {
+    res.status(503).json({ error: "Service unavailable" });
+  }
+});
 
 app.use(thoughtRoutes);
 
@@ -25,6 +33,21 @@ const mongoUrl =
   "mongodb://127.0.0.1:27017/project-happy-thoughts-api";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
+
+const seedData = [];
+
+if (process.env.RESET_DB) {
+  const seedDatabase = async () => {
+    console.log("Resetting database!");
+
+    await ThoughtModel.deleteMany({});
+
+    for (const thought of seedData) {
+      await new ThoughtModel(thought).save();
+    }
+  };
+  seedDatabase();
+}
 
 // Start the server
 app.listen(port, () => {
