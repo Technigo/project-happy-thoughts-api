@@ -5,7 +5,8 @@ import thougtRoutes from "./routes/thoughtRoutes.js";
 import dotenv from "dotenv";
 dotenv.config();
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1/project-mongo";
+const mongoUrl =
+  process.env.MONGO_URL || "mongodb://127.0.0.1/project-happy-thoughts-API";
 mongoose
   .connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("MongoDB Connected")) // Check if connected to MongoDB
@@ -23,11 +24,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Start defining your routes here
-// app.get("/", (req, res) => {
-//   res.send("Hello Technigo!");
-// });
-
+// The routs are located in the routes folder to keep the server.js file clean
 app.use(thougtRoutes);
 
 // Start the server
