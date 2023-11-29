@@ -6,7 +6,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const mongoUrl =
-  process.env.MONGO_URL || "mongodb://127.0.0.1/project-happy-thoughts-API";
+  process.env.MONGO_URL ||
+  "mongodb://127.0.0.1:27017/project-happy-thoughts-API";
 mongoose
   .connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("MongoDB Connected")) // Check if connected to MongoDB

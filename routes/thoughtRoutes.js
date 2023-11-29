@@ -50,7 +50,7 @@ router.get("/thoughts", async (req, res) => {
 router.post("/thoughts", urlencodedParser, async (req, res) => {
   try {
     const newThought = new ThoughtModel(req.body);
-    newThought.heart = 0; // Prevents the user from changing the heart
+    newThought.hearts = 0; // Prevents the user from changing the heart
     newThought.createdAt = new Date(); // Prevents the user from changing the date
     await newThought.save();
     res.status(200).json(newThought);
@@ -65,7 +65,7 @@ router.post("/thoughts/:thoughtId/like", async (req, res) => {
     const { thoughtId } = req.params;
     const updatedThought = await ThoughtModel.findOneAndUpdate(
       { _id: thoughtId },
-      { $inc: { heart: 1 } },
+      { $inc: { hearts: 1 } },
       { new: true }
     );
     if (updatedThought) {
