@@ -96,7 +96,7 @@ router.post("/thoughts", async (req, res) => {
 
 // This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its "hearts" property to add one heart
 router.post("/thoughts/:thoughtId/like", async (req, res) => {
-    const {thoughtId} = req.params;
+    const { thoughtId } = req.params;
 
     try {
         // Use ThoughtModel to find the thought with the given ID, increment the number of hearts by 1 and return the updated document, otherwise findByIdAndUpdate will return the original document before any modifications.
