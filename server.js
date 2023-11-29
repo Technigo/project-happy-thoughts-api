@@ -24,7 +24,7 @@ const Thought = mongoose.model("Thought", {
   message: {
     type: String,
     required: true,
-    minLength: 5,
+    minlength: 5,
     maxlength: 140,
   },
   hearts: {
@@ -47,7 +47,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Start defining your routes here
+//-----Routes------//
+
 app.get("/", (req, res) => {
   res.send(listEndpoints(app));
 });
@@ -58,30 +59,32 @@ app.get("/thoughts", async (req, res) => {
   const thoughts = await Thought.find().limit(20);
   //.sort({createdAt: "des"})
   if (thoughts) {
-    res.json(thoughts);
+    res.status(201).json(thoughts);
   } else {
     res.status(404).json({ error: `No thoughts found` });
   }
 });
 
 //----- POST/thoughts ------//
-// This endpoint expects a JSON body with the thought message, like this: { "message": "Express is great!" }. If the input is valid (more on that below), the thought should be saved, and the response should include the saved thought object, including its _id.
+
 app.post("/thoughts", async (req, res) => {
-  const { message } = req.body;
-  const thought = new Thought({ message });
-  await thought.save();
-  res.json(thought);
+  try {
+    const { message } = req.body;
+    const thought = new Thought({ message });
+    await thought.save();
+    res.status(201).json(thought);
+  } catch (err) {
+    res.status(400).json({ message: "Could not be saved", errors: err.errors });
+  }
 });
-//ADD ERROR HANDLING ABOVE! but it works right now!
 
 //----- POST/thoughts/:thoughtId/like ------//
-// This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its hearts property to add one heart.
 
 app.get("/thoughts/:_id", async (req, res) => {
   const tId = req.params._id;
   const foundThought = await Thought.findById(tId);
   if (foundThought) {
-    res.json({ body: foundThought });
+    res.status(201).json({ body: foundThought });
   } else {
     res.status(404).json({ error: `No thought matching that id found` });
   }
@@ -96,7 +99,7 @@ app.post("/thoughts/:_id/like", async (req, res) => {
     },
     { new: true }
   );
-  res.json(addLike);
+  res.status(201).json(addLike);
 });
 
 // Start the server
