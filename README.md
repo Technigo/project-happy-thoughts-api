@@ -60,9 +60,15 @@ Implement comprehensive testing for the API using tools like Mocha and Chai.
 ### Logging
 Integrate logging to capture and analyze application events.
 
-## View It Live
+The API is live and can be accessed at [Project Happy Thoughts API](https://movie-app-406016.el.r.appspot.com).
 
-The API is live and can be accessed at [Project Happy Thoughts API](https://movie-app-406016.el.r.appspot.com/thoughts).
+- The endpoint "/" returns documentation of [Happy-Thoughts API Express List Endpoints](https://movie-app-406016.el.r.appspot.com/).
+- A minimum of one endpoint to return a **collection** of results (array of elements) is available at [Thoughts Collection](https://movie-app-406016.el.r.appspot.com/thoughts).
+- A minimum of one endpoint to return a **single** result (single element) is available at [Single Thought](https://movie-app-406016.el.r.appspot.com/thoughts/65678a2200447e5aa66c2b27).
+
+Feel free to explore the various endpoints and interact with the API using your preferred API client or tools like Postman.
+
+
 
 Feel free to explore the various endpoints and interact with the API using your preferred API client or tools like Postman.
 
