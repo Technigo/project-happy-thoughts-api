@@ -18,8 +18,8 @@ const Thought = mongoose.model("Thought", {
   },
 
   heart: {
-    type: Boolean,
-    default: false,
+    type: Number,
+    default: 0,
   },
 
   createdAt: {
@@ -44,6 +44,7 @@ app.get("/", (req, res) => {
   res.send(listEndpoints(app));
 });
 
+//routes for all thoughts
 app.get("/thoughts", async (req, res) => {
   const thoughts = await Thought.find()
     .sort({ creadtedAt: "desc" })
@@ -52,6 +53,7 @@ app.get("/thoughts", async (req, res) => {
   res.json(thoughts);
 });
 
+//route for posting thought
 app.post("/thoughts", async (req, res) => {
   //Retrieve the info sent by the user to uor API ebdpoint
   const { message, heart } = req.body;
@@ -67,6 +69,31 @@ app.post("/thoughts", async (req, res) => {
     res.status(400).json({
       message: "Could not save thought to the Database",
       error: err.errors,
+    });
+  }
+});
+
+//route for adding likes to a post
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+
+  try {
+    const thought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      { $inc: { heart: 1 } }, // Increment the hearts property by 1
+      { new: true } // Return the updated thought
+    );
+
+    if (!thought) {
+      // If the thought with the given ID is not found
+      return res.status(404).json({ message: "Thought not found" });
+    }
+
+    res.json(thought);
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
     });
   }
 });
