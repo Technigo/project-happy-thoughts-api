@@ -11,8 +11,8 @@ const ThoughtSchema = new Schema({
   message: {
     type: String,
     required: true,
-    minlength: 5,
-    maxlength: 140,
+    minLength: 5,
+    maxLength: 140,
   },
   //Should not be assignable when creating a new thought
   hearts: {
