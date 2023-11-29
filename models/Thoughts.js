@@ -18,9 +18,13 @@ export const thoughtsSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now(),
-        timestamps: true
+        
     }
 
+
+},
+{
+    timestamps: true
 
 });
 
