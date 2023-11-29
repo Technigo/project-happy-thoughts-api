@@ -4,7 +4,9 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 import thoughtRoutes from "./routes/thoughtRoutes";
+
 mongoose.set("strictQuery", false);
+
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
 // PORT=9000 npm start

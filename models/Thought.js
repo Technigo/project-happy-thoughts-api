@@ -7,8 +7,9 @@ export const thoughtSchema = new Schema({
     type: String,
     required: true,
     minlength: 5,
+    maxlength: 140,
   },
-  heart: {
+  hearts: {
     type: Number,
     defualt: 0,
   },
