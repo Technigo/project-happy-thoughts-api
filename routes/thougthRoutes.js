@@ -9,19 +9,67 @@ router.get("/", async (req, res) => {
     try {
         const endpoints = listEndpoints(router);
         res.json(endpoints);
-    } catch (error) {
-        res.status(500).json({error: "Internal Server Error"});
+    } catch (err) {
+        res.status(500).json({message: "Internal Server Error", error: err.errors});
     }
 })
 
-// This endpoint should return a maximum of 20 thoughts, sorted by createdAt to show the most recent thoughts first.
+// This endpoint should return a maximum of 20 thoughts, sorted by createdAt to show the most recent thoughts first - comment this out if implementing pagination otherwise pagination won't work
+// router.get("/thoughts", async (req, res) => {
+//     // Use the ThoughtModel to find all the thoughts in the database, return max 20 thoughts sorted by createdAt in descending order
+//     try {
+//         const thoughts = await ThoughtModel.find()
+//             .sort({createdAt: "desc"})
+//             .limit(20)
+//             .exec();
+//         res.json(thoughts);
+//     } catch (err) {
+//         res.status(400).json({message: "Cannot load thoughts", error: err.errors});
+//     }
+// })
+
+// Implementing pagination when getting all the thoughts - user can insert the page number and limit the number of thoughts per page as queries
 router.get("/thoughts", async (req, res) => {
-    // Use the ThoughtModel to find all the thoughts in the database, return max 20 thoughts sorted by createdAt in descending order
-    try {
-        const thoughts = await ThoughtModel.find().sort({createdAt: "desc"}).limit(20).exec();
-        res.json(thoughts);
-    } catch (err) {
-        res.status(400).json({message: "Cannot load thoughts", error: err.errors});
+    // Get the page and limit variables from url and turn them into numbers
+    const page = parseInt(req.query.page) || 1; //default to 1 if not provided
+    const limit = parseInt(req.query.limit) || 10; // default to 10 if not provided
+    
+    // Handle invalid page and limit
+    if (isNaN(page) || isNaN(limit)) {
+        return res.status(400).json({ message: "Invalid page or limit value" });
+    } else {
+        // Handle page value less than 1
+        const skip = (page - 1) * limit;
+        const skipValue = skip < 0 ? 0 : skip;
+
+        try {
+            const selectedThoughts = await ThoughtModel.find()
+                .limit(limit)
+                .skip(skipValue) // "skip" method receives a number as a parameter and allows the user to specify the number of documents to skip
+                .sort({createdAt: "desc"})
+                .exec();
+
+            // Get the number of thoughts in the database
+            const countOfThoughts = await ThoughtModel.countDocuments();
+
+            // Check if there are thoughts in the database before implementing pagination
+            if (countOfThoughts === 0) {
+                return res.status(404).json({ message: "No thoughts found" });
+            } else {
+                res.status(200).json({
+                    selectedThoughts,
+                    pagination: {
+                        totalPages: Math.ceil(countOfThoughts/limit),
+                        currentPage: page,
+                        totalItems: countOfThoughts,
+                        itemsPerPage: limit
+                    }
+                })
+            }
+        
+        } catch (err) {
+            res.status(500).json({message: "Internal Server Error", error: err.errors});
+        }
     }
 })
 
