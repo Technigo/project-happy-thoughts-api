@@ -32,6 +32,7 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
   res.json({ endpoints: listEndpoints(app) });
 });
+//access the other routes
 app.use(thoughtsRouter);
 
 // Start the server

@@ -19,4 +19,4 @@ export const ThoughtsSchema = new Schema({
     }
 });
 
-export const Thought = mongoose.model("Thought", ThoughtsSchema);
+export const ThoughtModel = mongoose.model("Thought", ThoughtsSchema);
