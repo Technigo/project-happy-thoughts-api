@@ -40,23 +40,19 @@ router.post("/thoughts", async (req,res)=>{
         const thought = await ThoughtModel.create({message:message, hearts:hearts} )
         res.json(thought)
     } catch(error) {
-        res.status(500).json({ message: `Posting message failed due to error: ${error.message}` })
+        res.status(400).json({ message: "Could not save message to database", error:error.errors})
     }
 })
 
 // Route for a heart/like increment on a single post by id
-router.post("/thoughts/:id/like", async (req,res)=>{
+router.post("/thoughts/:thoughtId/like", async (req,res)=>{
     // First, finding the thought by its id
     const {thoughtId} = req.params
     try{
-    const thought = await ThoughtModel.findById(req.params.id)
+    const thought = await ThoughtModel.findById(thoughtId)
     //failed request
     if (!thought){
         return res.status(404).json({message:`Thought with id ${thoughtId} not found.`})
-        // note: 
-        // To get this error:
-        // CastError: Cast to ObjectId failed for value "6567a0dd7241308b35330e" (type string) at path "_id" for model "happyThoughts".  
-        // reason: BSONTypeError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer i.e. change id string but respect id length
     }
     // success
     // incrementing the hearts by 1
@@ -66,7 +62,7 @@ router.post("/thoughts/:id/like", async (req,res)=>{
     res.json(updatedThought)
     } catch(err) {
         console.log(err)
-     res.status(500).json({message: `Error in incrementing number of likes due to error: ${err.message}`})
+     res.status(500).json({ message: "Error in incrementing number of likes", error: err.errors})
     }
 })
 
