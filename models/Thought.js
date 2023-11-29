@@ -10,10 +10,13 @@ export const thoughtSchema = new Schema({
   },
   heart: {
     type: Number,
-    required: true,
+    defualt: 0,
   },
 
-  timestamps: true,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 // Edporting userSchema all around the project

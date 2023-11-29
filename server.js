@@ -4,8 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 import thoughtRoutes from "./routes/thoughtRoutes";
-import { connectDB } from "./config/db";
-
+mongoose.set("strictQuery", false);
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
 // PORT=9000 npm start
@@ -19,13 +18,11 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(thoughtRoutes);
 
-// Connection to the database through Mongoose
-connectDB();
-// const mongoUrl =
-//   process.env.MONGO_URL ||
-//   "mongodb://127.0.0.1:27017/project-happy-thoughts-api";
-// mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
-// mongoose.Promise = Promise;
+const mongoUrl =
+  process.env.MONGO_URL ||
+  "mongodb://127.0.0.1:27017/project-happy-thoughts-api";
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.Promise = Promise;
 
 // Start the server
 app.listen(port, () => {
