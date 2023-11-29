@@ -6,6 +6,9 @@ import dotenv from "dotenv";
 import routesEndPoint from "./routes/routesEndPoint.js";
 
 
+// Load environment variables from .env file
+dotenv.config();
+
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts-api";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
