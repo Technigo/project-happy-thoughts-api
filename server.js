@@ -1,8 +1,11 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import thoughtsRoutes from "./routes/thoughtsRoutes"; // Import routes for handling song-related endpoints
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+// 127.0.0.1:27017    localhost
+const mongoUrl =
+  process.env.MONGO_URL || "mongodb://127.0.0.1:27017/happy-thoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -15,11 +18,25 @@ const app = express();
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
-
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+app.use(express.urlencoded({ extended: false })); // Parse URL-encoded data
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next();
+  } else {
+    res.status(503).json({
+      // Returns a "503 Service Unavailable error" to the client, indicating that the service cannot currently handle the request due to an issue with the database connection.
+      error: "Service unavailable",
+    });
+  }
 });
+
+// Imported routes in the app
+app.use(thoughtsRoutes); // Mounting song-related routes in the Express app
+
+// // Start defining your routes here
+// app.get("/", (req, res) => {
+//   res.send("Hello Technigo!");
+// });
 
 // Start the server
 app.listen(port, () => {
