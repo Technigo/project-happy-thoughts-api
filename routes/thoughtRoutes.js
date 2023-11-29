@@ -3,17 +3,15 @@ import listEndpoints from "express-list-endpoints";
 import { ThoughtModel } from "../models/ThoughtModel";
 
 const router = express.Router();
-//const endpoints = listEndpoints(router);
-const bodyParser = require("body-parser");
+//const bodyParser = require("body-parser");
 
-//const jsonParser = bodyParser.json();
-const urlencodedParser = bodyParser.urlencoded({ extended: false });
+//const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 // List of all endpoints
 router.get("/", async (req, res) => {
   try {
     // Perform asynchronous operation (e.g., fetching data from the ThoughtModel)
-    const thoughts = await ThoughtModel.find();
+    //const thoughts = await ThoughtModel.find();
 
     // Construct the response with the fetched data
     res.status(200).send({
@@ -47,7 +45,7 @@ router.get("/thoughts", async (req, res) => {
   }
 });
 
-router.post("/thoughts", urlencodedParser, async (req, res) => {
+router.post("/thoughts", async (req, res) => {
   try {
     const newThought = new ThoughtModel(req.body);
     newThought.hearts = 0; // Prevents the user from changing the heart
