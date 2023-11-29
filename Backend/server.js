@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import dotenv from "dotenv"
+import "dotenv/config";
+import taskRoutes from "./routes/taskRoutes"
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -16,6 +17,7 @@ const app = express();
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+app.use(taskRoutes)
 
 // Start defining your routes here
 app.get("/", (req, res) => {
