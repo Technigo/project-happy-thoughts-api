@@ -61,7 +61,8 @@ Implement comprehensive testing for the API using tools like Mocha and Chai.
 Integrate logging to capture and analyze application events.
 
 ## View It Live
-The API is live and can be accessed at (Project Happy Thoughts API)[https://movie-app-406016.el.r.appspot.com/thoughts].
 
+The API is live and can be accessed at [Project Happy Thoughts API](https://movie-app-406016.el.r.appspot.com/thoughts).
 
 Feel free to explore the various endpoints and interact with the API using your preferred API client or tools like Postman.
+
