@@ -56,8 +56,7 @@ app.get("/", (req, res) => {
 //----- GET/thoughts ------//
 // This endpoint should return a maximum of 20 thoughts, sorted by createdAt to show the most recent thoughts first.
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find().limit(20);
-  //.sort({createdAt: "des"})
+  const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20);
   if (thoughts) {
     res.status(201).json(thoughts);
   } else {
