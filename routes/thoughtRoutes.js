@@ -3,10 +3,10 @@ import listEndpoints from "express-list-endpoints";
 import { ThoughtModel } from "../models/ThoughtModel";
 
 const router = express.Router();
-const endpoints = listEndpoints(router);
+//const endpoints = listEndpoints(router);
 const bodyParser = require("body-parser");
 
-const jsonParser = bodyParser.json();
+//const jsonParser = bodyParser.json();
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 // List of all endpoints
@@ -37,7 +37,10 @@ router.get("/", async (req, res) => {
 // List of all thoughts - this should be limited to show only the 20 most recent thoughts
 router.get("/thoughts", async (req, res) => {
   try {
-    const result = await ThoughtModel.find();
+    const result = await ThoughtModel.find()
+      .sort({ createdAt: "desc" })
+      .limit(20);
+
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json({ message: "Bad request", error });
@@ -46,38 +49,33 @@ router.get("/thoughts", async (req, res) => {
 
 router.post("/thoughts", urlencodedParser, async (req, res) => {
   try {
-    const newThought = await new ThoughtModel(req.body).save();
+    const newThought = new ThoughtModel(req.body);
+    newThought.heart = 0; // Prevents the user from changing the heart
+    newThought.createdAt = new Date(); // Prevents the user from changing the date
+    await newThought.save();
     res.status(200).json(newThought);
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: "Bad request", error });
   }
 });
 
-//const { ThoughtModel } = require("ThoughtModel");
-
-// router.post("/thoughts", async (req, res) => {
-//   const { message } = req.body;
-
-//   // Validate user input against the model schema
-//   try {
-//     const newThought = new ThoughtModel({ message });
-//     await newThought.validate();
-
-//     // Save the thought if validation succeeds
-//     const savedThought = await newThought.save();
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Thought successfully created",
-//       response: savedThought,
-//     });
-//   } catch (error) {
-//     res.status(400).json({
-//       success: false,
-//       message: "Bad request",
-//       error: error.message,
-//     });
-//   }
-// });
+router.post("/thoughts/:thoughtId/like", async (req, res) => {
+  try {
+    const { thoughtId } = req.params;
+    const updatedThought = await ThoughtModel.findOneAndUpdate(
+      { _id: thoughtId },
+      { $inc: { heart: 1 } },
+      { new: true }
+    );
+    if (updatedThought) {
+      res.status(200).json(updatedThought);
+    } else {
+      res.status(404).json({ message: "Not found" });
+    }
+  } catch (error) {
+    res.status(400).json({ message: "Bad request", error });
+  }
+});
 
 export default router;

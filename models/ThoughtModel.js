@@ -16,6 +16,7 @@ export const ThoughtSchema = new Schema({
   createdAt: {
     type: Date,
     default: Date.now,
+    immutable: true, // Prevents the user from changing the date
   },
 });
 
