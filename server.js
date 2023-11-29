@@ -1,8 +1,10 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import thoughtRoutes from "./routes/thoughtRoutes"
+mongoose.set("strictQuery", false);
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -11,15 +13,14 @@ mongoose.Promise = Promise;
 // PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
+app.use(express.urlencoded({ extended: false })); // Parse URL-encoded data
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
 
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
-});
+// Using the routes to handle API requests
+app.use(thoughtRoutes);
 
 // Start the server
 app.listen(port, () => {
