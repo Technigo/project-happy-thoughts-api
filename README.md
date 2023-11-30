@@ -1,13 +1,11 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+I built an API which includes a Thought Mongoose model which has properties for the message string, a heart property for tracking the number of likes, and a createdAt property to store when the thought was added. This API is used in this front-end project: https://hang-nguyen-happy-thoughts-project.netlify.app
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I added three endpoints for returning all the thoughts, posting a new thought and updating the number of likes for a post. I also tried out pagination, which means that the user can put in queries on page number and limit of the number of thoughts per page, and get only the thoughts on that page returned to them. 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://hang-happy-thoughts-api.onrender.com/

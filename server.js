@@ -1,8 +1,12 @@
 import express from "express";
 import cors from "cors";
+import bodyParser from "body-parser";
 import mongoose from "mongoose";
+import thoughtRoutes from "./routes/thougthRoutes";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+mongoose.set('strictQuery', false);
+
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts-api";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -15,11 +19,10 @@ const app = express();
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.json());
 
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
-});
+// Connect to the thought routes
+app.use(thoughtRoutes);
 
 // Start the server
 app.listen(port, () => {
