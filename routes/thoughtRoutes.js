@@ -35,9 +35,9 @@ router.get("/thoughts", async (req,res)=>{
 // Route for one happy thought post request
 router.post("/thoughts", async (req,res)=>{
     try{
-        const {message, hearts} =req.body    
+        const {message} =req.body    
         console.log(message)
-        const thought = await ThoughtModel.create({message:message, hearts:hearts} )
+        const thought = await ThoughtModel.create({message:message} )
         res.json(thought)
     } catch(error) {
         res.status(400).json({ message: "Could not save message to database", error:error.errors})
