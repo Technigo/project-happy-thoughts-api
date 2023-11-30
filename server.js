@@ -34,13 +34,13 @@ const mongoUrl =
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-const seedData = [];
+// const seedData = [];
 
 // if (process.env.RESET_DB) {
 //   const seedDatabase = async () => {
 //     console.log("Resetting database!");
 
-//     await ThoughtModel.deleteMany({});
+//     await ThoughtModel.insertMany({});
 
 //     for (const thought of seedData) {
 //       await new ThoughtModel(thought).save();
