@@ -2,22 +2,22 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import "dotenv/config";
+import listEndpoints from "express-list-endpoints";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
-
-// In order to replace the API we built, you're going to need to build a `Thought` Mongoose model which has properties for the `message` string, a `heart` property for tracking the number of likes, and a `createdAt` property to store when the thought was added.
 
 const Thought = mongoose.model("Thought", {
   message: {
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 500,
+    maxlength: 300,
   },
-  heart: {
+  hearts: {
     type: Number,
+    default: 0,
   },
   createdAt: {
     type: Date,
@@ -37,7 +37,7 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Emmy!");
+  res.send(listEndpoints);
 });
 
 app.get("/thoughts", async (req, res) => {
@@ -53,19 +53,36 @@ app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
 
   //Use the mongoose model to create the database entry
-  const thought = new Thought({ message, heart });
+  const thought = new Thought({ message });
 
   try {
     //Success
     const savedThought = await thought.save();
     res.status(201).json(savedThought);
   } catch (err) {
-    res
-      .status(400)
-      .json({
-        message: "Oh no, could not add the thought to the Database",
-        error: err.errors,
-      });
+    res.status(400).json({
+      message: "Oh no, could not add the thought to the Database",
+      error: err.errors,
+    });
+  }
+});
+
+// POST endpoint for liking a thought
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  try {
+    const { thoughtId } = req.params;
+    const thought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      { $inc: { hearts: 1 } },
+      { new: true }
+    );
+    if (!thought) {
+      res.status(404).json({ message: "Thought could not be found" });
+    } else {
+      res.status(200).json(thought);
+    }
+  } catch (err) {
+    res.status(400).json({ message: "Invalid request", error: err.errors });
   }
 });
 
