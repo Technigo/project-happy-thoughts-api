@@ -37,7 +37,7 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send(listEndpoints);
+  res.json({ endpoints: listEndpoints(app) });
 });
 
 app.get("/thoughts", async (req, res) => {
