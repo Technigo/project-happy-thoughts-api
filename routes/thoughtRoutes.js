@@ -3,16 +3,10 @@ import listEndpoints from "express-list-endpoints";
 import { ThoughtModel } from "../models/ThoughtModel";
 
 const router = express.Router();
-//const bodyParser = require("body-parser");
-
-//const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 // List of all endpoints
 router.get("/", async (req, res) => {
   try {
-    // Perform asynchronous operation (e.g., fetching data from the ThoughtModel)
-    //const thoughts = await ThoughtModel.find();
-
     // Construct the response with the fetched data
     res.status(200).send({
       success: true,
@@ -58,7 +52,7 @@ router.post("/thoughts", async (req, res) => {
   }
 });
 
-router.post("/thoughts/:thoughtId/like", async (req, res) => {
+router.put("/thoughts/:thoughtId/like", async (req, res) => {
   try {
     const { thoughtId } = req.params;
     const updatedThought = await ThoughtModel.findOneAndUpdate(
