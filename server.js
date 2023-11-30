@@ -10,12 +10,6 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
 
-// Seed data
-const seedData = [
-  { message: "Enjoying the sunshine!", hearts: 5 },
-  { message: "Loved my morning coffee.", hearts: 3 },
-  // ... [add more seed thoughts as needed]
-];
 
 //Seeding function
 /*async function seedDatabase() {

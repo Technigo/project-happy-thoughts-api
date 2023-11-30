@@ -1,11 +1,12 @@
 import express from "express";
 import Thought from "../models/Thought";
+import listEndpoints from 'express-list-endpoints';
 
 const router = express.Router();
 
 // Route for the root
 router.get("/", (req, res) => {
-    res.send("Hello Technigo!");
+  res.json(listEndpoints(app));
   });
   
   // Route for retrieving thoughts
