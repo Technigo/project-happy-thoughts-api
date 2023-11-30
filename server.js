@@ -3,7 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import thoughtRoutes from "./routes/thoughtRoutes.js";
-import { ThoughtModel } from "./models/Thought";
+
 
 
 dotenv.config();
@@ -31,7 +31,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false})) // Parse URL-encoded data
 
 // Route definitions
-app.use("/", thoughtRoutes);
+app.use(thoughtRoutes);
 
 // Error handlign for server state
 app.use((req, res, next) => {
