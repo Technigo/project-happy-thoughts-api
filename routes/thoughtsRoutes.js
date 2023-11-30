@@ -3,22 +3,19 @@ import express from "express";
 import listEndpoints from "express-list-endpoints";
 import { ThoughtModel } from "../models/ThoughtModel";
 
-// const express = require("express");
-// const listEndpoints = require("express-list-endpoints");
-// const { ThoughtModel } = require("../models/ThoughtModel");
-
 // Creating an instance of the Express router
 const router = express.Router();
 
-// ------- THE ROUTES -------
+// ------- THE ROUTES ------- //
 
-// ------- All endpoints -------
+// ------- LIST OF ALL ENDPOINTS ------- //
 // Show all endpoints available in a JSON format
 router.get("/", (req, res) => {
   const endpoints = listEndpoints(router);
   res.json(endpoints);
 });
 
+// ------- LIST RECENT THOUGHTS ------- //
 // GET 20 of the most recent posted thoughts
 router.get("/thoughts", async (req, res) => {
   const thoughts = await ThoughtModel.find()
@@ -28,7 +25,8 @@ router.get("/thoughts", async (req, res) => {
   res.json(thoughts);
 });
 
-// POST a thought
+// ------- POST THOUGHT ------- //
+// POST a new thought
 router.post("/thoughts", async (req, res) => {
   const { message } = req.body;
   const thought = new ThoughtModel({ message });
@@ -45,6 +43,7 @@ router.post("/thoughts", async (req, res) => {
   }
 });
 
+// ------- LIKE FUNCTION ------- //
 // POST a like for a certain posted thought by updating the 'hearts' property
 router.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;

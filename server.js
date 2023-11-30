@@ -1,11 +1,12 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv"; // Import dotenv for environment variables
 import mongoose from "mongoose";
 import thoughtsRoutes from "./routes/thoughtsRoutes"; // Import routes for handling song-related endpoints
 
-// 127.0.0.1:27017    localhost
-const mongoUrl =
-  process.env.MONGO_URL || "mongodb://127.0.0.1:27017/happy-thoughts";
+dotenv.config(); //Load environment variables from the .env file
+
+const mongoUrl = process.env.MONGO_URL;
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -32,11 +33,6 @@ app.use((req, res, next) => {
 
 // Imported routes in the app
 app.use(thoughtsRoutes); // Mounting song-related routes in the Express app
-
-// // Start defining your routes here
-// app.get("/", (req, res) => {
-//   res.send("Hello Technigo!");
-// });
 
 // Start the server
 app.listen(port, () => {
