@@ -12,12 +12,10 @@ export const ThoughtSchema = new Schema({
   hearts: {
     type: Number,
     default: 0,
-    //immutable: true, // Prevents the user from changing the hearts
   },
   createdAt: {
     type: Date,
     default: Date.now,
-    //immutable: true, // Prevents the user from changing the date
   },
 });
 
