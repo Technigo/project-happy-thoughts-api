@@ -2,9 +2,11 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import thoughtRoutes from "./routes/thoughtRoutes"
+import dotenv from "dotenv";
+dotenv.config();// Load environment variables from the .env file
 mongoose.set("strictQuery", false);
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts";
+const mongoUrl = process.env.MONGO_URL;
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
