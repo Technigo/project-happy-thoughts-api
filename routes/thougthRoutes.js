@@ -66,7 +66,6 @@ router.get("/thoughts", async (req, res) => {
                     }
                 })
             }
-        
         } catch (err) {
             res.status(500).json({message: "Internal Server Error", error: err.errors});
         }
@@ -94,8 +93,8 @@ router.post("/thoughts", async (req, res) => {
     }
 })
 
-// This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its "hearts" property to add one heart
-router.post("/thoughts/:thoughtId/like", async (req, res) => {
+// This endpoint works with both POST and PUT requests. It doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its "hearts" property to add one heart.
+router.put("/thoughts/:thoughtId/like", async (req, res) => {
     const { thoughtId } = req.params;
 
     try {
