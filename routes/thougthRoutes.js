@@ -93,7 +93,8 @@ router.post("/thoughts", async (req, res) => {
     }
 })
 
-// This endpoint works with both POST and PUT requests. It doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its "hearts" property to add one heart.
+// This endpoint works with both POST and PUT requests, but PUT request makes more sense to me as it is to update the hearts, not to create a new one. 
+// This endpoint doesn't require a JSON body. Given a valid thought id in the URL, the API should find that thought, and update its "hearts" property to add one heart.
 router.put("/thoughts/:thoughtId/like", async (req, res) => {
     const { thoughtId } = req.params;
 
