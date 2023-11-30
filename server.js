@@ -36,18 +36,18 @@ mongoose.Promise = Promise;
 
 const seedData = [];
 
-if (process.env.RESET_DB) {
-  const seedDatabase = async () => {
-    console.log("Resetting database!");
+// if (process.env.RESET_DB) {
+//   const seedDatabase = async () => {
+//     console.log("Resetting database!");
 
-    await ThoughtModel.deleteMany({});
+//     await ThoughtModel.deleteMany({});
 
-    for (const thought of seedData) {
-      await new ThoughtModel(thought).save();
-    }
-  };
-  seedDatabase();
-}
+//     for (const thought of seedData) {
+//       await new ThoughtModel(thought).save();
+//     }
+//   };
+//   seedDatabase();
+// }
 
 // Start the server
 app.listen(port, () => {
