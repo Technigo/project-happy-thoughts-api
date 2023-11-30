@@ -20,6 +20,7 @@ app.use(express.json());
 const Thought = require('./models/thought'); // correct the path here
 
 
+
 app.get('/', (req, res) => {
   res.send('Welcome to the Happy Thoughts API- spreading happiness over the world');
 });
