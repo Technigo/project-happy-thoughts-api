@@ -1,6 +1,6 @@
 import express from "express";
 import listEndpoints from "express-list-endpoints";
-import { ThoughtModel } from "../models/thoughtModel";
+import { ThoughtModel } from "../models/Thought";
 const router = express.Router();
 
 // Route to get available endpoints

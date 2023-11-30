@@ -3,7 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import "dotenv/config";
 import thoughtRoutes from "./routes/thoughtRoutes";
-import { ThoughtModel } from "./models/thoughtModel";
+import { ThoughtModel } from "./models/Thought";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
