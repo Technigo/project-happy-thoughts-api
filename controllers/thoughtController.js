@@ -36,7 +36,7 @@ const createThought = async (req, res) => {
             message: req.body.message.trim(),
         });
         // res.send('This is a POST request response');
-        return res.status(200).json(thought);
+        return res.status(201).json(thought);
 
     } catch (error) {
         // Check if the error is of type 'ValidationError'
@@ -58,23 +58,27 @@ const createThought = async (req, res) => {
 
 const createLike = async (req, res) => {
     try {
-        const thought = await Thought.findById(req.params.thoughtId)
+       
+        // The $inc operator has the following form: { $inc: { <field1>: <amount1>, <field2>: <amount2>, ... } }
+        const thought = await Thought.findByIdAndUpdate(
+            req.params.thoughtId,
+            { $inc: { hearts: 1 } }, // Increment the 'hearts' property by 1
+            { new: true } // Return the updated document
+        );
+
         // Check if the thought with the specified ID exists
         if (!thought) {
             return res.status(400).json({ error: 'Thought was not found' });
         }
 
-        // Update the 'hearts' property and save the thought
-        thought.hearts += 1;
-        const updatedThought = await thought.save();
-
-        return res.status(200).json(updatedThought);
+        return res.status(201).json(thought);
 
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
-}
+};
+
 
 module.exports = {
     getThoughts,
