@@ -1,25 +1,33 @@
-import express from "express";
-import cors from "cors";
-import mongoose from "mongoose";
+const express = require('express'); // Web application framework for Node.js
+const expressListEndpoints = require('express-list-endpoints');
+const dotenv = require('dotenv').config(); // Load environment variables from a .env file
+const cors = require('cors');
+const mongoose = require('mongoose'); // MongoDB object modeling tool for Node.js
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+// MongoDB connection setup
+const mongoUrl = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/happy_thoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
-const port = process.env.PORT || 8080;
+// Disable strict query mode to allow MongoDB queries with fields not defined
+// in the Mongoose schema.
+mongoose.set('strictQuery', false);
+
+const port = process.env.PORT || 8080; // Default port is 8080, can be overridden with PORT env variable
 const app = express();
 
-// Add middlewares to enable cors and json body parsing
-app.use(cors());
-app.use(express.json());
+// Middlewares
+app.use(cors()); // Enable Cross-Origin Resource Sharing
+app.use(express.json()); // Parse JSON request bodies
+app.use(express.urlencoded({ extended: false })); // Parse URL-encoded request bodies
 
-// Start defining your routes here
+// Endpoint for listing all routes
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send(expressListEndpoints(app));
 });
+
+// Routes
+app.use('/', require('./routes/thoughtRoutes'));
 
 // Start the server
 app.listen(port, () => {
