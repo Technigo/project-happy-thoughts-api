@@ -54,15 +54,12 @@ router.post("/thoughts/:thoughtId/like", async (req, res) => {
       { new: true }
     );
     if (!thought) {
-      return res.status(404).json({ message: "Thought not found" });
+      res.status(404).json({ message: "Thought not found" });
+    } else {
+      res.status(200).json(thought);
     }
-    thought.hearts = (thought.hearts || 0) + 1;
-
-    const updatedThought = await thought.save();
-
-    res.status(200).json(updatedThought);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  } catch (err) {
+    res.status(400).json({ message: "Invalid request", error: err.errors });
   }
 });
 
