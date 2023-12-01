@@ -1,12 +1,10 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This project uses Express and MongoDB to build an API which includes both GET request endpoints to return data and POST endpoints to create data. A little new for me was working more with validation for the data. 
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I had a very smooth running week. This project felt very straight forward, with the model, and simple routes, and no seeding to the database, since that will build itself during use. Even the deploy was an ease. It was fun to be able to go back and update an old project with some backend!
 
 ## View it live
 
