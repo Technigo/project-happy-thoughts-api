@@ -39,7 +39,7 @@ app.post('/thoughts', async (req, res) => {
     }
   });
 
-// PUT endpoint for liking a thought, Changed from post to put since Diego did that on the Q and A.
+// POST endpoint for liking a thought.
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
     try {
       const { thoughtId } = req.params;
