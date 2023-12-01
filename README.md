@@ -76,7 +76,7 @@ Not found:
 
 ## View it live
 
-Backend deploy, Render: https://happy-thoughts-api-k50a.onrender.com/
+Backend deploy, Render: https://happy-thoughts-api-k50a.onrender.com/  
 Frontend deploy, Netlify: https://project-happy-thoughts-susanne.netlify.app/
 
 ## 🔗 Links
