@@ -24,11 +24,6 @@ export const thoughtSchema = new Schema({
         type: Date, // Data type of the field is Date
         default: Date.now, // Default value is the current date and time
     },
-    // Define the "complete" field with specific properties
-    complete: {
-        type: Boolean, // Data type of the field is Boolean
-        default: false, // Default value is false if not provided
-    },
 });
 
 // Create a Mongoose model named "Thought" based on the defined schema

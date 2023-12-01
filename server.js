@@ -11,7 +11,7 @@ dotenv.config();
 mongoose.set("strictQuery", false);
 
 // Define the MongoDB connection URL, default to a local database
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URI || "mongodb://localhost/project-mongo";
 
 // Connect to the MongoDB database
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
