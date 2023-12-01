@@ -5,32 +5,18 @@ import Thought from "../models/Thought";
 
   // Route for the root
   const listEndpoints = require("express-list-endpoints");
-// Create an instance of the Express router
-// The router method in this code is like setting up a map or a blueprint for handling different kinds of requests in a web application. It helps organize and define how the application should respond when someone visits different URLs. Think of it as creating a list of instructions for the app to follow when it receives specific requests, like "show me all tasks" or "register a new user." This makes the code neat and helps the app know what to do when someone interacts with it.
+
+
+// Express router
 const setUpRoutes = (app) => {
   const router = express.Router();
 
   // Start defining your routes here
  app.get("/", (req, res) => {
-  res.send(listEndpoints(app));
-   
+  res.send(listEndpoints(app)); 
  });
 
-  // Modification: Now using the passed app object for listEndpoints
- /* app.get("/", (req, res) => {
-     res.json(listEndpoints(router));
-      //res.send("It works!")
-  });*/
-
-  /*app.get("/", async (req, res) => {
-    try {
-      const endpoints = listEndpoints(router);
-      res.json(endpoints);
-    } catch (error) {
-      res.status(500).json({ error: "Internal  Error" });
-    }
-  });*/
-  
+ 
   // Route for retrieving thoughts
 app.get('/thoughts', async (req, res) => {
     try {
@@ -53,8 +39,8 @@ app.post('/thoughts', async (req, res) => {
     }
   });
 
-// POST endpoint for liking a thought
-app.post('/thoughts/:thoughtId/like', async (req, res) => {
+// PUT endpoint for liking a thought, Changed from post to put since Diego did that on the Q and A.
+app.put('/thoughts/:thoughtId/like', async (req, res) => {
     try {
       const { thoughtId } = req.params;
       const thought = await Thought.findByIdAndUpdate(
@@ -71,9 +57,6 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
       res.status(400).json({ message: 'Invalid request', error: err.errors });
     }
   });
-
-  //export default Router;
-  //app.use("/", router);
 };
 
 export default setUpRoutes;

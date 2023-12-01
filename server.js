@@ -3,11 +3,10 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import setUpRoutes from "./Routes/Routes";
-import Routes from "./Routes/Routes";
 import Thought from "./models/Thought";
 
 
-const mongoUrl = process.env.HAPPY_THOUGHTS_URL || "mongodb://localhost:27017/HappyThoughts"; //"mongodb://localhost/defaultdb"; // used before deploy "mongodb://localhost:27017/HappyThoughts"
+const mongoUrl = process.env.HAPPY_THOUGHTS_URL || "mongodb://localhost:27017/HappyThoughts"; //"mongodb://localhost/defaultdb"; 
 console.log(`Connecting to MongoDB at ${mongoUrl}`); 
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
