@@ -1,16 +1,38 @@
 import express from "express";
 import Thought from "../models/Thought";
-import listEndpoints from 'express-list-endpoints';
 
-const router = express.Router();
 
-// Route for the root
-router.get("/", (req, res) => {
-  res.json(listEndpoints(app));
-  });
+
+  // Route for the root
+  const listEndpoints = require("express-list-endpoints");
+// Create an instance of the Express router
+// The router method in this code is like setting up a map or a blueprint for handling different kinds of requests in a web application. It helps organize and define how the application should respond when someone visits different URLs. Think of it as creating a list of instructions for the app to follow when it receives specific requests, like "show me all tasks" or "register a new user." This makes the code neat and helps the app know what to do when someone interacts with it.
+const setUpRoutes = (app) => {
+  const router = express.Router();
+
+  // Start defining your routes here
+ app.get("/", (req, res) => {
+  res.send(listEndpoints(app));
+   
+ });
+
+  // Modification: Now using the passed app object for listEndpoints
+ /* app.get("/", (req, res) => {
+     res.json(listEndpoints(router));
+      //res.send("It works!")
+  });*/
+
+  /*app.get("/", async (req, res) => {
+    try {
+      const endpoints = listEndpoints(router);
+      res.json(endpoints);
+    } catch (error) {
+      res.status(500).json({ error: "Internal  Error" });
+    }
+  });*/
   
   // Route for retrieving thoughts
-router.get('/thoughts', async (req, res) => {
+app.get('/thoughts', async (req, res) => {
     try {
       const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20);
       res.status(200).json(thoughts);
@@ -20,7 +42,7 @@ router.get('/thoughts', async (req, res) => {
   });
 
 // POST endpoint for creating a new thought
-router.post('/thoughts', async (req, res) => {
+app.post('/thoughts', async (req, res) => {
     try {
       const { message } = req.body;
       const newThought = new Thought({ message });
@@ -32,7 +54,7 @@ router.post('/thoughts', async (req, res) => {
   });
 
 // POST endpoint for liking a thought
-router.post('/thoughts/:thoughtId/like', async (req, res) => {
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
     try {
       const { thoughtId } = req.params;
       const thought = await Thought.findByIdAndUpdate(
@@ -50,4 +72,8 @@ router.post('/thoughts/:thoughtId/like', async (req, res) => {
     }
   });
 
-export default router;
+  //export default Router;
+  //app.use("/", router);
+};
+
+export default setUpRoutes;
