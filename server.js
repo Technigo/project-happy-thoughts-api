@@ -17,7 +17,6 @@ const Thought = mongoose.model("Thought", {
   hearts: {
     type: Number,
     default: 0,
-    set: () => 0, // Ensure hearts are not assignable when creating a new thought
   },
   createdAt: {
     type: Date,
