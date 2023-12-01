@@ -18,8 +18,7 @@ router.get("/thoughts", async (req, res) => {
   try {
     const thoughts = await ThoughtModel.find()
       .sort({ createdAt: -1 })
-      .limit(20)
-      .exec();
+      .limit(20);
 
     res.status(200).json(thoughts);
   } catch (error) {
