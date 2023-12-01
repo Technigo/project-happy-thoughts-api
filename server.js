@@ -35,8 +35,8 @@ mongoose.Promise = Promise;
 // wrap this part in an inviroment variabel
 
 // const seedData = [
-//   { message: "First thought", heart: 0 },
-//   { message: "Second thought", heart: 0 },
+//   { message: "gooo", heart: 0 },
+//   { message: "do do do", heart: 0 },
 // ];
 // //Seeding function
 // async function seedDatabase() {
@@ -52,6 +52,7 @@ mongoose.Promise = Promise;
 //     console.error("Error seeding database:", error);
 //   }
 // }
+// seedDatabase();
 
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
@@ -63,6 +64,7 @@ const app = express();
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+//app.use(Routes);
 
 setUpRoutes(app); // Attach routes to the app
 
