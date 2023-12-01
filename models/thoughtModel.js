@@ -5,18 +5,16 @@ const mongoose = require('mongoose');
 const thoughtSchema = mongoose.Schema({
     // Define a 'message' field in the schema
     message: {
-        type: String, 
+        type: String,
         required: true,
         minlength: 5,
         maxlength: 140
-    }
-}, {
+    },
     hearts: {
         type: Number,
         default: 0,
         immutable: true // Make the field read-only
-    }
-}, {
+    },
     createdAt: {
         type: Date,
         default: Date.now,
