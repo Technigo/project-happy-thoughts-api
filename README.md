@@ -1,13 +1,15 @@
-# Project Happy Thoughts API
+# Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+By using Express and MongoDB I built an API for posting and likeing comments on a small "twitter-like" front-end project I recently built.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+This was done by building a Mongoose model for the the thoughts (the posts) with the properties for the message string, a heat property for tracking the number of likes, and a createdAt property to store when a thought was added. I created three endpoints for returning all thoughts, posting a new thought and updating the number of likes for a post.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+The deployed project:
+https://happy-thoughts-emmy-dieden.onrender.com
+
+The frontend project where the API is used:
+https://happy-thoughts-emmy-dieden.netlify.app/
