@@ -25,7 +25,7 @@ router.post("/thoughts", async (req, res) => {
 
 // Route to handle getting a specific thought by its ID
 router.get('/thoughts/:thoughtId', async (req, res) => {
-    const thoughtId = req.params;
+    const { thoughtId } = req.params;
   
     try {
       const thought = await ThoughtModel.findById(thoughtId);
@@ -39,8 +39,7 @@ router.get('/thoughts/:thoughtId', async (req, res) => {
   });
 
 // Route to handle liking a thought by its ID
-//For updating the heart/like I choosed to use PUT instead of POST to increment the hearts property
-router.put('/thoughts/:thoughtId/like', async (req, res) => {
+router.post('/thoughts/:thoughtId/like', async (req, res) => {
     const { thoughtId } = req.params;
   
     try {
