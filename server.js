@@ -68,7 +68,7 @@ app.post("/thoughts", async (req, res) => {
 });
 
 // POST /thoughts/:id/like
-app.post("/thoughts/:_id/like", async (req, res) => {
+app.post("/thoughts/:id/like", async (req, res) => {
   const thoughtId = req.params.id; // Use req.params.id to get the thoughtId
 
   try {
@@ -88,6 +88,7 @@ app.post("/thoughts/:_id/like", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 
 
 // Start the server
