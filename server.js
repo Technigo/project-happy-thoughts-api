@@ -21,8 +21,7 @@ app.use(express.urlencoded({ extended: false })); // Parse URL-encoded data to a
 
 // Middleware to check database connectivity before handling requests
 app.use((_, res, next) => {
-  console.log(mongoose.connection.readyState);
-  if (mongoose.connection.readyState === 1) {
+  if (mongoose.connection.readyState === 0) {
     next();
   } else {
     // Returns a 503 Service Unavailable error to the client,
