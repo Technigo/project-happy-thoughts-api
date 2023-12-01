@@ -1,8 +1,8 @@
 import "dotenv/config";
-import express from "express";
 import cors from "cors";
+import express from "express";
 import mongoose from "mongoose";
-import routes from "./routes/Routes";
+import thoughtRoutes from "./routes/thoughts";
 
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
@@ -18,22 +18,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: false })); // Parse URL-encoded data to a json
-
-// Middleware to check database connectivity before handling requests
-app.use((_, res, next) => {
-  console.log('Ready state is ' + mongoose.connection.readyState)
-  if (mongoose.connection.readyState === 0) {
-    next();
-  } else {
-    // Returns a 503 Service Unavailable error to the client,
-    // indicating that the service cannot handle the request due to a lack of database connectivity.
-    res.status("503").json({
-      error: "Service unavailable"
-    });
-  }
-});
-
-app.use(routes);
+app.use(thoughtRoutes);
 
 // Start the server and listen on the specified port
 app.listen(port, () => {
