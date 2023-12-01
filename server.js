@@ -21,6 +21,7 @@ app.use(express.urlencoded({ extended: false })); // Parse URL-encoded data to a
 
 // Middleware to check database connectivity before handling requests
 app.use((_, res, next) => {
+  console.log('Ready state is ' + mongoose.connection.readyState)
   if (mongoose.connection.readyState === 0) {
     next();
   } else {
