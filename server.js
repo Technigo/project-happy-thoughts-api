@@ -1,41 +1,13 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import listEndpoints from "express-list-endpoints";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1/thoughts";
-
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log("MongoDB connected successfully");
-  })
-  .catch((error) => {
-    console.error("MongoDB connection error:", error.message);
-  });
-
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/thoughts";
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
-mongoose.set('strictQuery', true);
 
-const port = process.env.PORT || 8080;
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-// Custom middleware to collect route information
-const routeInfoMiddleware = (req, res, next) => {
-  req.routeInfo = app._router.stack
-    .filter((r) => r.route)
-    .map((r) => ({
-      path: r.route.path,
-      methods: Object.keys(r.route.methods).map(method => method.toUpperCase()), // Convert methods to uppercase
-      middleware: r.route.stack.map((m) => m.name).join(", "), // Convert middleware to a string
-    }));
-  next();
-};
-
-app.use(routeInfoMiddleware);
-
-const thoughtSchema = new mongoose.Schema({
+const Thought = mongoose.model("Thought", {
   message: {
     type: String,
     required: true,
@@ -45,64 +17,79 @@ const thoughtSchema = new mongoose.Schema({
   hearts: {
     type: Number,
     default: 0,
+    set: () => 0, // Ensure hearts are not assignable when creating a new thought
   },
   createdAt: {
     type: Date,
-    default: Date.now,
+    default: () => new Date(),
+    set: () => new Date(), // Ensure createdAt is not assignable when creating a new thought
   },
 });
 
-const Thought = mongoose.model('Thought', thoughtSchema);
+const port = process.env.PORT || 8080;
+const app = express();
+
+app.use(cors());
+app.use(express.json());
 
 // Display available routes
 app.get("/", (req, res) => {
-  res.json(req.routeInfo);
+  res.json(listEndpoints(app));
 });
 
+// GET /thoughts
 app.get("/thoughts", async (req, res) => {
   try {
-    const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20);
-    res.json(thoughts);
+    const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20);
+    res.status(200).json(thoughts);
   } catch (error) {
     console.error("Error fetching thoughts:", error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
+// POST /thoughts
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
 
   try {
     const newThought = new Thought({ message });
     const savedThought = await newThought.save();
-
-    res.json(savedThought);
+    res.status(201).json(savedThought);
   } catch (error) {
-    console.error("Error saving thought:", error);
-    res.status(400).json({ error: 'Invalid input' });
+    if (error.name === "ValidationError") {
+      // Handle validation errors
+      res.status(400).json({ error: "Invalid input", validationErrors: error.errors });
+    } else {
+      console.error("Error saving thought:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   }
 });
 
+// POST /thoughts/:thoughtId/like
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const thoughtId = req.params.thoughtId;
 
   try {
-    const thought = await Thought.findById(thoughtId);
+    const thought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      { $inc: { hearts: 1 } },
+      { new: true }
+    );
 
     if (!thought) {
-      return res.status(404).json({ error: 'Thought not found' });
+      res.status(404).json({ error: "Thought not found" });
+    } else {
+      res.status(200).json(thought);
     }
-
-    thought.hearts += 1;
-    const updatedThought = await thought.save();
-
-    res.json(updatedThought);
   } catch (error) {
-    console.error("Error updating thought:", error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error adding like:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
+// Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
