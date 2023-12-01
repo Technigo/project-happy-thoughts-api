@@ -40,7 +40,7 @@ app.post('/thoughts', async (req, res) => {
   });
 
 // PUT endpoint for liking a thought, Changed from post to put since Diego did that on the Q and A.
-app.put('/thoughts/:thoughtId/like', async (req, res) => {
+app.post('/thoughts/:thoughtId/like', async (req, res) => {
     try {
       const { thoughtId } = req.params;
       const thought = await Thought.findByIdAndUpdate(
