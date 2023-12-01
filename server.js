@@ -20,17 +20,16 @@ app.use(express.json());
 
 const Thought = require('./models/thought'); // correct the path here
 
-app.get("/api-docs", (req, res) => {
-  try {
-      const endpoints = listEndpoints(app);
-      res.json(endpoints);
-  } catch (err) {
-      res.status(500).json({ message: "Internal Server Error", error: err });
-  }
-});
-
 app.get('/', (req, res) => {
-  res.send('Welcome to the Happy Thoughts API- spreading happiness over the world');
+    try {
+        const endpoints = listEndpoints(app);
+        res.json({
+            message: 'Welcome to the Happy Thoughts API - spreading happiness over the world',
+            availableEndpoints: endpoints
+        });
+    } catch (err) {
+        res.status(500).json({ message: "Internal Server Error", error: err });
+    }
 });
 //Route to get all thoughts
 app.get('/thoughts', async (req, res) => {
