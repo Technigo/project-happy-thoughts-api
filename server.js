@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv"; // Import dotenv for environment variables
 import mongoose from "mongoose";
-import thoughtsRoutes from "./routes/thoughtsRoutes"; // Import routes for handling song-related endpoints
+import thoughtsRoutes from "./routes/thoughtsRoutes"; // Import routes for handling thought-related endpoints
 
 dotenv.config(); //Load environment variables from the .env file
 
@@ -10,9 +10,7 @@ const mongoUrl = process.env.MONGO_URL;
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
+// Defines the port the app will run on
 const port = process.env.PORT || 8080;
 const app = express();
 
@@ -32,7 +30,7 @@ app.use((req, res, next) => {
 });
 
 // Imported routes in the app
-app.use(thoughtsRoutes); // Mounting song-related routes in the Express app
+app.use(thoughtsRoutes); // Mounting thought-related routes in the Express app
 
 // Start the server
 app.listen(port, () => {

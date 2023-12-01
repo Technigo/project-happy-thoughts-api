@@ -18,11 +18,10 @@ export const thoughtSchema = new Schema({
     default: 0, // Sets a default value of '0' for 'hearts'
   },
   createdAt: {
-    type: Date,
-    default: Date.now,
+    type: Date, // Specifies that the createdAt field will store values in a Date format, allowing it to hold date and time information
+    default: Date.now, // Sets the default value for createdAt to the current date and time when a new document is created
   },
 });
 
-// Create a Mongoose model named 'ThoughtModel' based on the 'thoughtSchema' for the 'thoughts' collection
-// This model is used to interact with the "thoughts" collection in the MongoDB database. It allows you to perform CRUD operations on documents in that collection and provides methods for data validation based on the schema.
+// Creates a Mongoose model named 'ThoughtModel' based on the 'thoughtSchema' for the 'thoughts' collection
 export const ThoughtModel = mongoose.model("thoughts", thoughtSchema);
