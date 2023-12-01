@@ -22,9 +22,9 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 db.once("open", () => console.log("Connected to MongoDB"));
 
-app.use("/api", thoughtRoutes);
+app.use("/", thoughtRoutes);
 
-app.get("/api/endpoints", (req, res) => {
+app.get("/endpoints", (req, res) => {
   const endpoints = expressListEndpoints(app);
   res.json(endpoints);
 });
