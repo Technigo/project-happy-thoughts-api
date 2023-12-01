@@ -58,7 +58,7 @@ Response:
 
 Endpoint: /thoughts/:thoughtId/like  
 Method: PUT  
-Description: Increments the number of hearts for a specific thought.  
+Description: Increments the number of hearts for a specific thought. Following RESTful principles, I used PUT to 'update' likes even though the requirements say POST.  
 Parameters: thoughtId: The ID of the thought to like.  
 Response:  
 Success:  
