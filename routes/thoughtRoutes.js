@@ -20,7 +20,10 @@ router.get("/", (req, res) => {
 // Route for retrieving 20 latest posted happy thoughts based on createdAt date
 router.get("/thoughts", async (req,res)=>{
     try {
-        const thought = await ThoughtModel.find().sort({createdAt: "desc"}).limit(20).exec()
+        const thought = await ThoughtModel.find()
+        .sort({createdAt: "desc"})
+        .limit(20)
+        .exec()
         //success
         res.json(thought)
     } catch(error) {
