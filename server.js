@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const thoughtRoutes = require("./routes/thoughtRoutes");
 const expressListEndpoints = require("express-list-endpoints");
+const cors = require("cors");
 
 require("dotenv").config();
 
@@ -10,6 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
+app.use(cors());
 app.use(bodyParser.json());
 
 mongoose.connect(MONGODB_URI, {
