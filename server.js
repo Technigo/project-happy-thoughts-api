@@ -4,7 +4,8 @@ import mongoose from "mongoose";
 import "dotenv/config";
 import listEndpoints from "express-list-endpoints";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts";
+const mongoUrl =
+  process.env.MONGO_URL || "mongodb://127.0.0.1:27017/happy-thoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
