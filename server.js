@@ -27,8 +27,8 @@ const routeInfoMiddleware = (req, res, next) => {
     .filter((r) => r.route)
     .map((r) => ({
       path: r.route.path,
-      methods: Object.keys(r.route.methods),
-      middleware: r.route.stack.map((m) => m.name),
+      methods: Object.keys(r.route.methods).map(method => method.toUpperCase()), // Convert methods to uppercase
+      middleware: r.route.stack.map((m) => m.name).join(", "), // Convert middleware to a string
     }));
   next();
 };
