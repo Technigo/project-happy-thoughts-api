@@ -6,6 +6,8 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
+mongoose.set('strictQuery', false);
+
 const port = process.env.PORT || 8080;
 const app = express();
 
