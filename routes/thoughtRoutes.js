@@ -17,11 +17,11 @@ router.get("/", async (req, res) => {
 router.get("/thoughts", async (req, res) => {
   try {
     const thoughts = await ThoughtModel.find()
-      .sort({ createdAt: "desc" })
+      .sort({ createdAt: -1 })
       .limit(20)
       .exec();
 
-    res.json(thoughts);
+    res.status(200).json(thoughts);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -48,7 +48,11 @@ router.post("/thoughts", async (req, res) => {
 router.post("/thoughts/:thoughtId/like", async (req, res) => {
   try {
     const { thoughtId } = req.params;
-    const thought = await ThoughtModel.findById(thoughtId);
+    const thought = await ThoughtModel.findByIdAndUpdate(
+      thoughtId,
+      { $inc: { hearts: 1 } },
+      { new: true }
+    );
     if (!thought) {
       return res.status(404).json({ message: "Thought not found" });
     }
