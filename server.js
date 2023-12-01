@@ -33,6 +33,7 @@ const Thought = mongoose.model('Thought', {
 // PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
+const listEndpoints = require("express-list-endpoints");
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
@@ -40,7 +41,7 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send(listEndpoints(app));
 });
 
 app.get("/thoughts", async (req, res) => {
