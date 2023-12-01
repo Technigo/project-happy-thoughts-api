@@ -1,12 +1,16 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import "dotenv/config";
+import dotenv from "dotenv";
 import listEndpoints from "express-list-endpoints";
+dotenv.config();
 
-const mongoUrl =
-  process.env.MONGO_URL || "mongodb://127.0.0.1:27017/happy-thoughts";
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+const mongoUrl = process.env.MONGO_URL;
+const mongoUrlLocal = "mongodb://127.0.0.1:27017/happy-thoughts";
+mongoose.connect(mongoUrl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 mongoose.Promise = Promise;
 
 const Thought = mongoose.model("Thought", {
@@ -89,5 +93,6 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  // console.log(`Server running on http://localhost:${port}`); // Em, we did this for testing purposes, thats all
+  console.log(mongoUrl);
 });
