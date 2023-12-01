@@ -9,7 +9,7 @@ export const ThoughtsSchema = new Schema({
     },
     hearts: {
         type: Number,
-        default: 0,
+        default: 0, // This ensures that hearts can't be assigned when posting a new thought
     },
     createdAt: {
         type: Date,
