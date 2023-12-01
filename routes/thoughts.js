@@ -44,7 +44,7 @@ router.post("/thoughts/:thoughtId/like", async (req, res) => {
 
         if (!thought) {
             // Handles scenario where the thought is not found
-            return res.status(404).json({ error: " Thought not found" });
+            return res.status(404).json({ error: "Thought not found" });
         }
 
         // Increments the 'hearts' count for the thought and saves it
