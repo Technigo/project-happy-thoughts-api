@@ -21,6 +21,20 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Custom middleware to collect route information
+const routeInfoMiddleware = (req, res, next) => {
+  req.routeInfo = app._router.stack
+    .filter((r) => r.route)
+    .map((r) => ({
+      path: r.route.path,
+      methods: Object.keys(r.route.methods),
+      middleware: r.route.stack.map((m) => m.name),
+    }));
+  next();
+};
+
+app.use(routeInfoMiddleware);
+
 const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
@@ -40,16 +54,9 @@ const thoughtSchema = new mongoose.Schema({
 
 const Thought = mongoose.model('Thought', thoughtSchema);
 
-// New route to display available routes
+// Display available routes
 app.get("/", (req, res) => {
-  const routes = app._router.stack
-    .filter((r) => r.route)
-    .map((r) => ({
-      path: r.route.path,
-      methods: Object.keys(r.route.methods),
-      middleware: r.route.stack.map((m) => m.name),
-    }));
-  res.json(routes);
+  res.json(req.routeInfo);
 });
 
 app.get("/thoughts", async (req, res) => {
