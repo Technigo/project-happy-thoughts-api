@@ -48,18 +48,17 @@ router.post("/thoughts", async (req, res) => {
 router.post("/thoughts/:thoughtId/like", async (req, res) => {
   try {
     const { thoughtId } = req.params;
-    const thought = await ThoughtModel.findByIdAndUpdate(
-      thoughtId,
-      { $inc: { hearts: 1 } },
-      { new: true }
-    );
+    const thought = await ThoughtModel.findById(thoughtId);
     if (!thought) {
-      res.status(404).json({ message: "Thought not found" });
-    } else {
-      res.status(200).json(thought);
+      return res.status(404).json({ message: "Thought not found" });
     }
-  } catch (err) {
-    res.status(400).json({ message: "Invalid request", error: err.errors });
+    thought.hearts = (thought.hearts || 0) + 1;
+
+    const updatedThought = await thought.save();
+
+    res.status(200).json(updatedThought);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 
