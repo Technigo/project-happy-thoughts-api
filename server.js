@@ -8,7 +8,11 @@ dotenv.config();// Load environment variables from the .env file
 mongoose.set("strictQuery", false);//Addressing the deprecation warning
 
 const mongoUrl = process.env.MONGO_URL;
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+.then(()=>{console.log("You are now connected to MongoDB")})
+.catch((error)=>{
+  console.error("Connection to MongoDB failed:", error)
+})
 mongoose.Promise = Promise;
 
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
