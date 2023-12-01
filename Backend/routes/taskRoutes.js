@@ -1,6 +1,7 @@
 import express from "express";
 import listEndpoints from "express-list-endpoints";
-import { ThoughtModel } from "../models/Task";
+import {thoughtModel} from "../models/task";
+
 const router = express.Router();
 
 // Route to get available endpoints
@@ -9,25 +10,41 @@ router.get("/", (req, res) => {
   res.json({ endpoints });
 });
 
-// Route to get all titles from the database
+// Route to get all thoughts from the database
 router.get("/thoughts", async (req, res) => {
-  await ThoughtModel.find()
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((err) => res.json(err));
+  try {
+    const result = await ThoughtModel.find().sort({ createdAt: -1 }).limit(20);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
-router.post("/add", async (req, res) => {
-  const title = req.body.title;
-  // ... (repeat for other properties)
+// Route to add a new thought
+router.post("/thoughts", async (req, res) => {
+  try {
+    const { message } = req.body;
+    const newThought = await ThoughtModel.create({ message });
+    res.status(201).json(newThought);
+  } catch (err) {
+    res.status(400).json({ error: "Invalid Input" });
+  }
+});
 
-  await ThoughtModel.create({
-    title: title,
-    // ... (repeat for other properties)
-  })
-    .then((result) => res.json(result))
-    .catch((err) => res.json(err));
+// Route to like a thought
+router.post("/thoughts/:thoughtId/like", async (req, res) => {
+  try {
+    const thoughtId = req.params.thoughtId;
+    const thought = await ThoughtModel.findById(thoughtId);
+    if (!thought) {
+      return res.status(404).json({ error: 'Thought not found' });
+    }
+    thought.hearts += 1;
+    await thought.save();
+    res.json(thought);
+  } catch (err) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 export default router;
