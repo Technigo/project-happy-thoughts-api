@@ -1,13 +1,16 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+This weeks project was to create an API for showing and storing messages sent by my previous Happy thoughts site.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+In this project I'm using express and mongoose to create the model of the API and to create the different routes. There is one route which uses the GET method to show all the messages in the API, and route which uses the POST method to allow the user to add messages to the database.
+
+I've used MongoDB Atlas to store the database and Render to deploy the API.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+This weeks project has been a smooth process with very few issues. To have an overview of my API and the database I used Postman. In the code I've added error handler so that it's also shown in Postman if the GET or POST request fail.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+View the API live here: https://happy-thoughts-api-atw3.onrender.com
+View the live site here: https://happy-thoughts-project-by-inna.netlify.app/
