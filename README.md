@@ -11,7 +11,7 @@ The API is built using:
 
 ## The problem
 
-I first used mongoose following function: findByIdAndUpdate() to increment the number of likes on a specific happy thought (by id), but the former value was returned for some reason I did not understand, as the documentation (https://mongoosejs.com/docs/api/model.html#Model.findByIdAndUpdate()) specifies that a third option can be passed in the fucntion: `[options.new=false]«Boolean» if true, return the modified document rather than the original`
+I first used mongoose following function: findByIdAndUpdate() to increment the number of likes on a specific happy thought (by id), but the former value was returned for some reason I did not understand, as the documentation (https://mongoosejs.com/docs/api/model.html#Model.findByIdAndUpdate()) specifies that the function takes a third (option) parameter: `[options.new=false]«Boolean» if true, return the modified document rather than the original`
 I went back to using a more traditional approach with findById() and save() functions instead.
 
 I nevertheless found some articles about this hurdle:
