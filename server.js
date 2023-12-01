@@ -81,7 +81,7 @@ app.post("/thoughts/:id/like", async (req, res) => {
     if (!thought) {
       res.status(404).json({ error: "Thought not found" });
     } else {
-      res.status(200).json(thought);
+      res.status(200).json(addLike);
     }
   } catch (error) {
     console.error("Error adding like:", error);
