@@ -4,7 +4,7 @@ Technigo project week 15. Building an API using Express, MongoDB with GET reques
 
 ## The problem
 
-It's still a learning journey as we just started with backend. This week made me understand the backend better, especially how to connect it to the frontend. Biggest challenge was to deploy. ChatGPT, google and discussing with team-mates in order to make it work. Once adding the deployed link to the frontend it became really slow which made me thought something was wrong. Turns out I just needed to re-start my computer.
+It's still a learning journey as we just started with backend. This week made me understand the backend better, especially how to connect it to the frontend. Biggest challenge was to deploy. ChatGPT, google and discussing with team-mates in order to make it work. Once adding the deployed link to the frontend it became really slow. Turns out I needed to add/change the IP-adress in Atlas to a global 0.0... In learning purpose the code is commented a lot with the help of chatGPT. I've found that being a good way of learning: going through the code, commenting and by that understanding the code better.
 
 ## API explained
 
