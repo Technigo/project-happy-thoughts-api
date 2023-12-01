@@ -1,13 +1,19 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+For this project, I built my own API which works in the same way and should become a drop-in replacement for the API I used in the Happy Thoughts React frontend project.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I created my own API with the Mongoose model for the thougth message and the endpoints to get, post tohughts and likes. After the MongoDB project I thought this project was easier, but I had problems with connecting the frontend and thats because I was missing one word from the deployment.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+### Render Deploy
+
+https://project-mongo-api-6ofy.onrender.com
+
+### Netlify Deploy and Frontend repository
+
+https://caro-luna-happy-thoguths.netlify.app
+
+https://github.com/KroLuna/project-happy-thoughts-api
