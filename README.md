@@ -1,13 +1,25 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+This project is a MongoDB API that manages a collection of happy thoughts and serves as the backend for a Happy Thoughts project.
+Users can retrieve a list of 20 newest happy thoughts, post new happy thoughts, and like existing ones.
+The API is built using:
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+- Node.js,
+- Express.js,
+- MongoDB Atlas as the database,
+- and Mongoose as the ODM (Object Data Modeling) library.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I first used mongoose following function: findByIdAndUpdate() to increment the number of likes on a specific happy thought (by id), but the former value was returned for some reason I did not understand, as the documentation (https://mongoosejs.com/docs/api/model.html#Model.findByIdAndUpdate()) specifies that the function takes a third (option) parameter: `[options.new=false]«Boolean» if true, return the modified document rather than the original`
+I went back to using a more traditional approach with findById() and save() functions instead.
+
+I nevertheless found some articles about this hurdle:
+https://www.codingninjas.com/studio/library/findbyidandupdate-function
+https://medium.com/@findingalberta/what-the-fffff-findbyidandupdate-mongoose-107219d5f90
+and would have tried this if given more time.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Deployed front-end: https://lambent-fudge-cba686.netlify.app/
+Deployed back-end: https://project-happy-thoughts-api-v453.onrender.com
