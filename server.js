@@ -1,6 +1,9 @@
-import express from "express";
-import cors from "cors";
-import mongoose from "mongoose";
+const express = require('express'); // Express is a web application framework for Node.js
+const expressListEndpoints = require('express-list-endpoints');
+const dotenv = require('dotenv').config(); // dotenv is used to load environment variables from a .env file
+const cors = require('cors');
+// Import the mongoose library, which is a MongoDB object modeling tool for Node.js
+const mongoose = require('mongoose');
 
 const mongoUrl = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/happy_thoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -18,8 +21,10 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send(expressListEndpoints(app));
 });
+
+app.use('/', require('./routes/thoughtRoutes'));
 
 // Start the server
 app.listen(port, () => {
