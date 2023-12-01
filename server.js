@@ -80,7 +80,7 @@ app.get("/thoughts/:id", async (req, res) => {
 
 // POST /thoughts/:id/like
 app.post("/thoughts/:id/like", async (req, res) => {
-  const thoughtId = req.params.id;
+  const { thoughtId } = req.params.id;
   try {
     const addLike = await Thought.findByIdAndUpdate(
       thoughtId,
