@@ -1,13 +1,13 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This week we were supposed to build an API with GET and POST endpoints to create data. This API were then going to be connected to the frontend part of Happy Thoughts, a Twitter like project that we did several weeks ago.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I started off by coding the ThoughtModel and then went on to setting up the routes and server.js. It felt a bit easier this time to execute it since it was similar to other things we have done. I tried it out in Postman which was good practice since I haven't used it much before. I also added a loader, because especially from my phone, it could take a while to load all the posts.
+I used the provided material to help me through the assignment, as well as discussing with my team mates, searching online and chatGPT.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Please visit - backend: https://happy-thoughts-api-e1uj.onrender.com
+Please visit - with frontend: https://project-happythoughts-anna-robertsson.netlify.app/
