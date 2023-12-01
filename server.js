@@ -1,10 +1,11 @@
+// Importing necessary modules and setting up Express app
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import thoughtRoutes from "./routes/thoughtRoutes"
 import dotenv from "dotenv";
 dotenv.config();// Load environment variables from the .env file
-mongoose.set("strictQuery", false);
+mongoose.set("strictQuery", false);//Addressing the deprecation warning
 
 const mongoUrl = process.env.MONGO_URL;
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
