@@ -67,28 +67,38 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
-// POST /thoughts/:id/like
-app.get("/thoughts/:_id", async (req, res) => {
-  const tId = req.params._id;
-  const foundThought = await Thought.findById(tId);
+// GET /thoughts/:id
+app.get("/thoughts/:id", async (req, res) => {
+  const thoughtId = req.params.id;
+  const foundThought = await Thought.findById(thoughtId);
   if (foundThought) {
-    res.status(201).json({ body: foundThought });
+    res.status(200).json(foundThought);
   } else {
     res.status(404).json({ error: `No thought matching that id found` });
   }
 });
 
-app.post("/thoughts/:_id/like", async (req, res) => {
-  const tId = req.params._id;
-  const addLike = await Thought.findByIdAndUpdate(
-    tId,
-    {
-      $inc: { hearts: 1 },
-    },
-    { new: true }
-  );
-  res.status(201).json(addLike);
+// POST /thoughts/:id/like
+app.post("/thoughts/:id/like", async (req, res) => {
+  const thoughtId = req.params.id;
+  try {
+    const addLike = await Thought.findByIdAndUpdate(
+      thoughtId,
+      { $inc: { hearts: 1 } },
+      { new: true }
+    );
+    if (addLike) {
+      res.status(200).json(addLike);
+    } else {
+      res.status(404).json({ error: "Thought not found" });
+    }
+  } catch (error) {
+    console.error("Error adding like:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
+
+
 
 
 
