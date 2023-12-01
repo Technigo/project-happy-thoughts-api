@@ -10,72 +10,69 @@ In this project, I utilized Express and Mongoose to construct an API, defining r
 
 ### Get API Information
 
-Endpoint: /
-Method: GET
-Description: Retrieves information about Susannes Happy thoughts API, including a list of available endpoints.
-Response:
-[{
-"success": true,
-"message": "OK",
-"body": {
-"content": "Susannes Happy thoughts API",
-"endpoints": ["/", "/thoughts", "/thoughts/:thoughtId/like"]
+Endpoint: /  
+Method: GET  
+Description: Retrieves information about Susannes Happy thoughts API, including a list of available endpoints.  
+Response:  
+{  
+"success": true,  
+"message": "OK",  
+"body": {  
+"content": "Susannes Happy thoughts API",  
+"endpoints": ["/", "/thoughts", "/thoughts/:thoughtId/like"]  
+}  
 }
-}]
 
 ### Get Recent Thoughts
 
-Endpoint: /thoughts
-Method: GET
-Description: Retrieves the 20 most recent thoughts in descending order.
-Response:
-[
-{
-"_id": "123abc",
-"message": "This is a happy thought!",
-"hearts": 5,
-"createdAt": "2023-01-01T12:34:56.789Z"
-},
+Endpoint: /thoughts  
+Method: GET  
+Description: Retrieves the 20 most recent thoughts in descending order.  
+Response:  
+{  
+"\_id": "123abc",  
+"message": "This is a happy thought!",  
+"hearts": 5,  
+"createdAt": "2023-01-01T12:34:56.789Z"  
+},  
 // ... (more thoughts)
-]
 
 ### Post a New Thought
 
-Endpoint: /thoughts
-Method: POST
-Description: Adds a new thought to the database. The hearts and createdAt properties are automatically set.
-Request Body:
-[{
-"message": "This is a new happy thought!"
-}]
-Response:
-[{
-"_id": "456def",
-"message": "This is a new happy thought!",
-"hearts": 0,
-"createdAt": "2023-01-02T14:45:23.456Z"
-}]
+Endpoint: /thoughts  
+Method: POST  
+Description: Adds a new thought to the database. The hearts and createdAt properties are automatically set.  
+Request Body:  
+{  
+"message": "This is a new happy thought!"  
+}  
+Response:  
+{  
+"\_id": "456def",  
+"message": "This is a new happy thought!",  
+"hearts": 0,  
+"createdAt": "2023-01-02T14:45:23.456Z"  
+}
 
 ### Like a Thought
 
-Endpoint: /thoughts/:thoughtId/like
-Method: PUT
-Description: Increments the number of hearts for a specific thought.
-Parameters:
-thoughtId: The ID of the thought to like.
-Response:
-Success:
-[{
-"_id": "123abc",
-"message": "This is a happy thought!",
-"hearts": 6,
-"createdAt": "2023-01-01T12:34:56.789Z"
-}]
+Endpoint: /thoughts/:thoughtId/like  
+Method: PUT  
+Description: Increments the number of hearts for a specific thought.  
+Parameters: thoughtId: The ID of the thought to like.  
+Response:  
+Success:  
+{  
+"\_id": "123abc",  
+"message": "This is a happy thought!",  
+"hearts": 6,  
+"createdAt": "2023-01-01T12:34:56.789Z"  
+}
 
-Not found:
-[{
-"message": "Not found"
-}]
+Not found:  
+{  
+"message": "Not found"  
+}
 
 ## View it live
 
