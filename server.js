@@ -79,22 +79,26 @@ app.get("/thoughts/:id", async (req, res) => {
 
 // POST /thoughts/:id/like
 app.post("/thoughts/:id/like", async (req, res) => {
-  const { id } = req.params; // Change from thoughtId to id
+  const { id } = req.params;
 
   try {
-    const thought = await Thought.findById(id);
+    const thought = await Thought.findByIdAndUpdate(
+      id,
+      { $inc: { hearts: 1 } },
+      { new: true }
+    );
 
     if (!thought) {
-      return res.status(404).json({ message: 'Thought not found' });
+      return res.status(404).json({ error: "Thought not found" });
     }
 
-    thought.hearts += 1;
-    await thought.save();
-    res.json(thought); // Change from updatedThought to thought
+    res.status(200).json(thought);
   } catch (error) {
-    res.status(400).json({ message: 'Could not update thought', error: error });
+    console.error("Error adding like:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 
 
 // Start the server
