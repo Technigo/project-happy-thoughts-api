@@ -1,13 +1,14 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+For this project I built my own API for a frontend project we did a couple of weeks ago. You can view the frontend for this API here: https://happy-thoughts-jennylarsen.netlify.app/
+The project consists of RESTful endpoints, with specific instructions on how they should look and how the modeling of the API should look, that you can view here: https://github.com/Technigo/project-happy-thoughts-api/blob/master/instructions.md
+The project has error handeling consisting of 200, 400 and 500 response messages. 
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+To solve this project I started of building the model based on the learning material from this week, then I added the endpoints. Deployed the API and then applied it to the frontend. The project was easy to solve with clear instructions and tutorials. 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+API: https://jennylarsen-project-happy-thoughts-api.onrender.com/
+Frontend: https://happy-thoughts-jennylarsen.netlify.app/
