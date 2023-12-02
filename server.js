@@ -79,10 +79,10 @@ app.get("/thoughts/:id", async (req, res) => {
 
 // POST /thoughts/:id/like
 app.post("/thoughts/:id/like", async (req, res) => {
-  const { thoughtId } = req.params;
+  const { id } = req.params; // Change from thoughtId to id
 
   try {
-    const thought = await Thought.findById(thoughtId);
+    const thought = await Thought.findById(id);
 
     if (!thought) {
       return res.status(404).json({ message: 'Thought not found' });
@@ -90,14 +90,11 @@ app.post("/thoughts/:id/like", async (req, res) => {
 
     thought.hearts += 1;
     await thought.save();
-    res.json(updatedThought);
+    res.json(thought); // Change from updatedThought to thought
   } catch (error) {
     res.status(400).json({ message: 'Could not update thought', error: error });
   }
 });
-
-
-
 
 
 // Start the server
