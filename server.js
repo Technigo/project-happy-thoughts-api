@@ -15,6 +15,10 @@ const ThoughtSchema = new Schema({
     minlength: 5,
     maxlength: 140
   },
+  username: {
+    type: String,
+    maxlength: 30
+  },
   hearts: {
     type: Number,
     default: 0
@@ -53,11 +57,11 @@ app.get("/thoughts", async (req,res) => {
   }
 })
 app.post("/thoughts", async (req, res) => {
-  const { message } = req.body
+  const { message, username } = req.body
 
-  const thought = new Thought({ message })
+  const thought = new Thought({ message, username: username || "Anonymous" })
 
-  try {
+  try{
     const savedThought = await thought.save()
     res.status(201).json(savedThought)
   } catch (err) {
@@ -71,10 +75,8 @@ app.post("/thoughts/:_id/love", async (req, res) => {
   try {
     const lovebombedThought = await Thought.findByIdAndUpdate(_id, { $inc: { hearts: 1 } }, {new: true} )
     lovebombedThought ? res.status(201).json(lovebombedThought) : res.status(400).json({message: "Could not find a thought with the given ID", error: err.message})
-    // console.log(lovebombedThought)
-    // res.status(201).json(lovebombedThought)
   } catch (err) {
-    res.status(400).json({message: "Could not like the thought", error: err.message})
+    res.status(400).json({message: "Could not like this thought", error: err.message})
   }
 })
 
