@@ -29,14 +29,18 @@ exports.createThought = async (req, res, next) => {
     console.error(err);
     res.status(400).json({
       status: "fail",
-      message: err.message,
+      message: err.errors.message.message,
     });
   }
 };
 
 exports.postLikes = async (req, res) => {
   try {
-    const newLike = await Thoughts.findByIdAndUpdate(req.params.thoughtId, { $inc: { likes: 1 } });
+    const newLike = await Thoughts.findByIdAndUpdate(
+      req.params.thoughtId,
+      { $inc: { likes: 1 } },
+      { new: true }
+    );
 
     if (!newLike)
       return res
