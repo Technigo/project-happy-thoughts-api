@@ -42,43 +42,7 @@ router.put("/thoughts/:thoughtId/like" , async(req , res)=>{
 
 
 })
-// router.delete("/delete/:id" , async(req , res)=>{
-//     const { id } = req.params;
-//     await BookModel.findByIdAndUpdate(id)
-//     .then((result) =>{
-//         if(result){
-//             res.json({
-//                 message: "book deleted successfully",
-//                 deletedBook: result
-//             })
-            
-//         }else{
-//             res.status(404).json({message: "book not found"})
-//         }
 
-//     })
-//     .catch((err) => res.status(500).json(err))
-    
-// })
-// router.delete("/deleteAll" , async(req , res)=>{
-
-//     await BookModel.deleteMany({})
-//     .then((result) =>{
-//         if(result){
-//             res.json({
-//                 message: "all books deleted",
-//                 deletedCount: result.deletedCount
-//             })
-            
-//         }else{
-//             res.status(404).json({message: "book not found"})
-//         }
-
-//     })
-//     .catch((err) => res.status(500).json(err))
-    
-    
-// })
 export default router
 
 
