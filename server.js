@@ -89,7 +89,7 @@ app.post("/thoughts/:id/like", async (req, res) => {
     }
 
     thought.hearts += 1;
-    const updatedThought = await thought.save();
+    await thought.save();
     res.json(updatedThought);
   } catch (error) {
     res.status(400).json({ message: 'Could not update thought', error: error });
