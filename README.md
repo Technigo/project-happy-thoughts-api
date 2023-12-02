@@ -24,5 +24,7 @@ MongoDB (with Mongoose)
 CORS (Cross-Origin Resource Sharing)
 
 ## View it live
-
+Backend: 
 https://api-happy-thought.onrender.com/ 
+Frontend: 
+https://happy-happy-thought.netlify.app/
