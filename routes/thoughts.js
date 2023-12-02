@@ -62,8 +62,9 @@ router.post('/:thoughtId/like', async (req, res) => {
         res.status(201).json(savedThought);
     } catch (error) {
         // Use the handleErrors function for consistent error handling
-        handleErrors(res, error, 400, 'Thought not found. Could not add a like.!');
+        handleErrors(res, error, 400, 'Thought not found. Could not add a like!');
     }
 });
+
 
 export default router;

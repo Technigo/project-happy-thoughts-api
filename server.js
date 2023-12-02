@@ -30,14 +30,19 @@ app.use(express.json());
 //Mount the thought router
 app.use('/thoughts', thoughtsRouter);
 
-//define root endpoint to display all availeble endpoints
+// Define root endpoint to display all available endpoints
 app.get('/', (req, res) => {
+  try {
+    // Gets a list of required endpoints
+    const endpoints = listEndpoints(app);
 
-  //gets a list of required endpoints
-  const endpoints = listEndpoints(app);
-
-  //respond with the list of endpoints
-  res.json({ endpoints });
+    // Respond with the list of endpoints
+    res.json({ endpoints });
+  } catch (error) {
+    // Handle the error appropriately for the root endpoint
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 });
 
 //start the server
