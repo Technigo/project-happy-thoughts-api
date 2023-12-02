@@ -17,7 +17,8 @@ const ThoughtSchema = new Schema({
   },
   username: {
     type: String,
-    maxlength: 30
+    maxlength: 30,
+    default: "Anonymous"
   },
   hearts: {
     type: Number,
