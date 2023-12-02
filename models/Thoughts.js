@@ -14,11 +14,6 @@ export const thoughtsSchema = new Schema({
         default: 0,
        
     
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now(),
-        
     }
 
 
