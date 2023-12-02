@@ -1,9 +1,10 @@
-import express from "express";
+import "dotenv/config";
 import cors from "cors";
+import express from "express";
 import mongoose from "mongoose";
+import thoughtRoutes from "./routes/thoughts";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
@@ -16,12 +17,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
-});
+app.use(express.urlencoded({ extended: false })); // Parse URL-encoded data to a json
+app.use(thoughtRoutes);
 
-// Start the server
+// Start the server and listen on the specified port
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
