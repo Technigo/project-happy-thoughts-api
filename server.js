@@ -13,11 +13,17 @@ mongoose.Promise = Promise;
 const port = process.env.PORT || 8080;
 const app = express();
 
+
+
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+// Start defining your routes here
+app.use("/", router);
+app.use("/thoughts", router);
 
 // Start defining your routes here
 app.get("/", (req, res) => {
@@ -37,10 +43,6 @@ app.get("/", (req, res) => {
       
   ]);
 });
-
-
-
-app.use("/thoughts", router);
 
 // Start the server
 app.listen(port, () => {
