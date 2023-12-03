@@ -57,7 +57,7 @@ router.put(
         return res.status(404).json({ message: "Thought not found" });
       }
 
-      res.json(thought);
+      res.status(200).json(thought);
     } catch (err) {
       res.status(500).json({
         message: "Internal Server Error",

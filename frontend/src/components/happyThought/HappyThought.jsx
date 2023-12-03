@@ -28,7 +28,7 @@ export const HappyThought = ({ thought, setLikeCounter }) => {
     };
 
     await fetch(
-      `https://happy-thoughts-ux7hkzgmwa-uc.a.run.app/thoughts/${thought._id}/like`,
+      `https://happy-thoughts-api-backend.onrender.com/thoughts/${thought._id}/like`,
       options
     )
       .then((response) => response.json()) // Parsing the response as JSON
