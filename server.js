@@ -8,10 +8,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/thoughts";
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true }).then(less => console.log("Connected to MongoDB")).catch(err => console.log("Error connecting to MongoDB", err));
 mongoose.Promise = Promise;
 
-const port = process.env.PORT || 10000;
+const port = process.env.PORT || 8080;
 const app = express();
 
 // Add middlewares to enable cors and json body parsing
