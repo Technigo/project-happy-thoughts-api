@@ -22,7 +22,7 @@ export const HappyThought = ({ thought, setLikeCounter }) => {
     setLikesThisSession((prevLikes) => prevLikes + 1);
     setLikeCounter((likesSoFar) => likesSoFar + 1);
     const options = {
-      method: "POST", // Specifying the request method as POST
+      method: "PUT", // Specifying the request method as POST
       // Setting the content type of the request to application/json
       headers: { "Content-Type": "application/json" },
     };

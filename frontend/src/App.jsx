@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { HappyThoughtsFeed } from "./components/happyThoughtsFeed/HappyThoughtsFeed";
 import { WriteAPost } from "./components/writeAPost/WriteAPost";
 import loader from "./assets/loader.gif";
-import "dotenv/config";
 
 export const App = () => {
   //State that tracks if the data from the API is loading
@@ -16,9 +15,7 @@ export const App = () => {
 
   //The API connection string
   // const thoughtAPI = "https://happy-thoughts-ux7hkzgmwa-uc.a.run.app/thoughts";
-  const thoughtAPI =
-    "https://happy-thoughts-api-backend.onrender.com/thoughts" ||
-    "localhost:8080/thoughts";
+  const thoughtAPI = "https://happy-thoughts-api-backend.onrender.com/thoughts";
   //The call to the API
   const callAPi = async () => {
     await fetch(thoughtAPI)
