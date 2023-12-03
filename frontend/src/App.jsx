@@ -17,7 +17,7 @@ export const App = () => {
   //The API connection string
   // const thoughtAPI = "https://happy-thoughts-ux7hkzgmwa-uc.a.run.app/thoughts";
   const thoughtAPI =
-    "https://happy-thoughts-api-backend.onrender.com/" ||
+    "https://happy-thoughts-api-backend.onrender.com/thoughts" ||
     "localhost:8080/thoughts";
   //The call to the API
   const callAPi = async () => {
