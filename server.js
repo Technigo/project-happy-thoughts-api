@@ -1,8 +1,15 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import router from "./routes/routes";
+import { connectDB } from "./config/db";
+import dotenv from "dotenv";
+dotenv.config();
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+mongoose.set("strictQuery", false);
+
+const mongoUrl =
+  process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts-backend";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
@@ -15,6 +22,7 @@ const app = express();
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+app.use(router);
 
 // Start the server
 app.listen(port, () => {
