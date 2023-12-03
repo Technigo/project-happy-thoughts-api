@@ -22,4 +22,6 @@ router.post('/thoughts', async (req, res) => {
   }
 });
 
+// POST /thoughts/:thoughtId/like
+
 export default router;
