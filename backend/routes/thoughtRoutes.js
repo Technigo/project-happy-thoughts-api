@@ -46,11 +46,10 @@ router.post("/thoughts", async (req, res) => {
 router.put(
   "/thoughts/:thoughtId/like",
   asyncHandler(async (req, res) => {
-    const { thoughtId } = req.params;
-
     try {
+      const { thoughtId } = req.params;
       const thought = await ThoughtModel.findByIdAndUpdate(
-        thoughtId,
+        { _id: thoughtId },
         { $inc: { heart: 1 } },
         { new: true }
       );
