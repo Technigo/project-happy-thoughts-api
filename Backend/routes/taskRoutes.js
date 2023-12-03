@@ -1,6 +1,7 @@
+// taskRoutes.js
 import express from "express";
 import listEndpoints from "express-list-endpoints";
-import {thoughtModel} from "../models/task";
+import thoughtModel from "../models/task";
 
 const router = express.Router();
 
@@ -13,7 +14,7 @@ router.get("/", (req, res) => {
 // Route to get all thoughts from the database
 router.get("/thoughts", async (req, res) => {
   try {
-    const result = await ThoughtModel.find().sort({ createdAt: -1 }).limit(20);
+    const result = await thoughtModel.find().sort({ createdAt: -1 }).limit(20);
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: "Internal Server Error" });
@@ -24,7 +25,7 @@ router.get("/thoughts", async (req, res) => {
 router.post("/thoughts", async (req, res) => {
   try {
     const { message } = req.body;
-    const newThought = await ThoughtModel.create({ message });
+    const newThought = await thoughtModel.create({ message });
     res.status(201).json(newThought);
   } catch (err) {
     res.status(400).json({ error: "Invalid Input" });
@@ -35,7 +36,7 @@ router.post("/thoughts", async (req, res) => {
 router.post("/thoughts/:thoughtId/like", async (req, res) => {
   try {
     const thoughtId = req.params.thoughtId;
-    const thought = await ThoughtModel.findById(thoughtId);
+    const thought = await thoughtModel.findById(thoughtId);
     if (!thought) {
       return res.status(404).json({ error: 'Thought not found' });
     }

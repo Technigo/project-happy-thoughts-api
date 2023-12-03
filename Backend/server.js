@@ -3,7 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv"; // Fix: Correct import statement
 import taskRoutes from "./routes/taskRoutes";
-import thoughtModel from "./models/task";
+// import thoughtModel from "./models/task";
 
 dotenv.config();
 

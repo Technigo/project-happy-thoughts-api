@@ -19,6 +19,6 @@ const thoughtSchema = new Schema({
   },
 });
 
-const ThoughtModel = mongoose.model("Thought", thoughtSchema);
+const thoughtModel = mongoose.model("Thought", thoughtSchema);
 
-export default ThoughtModel;
+export default thoughtModel;
