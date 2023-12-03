@@ -11,7 +11,7 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/thoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 10000;
 const app = express();
 
 // Add middlewares to enable cors and json body parsing
