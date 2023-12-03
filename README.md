@@ -9,3 +9,7 @@ The main challenge was setting up a MongoDB database and connecting it to the Ex
 ## View it live
 
 The live project can be viewed here:
+
+API: https://project-happy-thoughts-api-6vz8.onrender.com/thoughts 
+
+Netlify: https://celadon-beijinho-ada8a3.netlify.app/ 
