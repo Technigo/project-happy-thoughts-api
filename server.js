@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+// import thoughtsRouter from './routes/thoughtsRouter.js';
 import router from "./routes/thoughtsRouter.js";
 import dotenv from "dotenv";
 
