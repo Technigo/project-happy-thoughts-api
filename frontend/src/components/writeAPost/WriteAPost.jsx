@@ -33,7 +33,7 @@ export const WriteAPost = ({ addNewPost }) => {
       };
 
       await fetch(
-        `https://happy-thoughts-ux7hkzgmwa-uc.a.run.app/thoughts`,
+        `https://happy-thoughts-api-backend.onrender.com/thoughts`,
         options
       )
         .then((response) => response.json())
