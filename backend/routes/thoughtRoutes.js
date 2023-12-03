@@ -48,9 +48,9 @@ router.put(
   asyncHandler(async (req, res) => {
     try {
       const { thoughtId } = req.params;
-      const thought = await ThoughtModel.findByIdAndUpdate(
+      const thought = await ThoughtModel.findOneAndUpdate(
         { _id: thoughtId },
-        { $inc: { heart: 1 } },
+        { $inc: { hearts: 1 } },
         { new: true }
       );
       if (!thought) {
