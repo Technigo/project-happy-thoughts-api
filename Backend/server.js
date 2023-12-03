@@ -1,9 +1,8 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import dotenv from "dotenv"; // Fix: Correct import statement
+import dotenv from "dotenv";
 import taskRoutes from "./routes/taskRoutes";
-// import thoughtModel from "./models/task";
 
 dotenv.config();
 
