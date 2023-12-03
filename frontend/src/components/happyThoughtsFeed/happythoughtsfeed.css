@@ -1,0 +1,9 @@
+.thought-feed {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 25px;
+  padding: 0 5rem;
+}

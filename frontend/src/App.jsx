@@ -1,35 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import { HappyThoughtsFeed } from "./components/happyThoughtsFeed/HappyThoughtsFeed";
+import { WriteAPost } from "./components/writeAPost/WriteAPost";
+import loader from "./assets/loader.gif";
+import "dotenv/config";
 
-function App() {
-  const [count, setCount] = useState(0)
+export const App = () => {
+  //State that tracks if the data from the API is loading
+  const [loading, setLoading] = useState(true);
+
+  // State that tracks the post information from the API
+  const [thoughtCollection, setThoughtCollection] = useState([]);
+
+  // A state that tracks the total amount of global likes during a session
+  const [likeCounter, setLikeCounter] = useState(0);
+
+  //The API connection string
+  // const thoughtAPI = "https://happy-thoughts-ux7hkzgmwa-uc.a.run.app/thoughts";
+  const thoughtAPI =
+    "https://happy-thoughts-api-backend.onrender.com/" ||
+    "localhost:8080/thoughts";
+  //The call to the API
+  const callAPi = async () => {
+    await fetch(thoughtAPI)
+      .then((data) => data.json())
+      .then((jsonData) => {
+        setThoughtCollection(jsonData);
+        setLoading(!loading);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    callAPi();
+  }, []);
+
+  //Adds a new post to the beginning of the thougtCollection
+  const addNewPost = (newPost) => {
+    setThoughtCollection([newPost, ...thoughtCollection]);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
-
-export default App
+    <div className="container">
+      <h1>Project Happy Thoughts</h1>
+      <h3>
+        The amount of posts you've liked so far this session is: {likeCounter}
+      </h3>
+      <WriteAPost addNewPost={addNewPost} />
+      {loading ? (
+        <img className="loader" src={loader} alt="loading-gif" />
+      ) : (
+        <HappyThoughtsFeed
+          thoughts={thoughtCollection}
+          setLikeCounter={setLikeCounter}
+        />
+      )}
+    </div>
+  );
+};

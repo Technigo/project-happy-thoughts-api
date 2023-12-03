@@ -4,20 +4,28 @@ const { Schema } = mongoose;
 
 export const thoughtSchema = new Schema(
   {
-    title: {
+    message: {
       type: String,
+      required: true,
+      minlength: 5,
+      maxlength: 140,
     },
-    likes: {
+    hearts: {
       type: Number,
+      default: 0,
+    },
+    createdAt: {
+      type: Date,
+      default: () => new Date(),
     },
 
     //     author: {
     //       type: String
     //   }
-  },
-  {
-    timestamps: true,
   }
+  // {
+  //   timestamps: true,
+  // }
 );
 
 export const ThoughtModel = mongoose.model("thoughts", thoughtSchema);

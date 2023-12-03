@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const { Schema } = mongoose;
+const crypto = require("crypto");
 
 export const userSchema = new Schema(
   {
