@@ -40,7 +40,8 @@ export const App = () => {
     <div className="container">
       <h1>Project Happy Thoughts</h1>
       <h3>
-        The amount of posts you've liked so far this session is: {likeCounter}
+        The total amount of likes you've given out so far this session is:{" "}
+        {likeCounter}
       </h3>
       <WriteAPost addNewPost={addNewPost} />
       {loading ? (
