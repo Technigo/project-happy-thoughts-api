@@ -1,13 +1,15 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+In this project I have worked with Express and MongoDB to build an API which includes both GET request endpoints to return data and POST endpoints to create data. This API is inserted in a previous project called Happy Thoughts, an X (formerly known as Twitter) like site where you can post your happy thoughts.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I had problem when deploying the backend project so I got helt from my group friends.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Happy Thoughts - backend:
+https://happy-thoughts-api-evelyn.onrender.com/
+
+Happy Thoughts - frontend:
+https://happythoughts-evelyndelcarmen.netlify.app/
