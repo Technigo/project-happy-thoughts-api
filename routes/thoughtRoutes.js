@@ -23,7 +23,7 @@ router.get("/thoughts", async (req, res) => {
 router.post("/thoughts", async (req, res) => {
     try {
         const { message } = req.body;
-        if (!message || message.lenght < 5 || message.lenght > 140) {
+        if (!message || message.length < 5 || message.length > 140) {
             return res.status(400).json({
                 error: "Invalid input. Message should be between 5 and 140 charachters.",
             });
