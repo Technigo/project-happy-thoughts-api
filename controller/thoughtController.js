@@ -26,7 +26,7 @@ export const addThoughtController = asyncHandler(async (req, res) => {
     res.json(result);
   } catch (error) {
     console.error(error);
-    res.status(400).json({ error: "Message' is required." });
+    res.status(400).json({ error: "Message is required." });
   }
 });
 
@@ -46,7 +46,7 @@ export const getOneThoughtController = asyncHandler(async (req, res) => {
   res.json(thought);
 });
 
-// desciption: PUT/PATCH a specific thought to give like
+// desciption: PUT a specific thought to give heart
 // route: /thoughts/:thoughtId/like
 // access: Private
 
@@ -54,7 +54,9 @@ export const addHeartController = asyncHandler(async (req, res) => {
   const { thoughtId } = req.params;
   const thought = await ThoughtsModel.findByIdAndUpdate(
     { _id: thoughtId },
-    { $inc: { hearts: 1 } }
+    //the $inc operator is used to increment the value of a numeric field in a document
+    { $inc: { hearts: 1 } },
+    { new: true }
   );
 
   if (!thought) {

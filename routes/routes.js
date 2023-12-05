@@ -13,8 +13,8 @@ const router = express.Router();
 //Endpoint should return a maximum of 20 thoughts
 router.get("/thoughts", getThoughtsController);
 
-//--PUT Find specific thought, and update its hearts property to add one heart
-// i.e http://localhost:8080/thoughts?656a1edf191e5afe6f4bf3f0
+//--GET /Find specific thought
+// i.e http://localhost:8080/thoughts/656a1edf191e5afe6f4bf3f0
 router.get("/thoughts/:thoughtId", getOneThoughtController);
 
 //--- POST /thoughts ---
