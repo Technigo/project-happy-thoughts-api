@@ -14,9 +14,7 @@ dotenv.config();
 export const connectDB = asyncHandler(async () => {
   try {
     mongoose.set("strictQuery", false);
-    const mongoUrl =
-      process.env.MONGO_URI ||
-      "mongodb://localhost/project-happy-thoughts-backend";
+    const mongoUrl = process.env.MONGO_URI;
     mongoose.Promise = Promise;
 
     const connect = await mongoose.connect(mongoUrl, {
