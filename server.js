@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost:27017/thoughts";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost:27017/books";
 mongoose
   .connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
   .then (() => {
