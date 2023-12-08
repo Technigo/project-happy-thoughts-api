@@ -17,9 +17,11 @@ router.get("/thoughts", async (req, res) => {
 
   router.post("/thoughts", async (req, res) => {
     try {
+      console.log('Received data:', req.body);
       const postedThought = await Thought(req.body).save();
       res.status(201).json(postedThought);
     } catch (error) {
+      console.error('Error saving thought:', error);
       res.status(400).json({ error: 'Invalid input' });
     }
   });
@@ -28,11 +30,9 @@ router.get("/thoughts", async (req, res) => {
     const { thoughtId } = req.params;
   
     try {
-      const likes = await Thought.findById(thoughtId, {
-
-      });
-  
-      if (!likes) {
+      const thought = await Thought.findById(thoughtId);
+      
+      if (!thought) {
         return res.status(404).json({ error: 'Thought not found' });
       }
   
