@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 // Define the schema for the 'Thought' model
 const thoughtSchema = new mongoose.Schema({
@@ -20,4 +20,7 @@ const thoughtSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('thought', thoughtSchema);
+const Thought = mongoose.model('Thought', thoughtSchema);
+
+// Export the model
+export default Thought;
