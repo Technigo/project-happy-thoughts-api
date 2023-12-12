@@ -1,13 +1,13 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Build our own API with MongoDB, moongoose and Express for a previous project - happy thought.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+It was a bit confusing when I tried to set up different files and folders for routes, controller, model and config from the beginning. I think I will do it differently next time when I am not familiar with the code yet. It is quite easily to get lost.
+The deployment wasn't that smooth as well, I got an error "MongooseError: The `uri` parameter to `openUri()` must be a string, got “undefined”", which is not very specific of what the root problem really is. But I tried to search on Slackover flow and explore possible issue with chat GPT and I solved it.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Frontend : https://lustrous-crepe-a62b4b.netlify.app/
+Backend: https://happy-thoughts-api-h1ti.onrender.com
