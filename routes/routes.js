@@ -5,10 +5,16 @@ import {
   getOneThoughtController,
   addHeartController,
 } from "../controller/thoughtController";
-
+import listEndpoints from "express-list-endpoints";
 //Start defining your routes here
 
 const router = express.Router();
+
+// Fetch the whole set of data
+router.get("/", async (req, res) => {
+  res.send(listEndpoints(router));
+});
+
 //--- GET /thoughts ---
 //Endpoint should return a maximum of 20 thoughts
 router.get("/thoughts", getThoughtsController);
