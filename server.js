@@ -30,8 +30,19 @@ const Thought = mongoose.model("Thought", {
 // Set up Express app
 const app = express();
 
-// For development: Allow requests from any source
-app.use(cors({ origin: '*' }));
+// Only allow requests from my happyThoughts
+const allowedOrigins = ['https://happy-thoughts-elbine.netlify.app'];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+}));
+
 
 // Enable JSON body parsing
 app.use(express.json());
