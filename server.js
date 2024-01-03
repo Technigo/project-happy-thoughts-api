@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import dotenv from 'dotenv';
 dotenv.config();
 
-// MongoDB connection
+// MongoDB connection URL
 const mongoUrl = process.env.MONGODB_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
@@ -27,7 +27,8 @@ const Thought = mongoose.model("Thought", {
   },
 });
 
-// Set up Express app
+// Setting up the Express app
+const port = process.env.PORT || 1313;
 const app = express();
 
 // Only allow requests from my happyThoughts
@@ -43,15 +44,14 @@ app.use(cors({
   }
 }));
 
-
-// Enable JSON body parsing
+// JSON body parsing middleware
 app.use(express.json());
 
 // Default route for API documentation
 app.get("/", (req, res) => {
   res.json({
-    "API documentation": {
-      "GET /thoughts": "Fetch the latest 20 thoughts, sorted by createdAt in descending order (arranging data from newer to older).",
+    "API Documentation": {
+      "GET /thoughts": "Fetch the latest 20 thoughts, sorted by createdAt in descending order (new to older).",
       "POST /thoughts": "Create a new thought. Requires JSON body with 'message' field.",
       "POST /thoughts/:thoughtId/like": "Like a thought. Increments the hearts count of the thought by 1. Requires thoughtId in the URL."
     }
@@ -107,7 +107,7 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
 });
 
 // Start the server
-const port = process.env.PORT || 1313;
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
+
