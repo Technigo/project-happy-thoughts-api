@@ -2,14 +2,16 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
+
+// Load environment variables from .env file
 dotenv.config();
 
-// MongoDB connection URL
+// Connect to MongoDB using the URL from environment variables, or default to local MongoDB
 const mongoUrl = process.env.MONGODB_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
-// Define the Thought model with validation
+// Define a MongoDB model for storing 'Thoughts' with message, hearts, and createdAt fields
 const Thought = mongoose.model("Thought", {
   message: {
     type: String,
@@ -27,13 +29,14 @@ const Thought = mongoose.model("Thought", {
   },
 });
 
-// Setting up the Express app
+// Initialize Express app and set the default port
 const port = process.env.PORT || 1313;
 const app = express();
 
-// Only allow requests from my happyThoughts
+// Define allowed origins for CORS (Cross-Origin Resource Sharing)
 const allowedOrigins = ['https://happy-thoughts-elbine.netlify.app'];
 
+// Configure CORS to accept requests only from the allowed origins
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -44,21 +47,21 @@ app.use(cors({
   }
 }));
 
-// JSON body parsing middleware
+// Enable parsing of JSON bodies in requests
 app.use(express.json());
 
-// Default route for API documentation
+// Route for the API's homepage, displaying available API routes and descriptions
 app.get("/", (req, res) => {
   res.json({
     "API Documentation": {
-      "GET /thoughts": "Fetch the latest 20 thoughts, sorted by createdAt in descending order (new to older).",
-      "POST /thoughts": "Create a new thought. Requires JSON body with 'message' field.",
-      "POST /thoughts/:thoughtId/like": "Like a thought. Increments the hearts count of the thought by 1. Requires thoughtId in the URL."
+      "GET /thoughts": "Fetch the latest 20 thoughts, sorted by createdAt in descending order.",
+      "POST /thoughts": "Create a new thought with a message.",
+      "POST /thoughts/:thoughtId/like": "Like a thought by incrementing its heart count."
     }
   });
 });
 
-// GET endpoint to fetch recent thoughts
+// GET route to retrieve the latest 20 thoughts
 app.get("/thoughts", async (req, res) => {
   try {
     const thoughts = await Thought.find()
@@ -71,7 +74,7 @@ app.get("/thoughts", async (req, res) => {
   }
 });
 
-// POST endpoint to create a new thought
+// POST route to create a new thought
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
 
@@ -84,7 +87,7 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
-// POST endpoint to like a thought
+// POST route to increment the heart count of a thought
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
 
@@ -106,8 +109,7 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
   }
 });
 
-// Start the server
+// Start the Express server on the specified port
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
-
