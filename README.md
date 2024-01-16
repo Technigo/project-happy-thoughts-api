@@ -1,4 +1,6 @@
 # Project Happy Thoughts API
+![image](https://github.com/mikaeloling/project-happy-thoughts-api/assets/140322170/7657c424-7188-45f0-aefb-a38b0e71be22)
+
 
 This project is an API for a 'Happy Thoughts' application, for which the frontend was built in an earlier project.
 
