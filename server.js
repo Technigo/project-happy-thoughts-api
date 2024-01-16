@@ -2,12 +2,13 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
-import thoughtRoutes from "./routes/thougthRoutes";
+import thoughtRoutes from "./routes/thoughtRoutes";
 
 mongoose.set("strictQuery", false);
 
 const mongoUrl =
-  process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts-api";
+  process.env.MONGO_URL ||
+  "mongodb://127.0.0.1:27017/project-happy-thoughts-api";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
