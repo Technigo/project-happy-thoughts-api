@@ -1,13 +1,17 @@
 # Project Happy Thoughts API
+![image](https://github.com/mikaeloling/project-happy-thoughts-api/assets/140322170/7657c424-7188-45f0-aefb-a38b0e71be22)
 
-Replace this readme with your own information about your project.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This project is an API for a 'Happy Thoughts' application, for which the frontend was built in an earlier project.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+The main challenge was setting up a MongoDB database and connecting it to the Express server correctly. I used Mongoose to define a schema and model for the thoughts, and created endpoints for getting all thoughts, posting a new thought, and most importantly -> liking the thoughts!
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+The live project can be viewed here (please try to ignore the horrible styling):
+
+API: https://project-happy-thoughts-api-6vz8.onrender.com/thoughts 
+
+Netlify: https://celadon-beijinho-ada8a3.netlify.app/ 
