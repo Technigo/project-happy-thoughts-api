@@ -10,5 +10,5 @@ The biggest challenge was figuring out CORS as this was new to me. Previously it
 
 ## View it live
 
-Frontend in netlify: https://mc-happy-thoughts.netlify.app/
-Backend in render: 
+Frontend in netlify: https://mc-happy-thoughts.netlify.app
+Backend in render: https://mc-happy-thoughts-api.onrender.com
