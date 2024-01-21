@@ -1,13 +1,16 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This project was the to create a backend api, to connect to a frontend we previously created. The backend is built with Node.js and Express, connected to a MongoDB Atlas database, and the frontend is deployed on Netlify. The project also includes the use of .env files.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+- .env
+- Atlas
+- Postman
+
+Figuring out CORS was a bit challenging. After adding my Netlify URL to the allowed origins, my deployed version started working as intended. 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Frontend in netlify: https://mc-happy-thoughts.netlify.app/
+Backend in render: 
