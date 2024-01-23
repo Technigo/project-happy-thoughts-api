@@ -5,21 +5,14 @@ import { useEffect, useState } from "react";
 import { LoadingComp } from "./components/LoadingComp";
 
 export const App = () => {
-  // Define state variables and initialize them with default values.
-  const [thoughtsData, setThoughtsData] = useState([]); // Stores thoughts data.
-  const [loading, setLoading] = useState(true); // Indicates whether data is loading.
-  // Store the total number of likes, retrieved from localStorage.
-  const [totalLikes, setTotalLikes] = useState(
-    parseInt(localStorage.getItem("totalLikes")) || 0
-  );
+  const [thoughtsData, setThoughtsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [totalLikes, setTotalLikes] = useState();
 
-  // Define the API endpoint URL.
-  // This will return the latest 20 thoughts data from the API.
-  const apiUrl = "https://happy-thoughts-ux7hkzgmwa-uc.a.run.app/thoughts";
-
-  // Function to fetch data from the API.
+  // Define the API endpoint URL
+  const apiUrl = "https://happy-thoughts-api-6vcl.onrender.com/thoughts";
   const fetchData = async () => {
-    // Set a minimum loading time of 2 seconds (2000 milliseconds)
+    // Set a minimum loading time of 3 seconds
     const minimumLoadingTime = 3000;
 
     // Record the start time
@@ -28,7 +21,7 @@ export const App = () => {
     try {
       const response = await fetch(apiUrl);
       if (!response.ok) {
-        throw new Error("Failed to getch thoughts");
+        throw new Error("Failed to fetch thoughts");
       }
       const data = await response.json();
       setThoughtsData(data);
@@ -49,38 +42,31 @@ export const App = () => {
     }
   };
 
-  // Use the useEffect hook to run fetchData on component mount.
+  // Use the useEffect hook to run fetchData on component mount
   useEffect(() => {
     fetchData();
-    // Set up a timer to fetch data periodically (every 5 seconds).
+    // Set up a timer to fetch data periodically (every 5 seconds)
     const intervalId = setInterval(fetchData, 5000);
-    // Clean up the interval when the component unmounts.
+    // Clean up the interval when the component unmounts
     return () => {
       clearInterval(intervalId);
     };
   }, []);
 
-  // Use the useEffect hook to save totalLikes to localStorage when it changes.
-  useEffect(() => {
-    localStorage.setItem("totalLikes", totalLikes.toString());
-  }, [totalLikes]);
-
-  // Callback function for when a new thought is submitted.
+  // Callback function for when a new thought is submitted
   const addNewThought = (newThought) => {
-    const uniqueKey = Date.now(); // Use a timestamp as a unique key.
-    // Create a new thought object with the unique key.
+    const uniqueKey = Date.now();
+    // Create a new thought object with the unique key
     const thoughtWithKey = {
       ...newThought,
-      _id: uniqueKey, // Using `_id` for the key.
+      _id: uniqueKey, // Using `_id` for the key to avoid confusion with the `key` prop
     };
-    // Updating `thoughtsData` state by adding `thoughtWithKey` at the beginning of the array.
     setThoughtsData([thoughtWithKey, ...thoughtsData]);
   };
 
-  // Render the main content of the app.
   return (
     <>
-      <Header totalLikes={totalLikes} />
+      <Header />
       <div className="main-wrapper">
         <Form
           newThought={addNewThought}

@@ -1,0 +1,60 @@
+.form-container {
+  background-color: #f2f0f0;
+  margin: 2rem 0;
+  padding: var(--padding);
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--black);
+  max-width: 500px;
+  width: 100%;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+textarea {
+  padding: 0.7rem;
+  border-color: #c4c3c3;
+}
+
+.post-lenght {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem 0.5rem 1rem;
+  font-size: 0.8rem;
+}
+
+.submit-btn {
+  border: none;
+  box-shadow: rgba(251, 85, 129, 0.7) -5px 5px,
+    rgba(251, 85, 129, 0.5) -10px 10px, rgba(251, 85, 129, 0.2) -15px 15px,
+    rgba(251, 85, 129, 0.1) -20px 20px;
+  border-radius: 10rem;
+  padding: 0.5rem 1rem;
+  width: fit-content;
+  background-color: #ffadc3;
+  transition: ease 0.5s;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.submit-btn:hover {
+  scale: 1.03;
+}
+
+.red {
+  color: red;
+}
