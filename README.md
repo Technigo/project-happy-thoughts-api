@@ -1,13 +1,13 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This API was created using Express JS, MongoDB and Mongoose. The API has three endpoints. One POST-method for sharing a thought. A GET-request for all thoughts saved in the database, with the 20 latest thoughts to be displayed. By sending a POST-request to the API endpoint "/like" you can also like a thought.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I had problems with connecting my original frontend for Happy Thoughts so I decided to copy and paste it into this repository instead.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Backend: https://happy-thoughts-api-6vcl.onrender.com/
+
+Frontend: https://happythoughts-julia.netlify.app/
