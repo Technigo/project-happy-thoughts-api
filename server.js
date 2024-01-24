@@ -9,6 +9,14 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts-ap
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
+mongoose.connection.on('connected', () => {
+  console.log('Connected to MongoDB');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('MongoDB connection error:', err);
+});
+
 const Thought = mongoose.model('Thought', {
   message: {
     type: String,
@@ -58,18 +66,20 @@ app.post("/thoughts", async (req, res) => {
   }
 })
 
-  app.get("/thoughts/:_id", async (req, res) => {
-    const thoughtId = req.params._id;
-    const identifiedThought = await Thought.findById(thoughtId);
-    if (identifiedThought) {
-      res.status(200).json({ body: identifiedThought });
-    } else {
-      res.status(400).json({ error: `Could not find thought` });
-    }
-  });
-  
-  app.post("/thoughts/:_id/like", async (req, res) => {
-    const thoughtId = req.params._id;
+app.get("/thoughts/:_id", async (req, res) => {
+  const thoughtId = req.params._id;
+  const identifiedThought = await Thought.findById(thoughtId);
+  if (identifiedThought) {
+    res.status(200).json({ body: identifiedThought });
+  } else {
+    res.status(400).json({ error: "Could not find thought" });
+  }
+});
+
+app.post("/thoughts/:id/like", async (req, res) => {
+  const thoughtId = req.params.id;
+
+try {
     const addHeart = await Thought.findByIdAndUpdate(
       thoughtId,
       {
@@ -77,8 +87,17 @@ app.post("/thoughts", async (req, res) => {
       },
       { new: true }
     );
-    res.status(201).json(addHeart);
-  });
+
+    if (addHeart) {
+      res.status(201).json(addHeart);
+    } else {
+      res.status(404).json({ error: "Thought not found" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 // Start the server
 app.listen(port, () => {
