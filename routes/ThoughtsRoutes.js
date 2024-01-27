@@ -17,7 +17,7 @@ router.post("/thoughts" , async(req , res) => {
         res.status(400).json({message: "empty thought is not allowed"})
         return
     }
-    if(!thought.message.length < 5){
+    if(thought.message.length < 5){
         res.status(400).json({message: "short thought is not allowed"})
         return
     }
