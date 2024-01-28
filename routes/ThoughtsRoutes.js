@@ -27,7 +27,7 @@ router.post("/thoughts" , async(req , res) => {
     .catch((error) => res.json(error))
 
 })
-router.put("/thoughts/:thoughtId/like" , async(req , res)=>{
+router.post("/thoughts/:thoughtId/like" , async(req , res)=>{
     const { thoughtId } = req.params;
     console.log(req.params)
     await ThoughtsModel.updateOne({ _id: thoughtId }, { $inc: { hearts: 1 } })
