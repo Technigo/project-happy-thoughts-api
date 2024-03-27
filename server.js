@@ -8,10 +8,14 @@ const mongoUrl = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/thoughts';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
+
 const port = process.env.PORT || 8080;
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: '*', // Allow all origins
+  credentials: true, // Accept credentials (cookies) sent by the client
+}));
 app.use(express.json());
 
 const thoughtSchema = new mongoose.Schema({
