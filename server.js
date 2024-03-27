@@ -12,10 +12,7 @@ mongoose.Promise = Promise;
 const port = process.env.PORT || 8080;
 const app = express();
 
-app.use(cors({
-  origin: '*', // Allow all origins
-  credentials: true, // Accept credentials (cookies) sent by the client
-}));
+app.use(cors());
 app.use(express.json());
 
 const thoughtSchema = new mongoose.Schema({
