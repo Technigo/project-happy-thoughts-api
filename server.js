@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import 'dotenv';
 import 'dotenv/config';
 
 const corsOptions = {
@@ -13,11 +14,25 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 1000;
 const app = express();
 
-app.use(cors(corsOptions));
+const allowedOrigins = ['https://happythoughtsfrontend.netlify.app/'];
+
+// Configure CORS to accept requests only from the allowed origins
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+}));
+
+
 app.use(express.json());
+
 
 const thoughtSchema = new mongoose.Schema({
   message: {
