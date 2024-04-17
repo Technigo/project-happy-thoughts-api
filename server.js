@@ -1,35 +1,29 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import thoughtRoute from "./routes/thoughtRoute";
+import ThoughtsRoutes from "./routes/ThoughtsRoutes";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-// Define the MongoDB connection URL, default to a local database
-const mongoUrl = process.env.MONGO_URI || "mongodb://localhost/project-mongo";
-
-// Connect to the MongoDB database
+const mongoUrl =
+  process.env.MONGO_URL || "mongodb://localhost/happy-thought-api";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.Promise = Promise;
-
-const port = process.env.PORT || 8080;
 const app = express();
 
+const port = process.env.PORT || 9090;
+
+// Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+app.use(ThoughtsRoutes);
 
+// Start defining your routes here
 app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
-app.use("/", thoughtRoute);
-
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: "Internal Server Error" });
-});
-
+// Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
