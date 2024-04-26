@@ -1,0 +1,37 @@
+header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #f4f4f4;
+  padding: 1rem var(--padding);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--black);
+  position: sticky;
+  top: 0;
+}
+
+.project-name {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.github-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--black);
+}
+
+.heart-likes-icon {
+  width: 1.5rem;
+}
+
+@media (min-width: 668px) {
+  header {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+}

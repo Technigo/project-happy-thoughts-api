@@ -1,0 +1,63 @@
+.feed-container {
+  max-width: 500px;
+  width: 100%;
+}
+
+.posted-thought {
+  margin-bottom: 3rem;
+  padding: 1rem;
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--black);
+  overflow-wrap: break-word;
+}
+
+.heart-time-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  font-size: 13px;
+}
+
+.heart-time-container p {
+  color: #bab6b6;
+}
+
+.likes {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.likes p {
+  color: #787575;
+}
+
+.likes-btn {
+  border: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 100%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: ease 0.4s;
+}
+
+.likes-btn:hover {
+  background-color: #fccfdc;
+}
+
+.likes-btn img {
+  width: 1.5rem;
+  transition: ease 0.4s;
+}
+
+.likes-btn img:hover {
+  width: 2rem;
+}
+
+.liked {
+  background-color: #ff8fad;
+}
