@@ -16,12 +16,17 @@ mongoose.set("strictQuery", false);
 
 // CORS Configuration
 // Adjust the 'origin' to match the URL of your frontend when deployed
-app.use(
-  cors({
-    origin: "http://localhost:5173", // This allows your frontend to make requests to your backend
-    optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
-  })
-);
+import cors from "cors";
+
+const corsOptions = {
+  origin: [
+    "http://localhost:5173",
+    "https://happy-thought-hamdiolad.netlify.app",
+  ],
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 
 // Middleware
 app.use(express.json());
