@@ -17,7 +17,7 @@ mongoose.set("strictQuery", false);
 app.use(express.json());
 
 // Routes
-app.use("/api", thoughtsRouter);
+app.use("/", thoughtsRouter);
 
 // Importing listEndpoints using CommonJS syntax
 const listEndpoints = require("express-list-endpoints");
