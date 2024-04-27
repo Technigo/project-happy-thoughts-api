@@ -1,27 +1,110 @@
 import express from "express";
-import cors from "cors";
+import dotenv from "dotenv";
 import mongoose from "mongoose";
+import cors from "cors"; // Import CORS module
+import thoughtsRouter from "./routes/ThoughtsRoutes";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.Promise = Promise;
+// Load environment variables
+dotenv.config();
 
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
-const port = process.env.PORT || 8080;
+// Initialize express application
 const app = express();
+const port = process.env.PORT || 9090;
 
-// Add middlewares to enable cors and json body parsing
-app.use(cors());
+// Set mongoose options
+mongoose.set("strictQuery", false);
+
+// CORS Configuration
+// Adjust the 'origin' to match the URL of your frontend when deployed
+
+const corsOptions = {
+  origin: [
+    "http://localhost:5173",
+    "https://happy-thought-hamdiolad.netlify.app",
+  ],
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+
+// Middleware
+app.use(express.json());
+// Middleware to parse URL-encoded forms
+app.use(express.urlencoded({ extended: true }));
+
+// Routes
+app.use("/", thoughtsRouter);
+
+// Importing listEndpoints using CommonJS syntax
+const listEndpoints = require("express-list-endpoints");
+
+// Test to see if it logs correctly
+console.log(listEndpoints); // Should now log the function
+
+// Root endpoint to list all endpoints
+app.get("/", (req, res) => {
+  const endpoints = listEndpoints(app); // Pass the app instance
+  res.json({ endpoints });
+});
+
+// Connect to MongoDB
+const mongoUrl = process.env.MONGO_URI;
+mongoose
+  .connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log("MongoDB connected successfully");
+    app.listen(port, () => {
+      console.log(`Server running on http://localhost:${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error("MongoDB connection error:", error.message);
+  });
+
+/*import express from "express";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+import thoughtsRouter from "./routes/ThoughtsRoutes";
+
+// Load environment variables
+dotenv.config();
+
+// Initialize express application
+const app = express();
+const port = process.env.PORT || 9090;
+
+// Set mongoose options
+mongoose.set("strictQuery", false);
+
+// Middleware
 app.use(express.json());
 
-// Start defining your routes here
+// Routes
+app.use("/", thoughtsRouter);
+
+// Importing listEndpoints using CommonJS syntax
+const listEndpoints = require("express-list-endpoints");
+
+// Test to see if it logs correctly
+console.log(listEndpoints); // Should now log the function
+
+// Root endpoint to list all endpoints
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  const endpoints = listEndpoints(app); // Pass the app instance
+  res.json({ endpoints });
 });
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+// Connect to MongoDB
+const mongoUrl = process.env.MONGO_URI;
+mongoose
+  .connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log("MongoDB connected successfully");
+    app.listen(port, () => {
+      console.log(`Server running on http://localhost:${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error("MongoDB connection error:", error.message);
+  });
+*/
