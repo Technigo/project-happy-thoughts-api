@@ -16,7 +16,6 @@ mongoose.set("strictQuery", false);
 
 // CORS Configuration
 // Adjust the 'origin' to match the URL of your frontend when deployed
-import cors from "cors";
 
 const corsOptions = {
   origin: [
