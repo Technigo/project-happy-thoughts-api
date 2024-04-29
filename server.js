@@ -1,27 +1,43 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import thoughtsRouter from "./routes/thoughtsRoutes.js"; // Adjust the path as necessary
+import dotenv from "dotenv";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+dotenv.config();
+
+// Configure your MongoDB connection string
+const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/project-happy-thoughts';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.Promise = Promise;
+mongoose.Promise = global.Promise;
 
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
-const port = process.env.PORT || 8080;
 const app = express();
 
-// Add middlewares to enable cors and json body parsing
-app.use(cors());
+// CORS configuration to allow requests from your frontend domain
+const corsOptions = {
+  origin: 'https://project-happy-thoughts-vite.vercel.app', // Update this to your frontend's actual domain
+};
+
+// Use CORS middleware with the specified options
+app.use(cors(corsOptions));
+
 app.use(express.json());
 
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+// Use the thoughtsRouter for handling requests to "/"
+app.use('/', thoughtsRouter);
+
+// Basic endpoint to list available routes (you might need to adjust this based on actual usage)
+app.get('/', (req, res) => {
+  res.json({ message: 'Welcome to the Happy Thoughts API' });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json({ message: err.message || 'Internal Server Error', error: err });
 });
 
 // Start the server
+const port = process.env.PORT || 8080;
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
