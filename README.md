@@ -4,6 +4,17 @@ This week we're building our own Happy Thoughts API using express.js, mongoose a
 
 ## The problem
 
+This assignment, too, was pretty straight forward. Following the instructions and looking back on past to weeks made solving this rather painless.
+
+Again, I opted for using "app.route().method()" to group the methods for the respective routes - I just think it looks cleaner.
+
+### Next
+
+- I might add some queries for filtering
+- pagination
+- Stretch goals suggest adding categories, tags and user names
+- I wonder I how can prevent others from using my API and filling up my database... maybe it's next week Authentication?
+
 ### Requirements
 
 - Your API should implement the routes exactly as documented in the instructions above (see [instructions.md](/instructions.md))
