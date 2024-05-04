@@ -56,7 +56,7 @@ app
       const newThought = await new Thought({
         message: req.body.message,
       }).save();
-      res.status(200).send(newThought);
+      res.status(201).send(newThought);
     } catch (err) {
       res
         .status(400)
@@ -74,7 +74,7 @@ app.route("/thoughts/:thoughtId/like").post(async (req, res) => {
       { returnDocument: "after" }
     );
     console.log(req.params.thoughtId);
-    res.status(200).json(thought);
+    res.status(201).json(thought);
   } catch (err) {
     res.status(400).json({ message: "Post request failed", error: err.errors });
   }
