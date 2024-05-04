@@ -8,6 +8,8 @@ This assignment, too, was pretty straight forward. Following the instructions an
 
 Again, I opted for using "app.route().method()" to group the methods for the respective routes - I just think it looks cleaner.
 
+Switching out the API on the frontend worked!
+
 ### Next
 
 - I might add some queries for filtering
@@ -26,3 +28,4 @@ Again, I opted for using "app.route().method()" to group the methods for the res
 ## View it live
 
 [Happy Thoughts API on Render](https://project-happy-thoughts-api-4mf8.onrender.com)
+[Happy thoughts front end on Netlify](https://app.netlify.com/sites/sofias-project-happy-thoughts/)
