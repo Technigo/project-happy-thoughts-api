@@ -6,7 +6,7 @@ import expressListEndpoints from "express-list-endpoints";
 
 dotenv.config();
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts";
 mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
@@ -25,6 +25,8 @@ const Thought = mongoose.model("Thought", {
   message: {
     type: String,
     required: true,
+    minlength: 5,
+    maxlength: 140,
   },
   hearts: {
     type: Number,
@@ -46,19 +48,37 @@ app.route("/").get(async (req, res) => {
 app
   .route("/thoughts")
   .get(async (req, res) => {
-    const thoughts = await Thought.find();
+    const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20);
     res.send(thoughts);
   })
   .post(async (req, res) => {
-    const newThought = await new Thought(req.body);
     try {
-      res.send(newThought);
-    } catch (error) {
-      res.status(404).json("Didn't work...");
+      const newThought = await new Thought({
+        message: req.body.message,
+      }).save();
+      res.status(200).send(newThought);
+    } catch (err) {
+      res
+        .status(400)
+        .json({ message: "Post request failed", error: err.errors });
     }
   });
 
-app.route("thoughts/:thoughtId/like").post();
+app.route("/thoughts/:thoughtId/like").post(async (req, res) => {
+  try {
+    const thought = await Thought.findByIdAndUpdate(
+      req.params.thoughtId,
+      {
+        $inc: { hearts: 1 },
+      },
+      { returnDocument: "after" }
+    );
+    console.log(req.params.thoughtId);
+    res.status(200).json(thought);
+  } catch (err) {
+    res.status(400).json({ message: "Post request failed", error: err.errors });
+  }
+});
 
 // Start the server
 app.listen(port, () => {
