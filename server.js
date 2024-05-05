@@ -35,13 +35,6 @@ const Thought = mongoose.model("Thought", {
   },
 });
 
-// Thought.pre("save", function (next) {
-//   if (this.isNew) {
-//     this.hearts = 0;
-//   }
-//   next();
-// });
-
 // Start defining your routes here
 app.get("/", (req, res) => {
   const endpoints = expressListEndpoints(app);
