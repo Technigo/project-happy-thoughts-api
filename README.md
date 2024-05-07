@@ -1,13 +1,31 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This week we're building our own Happy Thoughts API using express.js, mongoose and MongoDB.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+This assignment, too, was pretty straight forward. Following the instructions and looking back on past to weeks made solving this rather painless.
+
+Again, I opted for using "app.route().method()" to group the methods for the respective routes - I just think it looks cleaner.
+
+Switching out the API on the frontend worked!
+
+### Next
+
+- I might add some queries for filtering
+- pagination
+- Stretch goals suggest adding categories, tags and user names
+- I wonder I how can prevent others from using my API and filling up my database... maybe it's next week Authentication?
+
+### Requirements
+
+- Your API should implement the routes exactly as documented in the instructions above (see [instructions.md](/instructions.md))
+- Your `GET /thoughts` endpoint should only return 20 results, ordered by `createdAt` in descending order.
+- Your API should validate user input and return appropriate errors if the input is invalid.
+- In the `POST /thoughts` endpoint to create a new thought, if the input was invalid and the API is returning errors, it should set the response status to `400` (bad request).
+- The endpoint to add hearts to a thought should return an appropriate error if the thought was not found.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+[Happy Thoughts API on Render](https://project-happy-thoughts-api-4mf8.onrender.com)
+[Happy thoughts front end on Netlify](https://app.netlify.com/sites/sofias-project-happy-thoughts/)
