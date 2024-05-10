@@ -1,27 +1,80 @@
-import express from "express";
-import cors from "cors";
-import mongoose from "mongoose";
+import express from 'express'
+import cors from 'cors'
+import dotenv from 'dotenv'
+import mongoose from 'mongoose'
+import expressListEndpoints from 'express-list-endpoints'
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.Promise = Promise;
+dotenv.config()
+mongoose.set('strictQuery', false)
 
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
-const port = process.env.PORT || 8080;
-const app = express();
+const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/HappyThoughts'
+mongoose.connect(mongoUrl)
+mongoose.Promise = Promise
+const Thought = mongoose.model('Thought', {
+  message: {
+    type: String,
+    required: true,
+    maxlength: 140,
+    minlength: 5,
+  },
+  hearts: { type: Number, default: 0 },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+})
+
+const port = process.env.PORT || 8080
+const app = express()
 
 // Add middlewares to enable cors and json body parsing
-app.use(cors());
-app.use(express.json());
+app.use(cors())
+app.use(express.json())
 
 // Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
-});
+app.get('/', (req, res) => {
+  const endpoints = expressListEndpoints(app)
+  res.json(endpoints)
+})
+app.get('/thoughts', async (req, res) => {
+  const thoughts = await Thought.find({})
+    .sort({ createdAt: 'asc' })
+    .limit(20)
+    .exec()
 
+  try {
+    res.status(201).json(thoughts)
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: 'Could not retrieve thoughts.', error: err.errors })
+  }
+})
+app.post('/thoughts', async (req, res) => {
+  const { message, heart } = req.body
+  const thought = new Thought({ message, heart })
+  try {
+    const newThought = await thought.save()
+    res.status(201).json(newThought)
+  } catch (err) {
+    res.status(500).json({
+      message:
+        'Could not save your thought, insert a messagge between 5-140 characters',
+      error: err.errors,
+    })
+  }
+})
+app.post('thoughts/:thoughtId/like', async (req, res) => {
+  const hearts = await Thought.findById(req.params.id)
+  try {
+    res.status(201).json(hearts)
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: 'could not like the thought', error: err.errors })
+  }
+})
 // Start the server
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+  console.log(`Server running on http://localhost:${port}`)
+})
