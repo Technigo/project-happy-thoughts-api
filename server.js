@@ -11,7 +11,26 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
-//define thoughts model
+//define thought model
+const Thought = mongoose.model("Thought", {
+  message: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 140,
+  },
+  hearts: {
+    type: Number,
+    default: 0,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+//adding a new thought to test thought model
+new Thought({ message: "testtest" }).save();
 
 //defines the port the app will run on
 const port = process.env.PORT || 8080;
@@ -30,6 +49,12 @@ app.get("/", (req, res) => {
 //endpoint to get 20 thoughts sorted by createdAt (GET/thoughts)
 
 //endpoint to post thoughts (POST/thoughts)
+// app.post("/thoughts", async (req, res) => {
+//   const thought = new Thought(req.body);
+//   const savedThought = await thought.save();
+//   res.json(savedThought);
+// });
+// use try-catch form -> success -> bad request
 
 //endpoint to add hearts/likes to the thougth
 
