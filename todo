@@ -1,0 +1,35 @@
+// 1) Create mongoose model('Thought' {
+//   message: String,
+//   VALIDERING: required, minlength 5, maxlength 140.
+//   hearts: number?
+//   VALIDERING: default 0
+//   ska inte heller gå att lägga till hjärtan alls när man skickar. Man ska inte kunna fuska sig till likes.Det som går till mongodb ska vara O hjärtan.
+//   createdat: Date.now
+//   VALIDERING: default är när den skapas. ska inte gå att ändra när man skapar nytt meddelande.
+
+// })
+
+// add validation to all of the above? or just message? Like minlength and maxlength.
+
+// 2) ENDPOINTS:
+
+// * get/thoughts
+// show max 20 thoughts - desc - hitta info om detta i Vans klipp om post
+
+// * post/thoughts
+// req.body? should be validated!!
+// `{ "message": "Express is great!" }`
+// save the post if the message is validated.Create
+
+// * post/thoughts/:thoughtId/Like
+// om det finns ett id på ett meddelande som är validerat så ska apin uppdatera likesen. något med +1 eller så. Googla.
+
+// 3) DEPLOYA!!
+
+// 4) Byt ut apin i happy thoughts mot MIN NYA API genom att byta ut URLen. 
+
+// FÖR ATT BLI GODKÄND:
+// - följ instruktionerna EXAKT (lol)
+// - visa ENDAST 20 meddelanden, i fallande createdat. dvs nyast överst.
+// - validera data som skickas in. Svara med bra felmeddelanden om det blir fel. Använd status(400) - bad request.
+// - Om meddeladet man vill lajka inte kan hittas ska felmeddelandet vara lämpligt. vad fan betyder det? ahahahha
