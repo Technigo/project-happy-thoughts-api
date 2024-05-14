@@ -35,14 +35,22 @@ app.get("/thoughts", async (req, res) => {
   const thoughts = await Thought.find().sort({ createdAt: "desc" }).exec();
   res.json(thoughts);
 });
-app.post("/thoughts", (req, res) => {
 
-  const newThought = new Thought(req.body);
+app.post("/thoughts", (req, res) => {
+  const newThought = new Thought({ message: req.body.message, hearts: 0 });
   newThought.save().then(() => {
     res.json(newThought);
   });
 });
 
+app.post("/thoughts/:thoughtId/like", async (req, res) => { 
+  const thoughtId = req.params.thoughtId;
+  const thought = await Thought.findById(thoughtId);
+  thought.hearts += 1;    
+  thought.save().then(() => {
+    res.json(thought);
+  });
+} );
 
 // Start the server
 app.listen(port, () => {
