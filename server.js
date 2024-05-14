@@ -31,6 +31,19 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
+app.get("/thoughts", async (req, res) => {
+  const thoughts = await Thought.find().sort({ createdAt: "desc" }).exec();
+  res.json(thoughts);
+});
+app.post("/thoughts", (req, res) => {
+
+  const newThought = new Thought(req.body);
+  newThought.save().then(() => {
+    res.json(newThought);
+  });
+});
+
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
