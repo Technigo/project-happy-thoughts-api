@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import expressListEndpoints from "express-list-endpoints";
 import mongoose from "mongoose";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
@@ -18,7 +19,8 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  const endpoints = expressListEndpoints(app)
+  res.json(endpoints)
 });
 
 // Start the server
