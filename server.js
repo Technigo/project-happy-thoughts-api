@@ -1,4 +1,4 @@
-import express from "express";
+import express, { response } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
@@ -12,8 +12,8 @@ const thoughtSchema = new Schema({
   message: {
     type: String,
     required: true,
-    minLength: 5,
-    maxLength: 140,
+    minlength: 5,
+    maxlength: 140,
   },
   heart: {
     type: Number,
@@ -43,21 +43,59 @@ app.get("/", (req, res) => {
 });
 
 app.get("/thoughts", async (req, res) => {
-  res.send("Here there be happy thoughtsx");
+  const allThoughts = await Thought.find().limit(20).exec();
+  if (allThoughts.length > 0) {
+    res.json(allThoughts);
+  } else {
+    res.status(404).send("No happy thoughts found");
+  }
 });
 
 app.post("/thoughts", async (req, res) => {
   try {
-    if (req.body.message.length < 5) {
-      throw new Error("Message must be at least 5 characters long");
-    } else if (req.body.message.length > 140) {
-      throw new Error("Message must be at less than 140 characters long");
-    }
     const thought = new Thought({ message: req.body.message });
     await thought.save();
-    res.status(201).json(thought);
+    res.status(201).json({
+      success: true,
+      response: thought,
+      message: "Thought posted",
+    });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({
+      success: false,
+      response: error,
+      message: "Could not post thought",
+    });
+  }
+});
+
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+  try {
+    const thought = await Thought.findById(thoughtId);
+
+    if (!thought) {
+      return res.status(404).json({
+        success: false,
+        message: "Thought not found",
+      });
+    }
+
+    const likedThought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      {
+        heart: thought.heart + 1,
+      },
+      { new: true }
+    );
+
+    res.json({ success: true, heart: likedThought.heart });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      response: error,
+      message: "Could not like thought",
+    });
   }
 });
 
