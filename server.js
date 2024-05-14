@@ -43,14 +43,14 @@ app.post("/thoughts", (req, res) => {
   });
 });
 
-app.post("/thoughts/:thoughtId/like", async (req, res) => { 
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const thoughtId = req.params.thoughtId;
   const thought = await Thought.findById(thoughtId);
-  thought.hearts += 1;    
+  thought.hearts += 1;
   thought.save().then(() => {
     res.json(thought);
   });
-} );
+});
 
 // Start the server
 app.listen(port, () => {
