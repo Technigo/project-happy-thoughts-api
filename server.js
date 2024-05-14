@@ -21,6 +21,15 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
+app.get("/thoughts", (req, res) => {
+  // Get all the thoughts
+})
+
+app.post("/thoughts", (req, res) => {
+  // Create thought in the database
+  
+})
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
