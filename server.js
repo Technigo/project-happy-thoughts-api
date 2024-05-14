@@ -25,13 +25,28 @@ app.get("/", (req, res) => {
   res.json(endpoints);
 });
 
-//get all thoughts
+// Get all thoughts
 app.get("/thoughts", async (req, res) => {
   const thoughts = await Thought.find()
     .sort({ createdAt: -1 })
     .limit(20)
     .exec();
   res.json(thoughts);
+});
+
+// Post a thought
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body;
+  try {
+    const newThought = await new Thought({ message }).save();
+    res.status(201).json(newThought);
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+      message: "Could not save the thought...",
+    });
+  }
 });
 
 // Start the server
