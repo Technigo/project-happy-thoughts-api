@@ -1,5 +1,5 @@
 import cors from "cors";
-import express from "express";
+import express, { response } from "express";
 import mongoose from "mongoose";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
@@ -11,15 +11,60 @@ mongoose.Promise = Promise;
 // PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
+const bodyParser = require('body-parser')
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
 
+// create model
+
 // Start defining your routes here
 app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
+
+//post endpoints OBS EJ KLAR! EJ ENL MITT PROJEKT
+app.post('/blabla', async (req, res) => {
+  const { alla saker som ska vara i schemat som är i modellen} = req.body
+  try {
+    const blabla = await new BLABLA ({saker som ska vara i }).save()
+    res.status(201).json({
+      success: true,
+      response: blblbl,
+      message: 'blablabla'
+    })
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      response: error,
+      message: 'bkababb couldnt be created'
+    })
+  }
+})
+
+//patch endpoint (samma namn som post), ändra något specifikt i det som postats
+app.patch('/blabla/:id', async (req, res) => {
+  const { id } = req.params 
+
+  const { det som ska uppdateras } = req.body
+
+  try {
+    const blblbl = await blablabla(modellen).findByIdAndUpdate(id,(hitta) { vad vi ska uppdatera ex name: newName }(uppdatera), {new: true, runValidators: true}(uppdatera även i postman!!))
+
+    res.status(200).json({
+      success: true,
+      reponse: blblbl,
+      message: "blalala updated" eller `blablab uptated to ${blablablbaa}`
+    })
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      reponse: blblbl,
+      message: "blalala updated" 
+    })
+  }
+})
 
 // Start the server
 app.listen(port, () => {
