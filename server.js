@@ -28,9 +28,7 @@ const thoughtsSchema = new Schema({
 })
 
 const Thought = model ("Thought", thoughtsSchema)
-// const likeSchema = new Schema({
 
-// })
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
 // PORT=9000 npm start
@@ -81,8 +79,23 @@ app.post("/thoughts", async (req,res)=> {
 }
 }) 
 
-
-
+app.post("/thoughts/:id/like", async (req, res) => {
+  const thoughtId = req.params.id
+  
+  try{
+    const likedThought = await Thought.findByIdAndUpdate(
+      thoughtId, {$inc: {hearts: 1}}, {new: true}
+    )
+    
+    res.status(201).json(await likedThought.save())
+  }catch (error) {
+    res.status(500).json({
+      success: false,
+      response: error,
+      message: error.message
+    })
+  }
+})
 
 console.log(new Date())
 // Start the server
