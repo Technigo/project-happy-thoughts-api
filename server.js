@@ -2,8 +2,10 @@ import cors from "cors";
 import express from "express";
 import expressListEndpoints from "express-list-endpoints";
 import mongoose from "mongoose";
+import Thought from "./models/Thought";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl =
+  process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts";
 mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
@@ -19,8 +21,17 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  const endpoints = expressListEndpoints(app)
-  res.json(endpoints)
+  const endpoints = expressListEndpoints(app);
+  res.json(endpoints);
+});
+
+//get all thoughts
+app.get("/thoughts", async (req, res) => {
+  const thoughts = await Thought.find()
+    .sort({ createdAt: -1 })
+    .limit(20)
+    .exec();
+  res.json(thoughts);
 });
 
 // Start the server
