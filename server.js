@@ -49,6 +49,27 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
+// Like a post
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+  try {
+    const post = await Thought.findByIdAndUpdate(
+      thoughtId,
+      {
+        $inc: { hearts: 1 },
+      },
+      { new: true }
+    );
+    res.status(201).json(post);
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+      message: "Could not like the thought...",
+    });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
