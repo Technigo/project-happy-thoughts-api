@@ -4,7 +4,7 @@ The assignment was to building your own API to replace the existing one used in 
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I managed errors, validated input, connected to MongoDB, documented endpoints, set up Express routes, used environment variables and added basic logging.
 
 ## View it live
 
