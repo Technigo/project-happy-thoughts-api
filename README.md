@@ -15,5 +15,4 @@ The endpoint will add hearts to a thought should return an error if the thought 
 ## View it live
 
 API: https://project-happy-thoughts-api-qgyf.onrender.com/
-
 Frontend: https://celebrated-shortbread-0673ce.netlify.app/
