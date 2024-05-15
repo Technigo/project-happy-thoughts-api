@@ -93,13 +93,13 @@ app.post("/thoughts", async (req, res) => {
     res.status(201).json({
       success: true,
       response: thought,
-      message: "Thought created and saved",
+      responsemessage: "Thought created and saved",
     });
   } catch (error) {
     res.status(400).json({
       success: false,
       response: error,
-      message: "Couldn't save new thought",
+      responsemessage: "Couldn't save new thought",
     });
   }
 });
