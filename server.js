@@ -3,6 +3,7 @@ import express, { response } from 'express'
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import { validationResult, body } from 'express-validator'
+import expressListEndpoints from 'express-list-endpoints'
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/project-mongo'
 mongoose.connect(mongoUrl)
@@ -13,7 +14,7 @@ mongoose.Promise = Promise
 // PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
-const bodyParser = require('body-parser')
+// const bodyParser = require('body-parser')
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
@@ -45,17 +46,44 @@ const Thought = mongoose.model('Thought', Schema)
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-	res.send('Hello Technigo!')
+	const endpoints = expressListEndpoints(app)
+	if (endpoints) {
+		res.status(200).json(endpoints)
+	} else {
+		res.status(500).json({ error: 'Failed to load endpoints' })
+	}
 })
 
-//post endpoints OBS EJ KLAR! EJ ENL MITT PROJEKT
-app.post('/Thoughts', async (req, res) => {
-	const { message, hearts, createdAt } = req.body
-	try {
-		const postThought = await new Thought({ message, hearts, createdAt }).save()
+//get endpoint that gets the 20 latest messages
+app.get('/Thoughts', async (req, res) => {
+	const thoughts = await Thought.find()
+		.sort({ createdAt: 'desc' })
+		.limit(20)
+		.exec()
+
+	if (thoughts.length === 20 || thoughts.length < 20) {
 		res.status(201).json({
 			success: true,
-			response: Thought,
+			response: thoughts,
+			message: 'Showing the 20 latest entries',
+		})
+	} else {
+		res.status(400).json({
+			success: false,
+			response: error,
+			message: 'Could not load messages',
+		})
+	}
+})
+
+//post endpoints
+app.post('/Thoughts', async (req, res) => {
+	const { message, createdAt } = req.body
+	try {
+		const postedThought = await Thought({ message, createdAt }).save()
+		res.status(201).json({
+			success: true,
+			response: postedThought,
 			message: 'New thought created',
 		})
 	} catch (error) {
@@ -77,20 +105,20 @@ app.patch('/Thoughts/:id', async (req, res) => {
 	try {
 		const updateThought = await Thought.findByIdAndUpdate(
 			id,
-			{ message: newMessage },
+			{ message: message },
 			{ new: true, runValidators: true }
 		)
 
 		res.status(200).json({
 			success: true,
-			reponse: Thought,
-			message: 'hearts updated',
+			reponse: updateThought,
+			message: 'message updated',
 			// `hearts updated to ${hearts}`
 		})
 	} catch (error) {
 		res.status(400).json({
 			success: false,
-			reponse: error,
+			reponse: 'Error',
 			message: 'could not update hearts',
 		})
 	}

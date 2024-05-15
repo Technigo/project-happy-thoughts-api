@@ -7,7 +7,7 @@
 //   ska inte heller gå att lägga till hjärtan alls när man skickar. Man ska inte kunna fuska sig till likes.Det som går till mongodb ska vara O hjärtan. KLAR!
 
 //   createdat: Date.now
-//   VALIDERING: default är när den skapas. ska inte gå att ändra när man skapar nytt meddelande.
+//   VALIDERING: default är när den skapas. ska inte gå att ändra när man skapar nytt meddelande. KLAR
 
 // })
 
