@@ -42,6 +42,22 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
 
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body;
+  const createdAt = new Date();
+
+  try {
+    const thought = await new Thought({ message, createdAt }).save();
+    res.status(201).json(thought);
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      response: error,
+      message: "Thought couldn't be created",
+    });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
