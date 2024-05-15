@@ -3,6 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import expressListEndpoints from "express-list-endpoints";
+import Thought from "./models/ThoughtSchema";
 
 // Configure dotenv
 dotenv.config();
@@ -45,6 +46,38 @@ app.get("/", (req, res) => {
     res
       .status(500)
       .send("This page is unavailable at the moment. Please try again later.");
+  }
+});
+
+// GET thoughts
+app.get("/thoughts", async (req, res) => {
+  const allThoughts = await Thought.find();
+  res.json(allThoughts);
+});
+
+// POST thought
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body;
+
+  try {
+    // Success case - create thought
+    const thought = await new Thought({
+      message,
+    }).save();
+
+    // Set success status
+    res.status(201).json({
+      success: true,
+      response: thought,
+      message: "Thought created successfully",
+    });
+  } catch (error) {
+    // Failed case - return error message
+    res.status(400).json({
+      sucess: false,
+      response: error,
+      message: "Unable to create thought",
+    });
   }
 });
 
