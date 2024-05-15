@@ -38,10 +38,11 @@ app.get("/", (req, res) => {
 });
 
 //GET the thoughts endpoint
+//TODO Add that there are only 20 posts seen here
 app.get("/thoughts", async (req, res) => {
   try {
     const allThoughts = await Thought.find();
-    console.log(allThoughts);
+
     if (allThoughts.length > 0) {
       res.status(200).json(allThoughts);
     } else {
@@ -53,6 +54,27 @@ app.get("/thoughts", async (req, res) => {
       .status(500)
       .send(
         "Sorry, this page is not available at the moment. Please try again later."
+      );
+  }
+});
+
+//POST the thoughts endpoint
+app.post("/thoughts", async (req, res) => {
+  const { message, hearts, createdAt, _id } = req.body;
+
+  try {
+    const thought = await new Thought({
+      message,
+      hearts,
+      createdAt,
+      _id,
+    }).save();
+    res.status(201).json(thought);
+  } catch (error) {
+    res
+      .status(400)
+      .send(
+        "There has been an error with posting your thought. Please ensure that your message is at least 5 characters long and has a maximum of 140 characters."
       );
   }
 });
