@@ -38,8 +38,12 @@ app.get("/thoughts", async (req, res) => {
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
   try {
-    const newThought = await new Thought({ message }).save();
-    res.status(201).json(newThought);
+    if (message) {
+      const newThought = await new Thought({ message }).save();
+      res.status(201).json(newThought);
+    } else {
+      throw new Error("No message parameters...");
+    }
   } catch (error) {
     res.status(400).json({
       success: false,
@@ -59,9 +63,12 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
         $inc: { hearts: 1 },
       },
       { new: true }
-    );
+    ).exec();
     res.status(201).json(post);
   } catch (error) {
+    if (error.name === "CastError") {
+      error.message = `There's no post matching id:${thoughtId}`;
+    }
     res.status(400).json({
       success: false,
       error: error.message,
