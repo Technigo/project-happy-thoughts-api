@@ -29,8 +29,8 @@ const Thought = mongoose.model("Thought", {
   },
 });
 
-//adding a new thought to test thought model
-// new Thought({ message: "Happy to be done with this API 😍" }).save();
+//adding a new thought to test thought model *leaving it here to remember how it's done*
+// new Thought({ message: "Happy happy happy" }).save();
 
 //defines the port the app will run on
 const port = process.env.PORT || 8080;
@@ -110,10 +110,6 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
     });
   }
 });
-
-//add API to old happy thoughts project
-
-//update readme and open pull request
 
 // Start the server
 app.listen(port, () => {
