@@ -81,6 +81,28 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
+// POST like
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+
+  try {
+    const thought = await Thought.findById(thoughtId).exec();
+
+    if (thought) {
+      // Add one like
+      thought.hearts++;
+      // Save thought object
+      thought.save();
+      res.json(thought);
+    } else {
+      res.status(404).send("Could not find thought");
+    }
+  } catch (error) {
+    console.error("Error", error);
+    res.status(404).send("Could not find thought");
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
