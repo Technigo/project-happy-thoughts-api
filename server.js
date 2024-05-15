@@ -2,7 +2,7 @@ import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/technigo-w15-project-happy-thoughts-mongo";
 mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
@@ -15,6 +15,27 @@ const app = express();
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+
+const { Schema, model } = mongoose;
+
+const thoughtSchema = new Schema({
+  message: {
+    type: String,
+    minlength: 5,
+    maxlength: 140,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    required: true,
+  },
+  hearts: {
+    type: Number,
+    default: 0,
+  },
+});
+
+const Thought = model("Thought", thoughtSchema);
 
 // Start defining your routes here
 app.get("/", (req, res) => {
