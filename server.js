@@ -44,47 +44,52 @@ app.get("/", (req, res) => {
 });
 
 app.get("/thoughts", async (req, res) => {
+  const thoughts = await Thought.find().sort({ createdAt: 'desc' }).limit(20).exec()
+  res.json(thoughts)
+})
+
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body
+  const thought = new Thought({ message })
+
   try {
-    const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20);
-    res.json(thoughts);
-  } catch (error) {
-    res.status(500).json({ error: "Server error" });
+    const savedThought = await thought.save()
+    res.status(201).json(savedThought)
+  } catch (err) {
+    res.status(400).json("Could not save your happy thought")
+  }
+})
+
+app.get("/thoughts/:_id", async (req, res) => {
+  const thoughtId = req.params._id;
+  const identifiedThought = await Thought.findById(thoughtId);
+  if (identifiedThought) {
+    res.status(200).json({ body: identifiedThought });
+  } else {
+    res.status(400).json({ error: "Could not find thought" });
   }
 });
-// POST /thoughts endpoint
-app.post('/thoughts', async (req, res) => {
-  const { message } = req.body;
-  
-  if (!message || message.length < 5 || message.length > 140) {
-    return res.status(400).json({ error: 'Invalid input' });
-  }
 
-  const newThought = new Thought({ message });
+app.post("/thoughts/:id/like", async (req, res) => {
+  const thoughtId = req.params.id;
 
-  try {
-    const savedThought = await newThought.save();
-    res.status(201).json(savedThought);
-  } catch (error) {
-    res.status(400).json({ error: 'Could not save thought' });
-  }
-});
+try {
+    const addHeart = await Thought.findByIdAndUpdate(
+      thoughtId,
+      {
+        $inc: { hearts: 1 },
+      },
+      { new: true }
+    );
 
-// POST /thoughts/:thoughtId/like endpoint
-app.post('/thoughts/:thoughtId/like', async (req, res) => {
-  const { thoughtId } = req.params;
-
-  try {
-    const thought = await Thought.findById(thoughtId);
-
-    if (!thought) {
-      return res.status(404).json({ error: 'Thought not found' });
+    if (addHeart) {
+      res.status(201).json(addHeart);
+    } else {
+      res.status(404).json({ error: "Thought not found" });
     }
-
-    thought.hearts += 1;
-    await thought.save();
-    res.json(thought);
   } catch (error) {
-    res.status(400).json({ error: 'Could not update hearts' });
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
