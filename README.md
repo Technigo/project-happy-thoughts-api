@@ -1,8 +1,6 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+The assignment was to building your own API to replace the existing one used in the Happy Thoughts React project. The new API should have the functionality of the original, including routes for fetching, adding, and liking thoughts, while ensuring input validation and error handling.
 
 ## The problem
 
