@@ -33,9 +33,19 @@ app.use((req, res, next) => {
   }
 });
 
-// Start defining your routes here
+// ---- ROUTES ----
+
+// GET API documentation
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  try {
+    const endpoints = expressListEndpoints(app);
+    res.json(endpoints);
+  } catch (error) {
+    console.error("Error", error);
+    res
+      .status(500)
+      .send("This page is unavailable at the moment. Please try again later.");
+  }
 });
 
 // Start the server
