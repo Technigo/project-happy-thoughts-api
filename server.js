@@ -6,7 +6,7 @@ import listEndpoints from "express-list-endpoints";
 // MongoDB connection setup
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose
-  .connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(mongoUrl)
   .then(() => console.log("MongoDB connected successfully"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
