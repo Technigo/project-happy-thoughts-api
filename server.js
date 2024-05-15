@@ -80,6 +80,31 @@ app.post("/thoughts", async (req, res) => {
 });
 
 //POST Endpoint for adding a heart
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+
+  try {
+    const likeThought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      { $inc: { hearts: 1 } },
+      { new: true, runValidators: true }
+    );
+
+    if (likeThought) {
+      res.status(200).json(likeThought);
+    } else {
+      res
+        .status(404)
+        .send("There is no Thought with that ID. Please try another one.");
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .send(
+        "Sorry, this page is not available at the moment. Please try again later."
+      );
+  }
+});
 
 // Start the server
 app.listen(port, () => {
