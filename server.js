@@ -57,19 +57,18 @@ app.get("/thoughts", async (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
-  try {
+   console.log("Received data:", req.body); 
     const { message } = req.body;
     const thought = new Thought({ message });
-    const savedThought = await thought.save();
-    res.status(201).json(savedThought);
-  } catch (err) {
-    res
-      .status(400)
-      .json({
+    try {
+      const savedThought = await thought.save();
+      res.status(201).json(savedThought);
+    } catch (err) {
+      res.status(400).json({
         error: "Could not save your happy thought",
         details: err.message,
       });
-  }
+    }
 });
 
 app.get("/thoughts/:id", async (req, res) => {
