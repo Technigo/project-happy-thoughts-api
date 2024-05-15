@@ -16,7 +16,7 @@ const thoughtSchema = new Schema({
     minlength: 5,
     maxlength: 140,
   },
-  heart: {
+  hearts: {
     type: Number,
     default: 0,
   },
@@ -90,12 +90,12 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
     const likedThought = await Thought.findByIdAndUpdate(
       thoughtId,
       {
-        heart: thought.heart + 1,
+        hearts: thought.hearts + 1,
       },
       { new: true }
     );
 
-    res.json({ success: true, heart: likedThought.heart });
+    res.json({ success: true, hearts: likedThought.hearts });
   } catch (error) {
     res.status(400).json({
       success: false,
