@@ -4,7 +4,7 @@ import expressListEndpoints from "express-list-endpoints";
 import mongoose from "mongoose";
 
 //Importing the Model
-import { Thought } from "./models/ThoughtSchema";
+import { Thought } from "./models/thoughtSchema";
 
 const mongoUrl =
   process.env.MONGO_URL || "mongodb://localhost/project-thoughts-api";
