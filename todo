@@ -1,15 +1,17 @@
 // 1) Create mongoose model('Thought' {
 //   message: String,
-//   VALIDERING: required, minlength 5, maxlength 140.
+//   VALIDERING: required, minlength 5, maxlength 140. KLAR!
+
 //   hearts: number?
 //   VALIDERING: default 0
-//   ska inte heller gå att lägga till hjärtan alls när man skickar. Man ska inte kunna fuska sig till likes.Det som går till mongodb ska vara O hjärtan.
+//   ska inte heller gå att lägga till hjärtan alls när man skickar. Man ska inte kunna fuska sig till likes.Det som går till mongodb ska vara O hjärtan. KLAR!
+
 //   createdat: Date.now
 //   VALIDERING: default är när den skapas. ska inte gå att ändra när man skapar nytt meddelande.
 
 // })
 
-// add validation to all of the above? or just message? Like minlength and maxlength.
+// add validation to all of the above? or just message? Like minlength and maxlength. KLAR!
 
 // 2) ENDPOINTS:
 

@@ -1,6 +1,8 @@
 import cors from "cors";
 import express, { response } from "express";
 import mongoose from "mongoose";
+import bodyParser from "body-parser";
+import { validationResult, body } from "express-validator";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl);
@@ -16,8 +18,30 @@ const bodyParser = require('body-parser')
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.json())
+
+//create Schema
+const Schema = new mongoose.Schema({
+  message: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 140
+  },
+  hearts: {
+    type: Number,
+    default: 0,
+    immutable: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    immutable: true
+  }
+})
 
 // create model
+const Thoughts = mongoose.model('Thoughts', Schema)
 
 // Start defining your routes here
 app.get("/", (req, res) => {
