@@ -22,10 +22,22 @@ app.use(cors());
 app.use(express.json());
 
 // API documentation
-//TODO Add description!
 app.get("/", (req, res) => {
   try {
-    const endpoints = expressListEndpoints(app);
+    const endpoints = expressListEndpoints(app).map((endpoint) => {
+      if (endpoint.path === "/thoughts") {
+        endpoint.query = {
+          description: `Here you can send a GET request to get the last 20 thoughts in a decending order. As well as posting a new thought to the API with a POST request. Please include a JSON with the message like that: { "message": "My Happy Thought" }`,
+        };
+      }
+      if (endpoint.path === "/thoughts/:thoughtId/like") {
+        endpoint.query = {
+          description:
+            "On this endpoint you can like a thought by sending a POST request. Please provide the Id of the desired thought for it to work.",
+        };
+      }
+      return endpoint;
+    });
     res.status(200).json(endpoints);
   } catch (error) {
     console.error("The following error occured:", error);
