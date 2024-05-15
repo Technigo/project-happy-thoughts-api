@@ -58,6 +58,19 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
+app.get("/thoughts", async (req, res) => {
+  try {
+    const thoughts = await Thought.find().limit(20).sort({ createdAt: -1 });
+    res.status(200).json(thoughts);
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      response: error,
+      message: "Couldn't get the thoughts",
+    });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
