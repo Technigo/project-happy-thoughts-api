@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 
 import Thought from "./models/Thoughts";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/Happy-Thoughts";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
