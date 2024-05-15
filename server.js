@@ -1,8 +1,15 @@
 import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+import expressListEndpoints from "express-list-endpoints";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+// Configure dotenv
+dotenv.config();
+
+// Set up mongoURL and localhost
+const mongoUrl =
+  process.env.MONGO_URL || "mongodb://localhost/happy-thoughts-api";
 mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
@@ -12,9 +19,19 @@ mongoose.Promise = Promise;
 const port = process.env.PORT || 8080;
 const app = express();
 
-// Add middlewares to enable cors and json body parsing
+// ---- MIDDLEWARES ----
+
+// Middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+// Middleware to check database status
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next();
+  } else {
+    res.status(503).json({ error: "Service unavailable" });
+  }
+});
 
 // Start defining your routes here
 app.get("/", (req, res) => {
