@@ -16,7 +16,12 @@ app.use(express.json())
 
 //Schemas and models
 const Thought = mongoose.model("Thought", {
-  message: String,
+  message: {
+    type: String,
+    required: true,
+    minlength: 4,
+    maxlength: 140
+  },
   hearts: {
     type: Number,
     default: 0
@@ -32,10 +37,23 @@ app.get("/", (req, res) => {
   res.send("Hello Technigo!")
 })
 
+app.get("/thoughts", async (req, res) => {
+  try {
+    const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20)
+    res.json(thoughts)
+  } catch (err) {
+    res.status(400).json({ message: "Something went wrong.", error: err.errors })
+  }
+})
+
 app.post("/thoughts", async (req, res) => {
-  const thought = new Thought({message: req.body.message})
-  await thought.save()
-  res.json(thought)
+  try {
+    const thought = new Thought({message: req.body.message})
+    await thought.save()
+    res.status(201).json(thought)
+  } catch (err) {
+    res.status(400).json({message: "Could not save thought.", error: err.errors})
+  }
 })
 
 // Start the server
