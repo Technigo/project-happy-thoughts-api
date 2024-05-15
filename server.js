@@ -1,6 +1,10 @@
 import cors from 'cors'
 import express from 'express'
 import mongoose from 'mongoose'
+import expressListEndpoints from 'express-list-endpoints'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/project-mongo'
 mongoose.connect(mongoUrl)
@@ -35,7 +39,8 @@ app.use(express.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello Technigo!')
+  const endpoints = expressListEndpoints(app)
+  res.send(endpoints)
 })
 
 app.get('/thoughts', async (req, res) => {
@@ -44,6 +49,18 @@ app.get('/thoughts', async (req, res) => {
     .limit(20)
     .exec()
   res.json(thoughts)
+})
+
+app.get('/thoughts/:id', async (req, res) => {
+  const thought = await Thought.findOne({ _id: req.params.id })
+  if (thought) {
+    res.json(thought)
+  } else {
+    res.status(404).json({
+      error:
+        'Could not find a thought with this id, the ids can be found in the endpoint /thoughts and look like this: 6644ba986567997e623591fb',
+    })
+  }
 })
 
 app.post('/thoughts', async (req, res) => {
@@ -59,14 +76,15 @@ app.post('/thoughts', async (req, res) => {
 
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params
-  const likedThought = await Thought.findById(thoughtId)
-
   try {
-    if(likedThought)
-    likedThought.hearts ++
-    const updatedThought = await likedThought.save()
-    res.status(201).json(updatedThought)
-    
+    const newLike = await Thought.findByIdAndUpdate(
+      thoughtId,
+      {
+        $inc: { hearts: 1 },
+      },
+      { new: true }
+    )
+    res.status(201).json(newLike)
   } catch (error) {
     res.status(400).json({
       success: false,
