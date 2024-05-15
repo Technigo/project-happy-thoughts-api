@@ -30,7 +30,7 @@ const Thought = mongoose.model("Thought", {
 });
 
 //adding a new thought to test thought model
-new Thought({ message: "testtest" }).save();
+// new Thought({ message: "Happy to be starting with this API 😍" }).save();
 
 //defines the port the app will run on
 const port = process.env.PORT || 8080;
@@ -47,16 +47,60 @@ app.get("/", (req, res) => {
 });
 
 //endpoint to get 20 thoughts sorted by createdAt (GET/thoughts)
+app.get("/thoughts", async (req, res) => {
+  const thoughts = await Thought.find()
+    .sort({ createdAt: "desc" })
+    .limit(20)
+    .exec();
+  res.json(thoughts);
+});
 
 //endpoint to post thoughts (POST/thoughts)
-// app.post("/thoughts", async (req, res) => {
-//   const thought = new Thought(req.body);
-//   const savedThought = await thought.save();
-//   res.json(savedThought);
-// });
-// use try-catch form -> success -> bad request
+app.post("/thoughts", async (req, res) => {
+  //retrieve information sent to API endpoint
+  const { message } = req.body;
+  //use mongoose model to create the database entry
+  const thought = new Thought({ message });
 
-//endpoint to add hearts/likes to the thougth
+  try {
+    //success case
+    const newThought = await thought.save();
+    res.status(201).json(newThought);
+  } catch (err) {
+    //bad request
+    res.status(400).json({
+      message:
+        "Sorry, your thought was not saved. Make sure your message is between 5 to 140 characters.",
+      error: err.errors,
+    });
+  }
+});
+
+//endpoint to add ❤️ to the thought
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+
+  try {
+    const updateThought = await Thought.findById(thoughtId);
+
+    if (!updateThought) {
+      return res.status(404).json({ error: "Thought could not be found." });
+    }
+
+    //increments the hearts property of the thought by 1
+    updateThought.hearts++;
+    //saves updated thought back to database
+    await updateThought.save();
+    //success case
+    res.json({ message: "❤️ added successfully", updateThought });
+  } catch (err) {
+    //bad request
+    res.status(400).json({
+      message: "Sorry, could not ❤️ your thought",
+      error: err.errors,
+    });
+  }
+});
 
 //add API to old happy thoughts project
 
