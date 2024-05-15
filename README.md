@@ -4,8 +4,15 @@ The assignment was to building your own API to replace the existing one used in 
 
 ## The problem
 
-I managed errors, validated input, connected to MongoDB, documented endpoints, set up Express routes, used environment variables and added basic logging.
+I managed errors, validated input, connected to MongoDB, documented endpoints, set up Express routes, used environment variables and added basic logging. 
+
+My GET /thoughts endpoint is returning 20 results, ordered by createdAt in descending order. I also have the function to show ascending but it's not added in the frontend.
+
+The POST /thoughts endpoint creates a new thought and if the input is invalid it will return error (400).
+
+The endpoint will add hearts to a thought should return an error if the thought is not found.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+API: https://project-happy-thoughts-api-qgyf.onrender.com/
+Frontend: https://celebrated-shortbread-0673ce.netlify.app/
