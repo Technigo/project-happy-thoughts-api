@@ -11,13 +11,13 @@ const ThoughtSchema = new Schema({
   hearts: {
     type: Number,
     default: 0,
-    //Somthing that the user can't change the default!
+    //This way the user can't change the default
     setDefaultsOnInsert: true,
   },
   createdAt: {
     type: Date,
-    default: Date.now(),
-    //Something about should not be assigned when creating a new thought?
+    default: Date.now,
+    //So the date can't be changed after the first setting
     immutable: true,
   },
 });
