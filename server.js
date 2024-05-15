@@ -83,6 +83,40 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
+// Like a post
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+
+  try {
+    // Find the thought by ID and increment its hearts property by one
+    const updatedThought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      { $inc: { hearts: 1 } },
+      { new: true }
+    );
+
+    if (updatedThought) {
+      res.status(201).json({
+        success: true,
+        response: updatedThought,
+        message: "Thought liked successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        response: error,
+        message: "No thought was found with that ID",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      response: error,
+      message: "Internal server error",
+    });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
