@@ -5,8 +5,11 @@ import listEndpoints from "express-list-endpoints";
 
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
-mongoose.connect(mongoUrl);
-mongoose.Promise = Promise;
+mongoose
+  .connect(mongoUrl)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
+
 
 const thoughtSchema = new mongoose.Schema({
   message: {
