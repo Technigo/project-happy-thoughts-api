@@ -38,10 +38,10 @@ app.get("/", (req, res) => {
 });
 
 //GET the thoughts endpoint
-//TODO Add that there are only 20 posts seen here
+//Also sorting them in a decending order and limit the thoughts to 20 shown
 app.get("/thoughts", async (req, res) => {
   try {
-    const allThoughts = await Thought.find();
+    const allThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20);
 
     if (allThoughts.length > 0) {
       res.status(200).json(allThoughts);
@@ -78,6 +78,8 @@ app.post("/thoughts", async (req, res) => {
       );
   }
 });
+
+//POST Endpoint for adding a heart
 
 // Start the server
 app.listen(port, () => {
