@@ -51,11 +51,11 @@ const thoughtSchema = new Schema({
     minlength: 5,
     maxlength: 140,
   },
-  date: {
+  createdAt: {
     type: Date,
     default: Date.now,
   },
-  numberOfLikes: {
+  hearts: {
     type: Number,
     default: 0,
   },
@@ -81,13 +81,13 @@ app.get("/thoughts", async (req, res) => {
 
 //Post new though
 app.post("/thoughts", async (req, res) => {
-  const { message, date, numberOfLikes } = req.body;
+  const { message, createdAt, hearts } = req.body;
 
   try {
     const thought = await new Thought({
       message,
-      date,
-      numberOfLikes,
+      createdAt,
+      hearts,
     }).save();
 
     res.status(201).json({
@@ -105,15 +105,15 @@ app.post("/thoughts", async (req, res) => {
 });
 
 //Update likes count
-app.patch("/thoughts/:id", async (req, res) => {
+app.patch("/thoughts/:id/", async (req, res) => {
   const { id } = req.params;
 
-  const { numberOfLikes } = req.body;
+  const { hearts } = req.body;
 
   try {
     const thought = await Thought.findByIdAndUpdate(
       id,
-      { numberOfLikes: numberOfLikes },
+      { hearts: hearts },
       { new: true, runValidators: true }
     );
 

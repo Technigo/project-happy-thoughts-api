@@ -7,4 +7,5 @@ node_modules
 .env.production.local
 package-lock.json
 
-mongodb+srv://johannabn:<password>@cluster0.9vp2eew.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+mongodb+srv://johannabn:wyhHzXDyh72odgTELUELgFjtiGokccmAr9xiJaZTmVUtTUwzg@cluster0.9vp2eew.mongodb.net/happythoughts?retryWrites=true&w=majority&appName=Cluster0
+
