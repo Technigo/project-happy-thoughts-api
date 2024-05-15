@@ -35,13 +35,26 @@ app.get("/thoughts", async (req, res) => {
 
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
-  const thought = new Thought({ message});
+  const thought = new Thought({ message });
 
   try {
     const addedThought = await thought.save()
     res.status(201).json(addedThought)
   } catch(err) {
     res.status(404).json({message: "Could not add thought", error: err.errors})
+  }
+})
+
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  
+  const { thoughtId } = req.params
+
+  
+  try {
+    const incrementLike = await Thought.findByIdAndUpdate(thoughtId, {$inc: { hearts: 1} }, {new: true})
+    res.status(201).json(incrementLike)
+  } catch(err) {
+    res.status(404).json({message: "Could not add like", error: err.errors})
   }
 })
 
