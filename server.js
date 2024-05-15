@@ -26,8 +26,6 @@
 //   console.log(`Server running on http://localhost:${port}`);
 // });
 
-//-------------- Codealong with Matilda ------------
-
 import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
@@ -36,9 +34,7 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts";
 mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
+// Defines the port the app will run on
 const port = process.env.PORT || 8080;
 const app = express();
 
@@ -46,6 +42,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+//Model
 const { Schema, model } = mongoose;
 const thoughtSchema = new Schema({
   message: {
@@ -71,6 +68,18 @@ app.get("/", (req, res) => {
   res.send("Happy thoughts!");
 });
 
+//Get all thoughts
+app.get("/thought", async (req, res) => {
+  const allThoughts = await Thought.find();
+
+  if (allThoughts.length > 0) {
+    res.json(allThoughts);
+  } else {
+    res.status(404).send("No thoughts was found");
+  }
+});
+
+//Post new though
 app.post("/thoughts", async (req, res) => {
   const { message, date, numberOfLikes } = req.body;
 
@@ -95,6 +104,7 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
+//Update likes count
 app.patch("/thoughts/:id", async (req, res) => {
   const { id } = req.params;
 
