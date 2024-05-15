@@ -104,10 +104,8 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
-//Update likes count
-app.patch("/thoughts/:id/", async (req, res) => {
+app.patch("/thoughts/:id/like", async (req, res) => {
   const { id } = req.params;
-
   const { hearts } = req.body;
 
   try {
@@ -131,15 +129,16 @@ app.patch("/thoughts/:id/", async (req, res) => {
   }
 });
 
+//Update likes count
 // app.patch("/thoughts/:id", async (req, res) => {
 //   const { id } = req.params;
 
-//   const { addLike } = req.body;
+//   const { hearts } = req.body;
 
 //   try {
 //     const thought = await Thought.findByIdAndUpdate(
 //       id,
-//       { numberOfLikes: addLike },
+//       { hearts: hearts },
 //       { new: true, runValidators: true }
 //     );
 
