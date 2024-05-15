@@ -1,13 +1,18 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+We were building our own API for our previous Happy Thoughts project.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+We were asked to create three endpoints:
+1️⃣ GET/thoughts >> that should return 20 thoughts max, sorted by createdAt date, most recent thougth first.
+2️⃣ POST/thoughts >> this endpoint saves a new thought to the API (if input is valid = between 5 and 140 character).
+3️⃣ POST/thoughts/:thoughtId/like >> endpoint to add a heart (like) to the thought, found by id.
+
+I used Express.js and mongoose to define the API and interact with the database.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+[Happy Thoughts API on render.](https://project-happy-thoughts-api-83nh.onrender.com)
+
+[Happy Thoughts frontend on netlify.](https://happy-thoughts-by-eliane.netlify.app)

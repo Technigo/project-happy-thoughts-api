@@ -30,7 +30,7 @@ const Thought = mongoose.model("Thought", {
 });
 
 //adding a new thought to test thought model
-// new Thought({ message: "Happy to be starting with this API 😍" }).save();
+// new Thought({ message: "Happy to be done with this API 😍" }).save();
 
 //defines the port the app will run on
 const port = process.env.PORT || 8080;
@@ -39,6 +39,15 @@ const app = express();
 //add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+
+//middleware to check if database is available
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next();
+  } else {
+    res.status(503).json({ error: "service unavailable" });
+  }
+});
 
 //routes
 app.get("/", (req, res) => {
