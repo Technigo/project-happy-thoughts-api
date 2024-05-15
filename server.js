@@ -41,6 +41,18 @@ app.get("/thoughts", async (req, res) => {
   }
 });
 
+// GET /thoughts/oldest endpoint to return 20 oldest thoughts ordered by createdAt in ascending order
+app.get("/thoughts/oldest", async (req, res) => {
+  try {
+    const oldestThoughts = await Thought.find()
+      .sort({ createdAt: 1 })
+      .limit(20);
+    res.json(oldestThoughts);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 // POST /thoughts endpoint to create a new thought
 app.post("/thoughts", async (req, res) => {
   const { text } = req.body;
@@ -69,6 +81,16 @@ app.post("/thoughts/:id/like", async (req, res) => {
     thought.hearts += 1;
     await thought.save();
     res.json(thought);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// GET /thoughts/likes endpoint to retrieve all thoughts sorted by most likes to lowest
+app.get("/thoughts/likes", async (req, res) => {
+  try {
+    const thoughts = await Thought.find().sort({ hearts: -1 }).limit(20);
+    res.json(thoughts);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
