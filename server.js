@@ -30,7 +30,7 @@ import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happythoughts";
 mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
@@ -69,7 +69,7 @@ app.get("/", (req, res) => {
 });
 
 //Get all thoughts
-app.get("/thought", async (req, res) => {
+app.get("/thoughts", async (req, res) => {
   const allThoughts = await Thought.find();
 
   if (allThoughts.length > 0) {
