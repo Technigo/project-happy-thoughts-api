@@ -71,6 +71,21 @@ app.get("/thoughts", async (req, res) => {
   }
 });
 
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+
+  try {
+    const likedThought = await Thought.findByIdAndUpdate(thoughtId, { $inc: { hearts: 1 } }, { new: true });
+    res.status(201).json(likedThought);
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      response: error,
+      message: "You were unable to like the thought",
+    });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
