@@ -98,13 +98,13 @@ app.post("/thoughts", async (req, res) => {
 app.patch("/thoughts/:id", async (req, res) => {
   const { id } = req.params;
 
-  const { newLike } = req.body;
+  const { numberOfLikes } = req.body;
 
   try {
     const thought = await Thought.findByIdAndUpdate(
       id,
-      { numberOfLikes: newLike }
-      // { new: true, runValidators: true }
+      { numberOfLikes: numberOfLikes },
+      { new: true, runValidators: true }
     );
 
     res.status(200).json({
@@ -120,6 +120,32 @@ app.patch("/thoughts/:id", async (req, res) => {
     });
   }
 });
+
+// app.patch("/thoughts/:id", async (req, res) => {
+//   const { id } = req.params;
+
+//   const { addLike } = req.body;
+
+//   try {
+//     const thought = await Thought.findByIdAndUpdate(
+//       id,
+//       { numberOfLikes: addLike },
+//       { new: true, runValidators: true }
+//     );
+
+//     res.status(200).json({
+//       success: true,
+//       response: thought,
+//       message: "Number of likes updated",
+//     });
+//   } catch (error) {
+//     res.status(400).json({
+//       success: false,
+//       response: error,
+//       message: "Couldn't update number of likes",
+//     });
+//   }
+// });
 
 // Start the server
 app.listen(port, () => {
