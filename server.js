@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import expressListEndpoints from "express-list-endpoints";
 import Thought from "./models/ThoughtSchema";
 
-// Configure dotenv
+// Load environment variables
 dotenv.config();
 
 // Set up mongoURL and localhost
@@ -51,7 +51,10 @@ app.get("/", (req, res) => {
 
 // GET thoughts
 app.get("/thoughts", async (req, res) => {
-  const allThoughts = await Thought.find();
+  const allThoughts = await Thought.find()
+    .sort({ createdAt: "desc" })
+    .limit(20)
+    .exec();
   res.json(allThoughts);
 });
 
