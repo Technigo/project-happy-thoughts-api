@@ -1,8 +1,10 @@
 import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
+import expressListEndpoints from "express-list-endpoints"
+import { Thought } from "./models/Thought"
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-thoughts";
 mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
@@ -16,10 +18,32 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
 // Start defining your routes here
 app.get("/", (req, res) => {
   res.send("Hello Technigo!");
 });
+
+app.get("/thoughts", async (req, res) => {
+  try {
+    const thoughts = await Thought.find().sort({createdAt: "desc"}).limit(20).exec()
+  res.status(404).json(thoughts);
+  } catch(err){
+    res.status(404).json({message: "No happy thoughts", error: err.errors})
+  }
+})
+
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body;
+  const thought = new Thought({ message});
+
+  try {
+    const addedThought = await thought.save()
+    res.status(201).json(addedThought)
+  } catch(err) {
+    res.status(404).json({message: "Could not add thought", error: err.errors})
+  }
+})
 
 // Start the server
 app.listen(port, () => {
