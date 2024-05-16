@@ -2,9 +2,16 @@ import cors from "cors"
 import express from "express"
 import mongoose from "mongoose"
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo"
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts"
 mongoose.connect(mongoUrl)
 mongoose.Promise = Promise
+
+//Mongoose model
+const Thought = mongoose.model("Thought", {
+  message: { type: String, required: true, minlength: 5, maxlength: 140 },
+  hearts: { type: Number, default: 0 },
+  createdAt: { type: Date, default: Date.now },
+})
 
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
@@ -16,10 +23,19 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!")
+// GET thought endpoint
+app.get("/thoughts", async (req, res) => {
+  try {
+    const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20)
+    res.json(thoughts)
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong" })
+  }
 })
+
+// POST thought endpoint
+
+// POST likes endpoint
 
 // Start the server
 app.listen(port, () => {
