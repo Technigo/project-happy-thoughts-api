@@ -35,7 +35,7 @@ mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
 // Defines the port the app will run on
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8000;
 const app = express();
 
 // Add middlewares to enable cors and json body parsing
@@ -70,10 +70,7 @@ app.get("/", (req, res) => {
 
 //Get all thoughts
 app.get("/thoughts", async (req, res) => {
-  const allThoughts = await Thought.find()
-    .sort({ createdAt: asc })
-    .limit(20)
-    .exec();
+  const allThoughts = await Thought.find();
 
   if (allThoughts.length > 0) {
     res.json(allThoughts);
