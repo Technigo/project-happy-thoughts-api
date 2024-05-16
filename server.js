@@ -24,7 +24,7 @@ const thoughtSchema = new Schema({
     type: Date,
     default: () => new Date(),
   },
-});
+}); 
 
 const Thought = mongoose.model("Thought", thoughtSchema);
 
