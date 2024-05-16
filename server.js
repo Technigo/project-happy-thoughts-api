@@ -3,7 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 import expressListEndpoints from "express-list-endpoints";
 import { Thought } from "./models/Thought";
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
 
 
 const mongoUrl =
@@ -11,7 +11,7 @@ const mongoUrl =
 mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
-dotenv.config();
+// dotenv.config();
 
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
