@@ -3,9 +3,8 @@ import express from "express";
 import mongoose from "mongoose";
 import expressListEndpoints from "express-list-endpoints";
 import { Thought } from "./models/Thought";
-import dotenv from "dotenv"
+require("dotenv").config();
 
-dotenv.config()
 
 const mongoUrl =
   process.env.MONGO_URL || "mongodb://localhost/project-thoughts";
