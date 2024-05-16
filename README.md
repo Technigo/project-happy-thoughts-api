@@ -1,13 +1,14 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+During this week, the task was to create our own API and end points, so we can later replace them into our previous Twitter-like project.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I needed to be aware that any change we made to our backend it will be shown in the frontend of our project. Keeping that on mind, I created the API and endpoints using Mongoose and MongoDB.
+If I have had more time, I would like to implement infinite scrolling when reaching the bottom of the page.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://project-happy-thoughts-api-3unj.onrender.com
+
+https://dreamy-choux-a67cf0.netlify.app
