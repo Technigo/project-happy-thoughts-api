@@ -1,8 +1,10 @@
 import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
+import Thought from "./models/Thought";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl =
+  process.env.MONGO_URL || "mongodb://localhost/project-happy-thought-mongo";
 mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
@@ -19,6 +21,53 @@ app.use(express.json());
 // Start defining your routes here
 app.get("/", (req, res) => {
   res.send("Hello Technigo!");
+});
+
+// Get Thoughts - return a maximum of 20 thoughts
+app.get("/thoughts", async (req, res) => {
+  try {
+    const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20);
+    res.json(thoughts);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Post Thoughts - create a new thought
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body;
+
+  if (!message || message.length < 5 || message.length > 140) {
+    return res
+      .status(400)
+      .json({ message: "Message must be between 5 and 140 characters" });
+  }
+
+  try {
+    const thought = new Thought({ message });
+    const savedThought = await thought.save();
+    res.status(201).json(savedThought);
+  } catch (error) {
+    res.status(500).json({ message: "Interal server error" });
+  }
+});
+
+// Post Thought/ThoughtId/like - heart count for a specific thought
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+
+  try {
+    const thought = await Thought.findById(thoughtId);
+    if (!thought) {
+      return res.status(404).json({ message: "Thought not found " });
+    }
+
+    thought.hearts += 1;
+    const updatedThought = await thought.save();
+    res.status(200).json(updatedThought);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error " });
+  }
 });
 
 // Start the server
