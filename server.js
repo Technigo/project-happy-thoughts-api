@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import expressListEndpoints from "express-list-endpoints";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/thoughts";
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
 const { Schema } = mongoose;
@@ -24,7 +24,7 @@ const thoughtSchema = new Schema({
     type: Date,
     default: () => new Date(),
   },
-}); 
+});
 
 const Thought = mongoose.model("Thought", thoughtSchema);
 
