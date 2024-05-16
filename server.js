@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import expressListEndpoints from "express-list-endpoints";
 import mongoose from "mongoose";
+
 import Thought from "./models/Thought";
 
 const mongoUrl =
@@ -65,6 +66,34 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
       { new: true }
     ).exec();
     res.status(201).json(post);
+  } catch (error) {
+    if (error.name === "CastError") {
+      error.message = `There's no post matching id:${thoughtId}`;
+    }
+    res.status(400).json({
+      success: false,
+      error: error.message,
+      message: "Could not like the thought...",
+    });
+  }
+});
+
+//unlike a post
+app.post("/thoughts/:thoughtId/unlike", async (req, res) => {
+  const { thoughtId } = req.params;
+  try {
+    const post = await Thought.findOneAndUpdate(
+      { _id: thoughtId, hearts: { $gte: 1 } },
+      {
+        $inc: { hearts: -1 },
+      },
+      { new: true, runValidators: true }
+    ).exec();
+    if (post) {
+      res.status(201).json(post);
+    } else {
+      throw new Error("The post's like is 0 hence cannot be unliked");
+    }
   } catch (error) {
     if (error.name === "CastError") {
       error.message = `There's no post matching id:${thoughtId}`;
