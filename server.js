@@ -57,7 +57,10 @@ app.get("/", (req, res) => {
 //Also sorting them in a decending order and limit the thoughts to 20 shown
 app.get("/thoughts", async (req, res) => {
   try {
-    const allThoughts = await Thought.find().sort({ createdAt: -1 }).limit(20);
+    const allThoughts = await Thought.find()
+      .sort({ createdAt: -1 })
+      .limit(20)
+      .exec();
 
     if (allThoughts.length > 0) {
       res.status(200).json(allThoughts);

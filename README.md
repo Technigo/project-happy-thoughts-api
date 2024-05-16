@@ -6,7 +6,9 @@ This week we are building a backend to an existing frontend we built a few weeks
 
 The first thing was building the schema. It was important to add enough properties for proper validation. After that I built the different endpoints with different error handlings. Then came deployment and adding thoughts with the POST method to the remote database on MongoDB Atlas. In the end I connected it to my excisting Frontend. Find both links below.
 
+This is definitely a project I want to work on in the future to add more fun stuff.
+
 ## View it live
 
 Backend: https://linda-f-project-happy-thoughts-api.onrender.com/
-Frontend: TBD
+Frontend: https://linda-f-project-happy-thoughts.netlify.app/
