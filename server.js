@@ -35,6 +35,16 @@ app.get("/thoughts", async (req, res) => {
 
 // POST thought endpoint
 
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body
+  try {
+    const thought = await Thought.create({ message })
+    res.status(201).json(thought)
+  } catch (error) {
+    res.status(400).json({ error: "Invalid input" })
+  }
+})
+
 // POST likes endpoint
 
 // Start the server
