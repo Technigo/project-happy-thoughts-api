@@ -1,13 +1,12 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This week we're building our own Happy Thoughts API using express.js, mongoose and MongoDB that will be connected to the frontend that was created earlier.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+First of all, I implemented the express-list-endpoints. After that I started getting all of the thoughts, adding some dummie-messages with help of postman. Made it possible to post a thought and at last, made it possible to like a thought based on the id. 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+[Happy Thoughts API on render](https://happy-thoughts-api-q1ab.onrender.com)
+[Happy Thoughts Frontend on Netlify](https://ericas-happy-thoughts.netlify.app/)
