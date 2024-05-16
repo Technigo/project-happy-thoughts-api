@@ -1,13 +1,11 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+The assignment was to build an API for a "Happy Thoughts" application for which we have already built the frontend, where users can post happy thoughts and like other users' thoughts. The API needed to provide endpoints for retrieving, posting, and liking thoughts.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I approached the project problem by first defining the requirements and endpoints for the API. Then implemented the API using Express.js for handling HTTP requests, Mongoose for interacting with MongoDB to save posts in database, and Node.js for the server-side logic. I ensured that the API endpoints were properly implemented and tested using Postman.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://alma-happy-thoughts-api.onrender.com/thoughts
