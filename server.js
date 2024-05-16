@@ -42,7 +42,7 @@ app.post("/thoughts", async (req, res) => {
       const newThought = await new Thought({ message }).save();
       res.status(201).json(newThought);
     } else {
-      throw new Error("No message parameters...");
+      throw new Error("No message input...");
     }
   } catch (error) {
     res.status(400).json({
