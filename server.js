@@ -10,9 +10,7 @@ const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/project-mongo'
 mongoose.connect(mongoUrl)
 mongoose.Promise = Promise
 
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
+
 const port = process.env.PORT || 8080
 const app = express()
 
@@ -65,7 +63,9 @@ app.get('/thoughts/:id', async (req, res) => {
 
 app.post('/thoughts', async (req, res) => {
   try {
-    const thought = await new Thought(req.body).save()
+    const thought = await new Thought({
+      message: req.body.message,
+    }).save()
     res.status(200).json(thought)
   } catch (error) {
     res
