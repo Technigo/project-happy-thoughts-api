@@ -3,6 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 import expressListEndpoints from "express-list-endpoints";
 import { Thought } from "./models/Thought";
+import dotenv from "dotenv"
 
 dotenv.config()
 
