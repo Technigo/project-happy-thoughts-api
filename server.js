@@ -7,7 +7,7 @@ const mongoUrl =
 mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 9090;
 const app = express();
 
 const Thought = mongoose.model("Thought", {
@@ -26,6 +26,7 @@ const Thought = mongoose.model("Thought", {
     default: Date.now,
   },
 });
+
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
@@ -51,39 +52,42 @@ app.post("/thoughts", async (req, res) => {
     res.status(201).json(savedThougth);
   } catch (err) {
     //fail case
-    res
-      .status(400)
-      .json({
-        message:
-          "Couldn't save thought. Please try again, your thoughts are important.",
-        error:err.errors,
-      });
+    res.status(400).json({
+      message:
+        "Couldn't save thought. Please try again, your thoughts are important.",
+      error: err.errors,
+    });
   }
 });
 
-
-// This endpoint doesn't require a JSON body. 
-// Given a valid thought id in the URL, the API should 
-// find that thought, and update its `hearts` property to 
+// Given a valid thought id in the URL, the API should
+// find that thought, and update its `hearts` property to
 // add one heart.
 //POST thoughts/:thoughtId/like
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
   try {
-    const thoughtsId = await Thought.findByIdAndUpdate(thoughtId, { $inc: {hearts: 1} }, { new: true, runValidators: true });
-    
-  if (!thoughtsId) {
-    return res.status(404).json({message: "Thought not found."})
+    const thoughtsId = await Thought.findByIdAndUpdate(
+      thoughtId,
+      { $inc: { hearts: 1 } },
+      { new: true, runValidators: true }
+    );
+
+    if (!thoughtsId) {
+      return res.status(404).json({ message: "Thought not found." });
+    }
+
+    await thoughtsId.save();
+    res.json({ message: "You just liked a thought!", thoughtsId });
+  } catch (err) {
+    res
+      .status(404)
+      .json({
+        message: "Something went wrong, please try again.",
+        error: err.errors,
+      });
   }
-
-  await thoughtsId.save();
-  res.json({ message: "You just liked a thought!", thoughtsId})
-  } catch (err){
-    res.status(404).json({message: "Something went wrong, please try again.", error:err.errors,})
-  }
-})
-
-
+});
 
 // Start the server
 app.listen(port, () => {
