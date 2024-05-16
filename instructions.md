@@ -5,7 +5,7 @@ In the Happy Thoughts project, you built a frontend in React which uses an API w
 
 We built a frontend that has a form to write a new 'happy thought', lists recent thoughts, and shows a count of 'hearts' on each thought. Users could then click the heart to like a thought. It looked like this:
 ![Untitled (6)](https://github.com/Technigo/project-happy-thoughts-api/assets/51529201/83233e11-75cf-467e-aa71-4e5909f3fd14)
-⭐⭐⭐⭐⭐
+
 In order to replace the API we built, you're going to need to build a `Thought` Mongoose model which has properties for the `message` string, a `heart` property for tracking the number of likes, and a `createdAt` property to store when the thought was added.
 ## Endpoints to add
 
@@ -30,7 +30,7 @@ We mentioned the `Thought` model and its properties a bit earlier. Each of these
 - `createdAt` - the time the Thought was added to the database
   - Defaults to the current time
   - Should not be assignable when creating a new thought
-
+⭐⭐⭐⭐⭐
 ### Using your API
 Once you've created your API, you should deploy it, and update your frontend project to use your own API instead of the old Technigo one. The idea is that if you build this API correctly, **the only thing you should need to change in the frontend code is the URL to the API,** to change it from the Technigo one to the one you deploy.
 

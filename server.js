@@ -19,7 +19,7 @@ const Thought = mongoose.model("Thought", {
   message: {
     type: String,
     required: true,
-    minlength: 4,
+    minlength: 5,
     maxlength: 140
   },
   hearts: {
@@ -39,7 +39,7 @@ app.get("/", (req, res) => {
 
 app.get("/thoughts", async (req, res) => {
   try {
-    const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20)
+    const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20).exec()
     res.json(thoughts)
   } catch (err) {
     res.status(400).json({ message: "Something went wrong.", error: err.errors })
@@ -50,13 +50,31 @@ app.post("/thoughts", async (req, res) => {
   try {
     const thought = new Thought({message: req.body.message})
     await thought.save()
-    res.status(201).json(thought)
+    res.status(201).json({
+       success: true,
+       response: thought,
+       message: "Thought posted",
+     })
+  } catch (error) {
+    res.status(400).json({  
+      success: false,
+      response: error,
+      message: "Could not save thought."})
+  }
+})
+
+app.patch("/thoughts/:id/like", async (req, res) => {
+  try {
+    const thought = await Thought.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { hearts: 1 } }, { new: true, runValidators: true })
+    res.status(200).json(thought)
   } catch (err) {
-    res.status(400).json({message: "Could not save thought.", error: err.errors})
+    res.status(400).json({ message: "Could not like thought.", error: err.errors })
   }
 })
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+  console.log(`Server running on http://localhost:${port}`)
+})
