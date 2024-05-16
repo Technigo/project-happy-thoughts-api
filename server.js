@@ -1,10 +1,11 @@
 import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
-import expressListEndpoints from "express-list-endpoints"
-import { Thought } from "./models/Thought"
+import expressListEndpoints from "express-list-endpoints";
+import { Thought } from "./models/Thought";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-thoughts";
+const mongoUrl =
+  process.env.MONGO_URL || "mongodb://localhost/project-thoughts";
 mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
@@ -18,45 +19,62 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  const endpoints = expressListEndpoints(app);
+  res.json(endpoints)
 });
 
 app.get("/thoughts", async (req, res) => {
   try {
-    const thoughts = await Thought.find().sort({createdAt: "desc"}).limit(20).exec()
-  res.status(404).json(thoughts);
-  } catch(err){
-    res.status(404).json({message: "No happy thoughts", error: err.errors})
+    const thoughts = await Thought.find()
+      .sort({ createdAt: "desc" })
+      .limit(20)
+      .exec();
+    res.status(201).json(thoughts);
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      response: error,
+      message: "Could not get thoughts",
+    });
   }
-})
+});
 
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
   const thought = new Thought({ message });
 
   try {
-    const addedThought = await thought.save()
-    res.status(201).json(addedThought)
-  } catch(err) {
-    res.status(404).json({message: "Could not add thought", error: err.errors})
+    const addedThought = await thought.save();
+    res.status(201).json(addedThought);
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      response: error,
+      message: "Could not post a thought",
+    });
   }
-})
+});
 
-app.post("/thoughts/:thoughtId/like", async (req, res) => {
-  
-  const { thoughtId } = req.params
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
 
-  
   try {
-    const incrementLike = await Thought.findByIdAndUpdate(thoughtId, {$inc: { hearts: 1} }, {new: true})
-    res.status(201).json(incrementLike)
-  } catch(err) {
-    res.status(404).json({message: "Could not add like", error: err.errors})
+    const incrementLike = await Thought.findByIdAndUpdate(
+      thoughtId,
+      { $inc: { hearts: 1 } },
+      { new: true }
+    );
+    res.status(201).json(incrementLike);
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      response: error,
+      message: "Could not add a heart",
+    });
   }
-})
+});
 
 // Start the server
 app.listen(port, () => {
