@@ -6,7 +6,7 @@
 
 # Project Happy Thoughts API
 
-This backend project was about creating the possibility to post data into the API, with POST method, both a commment and to update/add liked to the comments. Also to create relevant endpoints. 
+This backend project was about creating the possibility to post data into the API, with POST method, both a commment and to update/add liked to the comments. Also to create relevant endpoints. The last step would be to add this API to an old frontend project with the same theme, to see that it would work.
 
 ## The problem
 
@@ -14,4 +14,6 @@ I thought that the adding of a like to a specific id was the tricky part, and I 
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://happy-thinking.onrender.com/
+
+Frontend updated with this personal API: https://happy-machine.netlify.app/
