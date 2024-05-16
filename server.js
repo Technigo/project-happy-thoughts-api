@@ -1,8 +1,9 @@
 import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
+import expressListEndpoints from "express-list-endpoints";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/HappyThoughts";
 mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
@@ -16,19 +17,48 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+// Mongoose model
+const Thought = mongoose.model("Thought", {
+  message: {
+    type: String,
+    required: true,
+    maxlength: 140,
+    minlength: 5,
+  },
+  hearts: { type: Number, default: 0 },
+  createdAt: { type: Date, default: Date.now },
 });
 
-app.get("/thoughts", (req, res) => {
-  // Get all the thoughts
-})
+// Start defining your routes here
+app.get("/", (req, res) => {
+  const endpoints = expressListEndpoints(app);
+  res.json(endpoints);
+});
 
-app.post("/thoughts", (req, res) => {
-  // Create thought in the database
-  
-})
+app.get("/thoughts", async (req, res) => {
+  // Get all the thoughts
+  const thoughts = await Thought.find({}).sort(
+    { createdAt: "asc" }.limit(20).exec()
+  );
+
+  try {
+    res.status(201).json(thoughts);
+  } catch (err) {
+    res.status(400).json({
+      message: "Could not retrieve the Happy Thoughts.",
+      error: err.errors,
+    });
+  }
+});
+
+app.post("/thoughts/", async (req, res) => {
+  // Create a thought in the database
+});
+
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  // Create like in the database
+
+});
 
 // Start the server
 app.listen(port, () => {
