@@ -111,20 +111,27 @@ app.patch("/thoughts/:id/like", async (req, res) => {
   try {
     const thought = await Thought.findByIdAndUpdate(
       id,
-      { hearts: hearts },
+      { $inc: { hearts: 1 } }, // Increment the hearts count by 1
       { new: true, runValidators: true }
     );
+
+    if (!thought) {
+      return res.status(404).json({
+        success: false,
+        responsemessage: "Thought not found",
+      });
+    }
 
     res.status(200).json({
       success: true,
       response: thought,
-      message: "Number of likes updated",
+      responsemessage: "Heart incremented successfully",
     });
   } catch (error) {
     res.status(400).json({
       success: false,
       response: error,
-      message: "Couldn't update number of likes",
+      responsemessage: "Couldn't increment heart",
     });
   }
 });
