@@ -58,9 +58,7 @@ app
       }).save();
       res.status(201).send(newThought);
     } catch (err) {
-      res
-        .status(400)
-        .json({ message: "Post request failed", error: err.errors });
+      res.status(400).json({ message: "Post request failed", error: err });
     }
   });
 
@@ -73,9 +71,7 @@ app
       const thought = await Thought.findById(req.params.thoughtId);
       res.status(201).json(thought);
     } catch (err) {
-      res
-        .status(400)
-        .json({ message: "Could not find thought", error: err.errors });
+      res.status(400).json({ message: "Could not find thought", error: err });
     }
   })
   .delete(async (req, res) => {
@@ -83,9 +79,7 @@ app
       await Thought.findByIdAndDelete(req.params.thoughtId);
       res.status(201).send(`Deleted thougth ${req.params.thoughtId}`);
     } catch (err) {
-      res
-        .status(400)
-        .json({ message: "Could not delete thought", error: err.errors });
+      res.status(400).json({ message: "Could not delete thought", error: err });
     }
   });
 
@@ -101,7 +95,7 @@ app.route("/thoughts/:thoughtId/like").post(async (req, res) => {
     );
     res.status(201).json(thought);
   } catch (err) {
-    res.status(400).json({ message: "Post request failed", error: err.errors });
+    res.status(400).json({ message: "Post request failed", error: err });
   }
 });
 

@@ -10,6 +10,8 @@ Again, I opted for using "app.route().method()" to group the methods for the res
 
 Switching out the API on the frontend worked!
 
+Added get and delete for single thought by \_id.
+
 ### Next
 
 - I might add some queries for filtering
