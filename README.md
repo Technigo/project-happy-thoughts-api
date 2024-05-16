@@ -1,12 +1,16 @@
+<h1 align="center">
+  <a href="">
+    <img src="/public/smiling.jpg" alt="Project Banner Image">
+  </a>
+</h1>
+
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This backend project was about creating the possibility to post data into the API, with POST method, both a commment and to update/add liked to the comments. Also to create relevant endpoints. 
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I thought that the adding of a like to a specific id was the tricky part, and I spent some time with that. I also struggled with the deployment, I got stuck with an empty array, and it turned out I hadnt created the user properly in Atlas and therefore nothing worked, but I didnt get any error messages. I redid the database process to start fresh. 
 
 ## View it live
 
