@@ -70,7 +70,10 @@ app.get("/", (req, res) => {
 
 //Get all thoughts
 app.get("/thoughts", async (req, res) => {
-  const allThoughts = await Thought.find();
+  const allThoughts = await Thought.find()
+    .sort({ createdAd: asc })
+    .limit(20)
+    .exec();
 
   if (allThoughts.length > 0) {
     res.json(allThoughts);
