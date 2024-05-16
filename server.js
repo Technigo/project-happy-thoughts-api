@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 import expressListEndpoints from "express-list-endpoints";
 import { Thought } from "./models/Thought";
 
+dotenv.config()
+
 const mongoUrl =
   process.env.MONGO_URL || "mongodb://localhost/project-thoughts";
 mongoose.connect(mongoUrl);
