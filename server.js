@@ -106,7 +106,7 @@ app.post("/thoughts", async (req, res) => {
 
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
-  const { hearts } = req.body;
+  const { hearts } = req.body; //Remove this?
 
   try {
     const thought = await Thought.findByIdAndUpdate(
