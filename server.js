@@ -105,12 +105,12 @@ app.post("/thoughts", async (req, res) => {
 });
 
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
-  const { id } = req.params;
+  const { thoughtId } = req.params;
   const { hearts } = req.body;
 
   try {
     const thought = await Thought.findByIdAndUpdate(
-      id,
+      thoughtId,
       { $inc: { hearts: 1 } }, // Increment the hearts count by 1
       { new: true, runValidators: true }
     );
