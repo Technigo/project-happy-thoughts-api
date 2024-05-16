@@ -7,7 +7,7 @@ const mongoUrl =
 mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
-const port = process.env.PORT || 8090;
+const port = process.env.PORT || 8080;
 const app = express();
 
 const Thought = mongoose.model("Thought", {
@@ -61,24 +61,30 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
-//POST thoughts/:thoughtId/like
+
 // This endpoint doesn't require a JSON body. 
 // Given a valid thought id in the URL, the API should 
 // find that thought, and update its `hearts` property to 
 // add one heart.
-app.get("/thoughts/:thoughtsId", async (req, res) => {
-  const { thoughtsId } = req.params;
-  const thoughtId = await Thought.findById(thoughtsId).exec();
-  
-  if (thoughtId) {
-    res.json(thoughtId);
-  } else {
-    res.status(404).send("No thought was found.")
+//POST thoughts/:thoughtId/like
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+  try {
+    const thoughtsId = await Thought.findById(thoughtId);
+    
+  if (!thoughtsId) {
+    return res.status(404).json({message: "Thought not found."})
   }
-});
+
+  thoughtsId.hearts++;
+  await thoughtsId.save();
+  res.json({ message: "You just liked a thought!", thoughtsId})
+  } catch (err){
+    res.status(404).json({message: "Something went wrong, please try again.", error:err.errors,})
+  }
+})
 
 
-//PATCH?
 
 // Start the server
 app.listen(port, () => {
