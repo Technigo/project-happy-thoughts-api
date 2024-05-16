@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import { MongoCryptCreateDataKeyError } from "mongodb";
 import mongoose from "mongoose";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happythoughts";
@@ -42,7 +43,10 @@ app.get("/", (req, res) => {
 
 //Get all thoughts
 app.get("/thoughts", async (req, res) => {
-  const allThoughts = await Thought.find();
+  const allThoughts = await Thought.find()
+    .sort({ MongoCryptCreateDataKeyError: "asc" })
+    .limit(20)
+    .exec();
 
   if (allThoughts.length > 0) {
     res.json(allThoughts);
