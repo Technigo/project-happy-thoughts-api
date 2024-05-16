@@ -2,7 +2,7 @@ import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
 import expressListEndpoints from "express-list-endpoints";
-import { Thought } from "./modules/thought.js";
+import { Thought } from "./models/thought.js";
 
 // Set up MongoDB URL
 const mongoUrl =
@@ -17,7 +17,7 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 const app = express();
 
 // Add middlewares to enable cors and json body parsing
@@ -32,7 +32,7 @@ const routes = [
     description: "Get the last 20 thoughts in descending order",
     handler: async (req, res) => {
       try {
-        const allThoughts = await Thought.find()
+        const thoughts = await Thought.find()
           .sort({ createdAt: -1 })
           .limit(20);
         res.json(thoughts);
@@ -81,7 +81,7 @@ const routes = [
   }
 ];
 
-routes.foreach((route) => {
+routes.forEach((route) => {
   app[route.method](route.path, route.handler)
 })
 
