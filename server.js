@@ -44,7 +44,7 @@ app.get("/", (req, res) => {
 //Get all thoughts
 app.get("/thoughts", async (req, res) => {
   const allThoughts = await Thought.find()
-    .sort({ MongoCryptCreateDataKeyError: "asc" })
+    .sort({ createdAt: "asc" })
     .limit(20)
     .exec();
 
