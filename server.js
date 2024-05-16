@@ -1,10 +1,14 @@
 import cors from "cors";
+import dotenv from "dotenv";
 import express from "express";
 import expressListEndpoints from "express-list-endpoints";
 import mongoose from "mongoose";
 
 //Importing the Model
 import { Thought } from "./models/thoughtSchema";
+
+// Getting the dotenv file
+dotenv.config();
 
 const mongoUrl =
   process.env.MONGO_URL || "mongodb://localhost/project-thoughts-api";
