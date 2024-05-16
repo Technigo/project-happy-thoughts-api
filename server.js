@@ -21,7 +21,7 @@ app.use(cors());
 app.use(express.json());
 
 // Thought model
-const Thought = mongoose.model("Thought", {
+const Thought = model("Thought", {
   message: {
     type: String,
     required: true,
@@ -44,7 +44,7 @@ app.route("/").get(async (req, res) => {
   res.send(endpoints);
 });
 
-//
+// Get all thoughts
 app
   .route("/thoughts")
   .get(async (req, res) => {
@@ -64,6 +64,32 @@ app
     }
   });
 
+// Get or delete specific thought
+app
+  .route("/thoughts/:thoughtId")
+  .get(async (req, res) => {
+    console.log("test", req.params.thoughtId);
+    try {
+      const thought = await Thought.findById(req.params.thoughtId);
+      res.status(201).json(thought);
+    } catch (err) {
+      res
+        .status(400)
+        .json({ message: "Could not find thought", error: err.errors });
+    }
+  })
+  .delete(async (req, res) => {
+    try {
+      await Thought.findByIdAndDelete(req.params.thoughtId);
+      res.status(201).send(`Deleted thougth ${req.params.thoughtId}`);
+    } catch (err) {
+      res
+        .status(400)
+        .json({ message: "Could not delete thought", error: err.errors });
+    }
+  });
+
+// Like specific thought
 app.route("/thoughts/:thoughtId/like").post(async (req, res) => {
   try {
     const thought = await Thought.findByIdAndUpdate(
@@ -73,7 +99,6 @@ app.route("/thoughts/:thoughtId/like").post(async (req, res) => {
       },
       { returnDocument: "after" }
     );
-    console.log(req.params.thoughtId);
     res.status(201).json(thought);
   } catch (err) {
     res.status(400).json({ message: "Post request failed", error: err.errors });
