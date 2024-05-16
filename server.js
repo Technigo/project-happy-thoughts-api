@@ -55,7 +55,7 @@ app.get("/thoughts", async (req, res) => {
 
 // Post thought endpoint
 app.post("/thoughts", async (req, res) => {
-  const message = req.body
+  const { message } = req.body
   const thought = new Thought({ message })
 
   try {
@@ -72,7 +72,7 @@ app.post("/thoughts", async (req, res) => {
 // Post heart endpoint
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   try {
-    const thoughtId = req.params
+    const { thoughtId } = req.params
     const thought = await Thought.findById(thoughtId)
     if (!thought) {
       return res.status(400).json({ error: "Could not find thought" })
