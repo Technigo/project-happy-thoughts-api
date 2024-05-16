@@ -47,8 +47,8 @@ app.get("/", (req, res) => {
 
 app.get("/thoughts", async (req, res) => {
   const allThoughts = await Thought.find()
-    .sort({ createdAt: -1 })
     .limit(20)
+    .sort({ createdAt: -1 })
     .exec();
   if (allThoughts.length > 0) {
     res.json(allThoughts);
