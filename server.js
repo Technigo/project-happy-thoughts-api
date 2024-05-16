@@ -53,11 +53,32 @@ app.get("/thoughts", async (req, res) => {
 
 app.post("/thoughts/", async (req, res) => {
   // Create a thought in the database
+  const { message, heart } = req.body;
+  const thought = new Thought({ message, heart });
+  try {
+    const newThought = await thought.save();
+    res.status(201).json(newThought);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Could not save your thought.", error: err.errors });
+  }
 });
 
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   // Create like in the database
-
+  const { thoughtId } = req.params;
+  const thought = await Thought.findById(thoughtId);
+  try {
+    thought.hearts += 1;
+    const updatedThought = await thought.save();
+    res.status(201).json(updatedThought);
+  } catch (err) {
+    res.status(500).json({
+      message: "Couldn't like the thought. Oh no!",
+      error: err.errors,
+    });
+  }
 });
 
 // Start the server
