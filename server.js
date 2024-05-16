@@ -67,16 +67,15 @@ app.post("/thoughts", async (req, res) => {
 // find that thought, and update its `hearts` property to 
 // add one heart.
 //POST thoughts/:thoughtId/like
-app.post("/thoughts/:thoughtId/like", async (req, res) => {
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
   try {
-    const thoughtsId = await Thought.findById(thoughtId);
+    const thoughtsId = await Thought.findByIdAndUpdate(thoughtId, { $inc: {hearts: 1} }, { new: true, runValidators: true });
     
   if (!thoughtsId) {
     return res.status(404).json({message: "Thought not found."})
   }
 
-  thoughtsId.hearts++;
   await thoughtsId.save();
   res.json({ message: "You just liked a thought!", thoughtsId})
   } catch (err){
