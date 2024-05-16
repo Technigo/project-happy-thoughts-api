@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
+import expressListEndpoints from "express-list-endpoints";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
 mongoose.connect(mongoUrl);
@@ -34,6 +35,11 @@ app.use(cors());
 app.use(express.json());
 
 // Start defining your routes here
+
+app.get("/", (req, res) => {
+  res.send(expressListEndpoints(app));
+});
+
 app.get("/thoughts", async (req, res) => {
   try {
     const fetchThoughts = await Thought.find()
