@@ -1,7 +1,10 @@
 import cors from "cors"
 import express from "express"
 import expressListEndpoints from "express-list-endpoints"
+import dotenv from "dotenv"
 import mongoose from "mongoose"
+
+dotenv.config()
 
 const mongoUrl =
   process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts-api"
