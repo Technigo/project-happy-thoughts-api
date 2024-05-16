@@ -45,7 +45,21 @@ app.post("/thoughts", async (req, res) => {
   }
 })
 
-// POST likes endpoint
+// POST like endpoint
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params
+  try {
+    const thought = await Thought.findById(thoughtId)
+    if (!thought) {
+      return res.status(404).json({ error: "Thought not found" })
+    }
+    thought.hearts += 1
+    await thought.save()
+    res.json(thought)
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong" })
+  }
+})
 
 // Start the server
 app.listen(port, () => {
