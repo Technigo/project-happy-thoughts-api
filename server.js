@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
+import expressListEndpoints from "express-list-endpoints";
 import Thought from "./models/Thought";
 
 const mongoUrl =
@@ -20,7 +21,9 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  const endpoints = expressListEndpoints(app);
+
+  res.json(endpoints);
 });
 
 // Get Thoughts - return a maximum of 20 thoughts
