@@ -1,10 +1,12 @@
 import cors from "cors";
 import express from "express";
-import { MongoCryptCreateDataKeyError } from "mongodb";
 import mongoose from "mongoose";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happythoughts";
-mongoose.connect(mongoUrl);
+mongoose.connect(mongoUrl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 mongoose.Promise = Promise;
 
 // Defines the port the app will run on
@@ -14,6 +16,18 @@ const app = express();
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+
+// Error handling middleware for JSON parsing errors
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
+    return res.status(400).json({
+      success: false,
+      error: "Bad JSON format",
+      message: "The request contains malformed JSON.",
+    });
+  }
+  next();
+});
 
 //Model
 const { Schema, model } = mongoose;
@@ -54,59 +68,85 @@ app.get("/thoughts", async (req, res) => {
     res.status(404).send("No thoughts was found");
   }
 });
-
-//Post new though
 app.post("/thoughts", async (req, res) => {
   const { message } = req.body;
 
-  try {
-    const thought = await new Thought({
-      message,
-    }).save();
+  // Input Validation
+  if (!message || typeof message !== "string" || message.trim().length === 0) {
+    return res.status(422).json({
+      success: false,
+      error: "Invalid input",
+      message: "Message is required and must be a non-empty string.",
+    });
+  }
 
+  try {
+    const thought = new Thought({ message });
+    await thought.save();
     res.status(201).json({
       success: true,
-      response: thought,
-      responsemessage: "Thought created and saved",
+      thought,
+      message: "Thought created and saved",
     });
   } catch (error) {
-    res.status(400).json({
+    if (error.name === "ValidationError") {
+      // Handle Mongoose schema validation error
+      const messages = Object.values(error.errors).map((err) => err.message);
+      return res.status(400).json({
+        success: false,
+        error: "Validation error",
+        message: messages.join(". "),
+      });
+    }
+
+    // Handle other errors that could occur
+    console.error("Failed to save thought:", error);
+    res.status(500).json({
       success: false,
-      response: error,
-      responsemessage: "Couldn't save new thought",
+      error: error.message,
+      message: "Couldn't save new thought due to server error",
     });
   }
 });
 
 app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
-  const { hearts } = req.body; //Remove this?
 
   try {
     const thought = await Thought.findByIdAndUpdate(
       thoughtId,
-      { $inc: { hearts: 1 } }, // Increment the hearts count by 1
+      { $inc: { hearts: 1 } },
       { new: true, runValidators: true }
     );
 
     if (!thought) {
       return res.status(404).json({
         success: false,
-        responsemessage: "Thought not found",
+        error: "NotFound",
+        message: "Thought not found",
       });
     }
 
     res.status(200).json({
       success: true,
-      response: thought,
-      responsemessage: "Heart incremented successfully",
+      thought,
+      message: "Heart incremented successfully",
     });
   } catch (error) {
-    res.status(400).json({
-      success: false,
-      response: error,
-      responsemessage: "Couldn't increment heart",
-    });
+    console.error("Error incrementing heart:", error);
+    if (error.name === "CastError") {
+      res.status(400).json({
+        success: false,
+        error: "BadRequest",
+        message: "Invalid thought ID format",
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        error: "InternalServerError",
+        message: "Internal server error when attempting to increment heart",
+      });
+    }
   }
 });
 
