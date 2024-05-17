@@ -14,11 +14,10 @@ const thoughtSchema = new Schema({
     default: 0,
   },
   createdAt: {
-    type: Date(),
-    default: () => new Date(),
+    type: Date,
+    // default: () => new Date(),
+    default: Date.now,
   },
 });
 
 export const Thought = mongoose.model("Thought", thoughtSchema);
-
-// Should not be assignable when creating a new thought
