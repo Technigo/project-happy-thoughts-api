@@ -3,7 +3,7 @@ import mongoose from "mongoose"
 //Schema - the blueprint
 const { Schema, model } = mongoose
 
-const happyThoughtsSchema = new Schema({
+const thoughtsSchema = new Schema({
   message: {
     type: String,
     required: true,
@@ -21,7 +21,7 @@ const happyThoughtsSchema = new Schema({
 })
 
 //Model
-const HappyThought = model("HappyThought", happyThoughtsSchema)
+const Thought = model("Thought", thoughtsSchema)
 
 
-export default HappyThought
+export default Thought
