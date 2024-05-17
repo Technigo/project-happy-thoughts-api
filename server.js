@@ -57,13 +57,11 @@ app.get("/thoughts", async (req, res) => {
 
 //Post new though
 app.post("/thoughts", async (req, res) => {
-  const { message, createdAt, hearts } = req.body;
+  const { message } = req.body;
 
   try {
     const thought = await new Thought({
       message,
-      createdAt,
-      hearts,
     }).save();
 
     res.status(201).json({
