@@ -1,7 +1,10 @@
 import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 import expressListEndpoints from "express-list-endpoints";
+
+dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/HappyThoughts";
 mongoose.connect(mongoUrl);
