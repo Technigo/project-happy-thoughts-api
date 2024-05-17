@@ -1,13 +1,14 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+The brief was to create the back end of a previously made twitter-clone front end project.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Using MongoDB and express I set up the API that would house the backend. It was a fairly straitforward process, making endpoints for GET requests and POST requests.
+
+If/when I have more time I would flesh out the error handling a bit more. As of right now it's very basic.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Back end: https://happy-thoughts-api-uu1o.onrender.com/
+Front end: https://manyhappythoughts.netlify.app/

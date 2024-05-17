@@ -72,9 +72,7 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
 
   try {
-      const thought = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}}, {new: true, runValidators: true});
-    // thought.hearts += 1;
-    // const updatedThought = await thought.save();
+    const thought = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}}, {new: true, runValidators: true});
     res.status(201).json(thought);
   } catch (err) {
     res.status(500).json({
