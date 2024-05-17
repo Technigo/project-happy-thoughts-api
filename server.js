@@ -41,7 +41,6 @@ app.get("/thoughts", async (req, res) => {
   }
 })
 
-
 //Post a thought endpoint
 app.post("/thoughts", async (req, res) => {
   const { message, hearts, createdAt } = req.body //Retrieve the information sent by user to our API endpoint
@@ -66,8 +65,9 @@ app.post("/thoughts", async (req, res) => {
 })
 
 
-//Post to like a thought
+//Post request to like a thought
 app.post("/thoughts")
+
 
 // Start the server
 app.listen(port, () => {
