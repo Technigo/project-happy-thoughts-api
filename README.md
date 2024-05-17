@@ -5,9 +5,12 @@ Developed a custom API using Node.js, MongoDB, and Mongoose and connected the AP
 API ensures validation for thought content and proper error handling.
 
 ## Endpoints
-fetch thoughts (GET /thoughts)
-posting new thoughts (POST /thoughts)
-liking thoughts (PATCH thoughts/:thoughtId/like)
+#### fetch thoughts 
+(GET /thoughts)
+#### posting new thoughts 
+(POST /thoughts)
+#### liking thoughts 
+(PATCH thoughts/:thoughtId/like)
 
 ## The problem
 
