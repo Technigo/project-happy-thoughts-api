@@ -76,20 +76,43 @@ app.get('/Thoughts', async (req, res) => {
 	}
 })
 
+//find thought by id
+app.get('/Thoughts/:id', async (req, res) => {
+	const { id } = req.params
+  console.log({id})
+	try {
+		const thoughtId = await Thought.findById(id)
+		res.status(200).json({
+			success: true,
+			response: thoughtId,
+			message: 'Thought found by Id',
+		})
+	} catch (error) {
+		console.error('error finding by id', error)
+		res.status(400).json({
+			success: false,
+			response: error,
+			message: 'Could not find thought with this id',
+		})
+	}
+})
+
 //post endpoints
 app.post('/Thoughts', async (req, res) => {
 	const { message, createdAt } = req.body
 	try {
-		const postedThought = await Thought({ message, createdAt }).save()
+		const newThought = new Thought({ message, createdAt })
+		const postedThought = await newThought.save()
 		res.status(201).json({
 			success: true,
 			response: postedThought,
 			message: 'New thought created',
 		})
 	} catch (error) {
+		console.error('what is the post error?', error)
 		res.status(400).json({
 			success: false,
-			response: error,
+			response: error.toString(),
 			message: 'Thought couldnt be created',
 		})
 	}
@@ -101,7 +124,6 @@ app.patch('/Thoughts/:id', async (req, res) => {
 
 	const { message, hearts, createdAt } = req.body
 
-	//kanske det ska vara här jag uppdaterar likes? googla.
 	try {
 		const updateThought = await Thought.findByIdAndUpdate(
 			id,
