@@ -54,10 +54,10 @@ app.get('/', (req, res) => {
 	}
 })
 
-//get endpoint that gets the 20 latest messages
-app.get('/Thoughts', async (req, res) => {
+//get route that gets the 20 latest messages
+app.get('/thoughts', async (req, res) => {
 	const thoughts = await Thought.find()
-		.sort({ createdAt: 'desc' })
+		.sort({ createdAt: 'asc' })
 		.limit(20)
 		.exec()
 
@@ -76,10 +76,10 @@ app.get('/Thoughts', async (req, res) => {
 	}
 })
 
-//find thought by id
-app.get('/Thoughts/:id', async (req, res) => {
+//get route to find thought by id
+app.get('/thoughts/:id', async (req, res) => {
 	const { id } = req.params
-  console.log({id})
+	console.log({ id })
 	try {
 		const thoughtId = await Thought.findById(id)
 		res.status(200).json({
@@ -97,8 +97,8 @@ app.get('/Thoughts/:id', async (req, res) => {
 	}
 })
 
-//post endpoints
-app.post('/Thoughts', async (req, res) => {
+//post route for posting new Thought
+app.post('/thoughts', async (req, res) => {
 	const { message, createdAt } = req.body
 	try {
 		const newThought = new Thought({ message, createdAt })
@@ -118,8 +118,31 @@ app.post('/Thoughts', async (req, res) => {
 	}
 })
 
-//patch endpoint (samma namn som post), ändra något specifikt i det som postats
-app.patch('/Thoughts/:id', async (req, res) => {
+//post route to update likes for posts
+app.post('/thoughts/:id/like', async (req, res) => {
+	try {
+		const updateLikesById = req.params.id
+		const updatedLikeCount = await Thought.findByIdAndUpdate(
+			updateLikesById,
+			{ $inc: { hearts: 1 } },
+			{ new: true }
+		)
+		res.status(201).json({
+			success: true,
+			response: updatedLikeCount,
+			message: 'Likes updated with one heart',
+		})
+	} catch (error) {
+		res.status(400).json({
+			success: false,
+			response: error,
+			message: 'Could not update likes',
+		})
+	}
+})
+
+//patch route (samma namn som post), ändra något specifikt i det som postats, ex uppdatera likes manuellt
+app.patch('/thoughts/:id', async (req, res) => {
 	const { id } = req.params
 
 	const { message, hearts, createdAt } = req.body

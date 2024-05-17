@@ -16,12 +16,12 @@
 // 2) ENDPOINTS:
 
 // * get/thoughts
-// show max 20 thoughts - desc - hitta info om detta i Vans klipp om post
+// show max 20 thoughts - desc - hitta info om detta i Vans klipp om post KLART
 
 // * post/thoughts
 // req.body? should be validated!!
 // `{ "message": "Express is great!" }`
-// save the post if the message is validated.Create
+// save the post if the message is validated.Create KLART
 
 // * post/thoughts/:thoughtId/Like
 // om det finns ett id på ett meddelande som är validerat så ska apin uppdatera likesen. något med +1 eller så. Googla.
