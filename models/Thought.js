@@ -17,4 +17,3 @@ export const Thought = mongoose.model("Thought", {
   },
 });
 
-// new Thought({message: "This is a test", heart: 2}). save()

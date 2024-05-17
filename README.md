@@ -1,13 +1,22 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+Developed a custom API using Node.js, MongoDB, and Mongoose and connected the API to my Happy Thoughts app, a React-based social media platform focused on sharing positive thoughts. 
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+API ensures validation for thought content and proper error handling.
+
+## Endpoints
+fetch thoughts (GET /thoughts)
+posting new thoughts (POST /thoughts)
+liking thoughts (PATCH thoughts/:thoughtId/like)
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Had some issues with deployment, but solved it with help of peers.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+#### Backend: 
+https://project-happy-thoughts-api-w357.onrender.com
+
+#### Frontend:
+
