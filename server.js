@@ -70,11 +70,12 @@ app.post("/thoughts/", async (req, res) => {
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   // Create like in the database
   const { thoughtId } = req.params;
-  const thought = await Thought.findById(thoughtId);
+
   try {
-    thought.hearts += 1;
-    const updatedThought = await thought.save();
-    res.status(201).json(updatedThought);
+      const thought = await Thought.findByIdAndUpdate(thoughtId, {$inc: {hearts: 1}}, {new: true, runValidators: true});
+    // thought.hearts += 1;
+    // const updatedThought = await thought.save();
+    res.status(201).json(thought);
   } catch (err) {
     res.status(500).json({
       message: "Couldn't like the thought. Oh no!",
