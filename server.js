@@ -81,13 +81,14 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
 //unlike a post
 app.post("/thoughts/:thoughtId/unlike", async (req, res) => {
   const { thoughtId } = req.params;
+  // Prevent unlike on posts with hearts below or equal to 0
   try {
     const post = await Thought.findOneAndUpdate(
       { _id: thoughtId, hearts: { $gte: 1 } },
       {
         $inc: { hearts: -1 },
       },
-      { new: true, runValidators: true }
+      { new: true }
     ).exec();
     if (post) {
       res.status(201).json(post);
@@ -101,7 +102,7 @@ app.post("/thoughts/:thoughtId/unlike", async (req, res) => {
     res.status(400).json({
       success: false,
       error: error.message,
-      message: "Could not like the thought...",
+      message: "Could not unlike the thought...",
     });
   }
 });
