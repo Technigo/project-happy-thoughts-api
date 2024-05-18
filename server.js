@@ -64,6 +64,23 @@ app.get("/thoughts", async (req, res) => {
   }
 });
 
+app.post("/thoughts", async (req, res) => {
+  try {
+    const thought = new Thought({message: req.body.message})
+    await thought.save()
+    res.status(201).json({
+       success: true,
+       response: thought,
+       message: "Thought posted",
+     })
+  } catch (error) {
+    res.status(400).json({  
+      success: false,
+      response: error,
+      message: "Could not save thought."})
+  }
+})
+
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   try {
     const { thoughtId } = req.params;
