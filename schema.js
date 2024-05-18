@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
-export const thougthSchema = new Schema ({
+export const thoughtSchema = new Schema ({
   message: {
     type: String,
     required: true,

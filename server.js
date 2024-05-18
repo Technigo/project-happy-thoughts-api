@@ -2,7 +2,7 @@ import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
 import expressListEndpoints from "express-list-endpoints";
-//import { thougthSchema } from "./schema";
+import { thoughtSchema } from "./schema";
 import { mongoConnectionMiddleware } from "./middleware";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts";
@@ -18,26 +18,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(mongoConnectionMiddleware);
-
-//Thought Schema
-const { Schema } = mongoose;
-
-const thoughtSchema = new Schema({
-  message: {
-    type: String,
-    required: true,
-    minlength: 5,
-    maxlength: 140,
-  },
-  hearts: {
-    type: Number,
-    default: 0,
-  },
-  createdAt: {
-    type: Date,
-    default: () => new Date(),
-  },
-});
 
 //Thought model
 const Thought = mongoose.model("Thought", thoughtSchema);
