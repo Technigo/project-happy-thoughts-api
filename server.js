@@ -23,7 +23,7 @@ app.use((req, res, next) => {
   }
 })
 
-//Thoughts model
+//Thought model
 const Thought = mongoose.model("Thought", {
   message: {
     type: String,
