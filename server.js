@@ -69,11 +69,7 @@ app.post("/thoughts", async (req, res) => {
     }).save();
 
     // Set success status
-    res.status(201).json({
-      success: true,
-      response: thought,
-      message: "Thought created successfully",
-    });
+    res.status(201).json(thought);
   } catch (error) {
     // Failed case - return error message
     res.status(400).json({
