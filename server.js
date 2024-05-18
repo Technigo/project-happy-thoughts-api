@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import expressListEndpoints from "express-list-endpoints";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts";
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });//I have some problems deploying I keep the second parameter even if this is old coding ;)
+mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
