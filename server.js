@@ -1,9 +1,8 @@
 import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
+//import Thought from "./model.js"
 import expressListEndpoints from "express-list-endpoints";
-import { thoughtSchema } from "./schema";
-import { mongoConnectionMiddleware } from "./middleware";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts";
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });//I have some problems deploying I keep the second parameter even if this is old coding ;)
@@ -17,17 +16,42 @@ const app = express();
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
-app.use(mongoConnectionMiddleware);
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next();
+  } else {
+    res.status(503).json({ error: "Service unavailable." });
+  }
+});
 
-//Thought model
-const Thought = mongoose.model("Thought", thoughtSchema);
+//Models
+const Thought = mongoose.model("Thought", {
+  message: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 140
+  },
+  hearts: {
+    type: Number,
+    default: 0
+  },
+  createdAt: {
+    type: Date, 
+    default: () => new Date()
+  } 
+})
 
 //Here the routes GET and POST
 app.get("/", (req, res) => {
   const endpoints = expressListEndpoints(app);
   const documentation = {
     Welcome: "This is the Happy Thoughts API!",
-    Endpoints: endpoints,
+    Endpoints: {
+      "/": "Get API documentation",
+      "/thoughts": "Get 20 latest thoughts",
+      "/thoughts/:thoughtId/like": "Like a specific thought"
+    }
   };
   res.json(documentation);
 });
