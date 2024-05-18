@@ -30,7 +30,7 @@ We mentioned the `Thought` model and its properties a bit earlier. Each of these
 - `createdAt` - the time the Thought was added to the database
   - Defaults to the current time
   - Should not be assignable when creating a new thought
-⭐⭐⭐⭐⭐
+
 ### Using your API
 Once you've created your API, you should deploy it, and update your frontend project to use your own API instead of the old Technigo one. The idea is that if you build this API correctly, **the only thing you should need to change in the frontend code is the URL to the API,** to change it from the Technigo one to the one you deploy.
 

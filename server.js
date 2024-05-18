@@ -98,6 +98,23 @@ app.patch("/thoughts/:id/like", async (req, res) => {
   }
 })
 
+app.patch("/thoughts/:id/dislike", async (req, res) => {
+  try {
+    const thought = await Thought.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { hearts: -1 } },
+      { new: true, runValidators: true }
+    )
+    res.status(200).json(thought)
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      response: error,
+      message: "Could not dislike thought.",
+    })
+  }
+})
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
