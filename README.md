@@ -1,13 +1,17 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+API to support the Happy Thoughts Project. Serve get requests and handle post request by querying a mongo database.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I set up a connection to a database, MongoDB, and added endpoints needed to support the Happy Thoughts frontend using Express. Changed url in frontend to point to new server.
+
+Further on I would like to try out and add more features like pagination and allowing the user to either be anonymous or to enter their name when they post their happy thought.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Backend:
+https://project-happy-thoughts-api-rn3z.onrender.com
+
+Frontend:
+https://happy-thoughts-fms.netlify.app/
