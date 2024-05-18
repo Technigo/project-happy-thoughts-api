@@ -9,4 +9,4 @@ First I created a to do list to follow based on the instructions. Then I impleme
 ## View it live
 
 Backend: https://sofies-happy-thoughts-api.onrender.com/
-Frontend:
+Frontend: https://bucolic-beignet-3163b4.netlify.app/
