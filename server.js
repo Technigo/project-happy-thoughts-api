@@ -1,20 +1,27 @@
 import express from "express"
 import cors from "cors"
 import mongoose from "mongoose"
+import expressListEndpoints from "express-list-endpoints"
 
+// Defines the port the app will run on and connects to mongoose
+const port = process.env.PORT || 8080
+const app = express()
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts"
 mongoose.connect(mongoUrl)
 mongoose.Promise = Promise
 
-// Defines the port the app will run on.
-const port = process.env.PORT || 8080
-const app = express()
-
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(express.json())
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next()
+  } else {
+    res.status(503).json({ error: "Service unavailable." })
+  }
+})
 
-//Schemas and models
+//Models
 const Thought = mongoose.model("Thought", {
   message: {
     type: String,
@@ -34,13 +41,27 @@ const Thought = mongoose.model("Thought", {
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!")
+  const documentation = {
+    Welcome: "Welcome to the Happy Thoughts API!",
+    Endpoints: expressListEndpoints(app).map((endpoint) => {
+      return {
+        path: endpoint.path,
+        methods: endpoint.methods,
+        middlewares: endpoint.middlewares,
+      }
+    })
+  }
+  res.json(documentation);
 })
 
 app.get("/thoughts", async (req, res) => {
   try {
     const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20).exec()
-    res.json(thoughts)
+    if (thoughts.length > 0) {
+      res.json(thoughts)
+    } else {
+      res.status(404).json({ error: "No thoughts found." })
+    }
   } catch (err) {
     res.status(400).json({ message: "Something went wrong.", error: err.errors })
   }
@@ -69,8 +90,11 @@ app.patch("/thoughts/:id/like", async (req, res) => {
       req.params.id,
       { $inc: { hearts: 1 } }, { new: true, runValidators: true })
     res.status(200).json(thought)
-  } catch (err) {
-    res.status(400).json({ message: "Could not like thought.", error: err.errors })
+  } catch (error) {
+    res.status(400).json({ 
+      success: false,
+      response: error,
+      message: "Could not like thought."})
   }
 })
 
