@@ -3,7 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 import expressListEndpoints from "express-list-endpoints";
 //import { thougthSchema } from "./schema";
-import { corsMiddleware, jsonMiddleware, mongoConnectionMiddleware } from "./middleware";
+import { mongoConnectionMiddleware } from "./middleware";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts";
 mongoose.connect(mongoUrl);
@@ -15,8 +15,8 @@ const port = process.env.PORT || 8080;
 const app = express();
 
 // Add middlewares to enable cors and json body parsing
-app.use(corsMiddleware);
-app.use(jsonMiddleware);
+app.use(cors());
+app.use(express.json());
 app.use(mongoConnectionMiddleware);
 
 //Thought Schema
@@ -42,7 +42,7 @@ const thoughtSchema = new Schema({
 //Thought model
 const Thought = mongoose.model("Thought", thoughtSchema);
 
-// Start defining your routes here
+//Here the routes GET and POST
 app.get("/", (req, res) => {
   const endpoints = expressListEndpoints(app);
   const documentation = {
@@ -52,16 +52,33 @@ app.get("/", (req, res) => {
   res.json(documentation);
 });
 
-app.post("/thoughts", async (req, res) => {
+app.get("/thoughts", async (req, res) => {
   try {
-    const { message } = req.body;
-    const thought = new Thought({ message });
-    const savedThought = await thought.save();
-    res.status(201).json(savedThought);
+    const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20);
+    res.status(200).json(thoughts);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 });
+
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  try {
+    const { thoughtId } = req.params;
+    const thought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      { $inc: { hearts: 1 } },
+      { new: true }
+    );
+
+    if (!thought) {
+      return res.status(404).json({ error: "Thought not found" });
+    }
+
+    res.status(200).json(thought);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+})
 
 // Start the server
 app.listen(port, () => {
