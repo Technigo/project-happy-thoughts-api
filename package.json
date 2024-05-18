@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@babel/preset-env": "^7.16.11",
+    "@babel/node": "^7.16.8",
     "cors": "^2.8.5",
     "express": "^4.17.3",
     "express-list-endpoints": "^7.1.0",
