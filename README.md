@@ -1,13 +1,18 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
+This project builds the backend for [Happy Thoughts project](https://github.com/wwenzz/project-happy-thoughts-vite) by creating RESTful API. This backend has the following endpoints:
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+- "/": Display a list of endpoints served by the backend.
+- "/thoughts": Offer GET and POST requests that display all thoughts and post a single thought individually.
+- "/thoughts/:id/like": Like a post based on the post id. Always increment by 1.
+- "/thoughts/:id/unlike": Unlike a post based on the post id. Always decrement by 1 and cannot apply on posts with 0 hearts.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+- POST request: Retreived the request body and used mongoose findByIdAndUpdate as well as findOneAndUpdate methods to post new data.
+- Error handling: Implemented try and catch block to catch any potential errors and further customise the error messages.
+- Response limit & sorting: Applied limit and sort methods from mongoose to limit and sort the responses.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://wen-happy-thoughts-api.onrender.com/
