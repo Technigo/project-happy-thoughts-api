@@ -4,8 +4,11 @@ import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import { validationResult, body } from 'express-validator'
 import expressListEndpoints from 'express-list-endpoints'
+import dotenv from 'dotenv'
 
-const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/project-mongo'
+dotenv.config()
+
+const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/happyThoughts'
 mongoose.connect(mongoUrl)
 mongoose.Promise = Promise
 
@@ -57,7 +60,7 @@ app.get('/', (req, res) => {
 //get route that gets the 20 latest messages
 app.get('/thoughts', async (req, res) => {
 	const thoughts = await Thought.find()
-		.sort({ createdAt: 'asc' })
+		.sort({ createdAt: 'desc' })
 		.limit(20)
 		.exec()
 
