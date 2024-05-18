@@ -2,6 +2,8 @@ import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
 import expressListEndpoints from "express-list-endpoints";
+import { thougthSchema } from "./schema";
+import { corsMiddleware, jsonMiddleware, mongoConnectionMiddleware } from "./middleware";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts";
 mongoose.connect(mongoUrl);
@@ -13,33 +15,12 @@ const port = process.env.PORT || 8080;
 const app = express();
 
 // Add middlewares to enable cors and json body parsing
-app.use(cors());
-app.use(express.json());
-app.use((req, res, next) => {
-  if (mongoose.connection.readyState === 1) {
-    next()
-  } else {
-    res.status(503).json({ error: "Service unavailable." })
-  }
-})
+app.use(corsMiddleware);
+app.use(jsonMiddleware);
+app.use(mongoConnectionMiddleware);
 
 //Thought model
-const Thought = mongoose.model("Thought", {
-  message: {
-    type: String,
-    required: true,
-    minlength: 5,
-    maxlength: 140
-  },
-  hearts: {
-    type: Number,
-    default: 0
-  },
-  createdAt: {
-    type: Date, 
-    default: () => new Date()
-  } 
-})
+const Thought = mongoose.model("Thought", thougthSchema)
 
 // Start defining your routes here
 app.get("/", (req, res) => {
@@ -47,8 +28,15 @@ app.get("/", (req, res) => {
 });
 
 app.post("/thoughts", async (req, res) => {
-  console.log("hello")
-})
+  try {
+    const { message } = req.body;
+    const thought = new Thought({ message });
+    const savedThought = await thought.save();
+    res.status(201).json(savedThought);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
 
 // Start the server
 app.listen(port, () => {
