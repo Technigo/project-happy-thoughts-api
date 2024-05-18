@@ -1,13 +1,11 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This week's project was about creating the backend for the Happy Thoughts project we did earlier in the bootcamp. This time, I had to code the server of the API where data from the MongoDB database can be handled using GET and POST methods.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+The main challenge was understanding and implementing the necessary code to connect to a database within a short timeframe.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+[here](https://project-happy-thoughts-api-d6ds.onrender.com)
