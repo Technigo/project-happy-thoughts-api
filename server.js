@@ -24,19 +24,22 @@ app.get("/", (req, res) => {
 
 //Get thoughts, descending by created and limit to 20 thoughts
 app.get("/thoughts", async (req, res) => {
-  const thoughts = await Thought.find().sort({ createdAt: "desc" }).limit(20).exec()
-  
+  const thoughts = await Thought.find()
+    .sort({ createdAt: "desc" })
+    .limit(20)
+    .exec()
+
   try {
     res.status(201).json({
       sucess: true,
       response: thoughts,
-      message: "Happy thoughts retrieved"
+      message: "Happy thoughts retrieved",
     })
   } catch (error) {
     res.status(400).json({
       sucess: false,
       response: error,
-      message: "Could not retrieve any Happy thoughts"
+      message: "Could not retrieve any Happy thoughts",
     })
   }
 })
@@ -46,28 +49,47 @@ app.post("/thoughts", async (req, res) => {
   const { message, hearts, createdAt } = req.body //Retrieve the information sent by user to our API endpoint
 
   //Use the mongoose model to create the database entry
-  const thought = new Thought({ message, hearts, createdAt }) 
+  const thought = new Thought({ message, hearts, createdAt })
 
   try {
     const newThought = await thought.save()
     res.status(201).json({
       sucess: true,
       response: newThought,
-      message: "Thought posted"
+      message: "Thought posted",
     })
   } catch (error) {
     res.status(400).json({
       sucess: false,
       response: error,
-      message: "Could not post thought"
+      message: "Could not post thought",
     })
   }
 })
 
+//Post request to like a Happy thought
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params
 
-//Post request to like a thought
-app.post("/thoughts")
-
+  try {
+    const likeThought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      { $inc: { hearts: 1 } },
+      { new: true, runValidators: true }
+    )
+    res.status(200).json({
+      sucess: true,
+      response: likeThought,
+      message: "Happy thought was successfully liked",
+    })
+  } catch (error) {
+    res.status(400).json({
+      sucess: false,
+      response: error,
+      message: "Could not like Happy thought",
+    })
+  }
+})
 
 // Start the server
 app.listen(port, () => {
