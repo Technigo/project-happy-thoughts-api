@@ -36,7 +36,6 @@ app.get("/", (req, res) => {
   res.send(expressListEndpoints(app));
 });
 
-// Start defining your routes here
 //GET thoughts
 app.get("/thoughts", async (req, res) => {
   const thoughts = await Thought.find()
@@ -85,12 +84,10 @@ app.patch("/thoughts/:thoughtId/like", async (req, res) => {
     await thoughtsId.save();
     res.json({ message: "You just liked a thought!", thoughtsId });
   } catch (err) {
-    res
-      .status(404)
-      .json({
-        message: "Something went wrong, please try again.",
-        error: err.errors,
-      });
+    res.status(404).json({
+      message: "Something went wrong, please try again.",
+      error: err.errors,
+    });
   }
 });
 
