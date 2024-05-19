@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
+import expressListEndpoints from "express-list-endpoints";
 
 const mongoUrl =
   process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts-mongo";
@@ -30,6 +31,10 @@ const Thought = mongoose.model("Thought", {
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send(expressListEndpoints(app));
+});
 
 // Start defining your routes here
 //GET thoughts
