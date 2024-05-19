@@ -1,13 +1,14 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+made my own api for the happy thoughts site we built in week 7
 
 ## The problem
+Started working in the [template](https://github.com/kathinka/express-api-starter), and copied my work over into this repo.
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+Started building the API as I have done on the last tasks
+wanted to add more to is as well, som made endpoint for it, but did not complete it as I rather wanted to join my team on working on the final task. So I revisit this later when I have more time!
 
 ## View it live
-
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+View it live:
+- [API](https://happy-thoughts-api-ap6c.onrender.com/)
+- [Client](https://happyhappenings.netlify.app/)
