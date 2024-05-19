@@ -10,5 +10,5 @@ wanted to add more to is as well, som made endpoint for it, but did not complete
 
 ## View it live
 View it live:
-- [API](https://happy-thoughts-api-ap6c.onrender.com/)
+- [API](https://project-happy-thoughts-api-sw6f.onrender.com/)
 - [Client](https://happyhappenings.netlify.app/)

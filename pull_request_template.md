@@ -1,6 +1,6 @@
 ## Netlify link
-https://happy-thoughts-api-ap6c.onrender.com
-https://happyhappenings.netlify.app/
+[API](https://project-happy-thoughts-api-sw6f.onrender.com/)
+[Site](https://happyhappenings.netlify.app/)
 
 ## Collaborators
 solo
