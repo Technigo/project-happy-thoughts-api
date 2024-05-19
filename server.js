@@ -34,15 +34,14 @@ app.get("/", (req, res) => {
   res.send("Send me a good thought");
 });
 
-// app.get("/thoughts", async (req, res) => {
-//   const thoughts = await Thought.find()
-//     .sort({ createdAt: "desc" })
-//     .limit(20)
-//     .exec();
+app.get("/thoughts", async (req, res) => {
+  const thoughts = await Thought.find()
+    .sort({ createdAt: "desc" })
+    .limit(20)
+    .exec();
 
-//   res.json(thoughts);
-
-// });
+  res.json(thoughts);
+});
 
 // // Routes to add new Thought
 // app.post("/thoughts", async (req, res) => {
