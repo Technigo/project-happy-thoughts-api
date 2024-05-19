@@ -3,16 +3,31 @@ import express from "express";
 import mongoose from "mongoose";
 import { Thought } from "./models/thoughtModel.js";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/thoughts";
-mongoose.connect(mongoUrl);
-mongoose.Promise = Promise;
-
 const port = process.env.PORT || 8000;
 const app = express();
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
+
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/thoughts";
+mongoose
+  .connect(mongoUrl)
+  .then(() => {
+    console.log("App is conntected to db");
+    // Start the server when conntected to db
+    app.listen(port, () => {
+      console.log(`Server running on http://localhost:${port}`);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+mongoose.Promise = Promise;
+
+// const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/thoughts";
+// mongoose.connect(mongoUrl);
+// mongoose.Promise = Promise;
 
 // Start defining your routes here
 app.get("/", (req, res) => {
@@ -67,6 +82,6 @@ app.get("/", (req, res) => {
 // });
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server running on http://localhost:${port}`);
+// });
