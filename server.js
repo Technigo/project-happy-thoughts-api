@@ -1,6 +1,7 @@
 import cors from "cors"
 import express from "express"
 import mongoose from "mongoose"
+import expressListEndpoints from "express-list-endpoints"
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happy-thoughts"
 mongoose.connect(mongoUrl)
@@ -22,6 +23,12 @@ const app = express()
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(express.json())
+
+// List endpoints
+app.get("/", (req, res) => {
+  const endpoints = expressListEndpoints(app)
+  res.json(endpoints)
+})
 
 // GET thought endpoint
 app.get("/thoughts", async (req, res) => {
