@@ -1,7 +1,12 @@
 import cors from "cors"
 import express from "express"
 import mongoose from "mongoose"
+import dotenv from "dotenv"
 import Thought from "./models/Thoughts"
+import expressListEndpoints from "express-list-endpoints"
+
+//.env
+dotenv.config()
 
 const mongoUrl =
   process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts"
@@ -46,10 +51,10 @@ app.get("/thoughts", async (req, res) => {
 
 //Post a thought endpoint
 app.post("/thoughts", async (req, res) => {
-  const { message, hearts, createdAt } = req.body //Retrieve the information sent by user to our API endpoint
+  const { message } = req.body //Retrieve the information sent by user to our API endpoint
 
   //Use the mongoose model to create the database entry
-  const thought = new Thought({ message, hearts, createdAt })
+  const thought = new Thought({ message })
 
   try {
     const newThought = await thought.save()
