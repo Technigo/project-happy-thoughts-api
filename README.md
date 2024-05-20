@@ -1,13 +1,17 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This week it was time to build my own API using Express.js, Mongoose and MongoDB, and then connect it with one of my previous front end projects - Happy Thoughts, which make this my first fullstack project.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+I started with models and created it in a new folder to keep the server.js more organized and modular. Then I created different endpoints to GET and POST the data.
+
+If I had more time I would like to keep building to make it even better.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Render:
+https://project-happy-thoughts-api-j0eg.onrender.com
+
+Netlify:
+https://project-happy-thoughts-by-lovisa.netlify.app/
