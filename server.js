@@ -8,10 +8,7 @@ import expressListEndpoints from "express-list-endpoints";
 dotenv.config();
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
-mongoose
-  .connect(mongoUrl)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
 // PORT=8080 npm start
