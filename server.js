@@ -1,16 +1,17 @@
 import cors from "cors";
 import express from "express";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 import mongoose from "mongoose";
 import expressListEndpoints from "express-list-endpoints";
 
 // Load environment variables
 dotenv.config();
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts"
-mongoose.connect(mongoUrl)
-.then(() => console.log("MongoDB connected"))
-.catch(err => console.error("MongoDB connection error:", err));
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
+mongoose
+  .connect(mongoUrl)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 mongoose.Promise = Promise;
 
 // PORT=8080 npm start
@@ -34,17 +35,17 @@ const Thought = mongoose.model("Thought", {
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 140
+    maxlength: 140,
   },
   hearts: {
     type: Number,
-    default: 0
+    default: 0,
   },
   createdAt: {
-    type: Date, 
-    default: () => new Date()
-  } 
-})
+    type: Date,
+    default: () => new Date(),
+  },
+});
 
 //Here the routes GET and POST
 app.get("/", (req, res) => {
@@ -54,8 +55,8 @@ app.get("/", (req, res) => {
     Endpoints: {
       "/": "Get API documentation",
       "/thoughts": "Get 20 latest thoughts",
-      "/thoughts/:thoughtId/like": "Like a specific thought"
-    }
+      "/thoughts/:thoughtId/like": "Like a specific thought",
+    },
   };
   res.json(documentation);
 });
@@ -71,20 +72,21 @@ app.get("/thoughts", async (req, res) => {
 
 app.post("/thoughts", async (req, res) => {
   try {
-    const thought = new Thought({message: req.body.message})
-    await thought.save()
+    const thought = new Thought({ message: req.body.message });
+    await thought.save();
     res.status(201).json({
-       success: true,
-       response: thought,
-       message: "Thought posted",
-     })
+      success: true,
+      response: thought,
+      message: "Thought posted",
+    });
   } catch (error) {
-    res.status(400).json({  
+    res.status(400).json({
       success: false,
       response: error,
-      message: "Could not save thought."})
+      message: "Could not save thought.",
+    });
   }
-})
+});
 
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   try {
@@ -103,7 +105,7 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
-})
+});
 
 // Start the server
 app.listen(port, () => {
