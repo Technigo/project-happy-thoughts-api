@@ -22,4 +22,5 @@ Had some issues with deployment, but solved it with help of peers.
 https://project-happy-thoughts-api-w357.onrender.com
 
 #### Frontend:
+https://polite-begonia-9a20c4.netlify.app/
 
