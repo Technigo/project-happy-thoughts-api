@@ -43,7 +43,7 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
-app.get("/thoughts/:thoughtId/like", async (req, res) => {
+app.patch("/thoughts/:thoughtId/like", async (req, res) => {
   // FInd the heart and update its value by one
   const { thoughtId } = req.params;
 
