@@ -8,7 +8,7 @@ const mongoUrl =
 mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
-const port = process.env.PORT || 9090;
+const port = process.env.PORT || 8080;
 const app = express();
 
 const Thought = mongoose.model("Thought", {
