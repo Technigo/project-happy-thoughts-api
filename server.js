@@ -56,7 +56,7 @@ app.post("/thoughts", async(req, res) => {
   const {message} = req.body
   try {
     const thought = await new Thoughts({message}).save()
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       response: thought,
       message: "New thought has been sent."
@@ -70,11 +70,26 @@ app.post("/thoughts", async(req, res) => {
   }
 });
 
+app.get("/thoughts/:id", async (req, res) => {
+  try {
+    const thought = await Thoughts.findById(req.params.id);
+    if (thought) {
+      res.status(200).json(thought);
+    } else {
+      res.status(404).json({ error: "Thought not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Error fetching thought", details: err.message });
+  }
+});
+
 app.post("/thoughts/:id/like", async (req, res) => {
   const thoughtId = req.params.id
   try{
     const likedThought = await Thoughts.findByIdAndUpdate(
-      thoughtId, {$inc: {hearts: 1}}, {new: true}
+      thoughtId, 
+      {$inc: {hearts: 1}}, 
+      {new: true}
     )
     res.status(201).json(await likedThought.save())
   }catch (error) {
@@ -85,6 +100,7 @@ app.post("/thoughts/:id/like", async (req, res) => {
     })
   }
 })
+
 
 // Start the server
 app.listen(port, () => {
