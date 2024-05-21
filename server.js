@@ -76,7 +76,7 @@ app.get("/thoughts/:id", async (req, res) => {
     if (thought) {
       res.status(200).json(thought);
     } else {
-      res.status(404).json({ error: "Thought not found" });
+      res.status(404).json({ error: "Thoughts cannot be found" });
     }
   } catch (err) {
     res.status(500).json({ error: "Error fetching thought", details: err.message });
@@ -100,7 +100,6 @@ app.post("/thoughts/:id/like", async (req, res) => {
     })
   }
 })
-
 
 // Start the server
 app.listen(port, () => {
