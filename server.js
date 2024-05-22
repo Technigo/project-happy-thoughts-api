@@ -7,8 +7,14 @@ mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 const Thought = mongoose.model("Thought", {
   // this is the schema that tells the data base what kind of data we are expecting. like year-film, category and so on.
-  message: String,
-  hearts: Number,
+  message: {
+    type: String,
+    required: true,
+  },
+  hearts: {
+    type: Number,
+    default: 0,
+  },
   // createat is a timestamp that will be added automatically, it tells me when the thought was created.
   createdAt: {
     type: Date,
@@ -26,7 +32,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
 // here is where the routes are defined.(thoughts)
 app.get("/thoughts", async (req, res) => {
   const thoughts = await Thought.find()
@@ -35,9 +40,9 @@ app.get("/thoughts", async (req, res) => {
     // limited to 20 thoughts
     .limit(20)
     .exec();
-  res.json(thoughts);
+  res.status(200).json(thoughts);
 });
-// this is a post request that will create a new thought, raw data is sent in the body of the request.  
+// this is a post request that will create a new thought, raw data is sent in the body of the request.
 app.post("/thoughts", (req, res) => {
   if (req.body.message.length < 5 || req.body.message.length > 140) {
     res.status(400).json({
@@ -48,10 +53,10 @@ app.post("/thoughts", (req, res) => {
   // create a new thought and save it to the database, mongo db will create a unique id for the thought.
   const newThought = new Thought({ message: req.body.message, hearts: 0 });
   newThought.save().then(() => {
-    res.json(newThought);
+    res.status(201).json(newThought);
   });
 });
-// here we create the hearts, the likes 
+// here we create the hearts, the likes
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const thoughtId = req.params.thoughtId;
   const thought = await Thought.findById(thoughtId);
@@ -60,10 +65,10 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
     return;
   }
   // add a heart to the thought
-  thought.hearts = thought.hearts + 1
+  thought.$inc({ hearts: 1 });
   // here is where the heart is saved to the database
   thought.save().then(() => {
-    res.json(thought);
+    res.status(200).json(thought);
   });
 });
 
