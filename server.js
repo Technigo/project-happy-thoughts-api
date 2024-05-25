@@ -58,14 +58,12 @@ app.post("/thoughts", async(req, res) => {
     const thought = await new Thoughts({message}).save()
     res.status(200).json({
       success: true,
-      response: thought,
-      message: "New thought has been sent."
+      message: thought.message
     })
   } catch (error) {
     res.status(400).json({
       success: false,
-      response: error,
-      message: "Thoughts cannot be sent."
+      error: "Thoughts cannot be sent."
     })    
   }
 });
