@@ -58,7 +58,8 @@ app.post("/thoughts", async(req, res) => {
     const thought = await new Thoughts({message}).save()
     res.status(200).json({
       success: true,
-      message: thought.message
+      message: thought.message,
+      hearts: 0
     })
   } catch (error) {
     res.status(400).json({
