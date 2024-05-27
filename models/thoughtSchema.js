@@ -11,8 +11,6 @@ const ThoughtSchema = new Schema({
   hearts: {
     type: Number,
     default: 0,
-    //This way the user can't change the default
-    setDefaultsOnInsert: true,
   },
   createdAt: {
     type: Date,

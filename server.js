@@ -79,14 +79,11 @@ app.get("/thoughts", async (req, res) => {
 
 //POST the thoughts endpoint
 app.post("/thoughts", async (req, res) => {
-  const { message, hearts, createdAt, _id } = req.body;
+  const { message } = req.body;
 
   try {
     const thought = await new Thought({
       message,
-      hearts,
-      createdAt,
-      _id,
     }).save();
     res.status(201).json(thought);
   } catch (error) {
