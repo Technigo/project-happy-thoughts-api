@@ -9,7 +9,7 @@ I approached the project problem by first defining the requirements and endpoint
 Endpoints:
 
 - https://alma-happy-thoughts-api.onrender.com/thoughts, GET request for list of 20 thoughts, POST request to send a new thought
-- Backend: https://alma-happy-thoughts-api.onrender.com/thoughts/:thoughtId/like - POST request to like a thought
+- https://alma-happy-thoughts-api.onrender.com/thoughts/:thoughtId/like - POST request to like a thought
 
 ## View it live
 
