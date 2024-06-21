@@ -1,6 +1,10 @@
 import cors from "cors"
 import express from "express"
 import mongoose from "mongoose"
+import expressListEndpoints from "express-list-endpoints"
+import dotenv from "dotenv"
+
+dotenv.config()
 
 const mongoUrl =
   process.env.MONGO_URL || "mongodb://localhost/happy-thoughts-axel"
@@ -20,23 +24,19 @@ app.use(express.json())
 const { Schema, model } = mongoose
 
 const thoughtSchema = new Schema({
-  thought: {
+  message: {
     type: String,
     required: true,
-    minlength: 4,
+    minlength: 5,
+    maxlength: 140,
   },
   date: {
     type: Date,
-    required: true,
+    default: Date.now,
   },
-  isVirtual: {
-    type: Boolean,
-    default: false,
-  },
-  typeOfEvent: {
-    type: String,
-    enum: ["other"],
-    default: "other",
+  hearts: {
+    type: Number,
+    default: 0,
   },
 })
 
@@ -44,53 +44,69 @@ const Thought = model("Thought", thoughtSchema)
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!")
+  const endpoints = expressListEndpoints(app)
+  res.json(endpoints)
 })
-app.post("/thoughts", async (req, res) => {
-  const { name, date, isVirtual, typeOfEvent } = req.body
+app.get("/thoughts", async (req, res) => {
+  const thoughts = await Thought.find()
+    .sort({ createdAt: "desc" })
+    .limit(20)
+    .exec()
   try {
-    const thought = await new Thought({
-      name,
-      date,
-      isVirtual,
-      typeOfEvent,
-    }).save()
-
     res.status(201).json({
       success: true,
-      respone: thought,
-      message: "Thought created",
+      respone: thoughts,
+      message: "Thought retrived",
     })
   } catch (error) {
     res.status(400).json({
       success: false,
       response: error,
-      message: "Thought could not be created",
+      message: "Thoughts could not be retrived",
     })
   }
 })
 
-app.patch("thoughts/:id", async (req, res) => {
-  const { id } = req.params
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body
 
-  const { newThought } = req.body
+  const thought = new Thought({ message })
+
   try {
-    const thought = await Thought.findByIdAndUpdate(
-      id,
-      { name: newThought },
-      { new: true, runValidators: true }
-    )
-
-    res.status(200).json({
-      success: false,
-      response: thought,
-      message: "Thougt updated",
+    const newThought = await thought.save()
+    res.status(201).json({
+      success: true,
+      response: newThought,
+      message: "Thougt posted",
     })
   } catch (error) {
     res.status(400).json({
       success: false,
       response: error,
-      meessage: "Thought could not be updated",
+      meessage: "Thought could not be posted",
+    })
+  }
+})
+
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params
+
+  try {
+    const likeThought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      { $inc: { hearts: 1 } },
+      { new: true, runValidators: true }
+    )
+    res.status(200).json({
+      sucess: true,
+      response: likeThought,
+      message: "Happy thought was successfully liked",
+    })
+  } catch (error) {
+    res.status(400).json({
+      sucess: false,
+      response: error,
+      message: "Could not like Happy thought",
     })
   }
 })
