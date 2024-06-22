@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import router from "./routes/Routes.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 
@@ -18,8 +20,8 @@ app.use(express.json());
 app.use("/", router);
 
 // Defines the port the app will run on.
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
-mongoose.connect(mongoUrl);
+const MONGO_URL = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
+mongoose.connect(MONGO_URL);
 mongoose.Promise = Promise;
 
 const port = process.env.PORT || 8080;
