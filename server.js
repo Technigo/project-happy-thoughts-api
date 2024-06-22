@@ -9,6 +9,7 @@ const app = express();
 app.use(
   cors({
     origin: ["https://happyhappenings.netlify.app"],
+
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization", "updatedthoughtlike"],
   })
@@ -21,7 +22,7 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/happyThoughts";
 mongoose.connect(mongoUrl);
 mongoose.Promise = Promise;
 
-const port = process.env.PORT || 8090;
+const port = process.env.PORT || 8080;
 
 // Start the server
 app.listen(port, () => {
