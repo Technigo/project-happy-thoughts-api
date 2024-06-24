@@ -1,13 +1,12 @@
 # Project Happy Thoughts API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+This week I created my on API for a twitter-like website called Happy Thoughts. I'm using MondgoDB to store the data that the user can insert.
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+First I created a to do list to follow based on the instructions. Then I implemented the different routes when I had time to work. When all the endpoints where created I deployed with Render by modifiyng the connectiong string I created with Atlas in the last project.
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+Backend: https://sofies-happy-thoughts-api.onrender.com/
+Frontend: https://sofies-happy-thoughts.netlify.app
