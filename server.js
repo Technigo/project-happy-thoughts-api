@@ -7,7 +7,7 @@ import dotenv from "dotenv"
 dotenv.config()
 
 const mongoUrl =
-  process.env.MONGO_URL || "mongodb://localhost/happy-thoughts-axel"
+  process.env.MONGO_URL || "mongodb://localhost/happy-thoughts-api"
 mongoose.connect(mongoUrl)
 mongoose.Promise = Promise
 
@@ -40,7 +40,7 @@ const thoughtSchema = new Schema({
   },
 })
 
-const Thought = model("Thought", thoughtSchema)
+export const Thought = model("Thought", thoughtSchema)
 
 // Start defining your routes here
 app.get("/", (req, res) => {
