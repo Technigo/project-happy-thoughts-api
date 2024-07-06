@@ -57,7 +57,7 @@ app.get("/thoughts", async (req, res) => {
     const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20);
     res.status(200).json(thoughts);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching thoughts" });
+    res.status(500).json({ message: "Error fetching thoughts", error: error.message });
   }
 });
 
