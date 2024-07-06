@@ -1,44 +1,103 @@
-// server.js
+import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
+import expressListEndpoints from "express-list-endpoints";
+import mongoose from "mongoose";
 
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const routes = require('./routes'); // Assumi che il file si chiami routes.js
-const Thought = require('./models/Thought'); // Ensure this matches the exact file casing
-const thoughtsData = require('./data/thoughtsData'); // Assumi il percorso corretto ai dati di esempio
+// Load environment variables
+dotenv.config();
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts";
+mongoose.connect(mongoUrl, {});
+mongoose.Promise = global.Promise;
 
-// Middleware
-app.use(bodyParser.json());
-app.use(cors());
-
-// MongoDB Connection
-mongoose.connect(process.env.MONGO_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(async () => {
-  console.log("MongoDB connected successfully");
-
-  // Inserisci i dati di esempio nel database solo se non ci sono pensieri già presenti
-  const count = await Thought.countDocuments();
-  if (count === 0) {
-    await Thought.insertMany(thoughtsData);
-    console.log("Inserted initial thoughts data into the database");
-  }
-})
-.catch((err) => {
-  console.error("MongoDB connection error:", err.message);
-  process.exit(1); // Exit process with failure
+// Define mongoose schema for Thought
+const thoughtSchema = new mongoose.Schema({
+  message: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 140,
+  },
+  hearts: {
+    type: Number,
+    default: 0,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-// Mount the routes under /api
-app.use('/api', routes);
+// Create mongoose model for Thought
+const Thought = mongoose.model("Thought", thoughtSchema);
+
+// Initialize Express app
+const app = express();
+const port = process.env.PORT || 9000;
+
+// Middleware setup
+app.use(cors());
+app.use(express.json());
+
+// Routes
+app.get("/", (req, res) => {
+  res.json({
+    message: "Happy Thoughts API",
+    endpoints: expressListEndpoints(app),
+  });
+});
+
+// GET /thoughts - Get up to 20 most recent thoughts
+app.get("/thoughts", async (req, res) => {
+  try {
+    const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20);
+    res.status(200).json(thoughts);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching thoughts" });
+  }
+});
+
+// POST /thoughts - Create a new thought
+app.post("/thoughts", async (req, res) => {
+  const { message } = req.body;
+
+  if (!message || message.length < 5 || message.length > 140) {
+    return res.status(400).json({ message: "Invalid message length" });
+  }
+
+  try {
+    const newThought = new Thought({ message });
+    const savedThought = await newThought.save();
+    res.status(201).json(savedThought);
+  } catch (error) {
+    res.status(500).json({ message: "Error saving thought" });
+  }
+});
+
+// POST /thoughts/:thoughtId/like - Increment hearts of a thought by ID
+app.post("/thoughts/:thoughtId/like", async (req, res) => {
+  const { thoughtId } = req.params;
+
+  try {
+    const thought = await Thought.findByIdAndUpdate(
+      thoughtId,
+      { $inc: { hearts: 1 } },
+      { new: true }
+    );
+
+    if (!thought) {
+      return res.status(404).json({ message: "Thought not found" });
+    }
+
+    res.status(200).json(thought);
+  } catch (error) {
+    res.status(500).json({ message: "Error liking thought" });
+  }
+});
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
 });
+
