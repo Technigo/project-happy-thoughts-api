@@ -1,27 +1,44 @@
-import cors from "cors";
-import express from "express";
-import mongoose from "mongoose";
+// server.js
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-mongo";
-mongoose.connect(mongoUrl);
-mongoose.Promise = Promise;
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const routes = require('./routes'); // Assumi che il file si chiami routes.js
+const Thought = require('./models/Thought'); // Ensure this matches the exact file casing
+const thoughtsData = require('./data/thoughtsData'); // Assumi il percorso corretto ai dati di esempio
 
-// Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
-const port = process.env.PORT || 8080;
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-// Add middlewares to enable cors and json body parsing
+// Middleware
+app.use(bodyParser.json());
 app.use(cors());
-app.use(express.json());
 
-// Start defining your routes here
-app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+// MongoDB Connection
+mongoose.connect(process.env.MONGO_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(async () => {
+  console.log("MongoDB connected successfully");
+
+  // Inserisci i dati di esempio nel database solo se non ci sono pensieri già presenti
+  const count = await Thought.countDocuments();
+  if (count === 0) {
+    await Thought.insertMany(thoughtsData);
+    console.log("Inserted initial thoughts data into the database");
+  }
+})
+.catch((err) => {
+  console.error("MongoDB connection error:", err.message);
+  process.exit(1); // Exit process with failure
 });
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+// Mount the routes under /api
+app.use('/api', routes);
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
