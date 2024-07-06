@@ -11,7 +11,7 @@ dotenv.config();
 mongoose.set('strictQuery', false); // Add this line
 
 // Connect to MongoDB database
-const mongoUrl = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/project-happy-thoughts';
+const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost:27017/project-happy-thoughts';
 mongoose.connect(mongoUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -50,7 +50,7 @@ const Thought = mongoose.model('Thought', thoughtSchema);
 
 // Initialize Express app
 const app = express();
-const port = process.env.PORT || 10000;
+const port = process.env.PORT || 27017;
 
 // Middleware setup
 app.use(cors());
