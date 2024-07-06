@@ -11,7 +11,7 @@ dotenv.config();
 mongoose.set('strictQuery', false); // Add this line
 
 // Connect to MongoDB database
-const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/project-happy-thoughts';
+const mongoUrl = process.env.MONGO_URL || 'mongodb://0.0.0.0/project-happy-thoughts';
 mongoose.connect(mongoUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
