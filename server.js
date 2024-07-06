@@ -8,6 +8,9 @@ import mongoose from "mongoose";
 // Load environment variables
 dotenv.config();
 
+mongoose.set('strictQuery', false);
+
+
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-happy-thoughts";
 mongoose.connect(mongoUrl, {});
 mongoose.Promise = global.Promise;
