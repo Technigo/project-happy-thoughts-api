@@ -114,6 +114,23 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
     res.status(500).json({ message: 'Error liking thought', error: error.message });
   }
 });
+// DELETE /thoughts/:thoughtId - Delete a thought by ID
+app.delete('/thoughts/:thoughtId', async (req, res) => {
+  const { thoughtId } = req.params;
+
+  try {
+    const deletedThought = await Thought.findByIdAndDelete(thoughtId);
+
+    if (!deletedThought) {
+      return res.status(404).json({ message: 'Thought not found' });
+    }
+
+    res.status(200).json({ message: 'Thought deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting thought:', error);
+    res.status(500).json({ message: 'Error deleting thought', error: error.message });
+  }
+});
 
 // Global error handler
 app.use((err, req, res, next) => {
