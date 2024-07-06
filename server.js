@@ -1,19 +1,30 @@
-// Import delle librerie necessarie
+// Import necessary libraries
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
 import expressListEndpoints from 'express-list-endpoints';
 
-// Caricamento delle variabili d'ambiente
+// Load environment variables
 dotenv.config();
 
-// Connessione al database MongoDB
+// Connect to MongoDB database
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/project-happy-thoughts';
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.Promise = global.Promise;
+mongoose.connect(mongoUrl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000, // Example server selection timeout
+  socketTimeoutMS: 45000 // Example socket timeout
+})
+.then(() => {
+  console.log('MongoDB connected successfully');
+})
+.catch((err) => {
+  console.error('MongoDB connection error:', err);
+  process.exit(1); // Exit the application if MongoDB connection fails
+});
 
-// Schema Mongoose per il modello Thought
+// Define Mongoose schema for Thought model
 const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
@@ -24,24 +35,30 @@ const thoughtSchema = new mongoose.Schema({
   hearts: {
     type: Number,
     default: 0,
+    // Prevent hearts from being set when creating a new thought
+    set: () => 0
   },
   createdAt: {
     type: Date,
     default: Date.now,
+    // Prevent createdAt from being set when creating a new thought
+    set: () => Date.now()
   },
 });
 
 const Thought = mongoose.model('Thought', thoughtSchema);
 
-// Inizializzazione dell'app Express
+// Initialize Express app
 const app = express();
 const port = process.env.PORT || 10000;
 
-// Middleware
+// Middleware setup
 app.use(cors());
 app.use(express.json());
 
-// Definizione delle route
+// Define routes
+
+// Root endpoint
 app.get('/', (req, res) => {
   res.json({
     message: 'Happy Thoughts API',
@@ -49,34 +66,32 @@ app.get('/', (req, res) => {
   });
 });
 
-// GET /thoughts - Ottiene i 20 pensieri più recenti
+// GET /thoughts - Get the 20 most recent thoughts
 app.get('/thoughts', async (req, res) => {
   try {
     const thoughts = await Thought.find().sort({ createdAt: -1 }).limit(20);
     res.status(200).json(thoughts);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching thoughts', error });
+    console.error('Error fetching thoughts:', error);
+    res.status(500).json({ message: 'Error fetching thoughts', error: error.message });
   }
 });
 
-// POST /thoughts - Crea un nuovo pensiero
+// POST /thoughts - Create a new thought
 app.post('/thoughts', async (req, res) => {
   const { message } = req.body;
-
-  if (!message || message.length < 5 || message.length > 140) {
-    return res.status(400).json({ message: 'Invalid message length' });
-  }
 
   try {
     const newThought = new Thought({ message });
     const savedThought = await newThought.save();
     res.status(201).json(savedThought);
   } catch (error) {
-    res.status(500).json({ message: 'Error saving thought', error });
+    console.error('Error saving thought:', error);
+    res.status(500).json({ message: 'Error saving thought', error: error.message });
   }
 });
 
-// POST /thoughts/:thoughtId/like - Incrementa i cuori di un pensiero per ID
+// POST /thoughts/:thoughtId/like - Increment hearts of a thought by ID
 app.post('/thoughts/:thoughtId/like', async (req, res) => {
   const { thoughtId } = req.params;
 
@@ -93,29 +108,18 @@ app.post('/thoughts/:thoughtId/like', async (req, res) => {
 
     res.status(200).json(thought);
   } catch (error) {
-    res.status(500).json({ message: 'Error liking thought', error });
+    console.error('Error liking thought:', error);
+    res.status(500).json({ message: 'Error liking thought', error: error.message });
   }
 });
 
-const thoughtId = '668989b29e009559a9281952'; // Esempio di ID del pensiero
-fetch(`http://localhost:10000/thoughts/${thoughtId}/like`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-})
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Error:', error));
-
-
-// Gestione degli errori globali
+// Global error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Internal Server Error', error: err.message });
 });
 
-// Avvio del server
+// Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
