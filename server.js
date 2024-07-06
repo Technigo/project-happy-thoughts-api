@@ -11,7 +11,12 @@ dotenv.config();
 mongoose.set('strictQuery', false); // Add this line
 
 // Connect to MongoDB database
-const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost:27017/project-happy-thoughts';
+const mongoUrl = process.env.MONGO_URL;
+if (!mongoUrl) {
+  console.error('MONGO_URL environment variable not set');
+  process.exit(1);
+}
+
 console.log('Attempting to connect to MongoDB at:', mongoUrl); // Log connection URL
 
 mongoose.connect(mongoUrl, {
