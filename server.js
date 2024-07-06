@@ -1,4 +1,3 @@
-// Import necessary libraries
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
@@ -8,20 +7,23 @@ import expressListEndpoints from 'express-list-endpoints';
 // Load environment variables
 dotenv.config();
 
+// Set mongoose options to suppress the deprecation warning
+mongoose.set('strictQuery', false); // Add this line
+
 // Connect to MongoDB database
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/project-happy-thoughts';
 mongoose.connect(mongoUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 5000, // Example server selection timeout
-  socketTimeoutMS: 45000 // Example socket timeout
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000
 })
 .then(() => {
   console.log('MongoDB connected successfully');
 })
 .catch((err) => {
   console.error('MongoDB connection error:', err);
-  process.exit(1); // Exit the application if MongoDB connection fails
+  process.exit(1);
 });
 
 // Define Mongoose schema for Thought model
@@ -35,13 +37,11 @@ const thoughtSchema = new mongoose.Schema({
   hearts: {
     type: Number,
     default: 0,
-    // Prevent hearts from being set when creating a new thought
     set: () => 0
   },
   createdAt: {
     type: Date,
     default: Date.now,
-    // Prevent createdAt from being set when creating a new thought
     set: () => Date.now()
   },
 });
