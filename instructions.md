@@ -40,6 +40,7 @@ Once you've created your API, you should deploy it, and update your frontend pro
 - Your API should validate user input and return appropriate errors if the input is invalid.
 - In the `POST /thoughts` endpoint to create a new thought, if the input was invalid and the API is returning errors, it should set the response status to `400` (bad request).
 - The endpoint to add hearts to a thought should return an appropriate error if the thought was not found.
+- You should follow the guidelines on how to write clean code
 
 ## Stretch goals
 So you’ve completed the requirements? Great job! Make sure you've committed and pushed a version of your project before starting on the stretch goals. Remember that the stretch goals are optional.
