@@ -41,7 +41,7 @@ app.post("/thoughts", async (req, res) => {
   }
 
   try {
-    const newThought = new Thought({ message }); // Only save the message
+    const newThought = new Thought({ message }); // Save only the message
     const savedThought = await newThought.save();
     res.status(201).json(savedThought);
   } catch (error) {
@@ -56,8 +56,8 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
   try {
     const updatedThought = await Thought.findByIdAndUpdate(
       thoughtId,
-      { $inc: { hearts: 1 } }, // Increment the hearts count
-      { new: true } // Return the updated document
+      { $inc: { hearts: 1 } }, // Increment hearts count
+      { new: true } // Return updated document
     );
 
     if (!updatedThought) {
@@ -68,6 +68,11 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Could not update hearts" });
   }
+});
+
+// Catch-all route for undefined endpoints (optional)
+app.use((req, res) => {
+  res.status(404).json({ error: "Endpoint not found" });
 });
 
 // Start the server

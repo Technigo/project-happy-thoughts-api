@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// Define the Thought schema
 const ThoughtSchema = new mongoose.Schema({
   message: {
     type: String,
@@ -17,4 +18,5 @@ const ThoughtSchema = new mongoose.Schema({
   },
 });
 
+// Export the Thought model
 export const Thought = mongoose.model("Thought", ThoughtSchema);
