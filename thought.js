@@ -20,4 +20,3 @@ const ThoughtSchema = new mongoose.Schema({
 
 // Export the Thought model
 export const Thought = mongoose.model("Thought", ThoughtSchema);
-n
