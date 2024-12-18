@@ -54,6 +54,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const allowedOrigins = ["https://post-happy-thoughts.netlify.app"]
+
 // Start defining your routes here
 app.get("/", (req, res) => {
   res.send("Hello Technigo!");
