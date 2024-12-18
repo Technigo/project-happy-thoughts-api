@@ -5,8 +5,6 @@ import dotenv from "dotenv";
 
 dotenv.config()
 
-// const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/thoughts";
-
 const mongoURI = process.env.MONGODB_URI
 
 mongoose.connect(mongoURI)
@@ -48,7 +46,6 @@ app.use(cors({
   origin: "https://post-happy-thoughts.netlify.app",
   methods: ["GET", "POST"], // Specify allowed methods
   allowedHeaders: ["*"], // Specify allowed headers, in this case all
-  // credentials: true
 }));
 
 app.use(express.json());
