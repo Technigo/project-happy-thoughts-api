@@ -22,6 +22,6 @@ app.get("/", (req, res) => {
   const endpoints = expressListEndpoints(app);
   res.send(endpoints);
 });
-https://www.postman.com/workspace/My-Workspace~7855bb11-d316-4606-804b-511882638d76/collection/39178525-61fa37bf-042d-4730-bd63-69b53e7554d0
+
 // Error handling middleware    
 app.use(errorHandler);
