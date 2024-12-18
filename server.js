@@ -40,24 +40,21 @@ const Thought = mongoose.model("Thought", new mongoose.Schema({
     default: () => new Date()
   }
 }))
-
-//check if validation is working
-new Thought({message: "hallo"}).save();
-
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
 // PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
 
+app.use(cors({
+  origin: "https://post-happy-thoughts.netlify.app", // your frontend URL
+  methods: ["GET", "POST"], // Specify allowed methods
+  allowedHeaders: ["Content-Type"] // Specify allowed headers
+}));
+
 // Add middlewares to enable cors and json body parsing
 // app.use(cors());
 app.use(express.json());
-
-// Define allowed origins
-app.use(cors({
-  origin: "https://post-happy-thoughts.netlify.app"
-}))
 
 // Start defining your routes here
 app.get("/", (req, res) => {
