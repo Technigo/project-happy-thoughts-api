@@ -25,11 +25,11 @@ const Thought = mongoose.model("Thought", new mongoose.Schema({
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 500
+    maxlength: 140
   },
-  heart: {
-    type: Boolean,
-    default: false
+  hearts: {
+    type: Number,
+    default: 0
   },
   likedBy: [{
     type: mongoose.Schema.Types.ObjectId, //stores preferences to user object
@@ -62,7 +62,7 @@ app.get("/", (req, res) => {
 app.get("/thoughts", async (req, res) => {
   try {
     // returning 20 thoughts in descending order
-    const thoughts = await Thought.find().sort({createAt: "desc"}).limit(20).exec();
+    const thoughts = await Thought.find().sort({createdAt: "desc"}).limit(20).exec();
     res.json(thoughts)
   }catch (error) {
     console.error('Error retrieving thoughts', error);
@@ -72,13 +72,10 @@ app.get("/thoughts", async (req, res) => {
 
   app.post("/thoughts", async (req, res) => {
     try{
-      //retrieve the information sent by the client to our API endpoint
-      const {message, heart} = req.body;
+      //retrieve the information sent by the client to the API endpoint
+      const {message} = req.body;
       //use the mongoose model to create the DB entry
-      const newThought = new Thought({
-        message,
-        heart,
-      });
+      const newThought = new Thought({message});
       await newThought.save();
 
       res.status(201).json(newThought);
@@ -86,7 +83,25 @@ app.get("/thoughts", async (req, res) => {
       res.status(400).json({message: "Could not save thought", errors: error.err.errors})
     }
     });
+
+    // Like a thought (increase of hearts)
     app.post("/thoughts/:id/like", async (req, res) => {
+      try {
+        const {id} = req.params;
+        // Find the thought by ID and update the hearts count
+        const updatedThought = await Thought.findByIdAndUpdate(
+          id,
+          {$inc: {hearts:1}}, 
+          {new: true}
+        );
+        if(!updatedThought) {
+          return res.status(404).json({message: "Thought not found"});
+        }
+        res.status(200).json(updatedThought);
+      } catch (error){
+        console.error("There is an errow by liking the thought", error);
+        res.status(500).jason({message: "Could not like thought"})
+      }
     })
 
 // Start the server
