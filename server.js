@@ -48,6 +48,7 @@ app.use(cors({
   origin: "*",
   methods: ["GET", "POST"], // Specify allowed methods
   allowedHeaders: ["*"], // Specify allowed headers, in this case all
+  credentials: true
 }));
 
 app.use(express.json());
