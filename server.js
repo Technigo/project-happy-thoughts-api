@@ -1,4 +1,4 @@
-import cors from "cors";
+// import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
@@ -46,11 +46,11 @@ const Thought = mongoose.model("Thought", new mongoose.Schema({
 const port = process.env.PORT || 8080;
 const app = express();
 
-app.use(cors({
-  origin: "https://post-happy-thoughts.netlify.app", // your frontend URL
-  methods: ["GET", "POST"], // Specify allowed methods
-  allowedHeaders: ["Content-Type"] // Specify allowed headers
-}));
+// app.use(cors({
+//   origin: "https://post-happy-thoughts.netlify.app", // your frontend URL
+//   methods: ["GET", "POST"], // Specify allowed methods
+//   allowedHeaders: ["Content-Type"] // Specify allowed headers
+// }));
 
 // Add middlewares to enable cors and json body parsing
 // app.use(cors());
