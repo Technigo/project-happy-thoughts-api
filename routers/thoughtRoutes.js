@@ -1,5 +1,6 @@
 import express from "express";
 import { getThoughts, postThought } from "../controllers/thoughtController.js";
+import { validateThought, validate } from "../middleware/validation.js";
 
 const router = express.Router();
 
@@ -7,6 +8,6 @@ const router = express.Router();
 router.get("/", getThoughts);
 
 // Post a new thought
-router.post("/", postThought);
+router.post("/", validateThought, validate, postThought);
 
 export { router as thoughtRoutes };

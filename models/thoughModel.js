@@ -3,7 +3,9 @@ import mongoose from "mongoose";
 const thoughtSchema = new mongoose.Schema({
   message: {
     type: String,
-    required: true
+    required: true,
+    minlength: [5, "The message must be at least 5 characters long."],
+    maxlength: [140, "The message can't exceed 140 characters."]
   },
   hearts: {
     type: Number,
@@ -11,7 +13,7 @@ const thoughtSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: () => new Date(),
   }
 });
 
