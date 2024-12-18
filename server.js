@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import expressListEndpoints from "express-list-endpoints";
 
 dotenv.config();
 
@@ -19,8 +20,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Define mongoose model
-const Thought = mongoose.model('Thought', {
+const { Schema, model } = mongoose;
+
+// Define mongoose Schema since more complex than just using mongoose model
+const thoughtSchema = new Schema({
   message: {
     type: String,
     required: true,
@@ -37,9 +40,11 @@ const Thought = mongoose.model('Thought', {
   }
 });
 
+const Thought = model('Thought', thoughtSchema);
+
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.json(expressListEndpoints(app));
 });
 
 app.get("/thoughts", async (req, res) => {
@@ -47,19 +52,42 @@ app.get("/thoughts", async (req, res) => {
   res.json(thoughts);
 });
 
+// app.post("/thoughts", async (req, res) => {
+//   //Retrieve info that is sent by the user to our API endpoint
+//   // I use {} around message to make sure ONLY message can be sent in by the user, not hearts and createdAt.
+//   const { message } = req.body;
+//   // Use our mongoose model to create the database entry
+//   const thought = new Thought({ message });
+
+//   try {
+//     // Success
+//     const savedThought = await thought.save();
+//     res.status(201).json(savedThought);
+//   } catch (err) {
+//     res.status(400).json({ message: "Could not save thought to database", error: err.errors });
+//   }
+// });
+
 app.post("/thoughts", async (req, res) => {
   //Retrieve info that is sent by the user to our API endpoint
   // I use {} around message to make sure ONLY message can be sent in by the user, not hearts and createdAt.
   const { message } = req.body;
-  // Use our mongoose model to create the database entry
-  const thought = new Thought({ message });
 
   try {
-    // Success
-    const savedThought = await thought.save();
-    res.status(201).json(savedThought);
+    // Use our mongoose model to create the database entry
+    const thought = await new Thought({ message }).save();
+
+    res.status(201).json({
+      success: true,
+      response: thought,
+      message: "thought is created"
+    });
   } catch (err) {
-    res.status(400).json({ message: "Could not save thought to database", error: err.errors });
+    res.status(400).json({
+      success: false,
+      response: err.errors,
+      message: "Could not save thought to database"
+    });
   }
 });
 
