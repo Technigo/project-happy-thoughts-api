@@ -11,19 +11,12 @@ export const postLike =  async (req, res) => {
     );
     
     if (!updatedThought) {
-      return res.status(404).json({
-        success: false,
-        error: "Thought not found",
-        details: "The thought with the provided ID was not found."
-      });
+      return res.status(404).json({ error: "Thought not found" });
     }
     
+    // Return the updated thought directly
     res.status(200).json(updatedThought);
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: "Updating likes failed",
-      details: error.message
-    });
+    res.status(500).json({ error: error.message });
   }
 };
