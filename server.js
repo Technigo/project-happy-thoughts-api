@@ -35,10 +35,10 @@ const Thought = mongoose.model("Thought", new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, //stores preferences to user object
     ref:"User"
   }],
-  createdAt: {
-    type: Date,
-    default: () => new Date()
-  }
+  // createdAt: {
+  //   type: Date,
+  //   default: () => new Date()
+  // }
 }))
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value:
