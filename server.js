@@ -5,9 +5,9 @@ import dotenv from "dotenv";
 
 dotenv.config()
 
-//const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/thoughts";
+const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/thoughts";
 
-const mongoURI = process.env.MONGODB_URI
+// const mongoURI = process.env.MONGODB_URI
 
 mongoose.connect(mongoURI)
 .then(() => {
@@ -47,10 +47,10 @@ const port = process.env.PORT || 8080;
 const app = express();
 
 app.use(cors({
-  origin: "*",
+  origin: "https://post-happy-thoughts.netlify.app",
   methods: ["GET", "POST"], // Specify allowed methods
   allowedHeaders: ["*"], // Specify allowed headers
-  credetials: true
+  // credetials: true
 }));
 
 // Add middlewares to enable cors and json body parsing
