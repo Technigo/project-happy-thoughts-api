@@ -17,8 +17,6 @@ mongoose.connect(mongoURI)
   console.error('Error to connect with MongoDB', error)
   })
 
-//mongoose.Promise = Promise;
-
 // Setting a Schema and model
 const Thought = mongoose.model("Thought", new mongoose.Schema({
   message: {
@@ -49,12 +47,9 @@ const app = express();
 app.use(cors({
   origin: "https://post-happy-thoughts.netlify.app",
   methods: ["GET", "POST"], // Specify allowed methods
-  allowedHeaders: ["*"], // Specify allowed headers
-  // credetials: true
+  allowedHeaders: ["*"], // Specify allowed headers, in this case all
 }));
 
-// Add middlewares to enable cors and json body parsing
-// app.use(cors());
 app.use(express.json());
 
 // Start defining your routes here
