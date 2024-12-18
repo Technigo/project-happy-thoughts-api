@@ -45,7 +45,7 @@ const port = process.env.PORT || 8080;
 const app = express();
 
 app.use(cors({
-  origin: "https://post-happy-thoughts.netlify.app",
+  origin: "*",
   methods: ["GET", "POST"], // Specify allowed methods
   allowedHeaders: ["*"], // Specify allowed headers, in this case all
 }));
