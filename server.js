@@ -54,7 +54,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Define allowed origins
 const allowedOrigins = ["https://post-happy-thoughts.netlify.app"]
+
+// use CORS middleware with specific origin
+app.use(cors({
+  origin: allowedOrigins
+}));
 
 // Start defining your routes here
 app.get("/", (req, res) => {
