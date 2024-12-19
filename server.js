@@ -100,15 +100,6 @@ app.get("/thoughts", async (req, res) => {
         }
         const updatedThought = await thought.save()
 
-        // const {id} = req.params;
-        // const updatedThought = await Thought.findByIdAndUpdate(
-        //   id,
-        //   {$inc: {hearts:1}}, 
-        //   {new: true}
-        // );
-        // if(!updatedThought) {
-        //   return res.status(404).json({message: "Thought not found"});
-        // }
         res.status(200).json(updatedThought);
       } catch (error){
         console.error("There is an errow by liking the thought", error);
