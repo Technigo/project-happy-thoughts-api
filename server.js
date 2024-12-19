@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import listEndpoints from "express-list-endpoints";
 
 dotenv.config()
 
@@ -52,7 +53,11 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  const endpoints = listEndpoints(app);
+  res.json({
+    message: "These are the endpoints of the Happy Thoughts API",
+    endpoints: endpoints
+  })
 });
 
 app.get("/thoughts", async (req, res) => {
