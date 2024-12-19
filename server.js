@@ -88,16 +88,27 @@ app.get("/thoughts", async (req, res) => {
     // Like a thought (increase of hearts)
     app.post("/thoughts/:id/like", async (req, res) => {
       try {
-        const {id} = req.params;
-        // Find the thought by ID and update the hearts count
-        const updatedThought = await Thought.findByIdAndUpdate(
-          id,
-          {$inc: {hearts:1}}, 
-          {new: true}
-        );
-        if(!updatedThought) {
-          return res.status(404).json({message: "Thought not found"});
+        const {id} = req.params
+        const thought = await Thought.findById(id)
+        if(!thought) {
+          return res.status(404).json({message: "Thought was not found"})
         }
+        if (thought.hearts %2=== 0) {
+          thought.hearts+=1
+        } else {
+          thought.hearts -=1
+        }
+        const updatedThought = await thought.save()
+
+        // const {id} = req.params;
+        // const updatedThought = await Thought.findByIdAndUpdate(
+        //   id,
+        //   {$inc: {hearts:1}}, 
+        //   {new: true}
+        // );
+        // if(!updatedThought) {
+        //   return res.status(404).json({message: "Thought not found"});
+        // }
         res.status(200).json(updatedThought);
       } catch (error){
         console.error("There is an errow by liking the thought", error);
