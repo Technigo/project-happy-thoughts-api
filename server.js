@@ -52,44 +52,44 @@ app.get("/thoughts", async (req, res) => {
   res.json(thoughts);
 });
 
-// app.post("/thoughts", async (req, res) => {
-//   //Retrieve info that is sent by the user to our API endpoint
-//   // I use {} around message to make sure ONLY message can be sent in by the user, not hearts and createdAt.
-//   const { message } = req.body;
-//   // Use our mongoose model to create the database entry
-//   const thought = new Thought({ message });
-
-//   try {
-//     // Success
-//     const savedThought = await thought.save();
-//     res.status(201).json(savedThought);
-//   } catch (err) {
-//     res.status(400).json({ message: "Could not save thought to database", error: err.errors });
-//   }
-// });
-
 app.post("/thoughts", async (req, res) => {
   //Retrieve info that is sent by the user to our API endpoint
   // I use {} around message to make sure ONLY message can be sent in by the user, not hearts and createdAt.
   const { message } = req.body;
+  // Use our mongoose model to create the database entry
+  const thought = new Thought({ message });
 
   try {
-    // Use our mongoose model to create the database entry
-    const thought = await new Thought({ message }).save();
-
-    res.status(201).json({
-      success: true,
-      response: thought,
-      message: "thought is created"
-    });
+    // Success
+    const savedThought = await thought.save();
+    res.status(201).json(savedThought);
   } catch (err) {
-    res.status(400).json({
-      success: false,
-      response: err.errors,
-      message: "Could not save thought to database"
-    });
+    res.status(400).json({ message: "Could not save thought to database", error: err.errors });
   }
 });
+
+// app.post("/thoughts", async (req, res) => {
+//   //Retrieve info that is sent by the user to our API endpoint
+//   // I use {} around message to make sure ONLY message can be sent in by the user, not hearts and createdAt.
+//   const { message } = req.body;
+
+//   try {
+//     // Use our mongoose model to create the database entry
+//     const thought = await new Thought({ message }).save();
+
+//     res.status(201).json({
+//       success: true,
+//       response: thought,
+//       message: "thought is created"
+//     });
+//   } catch (err) {
+//     res.status(400).json({
+//       success: false,
+//       response: err.errors,
+//       message: "Could not save thought to database"
+//     });
+//   }
+// });
 
 app.post("/thoughts/:thoughtId/like", async (req, res) => {
   // Get thoughtId from URL-param
