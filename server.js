@@ -97,17 +97,17 @@ app.post("/thoughts/:thoughtId/like", async (req, res) => {
   const { thoughtId } = req.params;
 
   try {
-    // Hitta en tanke med rätt id och öka hearts med 1
+    // Find a thought with right ID and increase hearts by 1
     const updatedThought = await Thought.findByIdAndUpdate(
-      thoughtId,                  // Hitta dokumentet baserat på ID
-      { $inc: { hearts: 1 } },    // Incrementerar hearts med 1
-      { new: true }               // Returnera det uppdaterade dokumentet
+      thoughtId,                  // Find thought based on ID
+      { $inc: { hearts: 1 } },    // Increments hearts with 1
+      { new: true }               // Return the updated thought
     );
 
     if (updatedThought) {
-      res.status(200).json(updatedThought); // Skicka tillbaka det uppdaterade dokumentet
+      res.status(200).json(updatedThought); // Send back the updated thought
     } else {
-      res.status(404).json({ message: "Thought not found" }); // Om inget dokument hittas
+      res.status(404).json({ message: "Thought not found" }); // If no thought found
     }
   } catch (err) {
     res.status(400).json({ message: "Could not update hearts", error: err.message });
